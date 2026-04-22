@@ -36,7 +36,7 @@ jobs:
 
   release:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -55,7 +55,15 @@ jobs:
         MINOR=$(grep 'minor=' version.properties | cut -d'=' -f2)
         PATCH=$(grep 'patch=' version.properties | cut -d'=' -f2)
         BUILD=$(grep 'build=' version.properties | cut -d'=' -f2)
-        echo "VERSION=$MAJOR.$MINOR.$PATCH-$BUILD" >> $GITHUB_OUTPUT
+        RUN_NUMBER=${{ github.run_number }}
+
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          VERSION="$MAJOR.$MINOR.$PATCH-PR$PR_NUMBER-$RUN_NUMBER"
+        else
+          VERSION="$MAJOR.$MINOR.$PATCH-$BUILD-$RUN_NUMBER"
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
@@ -63,5 +71,6 @@ jobs:
         tag_name: v${{ steps.get_version.outputs.VERSION }}
         name: Release v${{ steps.get_version.outputs.VERSION }}
         files: nature-tools-debug.apk
+        prerelease: ${{ github.event_name == 'pull_request' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
