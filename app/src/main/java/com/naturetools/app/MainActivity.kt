@@ -30,20 +30,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             var themeMode by rememberSaveable { mutableStateOf("system") }
+            var dynamicColor by rememberSaveable { mutableStateOf(true) }
+
             val darkTheme = when (themeMode) {
                 "light" -> false
                 "dark" -> true
                 else -> isSystemInDarkTheme()
             }
 
-            NatureToolsTheme(darkTheme = darkTheme) {
+            NatureToolsTheme(
+                darkTheme = darkTheme,
+                dynamicColor = dynamicColor
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NatureToolsApp(
                         themeMode = themeMode,
-                        onThemeChange = { themeMode = it }
+                        onThemeChange = { themeMode = it },
+                        dynamicColor = dynamicColor,
+                        onDynamicColorChange = { dynamicColor = it }
                     )
                 }
             }
@@ -59,9 +66,9 @@ data class Tool(
 )
 
 val tools = listOf(
-    Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Utility"),
-    Tool("Calculator", Icons.Default.Calculate, "calculator", "Utility"),
-    Tool("Web Search", Icons.Default.Search, "web", "General"),
+    Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
+    Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
+    Tool("Web Search", Icons.Default.Search, "web", "Utility"),
     Tool("Compass", Icons.Default.Explore, "compass", "Sensors"),
     Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors"),
     Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
@@ -70,14 +77,18 @@ val tools = listOf(
     Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
     Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
     Tool("Device", Icons.Default.Info, "device", "System"),
-    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Education"),
-    Tool("Random Gen", Icons.Default.Casino, "random", "Utility")
+    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
+    Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
+    Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science"),
+    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science")
 )
 
 @Composable
 fun NatureToolsApp(
     themeMode: String,
-    onThemeChange: (String) -> Unit
+    onThemeChange: (String) -> Unit,
+    dynamicColor: Boolean,
+    onDynamicColorChange: (Boolean) -> Unit
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -89,7 +100,9 @@ fun NatureToolsApp(
             SettingsScreen(
                 navController = navController,
                 themeMode = themeMode,
-                onThemeChange = onThemeChange
+                onThemeChange = onThemeChange,
+                dynamicColor = dynamicColor,
+                onDynamicColorChange = onDynamicColorChange
             )
         }
         composable("converter") { UnitConverterScreen(navController) }
@@ -105,6 +118,8 @@ fun NatureToolsApp(
         composable("device") { DeviceScreen(navController) }
         composable("prime") { PrimeCheckerScreen(navController) }
         composable("random") { RandomGeneratorScreen(navController) }
+        composable("periodic_table") { PeriodicTableScreen(navController) }
+        composable("pokedex") { PokedexScreen(navController) }
     }
 }
 
@@ -113,7 +128,7 @@ fun NatureToolsApp(
 fun HomeScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("All") }
-    val categories = listOf("All") + tools.map { it.category }.distinct()
+    val categories = listOf("All") + tools.map { it.category }.distinct().sorted()
 
     val filteredTools = tools.filter {
         (selectedCategory == "All" || it.category == selectedCategory) &&
@@ -122,7 +137,7 @@ fun HomeScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text("Nature Tools") },
                 actions = {
                     IconButton(onClick = { navController.navigate("settings") }) {
@@ -133,17 +148,18 @@ fun HomeScreen(navController: NavHostController) {
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = { searchQuery = it },
+                onSearch = { },
+                active = false,
+                onActiveChange = { },
                 placeholder = { Text("Search tools...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium
-            )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {}
 
             ScrollableTabRow(
                 selectedTabIndex = categories.indexOf(selectedCategory),
@@ -152,16 +168,17 @@ fun HomeScreen(navController: NavHostController) {
                 containerColor = androidx.compose.ui.graphics.Color.Transparent
             ) {
                 categories.forEach { category ->
-                    Tab(
+                    FilterChip(
                         selected = selectedCategory == category,
                         onClick = { selectedCategory = category },
-                        text = { Text(category) }
+                        label = { Text(category) },
+                        modifier = Modifier.padding(horizontal = 4.dp)
                     )
                 }
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Adaptive(minSize = 150.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -170,7 +187,7 @@ fun HomeScreen(navController: NavHostController) {
                 items(filteredTools) { tool ->
                     ElevatedCard(
                         onClick = { navController.navigate(tool.route) },
-                        modifier = Modifier.fillMaxWidth().height(140.dp)
+                        modifier = Modifier.fillMaxWidth().height(120.dp)
                     ) {
                         Column(
                             modifier = Modifier.fillMaxSize(),
@@ -180,11 +197,20 @@ fun HomeScreen(navController: NavHostController) {
                             Icon(
                                 tool.icon,
                                 contentDescription = tool.name,
-                                modifier = Modifier.size(40.dp),
-                                tint = LocalContentColor.current
+                                modifier = Modifier.size(32.dp),
+                                tint = MaterialTheme.colorScheme.primary
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text(tool.name, style = MaterialTheme.typography.titleMedium)
+                            Text(
+                                tool.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                tool.category,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.outline
+                            )
                         }
                     }
                 }

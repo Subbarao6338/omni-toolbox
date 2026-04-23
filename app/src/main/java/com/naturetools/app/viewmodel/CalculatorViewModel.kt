@@ -31,7 +31,7 @@ class CalculatorViewModel : ViewModel() {
         if (lastValue == null) {
             lastValue = currentValue
         } else {
-            calculate()
+            calculateInternal()
         }
         lastOperator = op
         isNewInput = true
@@ -39,22 +39,34 @@ class CalculatorViewModel : ViewModel() {
 
     fun onScientific(op: String) {
         val currentValue = display.toDoubleOrNull() ?: return
-        val result = when (op) {
-            "sin" -> sin(Math.toRadians(currentValue))
-            "cos" -> cos(Math.toRadians(currentValue))
-            "tan" -> tan(Math.toRadians(currentValue))
-            "log" -> log10(currentValue)
-            "ln" -> ln(currentValue)
-            "√" -> sqrt(currentValue)
-            else -> currentValue
+        val result = try {
+            when (op) {
+                "sin" -> sin(Math.toRadians(currentValue))
+                "cos" -> cos(Math.toRadians(currentValue))
+                "tan" -> tan(Math.toRadians(currentValue))
+                "log" -> log10(currentValue)
+                "ln" -> ln(currentValue)
+                "√" -> if (currentValue >= 0) sqrt(currentValue) else Double.NaN
+                else -> currentValue
+            }
+        } catch (e: Exception) {
+            Double.NaN
         }
-        val entry = "$op($currentValue) = ${formatResult(result)}"
+
+        val formattedResult = formatResult(result)
+        val entry = "$op($currentValue) = $formattedResult"
         history.add(0, entry)
-        display = formatResult(result)
+        display = formattedResult
         isNewInput = true
     }
 
     fun calculate() {
+        calculateInternal()
+        lastValue = null
+        lastOperator = null
+    }
+
+    private fun calculateInternal() {
         val currentValue = display.toDoubleOrNull() ?: return
         val operator = lastOperator ?: return
         val result = when (operator) {
@@ -65,19 +77,23 @@ class CalculatorViewModel : ViewModel() {
             else -> currentValue
         }
 
-        val entry = "${lastValue} $operator $currentValue = ${formatResult(result)}"
+        val entry = "${formatValue(lastValue!!)} $operator ${formatValue(currentValue)} = ${formatResult(result)}"
         history.add(0, entry)
 
         display = formatResult(result)
         lastValue = result
-        lastOperator = null
         isNewInput = true
+    }
+
+    private fun formatValue(value: Double): String {
+        return if (value % 1.0 == 0.0) value.toLong().toString() else "%.4f".format(value).trimEnd('0').trimEnd('.')
     }
 
     private fun formatResult(result: Double): String {
         return if (result.isNaN()) "Error"
+        else if (result.isInfinite()) "Infinity"
         else if (result % 1.0 == 0.0) result.toLong().toString()
-        else "%.4f".format(result)
+        else "%.6f".format(result).trimEnd('0').trimEnd('.')
     }
 
     fun clear() {
