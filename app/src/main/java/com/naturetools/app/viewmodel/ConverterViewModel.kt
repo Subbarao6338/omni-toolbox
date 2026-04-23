@@ -11,7 +11,7 @@ class ConverterViewModel : ViewModel() {
     var result by mutableStateOf("")
     var selectedTab by mutableIntStateOf(0)
 
-    val tabs = listOf("Length", "Weight", "Temp", "Area")
+    val tabs = listOf("Length", "Weight", "Temp", "Area", "Volume", "Pressure")
 
     fun onInputChange(value: String) {
         input = value
@@ -21,6 +21,8 @@ class ConverterViewModel : ViewModel() {
             1 -> "${(numericValue * 2.20462).format(2)} Pounds" // Kg to Lbs
             2 -> "${(numericValue * 9 / 5 + 32).format(2)} °F" // C to F
             3 -> "${(numericValue * 10.7639).format(2)} Sq Ft" // Sq M to Sq Ft
+            4 -> "${(numericValue * 0.264172).format(2)} Gallons" // Liters to Gallons
+            5 -> "${(numericValue * 14.5038).format(2)} PSI" // Bar to PSI
             else -> ""
         }
     }
