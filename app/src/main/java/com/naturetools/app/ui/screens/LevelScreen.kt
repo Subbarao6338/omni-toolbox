@@ -27,7 +27,7 @@ fun LevelScreen(navController: NavHostController) {
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     val accelSensor = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
 
-    DisposableEffect(Unit) {
+    DisposableEffect(sensorManager, accelSensor) {
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
                 if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
@@ -38,7 +38,9 @@ fun LevelScreen(navController: NavHostController) {
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
         sensorManager.registerListener(listener, accelSensor, SensorManager.SENSOR_DELAY_UI)
-        onDispose { sensorManager.unregisterListener(listener) }
+        onDispose {
+            sensorManager.unregisterListener(listener)
+        }
     }
 
     ToolScreen(title = "Level", onBack = { navController.popBackStack() }) { padding ->

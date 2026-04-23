@@ -41,14 +41,32 @@ val elements = listOf(
     Element("P", "Phosphorus", 15, Color(0xFFFFECB3)),
     Element("S", "Sulfur", 16, Color(0xFFFFE0B2)),
     Element("Cl", "Chlorine", 17, Color(0xFFFFCCBC)),
-    Element("Ar", "Argon", 18, Color(0xFFD7CCC8))
+    Element("Ar", "Argon", 18, Color(0xFFD7CCC8)),
+    Element("K", "Potassium", 19, Color(0xFFC8E6C9)),
+    Element("Ca", "Calcium", 20, Color(0xFFDCEDC8)),
+    Element("Sc", "Scandium", 21, Color(0xFFF0F4C3)),
+    Element("Ti", "Titanium", 22, Color(0xFFFFF9C4)),
+    Element("V", "Vanadium", 23, Color(0xFFFFECB3)),
+    Element("Cr", "Chromium", 24, Color(0xFFFFE0B2)),
+    Element("Mn", "Manganese", 25, Color(0xFFFFCCBC)),
+    Element("Fe", "Iron", 26, Color(0xFFD7CCC8)),
+    Element("Co", "Cobalt", 27, Color(0xFFC8E6C9)),
+    Element("Ni", "Nickel", 28, Color(0xFFDCEDC8)),
+    Element("Cu", "Copper", 29, Color(0xFFF0F4C3)),
+    Element("Zn", "Zinc", 30, Color(0xFFFFF9C4)),
+    Element("Ga", "Gallium", 31, Color(0xFFFFECB3)),
+    Element("Ge", "Germanium", 32, Color(0xFFFFE0B2)),
+    Element("As", "Arsenic", 33, Color(0xFFFFCCBC)),
+    Element("Se", "Selenium", 34, Color(0xFFD7CCC8)),
+    Element("Br", "Bromine", 35, Color(0xFFBBDEFB)),
+    Element("Kr", "Krypton", 36, Color(0xFFFFCCBC))
 )
 
 @Composable
 fun PeriodicTableScreen(navController: NavHostController) {
     ToolScreen(title = "Periodic Table", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-            Text("Main Elements", style = MaterialTheme.typography.titleMedium)
+            Text("Elements (1-36)", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(16.dp))
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 80.dp),

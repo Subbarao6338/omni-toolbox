@@ -27,7 +27,7 @@ fun CompassScreen(navController: NavHostController) {
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     val rotationSensor = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) }
 
-    DisposableEffect(Unit) {
+    DisposableEffect(sensorManager, rotationSensor) {
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
                 if (event?.sensor?.type == Sensor.TYPE_ROTATION_VECTOR) {
@@ -41,7 +41,9 @@ fun CompassScreen(navController: NavHostController) {
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
         sensorManager.registerListener(listener, rotationSensor, SensorManager.SENSOR_DELAY_UI)
-        onDispose { sensorManager.unregisterListener(listener) }
+        onDispose {
+            sensorManager.unregisterListener(listener)
+        }
     }
 
     val rotation by animateFloatAsState(targetValue = -azimuth)
