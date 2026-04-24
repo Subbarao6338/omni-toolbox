@@ -19,7 +19,9 @@ class ConverterViewModel : ViewModel() {
         ConversionCategory("Weight", listOf(Unit("Kilogram", 1.0), Unit("Gram", 1000.0), Unit("Pound", 2.20462), Unit("Ounce", 35.274))),
         ConversionCategory("Temperature", listOf(Unit("Celsius", 1.0), Unit("Fahrenheit", 0.0), Unit("Kelvin", 0.0))),
         ConversionCategory("Area", listOf(Unit("Sq Meter", 1.0), Unit("Sq Kilometer", 0.000001), Unit("Sq Mile", 3.861e-7), Unit("Acre", 0.000247105))),
-        ConversionCategory("Volume", listOf(Unit("Liter", 1.0), Unit("Milliliter", 1000.0), Unit("Gallon (US)", 0.264172), Unit("Cubic Meter", 0.001)))
+        ConversionCategory("Volume", listOf(Unit("Liter", 1.0), Unit("Milliliter", 1000.0), Unit("Gallon (US)", 0.264172), Unit("Cubic Meter", 0.001))),
+        ConversionCategory("Digital", listOf(Unit("Byte", 1.0), Unit("Bit", 8.0), Unit("Kilobyte", 1.0/1024), Unit("Megabyte", 1.0/(1024*1024)), Unit("Gigabyte", 1.0/(1024.0*1024*1024)), Unit("Terabyte", 1.0/(1024.0*1024*1024*1024)))),
+        ConversionCategory("Pressure", listOf(Unit("Pascal", 1.0), Unit("Bar", 1e-5), Unit("PSI", 0.000145038), Unit("Atmosphere", 9.8692e-6)))
     )
 
     fun onInputChange(value: String) {

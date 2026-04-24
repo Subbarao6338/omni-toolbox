@@ -1,14 +1,17 @@
 package com.naturetools.app.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
@@ -28,6 +31,11 @@ val pokemonList = listOf(
     Pokemon(10, "Caterpie", "Bug"),
     Pokemon(11, "Metapod", "Bug"),
     Pokemon(12, "Butterfree", "Bug/Flying"),
+    Pokemon(16, "Pidgey", "Normal/Flying"),
+    Pokemon(17, "Pidgeotto", "Normal/Flying"),
+    Pokemon(18, "Pidgeot", "Normal/Flying"),
+    Pokemon(19, "Rattata", "Normal"),
+    Pokemon(20, "Raticate", "Normal"),
     Pokemon(25, "Pikachu", "Electric"),
     Pokemon(26, "Raichu", "Electric"),
     Pokemon(133, "Eevee", "Normal"),
@@ -42,8 +50,35 @@ val pokemonList = listOf(
     Pokemon(148, "Dragonair", "Dragon"),
     Pokemon(149, "Dragonite", "Dragon/Flying"),
     Pokemon(150, "Mewtwo", "Psychic"),
-    Pokemon(151, "Mew", "Psychic")
+    Pokemon(151, "Mew", "Psychic"),
+    Pokemon(152, "Chikorita", "Grass"),
+    Pokemon(155, "Cyndaquil", "Fire"),
+    Pokemon(158, "Totodile", "Water"),
+    Pokemon(249, "Lugia", "Psychic/Flying"),
+    Pokemon(250, "Ho-Oh", "Fire/Flying")
 )
+
+fun getTypeColor(type: String): Color {
+    return when (type.lowercase()) {
+        "grass" -> Color(0xFF7AC74C)
+        "fire" -> Color(0xFFEE8130)
+        "water" -> Color(0xFF6390F0)
+        "bug" -> Color(0xFFA6B91A)
+        "normal" -> Color(0xFFA8A77A)
+        "poison" -> Color(0xFFA33EA1)
+        "electric" -> Color(0xFFF7D02C)
+        "ground" -> Color(0xFFE2BF65)
+        "fairy" -> Color(0xFFD685AD)
+        "fighting" -> Color(0xFFC22E28)
+        "psychic" -> Color(0xFFF95587)
+        "rock" -> Color(0xFFB6A136)
+        "ghost" -> Color(0xFF735797)
+        "ice" -> Color(0xFF96D9D6)
+        "dragon" -> Color(0xFF6F35FC)
+        "flying" -> Color(0xFFA98FF3)
+        else -> Color.Gray
+    }
+}
 
 @Composable
 fun PokedexScreen(navController: NavHostController) {
@@ -70,9 +105,24 @@ fun PokedexScreen(navController: NavHostController) {
                         ) {
                             Text("#${pokemon.id.toString().padStart(3, '0')}", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.width(16.dp))
-                            Column {
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text(pokemon.name, style = MaterialTheme.typography.titleMedium)
-                                Text(pokemon.type, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    pokemon.type.split("/").forEach { type ->
+                                        Surface(
+                                            color = getTypeColor(type),
+                                            shape = RoundedCornerShape(4.dp)
+                                        ) {
+                                            Text(
+                                                text = type,
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = Color.White
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
