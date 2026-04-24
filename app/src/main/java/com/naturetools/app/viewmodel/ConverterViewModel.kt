@@ -9,23 +9,73 @@ import androidx.lifecycle.ViewModel
 class ConverterViewModel : ViewModel() {
     var input by mutableStateOf("")
     var result by mutableStateOf("")
-    var selectedTab by mutableIntStateOf(0)
 
-    val tabs = listOf("Length", "Weight", "Temp", "Area", "Volume", "Pressure")
+    var selectedCategoryIndex by mutableIntStateOf(0)
+    var fromUnitIndex by mutableIntStateOf(0)
+    var toUnitIndex by mutableIntStateOf(0)
+
+    val categories = listOf(
+        ConversionCategory("Length", listOf(Unit("Meter", 1.0), Unit("Kilometer", 0.001), Unit("Mile", 0.000621371), Unit("Foot", 3.28084))),
+        ConversionCategory("Weight", listOf(Unit("Kilogram", 1.0), Unit("Gram", 1000.0), Unit("Pound", 2.20462), Unit("Ounce", 35.274))),
+        ConversionCategory("Temperature", listOf(Unit("Celsius", 1.0), Unit("Fahrenheit", 0.0), Unit("Kelvin", 0.0))),
+        ConversionCategory("Area", listOf(Unit("Sq Meter", 1.0), Unit("Sq Kilometer", 0.000001), Unit("Sq Mile", 3.861e-7), Unit("Acre", 0.000247105))),
+        ConversionCategory("Volume", listOf(Unit("Liter", 1.0), Unit("Milliliter", 1000.0), Unit("Gallon (US)", 0.264172), Unit("Cubic Meter", 0.001)))
+    )
 
     fun onInputChange(value: String) {
         input = value
-        val numericValue = value.toDoubleOrNull() ?: 0.0
-        result = when (selectedTab) {
-            0 -> "${(numericValue * 0.621371).format(2)} Miles" // Km to Miles
-            1 -> "${(numericValue * 2.20462).format(2)} Pounds" // Kg to Lbs
-            2 -> "${(numericValue * 9 / 5 + 32).format(2)} °F" // C to F
-            3 -> "${(numericValue * 10.7639).format(2)} Sq Ft" // Sq M to Sq Ft
-            4 -> "${(numericValue * 0.264172).format(2)} Gallons" // Liters to Gallons
-            5 -> "${(numericValue * 14.5038).format(2)} PSI" // Bar to PSI
-            else -> ""
+        convert()
+    }
+
+    fun onCategoryChange(index: Int) {
+        selectedCategoryIndex = index
+        fromUnitIndex = 0
+        toUnitIndex = 1
+        convert()
+    }
+
+    fun onFromUnitChange(index: Int) {
+        fromUnitIndex = index
+        convert()
+    }
+
+    fun onToUnitChange(index: Int) {
+        toUnitIndex = index
+        convert()
+    }
+
+    private fun convert() {
+        val value = input.toDoubleOrNull() ?: return
+        val category = categories[selectedCategoryIndex]
+        val fromUnit = category.units[fromUnitIndex]
+        val toUnit = category.units[toUnitIndex]
+
+        result = if (category.name == "Temperature") {
+            convertTemperature(value, fromUnit.name, toUnit.name)
+        } else {
+            val baseValue = value / fromUnit.factor
+            (baseValue * toUnit.factor).format(4)
         }
     }
 
-    private fun Double.format(digits: Int) = "%.${digits}f".format(this)
+    private fun convertTemperature(value: Double, from: String, to: String): String {
+        val celsius = when (from) {
+            "Celsius" -> value
+            "Fahrenheit" -> (value - 32) * 5 / 9
+            "Kelvin" -> value - 273.15
+            else -> value
+        }
+        val resultValue = when (to) {
+            "Celsius" -> celsius
+            "Fahrenheit" -> celsius * 9 / 5 + 32
+            "Kelvin" -> celsius + 273.15
+            else -> celsius
+        }
+        return resultValue.format(2)
+    }
+
+    private fun Double.format(digits: Int) = "%.${digits}f".format(this).trimEnd('0').trimEnd('.')
+
+    data class ConversionCategory(val name: String, val units: List<Unit>)
+    data class Unit(val name: String, val factor: Double)
 }

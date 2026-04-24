@@ -16,9 +16,13 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     val allNotes: StateFlow<List<Note>> = noteDao.getAllNotes()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun saveNote(title: String, content: String) {
+    fun saveNote(title: String, content: String, id: Long = 0) {
         viewModelScope.launch {
-            noteDao.insertNote(Note(title = title, content = content))
+            if (id == 0L) {
+                noteDao.insertNote(Note(title = title, content = content))
+            } else {
+                noteDao.insertNote(Note(id = id, title = title, content = content))
+            }
         }
     }
 

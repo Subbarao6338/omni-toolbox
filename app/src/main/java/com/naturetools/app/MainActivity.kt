@@ -68,11 +68,14 @@ data class Tool(
 val tools = listOf(
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
     Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
+    Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Calculation"),
+    Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation"),
     Tool("Web Search", Icons.Default.Search, "web", "Utility"),
     Tool("Compass", Icons.Default.Explore, "compass", "Sensors"),
     Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors"),
-    Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
+    Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors"),
     Tool("Level", Icons.Default.Architecture, "level", "Sensors"),
+    Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
     Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility"),
     Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
     Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
@@ -80,7 +83,8 @@ val tools = listOf(
     Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
     Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
     Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science"),
-    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science")
+    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science"),
+    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer")
 )
 
 @Composable
@@ -107,9 +111,12 @@ fun NatureToolsApp(
         }
         composable("converter") { UnitConverterScreen(navController) }
         composable("calculator") { CalculatorScreen(navController) }
+        composable("bmi") { BMICalculatorScreen(navController) }
+        composable("tip") { TipCalculatorScreen(navController) }
         composable("web") { WebToolScreen(navController) }
         composable("compass") { CompassScreen(navController) }
         composable("light") { LightMeterScreen(navController) }
+        composable("metal") { MetalDetectorScreen(navController) }
         composable("note") { NotePadScreen(navController) }
         composable("level") { LevelScreen(navController) }
         composable("flashlight") { FlashlightScreen(navController) }
@@ -120,6 +127,7 @@ fun NatureToolsApp(
         composable("random") { RandomGeneratorScreen(navController) }
         composable("periodic_table") { PeriodicTableScreen(navController) }
         composable("pokedex") { PokedexScreen(navController) }
+        composable("base64") { Base64Screen(navController) }
     }
 }
 
