@@ -20,10 +20,11 @@ import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
-fun WebToolScreen(navController: NavHostController) {
+fun WebToolScreen(navController: NavHostController, initialUrl: String? = null) {
     val context = LocalContext.current
-    var urlInput by remember { mutableStateOf("https://www.google.com") }
-    var urlToLoad by remember { mutableStateOf("https://www.google.com") }
+    val defaultUrl = initialUrl ?: "https://www.google.com"
+    var urlInput by remember { mutableStateOf(defaultUrl) }
+    var urlToLoad by remember { mutableStateOf(defaultUrl) }
     var isOffline by remember { mutableStateOf(false) }
 
     fun checkConnectivity(): Boolean {
