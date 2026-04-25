@@ -3,6 +3,8 @@ package com.naturetools.app.ui.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -48,8 +50,12 @@ fun WebToolScreen(
 
     LaunchedEffect(urlToLoad, webView) {
         isOffline = !checkConnectivity()
-        if (!isOffline && webView != null && webView?.url != urlToLoad) {
-            webView?.loadUrl(urlToLoad)
+        if (!isOffline && webView != null) {
+            val currentUrl = webView?.url?.removeSuffix("/")
+            val targetUrl = urlToLoad.removeSuffix("/")
+            if (currentUrl != targetUrl) {
+                webView?.loadUrl(urlToLoad)
+            }
         }
     }
 
@@ -136,7 +142,13 @@ fun WebToolScreen(
                                 override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                                     return false
                                 }
+
+                                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                                    isLoading = false
+                                    super.onReceivedError(view, request, error)
+                                }
                             }
+                            webChromeClient = WebChromeClient()
                             settings.apply {
                                 javaScriptEnabled = true
                                 domStorageEnabled = true
@@ -147,7 +159,7 @@ fun WebToolScreen(
                                 setSupportZoom(true)
                                 builtInZoomControls = true
                                 displayZoomControls = false
-                                userAgentString = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36"
+                                javaScriptCanOpenWindowsAutomatically = true
                             }
                             webView = this
                         }

@@ -203,7 +203,7 @@ fun NatureToolsApp(
         composable("date_calc") { DateCalculatorScreen(navController) }
         composable("bpm") { BpmCounterScreen(navController) }
         composable("fuel") { FuelCostCalculatorScreen(navController) }
-        composable("hub") { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app/", showUrlBar = false, title = "Hub") }
+        composable("hub") { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "Hub") }
         composable(
             "media_grabber?url={url}",
             arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null })
