@@ -67,24 +67,34 @@ data class Tool(
 
 val tools = listOf(
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
+    Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion"),
     Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
     Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Calculation"),
     Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation"),
+    Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation"),
     Tool("Web Search", Icons.Default.Search, "web", "Utility"),
     Tool("Compass", Icons.Default.Explore, "compass", "Sensors"),
     Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors"),
     Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors"),
     Tool("Level", Icons.Default.Architecture, "level", "Sensors"),
+    Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors"),
     Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
+    Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity"),
     Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility"),
     Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
+    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility"),
     Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
     Tool("Device", Icons.Default.Info, "device", "System"),
+    Tool("Storage", Icons.Default.Storage, "storage", "System"),
     Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
     Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
     Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science"),
     Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science"),
-    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer")
+    Tool("Morse Code", Icons.Default.Language, "morse", "Science"),
+    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer"),
+    Tool("JSON Format", Icons.Default.DataObject, "json", "Developer"),
+    Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer"),
+    Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media")
 )
 
 @Composable
@@ -110,24 +120,34 @@ fun NatureToolsApp(
             )
         }
         composable("converter") { UnitConverterScreen(navController) }
+        composable("currency") { CurrencyConverterScreen(navController) }
         composable("calculator") { CalculatorScreen(navController) }
         composable("bmi") { BMICalculatorScreen(navController) }
         composable("tip") { TipCalculatorScreen(navController) }
+        composable("discount") { DiscountCalculatorScreen(navController) }
         composable("web") { WebToolScreen(navController) }
         composable("compass") { CompassScreen(navController) }
         composable("light") { LightMeterScreen(navController) }
         composable("metal") { MetalDetectorScreen(navController) }
         composable("note") { NotePadScreen(navController) }
+        composable("checklist") { ChecklistScreen(navController) }
         composable("level") { LevelScreen(navController) }
         composable("flashlight") { FlashlightScreen(navController) }
         composable("stopwatch") { StopwatchScreen(navController) }
+        composable("world_clock") { WorldClockScreen(navController) }
         composable("battery") { BatteryScreen(navController) }
         composable("device") { DeviceScreen(navController) }
+        composable("storage") { StorageScreen(navController) }
         composable("prime") { PrimeCheckerScreen(navController) }
         composable("random") { RandomGeneratorScreen(navController) }
         composable("periodic_table") { PeriodicTableScreen(navController) }
         composable("pokedex") { PokedexScreen(navController) }
+        composable("morse") { MorseCodeScreen(navController) }
         composable("base64") { Base64Screen(navController) }
+        composable("json") { JsonFormatterScreen(navController) }
+        composable("url_encoder") { UrlEncoderScreen(navController) }
+        composable("sensor_data") { SensorDataScreen(navController) }
+        composable("color_picker") { ColorPickerScreen(navController) }
     }
 }
 

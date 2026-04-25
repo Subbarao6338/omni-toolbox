@@ -30,7 +30,7 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
                         }
                     }
                     Box(contentAlignment = Alignment.BottomEnd, modifier = Modifier.fillMaxWidth()) {
-                        Text(viewModel.display, style = MaterialTheme.typography.displayMedium)
+                        Text(viewModel.display.ifEmpty { "0" }, style = MaterialTheme.typography.displayMedium)
                     }
                 }
             }
@@ -39,7 +39,7 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
 
             // Scientific Row
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("sin", "cos", "tan", "log", "ln", "√").forEach { op ->
+                listOf("sin", "cos", "tan", "log", "√", "eˣ", "x²").forEach { op ->
                     FilledTonalButton(
                         onClick = { viewModel.onScientific(op) },
                         modifier = Modifier.weight(1f),
@@ -57,7 +57,8 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
                 listOf("7", "8", "9", "/"),
                 listOf("4", "5", "6", "*"),
                 listOf("1", "2", "3", "-"),
-                listOf("C", "0", "=", "+")
+                listOf("C", "0", "=", "+"),
+                listOf("mod", "pow", ".", "AC")
             )
             buttons.forEach { row ->
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -66,17 +67,23 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
                             onClick = {
                                 when (label) {
                                     "C" -> viewModel.clear()
+                                    "AC" -> {
+                                        viewModel.clear()
+                                        viewModel.clearHistory()
+                                    }
                                     "=" -> viewModel.calculate()
-                                    "+", "-", "*", "/" -> viewModel.onOperator(label)
+                                    "+", "-", "*", "/", "mod", "pow" -> viewModel.onOperator(label)
+                                    "." -> viewModel.onDigit(".")
                                     else -> viewModel.onDigit(label)
                                 }
                             },
-                            modifier = Modifier.weight(1f).aspectRatio(1.2f),
-                            colors = if (label in "+-*/=") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                                     else if (label == "C") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                                     else ButtonDefaults.filledTonalButtonColors()
+                            modifier = Modifier.weight(1f).aspectRatio(if (buttons.size > 4) 1.5f else 1.2f),
+                            colors = if (label in "+-*/=modpow") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                                     else if (label == "C" || label == "AC") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                                     else ButtonDefaults.filledTonalButtonColors(),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
-                            Text(label, style = MaterialTheme.typography.titleLarge)
+                            Text(label, style = if (label.length > 2) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleLarge)
                         }
                     }
                 }

@@ -47,6 +47,17 @@ class CalculatorViewModel : ViewModel() {
                 "log" -> log10(currentValue)
                 "ln" -> ln(currentValue)
                 "√" -> if (currentValue >= 0) sqrt(currentValue) else Double.NaN
+                "mod" -> {
+                    // This is a bit tricky for a single-operand scientific function.
+                    // Usually mod needs two. Let's assume it's for current result % something,
+                    // but most calculators use it as a binary operator.
+                    // Let's implement it as binary in calculateInternal instead,
+                    // and keep scientific for unary.
+                    // If we want exp(x) as e^x:
+                    exp(currentValue)
+                }
+                "eˣ" -> exp(currentValue)
+                "x²" -> currentValue * currentValue
                 else -> currentValue
             }
         } catch (e: Exception) {
@@ -74,6 +85,8 @@ class CalculatorViewModel : ViewModel() {
             "-" -> lastValue!! - currentValue
             "*" -> lastValue!! * currentValue
             "/" -> if (currentValue != 0.0) lastValue!! / currentValue else Double.NaN
+            "mod" -> lastValue!! % currentValue
+            "pow" -> lastValue!!.pow(currentValue)
             else -> currentValue
         }
 
