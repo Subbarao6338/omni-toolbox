@@ -2,18 +2,23 @@ package com.naturetools.app.ui.screens
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -25,9 +30,9 @@ import com.naturetools.app.ui.components.ToolScreen
 import org.json.JSONArray
 
 @Composable
-fun MediaGrabberScreen(navController: NavHostController) {
-    var urlInput by remember { mutableStateOf("") }
-    var urlToLoad by remember { mutableStateOf("") }
+fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = null) {
+    var urlInput by remember { mutableStateOf(initialUrl ?: "") }
+    var urlToLoad by remember { mutableStateOf(initialUrl ?: "") }
     var mediaLinks by remember { mutableStateOf(setOf<String>()) }
     var isLoading by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
@@ -41,7 +46,20 @@ fun MediaGrabberScreen(navController: NavHostController) {
         }
     }
 
-    ToolScreen(title = "Media Grabber", onBack = { navController.popBackStack() }) { padding ->
+    ToolScreen(
+        title = "Media Grabber",
+        onBack = { navController.popBackStack() },
+        actions = {
+            if (mediaLinks.isNotEmpty()) {
+                IconButton(onClick = {
+                    val allLinks = mediaLinks.joinToString("\n")
+                    clipboardManager.setText(AnnotatedString(allLinks))
+                }) {
+                    Icon(Icons.Default.ContentCopy, contentDescription = "Copy All")
+                }
+            }
+        }
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -79,12 +97,14 @@ fun MediaGrabberScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(mediaLinks.toList()) { link ->
-                        Card(
+                        ElevatedCard(
                             modifier = Modifier
                                 .aspectRatio(1f)
+                                .clip(RoundedCornerShape(8.dp))
                                 .clickable {
                                     clipboardManager.setText(AnnotatedString(link))
-                                }
+                                },
+                            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 AsyncImage(
@@ -93,13 +113,19 @@ fun MediaGrabberScreen(navController: NavHostController) {
                                     modifier = Modifier.fillMaxSize(),
                                     contentScale = ContentScale.Crop
                                 )
-                                IconButton(
-                                    onClick = { clipboardManager.setText(AnnotatedString(link)) },
-                                    modifier = Modifier.align(Alignment.BottomEnd)
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(4.dp)
+                                        .background(
+                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+                                            RoundedCornerShape(4.dp)
+                                        )
                                 ) {
                                     Icon(
-                                        Icons.Default.Download,
+                                        Icons.Default.ContentCopy,
                                         contentDescription = "Copy Link",
+                                        modifier = Modifier.size(20.dp).padding(2.dp),
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
@@ -118,20 +144,38 @@ fun MediaGrabberScreen(navController: NavHostController) {
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 val script = """
                                     (function() {
-                                        var links = [];
+                                        var links = new Set();
                                         var imgs = document.getElementsByTagName('img');
                                         for (var i = 0; i < imgs.length; i++) {
-                                            if (imgs[i].src) links.push(imgs[i].src);
+                                            if (imgs[i].src) links.add(imgs[i].src);
+                                            if (imgs[i].srcset) {
+                                                var srcset = imgs[i].srcset.split(',');
+                                                srcset.forEach(s => {
+                                                    var url = s.trim().split(' ')[0];
+                                                    if (url) {
+                                                        try { links.add(new URL(url, document.baseURI).href); } catch(e) {}
+                                                    }
+                                                });
+                                            }
                                         }
                                         var videos = document.getElementsByTagName('video');
                                         for (var i = 0; i < videos.length; i++) {
-                                            if (videos[i].src) links.push(videos[i].src);
+                                            if (videos[i].src) links.add(videos[i].src);
+                                            if (videos[i].poster) links.add(videos[i].poster);
                                             var sources = videos[i].getElementsByTagName('source');
                                             for (var j = 0; j < sources.length; j++) {
-                                                if (sources[j].src) links.push(sources[j].src);
+                                                if (sources[j].src) links.add(sources[j].src);
                                             }
                                         }
-                                        return JSON.stringify(links);
+                                        var metas = document.getElementsByTagName('meta');
+                                        for (var i = 0; i < metas.length; i++) {
+                                            var prop = metas[i].getAttribute('property');
+                                            var content = metas[i].getAttribute('content');
+                                            if (prop && (prop === 'og:image' || prop === 'og:video' || prop === 'og:image:secure_url') && content) {
+                                                try { links.add(new URL(content, document.baseURI).href); } catch(e) {}
+                                            }
+                                        }
+                                        return JSON.stringify(Array.from(links));
                                     })();
                                 """.trimIndent()
 
@@ -172,7 +216,7 @@ fun MediaGrabberScreen(navController: NavHostController) {
                 update = {
                     webView = it
                 },
-                modifier = Modifier.size(0.dp) // Hidden
+                modifier = Modifier.size(1.dp).alpha(0f) // Small but not hidden from JS engine
             )
         }
     }

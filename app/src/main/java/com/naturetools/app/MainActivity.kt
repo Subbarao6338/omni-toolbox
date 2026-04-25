@@ -87,38 +87,44 @@ data class Tool(
 val tools = listOf(
     Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer"),
     Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
-    Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Calculation"),
+    Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health"),
     Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
     Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity"),
     Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media"),
     Tool("Compass", Icons.Default.Explore, "compass", "Sensors"),
+    Tool("Compound Interest", Icons.Default.TrendingUp, "compound_interest", "Finance"),
+    Tool("CPU Info", Icons.Default.Memory, "cpu_info", "System"),
     Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion"),
     Tool("Date Calc", Icons.Default.CalendarToday, "date_calc", "Calculation"),
     Tool("Device", Icons.Default.Info, "device", "System"),
     Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation"),
     Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility"),
+    Tool("Fuel Cost", Icons.Default.LocalGasStation, "fuel", "Calculation"),
+    Tool("Hub", Icons.Default.Hub, "hub", "Utility"),
     Tool("JSON Format", Icons.Default.DataObject, "json", "Developer"),
     Tool("Level", Icons.Default.Architecture, "level", "Sensors"),
     Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors"),
+    Tool("Loan Calculator", Icons.Default.AccountBalance, "loan_calc", "Finance"),
+    Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Media"),
     Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors"),
     Tool("Morse Code", Icons.Default.Language, "morse", "Science"),
     Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
-    Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science"),
-    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science"),
-    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
+    Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Education"),
+    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Education"),
+    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Education"),
+    Tool("QR Generator", Icons.Default.QrCode, "qr_gen", "Utility"),
     Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
     Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors"),
+    Tool("Step Counter", Icons.Default.DirectionsRun, "step_counter", "Health"),
     Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
     Tool("Storage", Icons.Default.Storage, "storage", "System"),
     Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation"),
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
     Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer"),
+    Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health"),
     Tool("Web Search", Icons.Default.Search, "web", "Utility"),
     Tool("World Clock", Icons.Default.Public, "world_clock", "Utility"),
-    Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility"),
-    Tool("Fuel Cost", Icons.Default.LocalGasStation, "fuel", "Calculation"),
-    Tool("Hub", Icons.Default.Hub, "hub", "Utility"),
-    Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Media")
+    Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility")
 )
 
 @Composable
@@ -198,7 +204,19 @@ fun NatureToolsApp(
         composable("bpm") { BpmCounterScreen(navController) }
         composable("fuel") { FuelCostCalculatorScreen(navController) }
         composable("hub") { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app/", showUrlBar = false, title = "Hub") }
-        composable("media_grabber") { MediaGrabberScreen(navController) }
+        composable(
+            "media_grabber?url={url}",
+            arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null })
+        ) { backStackEntry ->
+            val url = backStackEntry.arguments?.getString("url")
+            MediaGrabberScreen(navController, initialUrl = url)
+        }
+        composable("loan_calc") { LoanCalculatorScreen(navController) }
+        composable("compound_interest") { CompoundInterestScreen(navController) }
+        composable("water") { WaterTrackerScreen(navController) }
+        composable("step_counter") { StepCounterScreen(navController) }
+        composable("qr_gen") { QrGeneratorScreen(navController) }
+        composable("cpu_info") { CpuInfoScreen(navController) }
     }
 }
 
@@ -259,7 +277,7 @@ fun HomeScreen(navController: NavHostController) {
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
+                columns = GridCells.Adaptive(minSize = 100.dp),
                 contentPadding = PaddingValues(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
