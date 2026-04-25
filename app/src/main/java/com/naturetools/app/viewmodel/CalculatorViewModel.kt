@@ -101,14 +101,14 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun formatValue(value: Double): String {
-        return if (value % 1.0 == 0.0) value.toLong().toString() else "%.4f".format(value).trimEnd('0').trimEnd('.')
+        return if (value % 1.0 == 0.0) value.toLong().toString() else String.format(java.util.Locale.US, "%.4f", value).trimEnd('0').trimEnd('.')
     }
 
     private fun formatResult(result: Double): String {
         return if (result.isNaN()) "Error"
         else if (result.isInfinite()) "Infinity"
         else if (result % 1.0 == 0.0) result.toLong().toString()
-        else "%.6f".format(result).trimEnd('0').trimEnd('.')
+        else String.format(java.util.Locale.US, "%.6f", result).trimEnd('0').trimEnd('.')
     }
 
     fun clear() {

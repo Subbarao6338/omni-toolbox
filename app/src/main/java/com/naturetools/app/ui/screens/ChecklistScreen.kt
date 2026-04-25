@@ -11,15 +11,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
-
-data class ChecklistItem(val id: Int, val text: String, val isChecked: Boolean)
+import com.naturetools.app.viewmodel.ChecklistViewModel
 
 @Composable
-fun ChecklistScreen(navController: NavHostController) {
-    var items by remember { mutableStateOf(listOf<ChecklistItem>()) }
-    var nextId by remember { mutableIntStateOf(1) }
+fun ChecklistScreen(navController: NavHostController, viewModel: ChecklistViewModel = viewModel()) {
+    val items by viewModel.allItems.collectAsState(initial = emptyList())
     var newItemText by remember { mutableStateOf("") }
 
     ToolScreen(title = "Checklist", onBack = { navController.popBackStack() }) { padding ->
@@ -35,7 +34,7 @@ fun ChecklistScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = {
                     if (newItemText.isNotBlank()) {
-                        items = items + ChecklistItem(nextId++, newItemText, false)
+                        viewModel.addItem(newItemText)
                         newItemText = ""
                     }
                 }) {
@@ -51,13 +50,13 @@ fun ChecklistScreen(navController: NavHostController) {
                     ) {
                         Checkbox(
                             checked = item.isChecked,
-                            onCheckedChange = { checked ->
-                                items = items.map { if (it.id == item.id) it.copy(isChecked = checked) else it }
+                            onCheckedChange = { _ ->
+                                viewModel.toggleItem(item)
                             }
                         )
                         Text(item.text, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                         IconButton(onClick = {
-                            items = items.filter { it.id != item.id }
+                            viewModel.deleteItem(item)
                         }) {
                             Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
                         }

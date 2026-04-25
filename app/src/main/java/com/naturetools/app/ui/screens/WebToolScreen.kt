@@ -4,12 +4,15 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,7 +57,21 @@ fun WebToolScreen(
         webView?.goBack()
     }
 
-    ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
+    ToolScreen(
+        title = title,
+        onBack = { navController.popBackStack() },
+        actions = {
+            IconButton(onClick = { webView?.reload() }) {
+                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+            }
+            IconButton(onClick = {
+                val currentUrl = webView?.url ?: urlToLoad
+                navController.navigate("media_grabber?url=$currentUrl")
+            }) {
+                Icon(Icons.Default.Download, contentDescription = "Grab Media")
+            }
+        }
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             if (showUrlBar) {
                 Row(
@@ -126,15 +143,19 @@ fun WebToolScreen(
                                 databaseEnabled = true
                                 useWideViewPort = true
                                 loadWithOverviewMode = true
+                                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                                setSupportZoom(true)
+                                builtInZoomControls = true
+                                displayZoomControls = false
                                 userAgentString = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36"
                             }
                             webView = this
                         }
                     },
                     update = {
-                        webView = it
+                        // Avoid reload on recomposition if possible, but keep it filling space
                     },
-                    modifier = Modifier.fillMaxSize().weight(1f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                 )
             }
         }
