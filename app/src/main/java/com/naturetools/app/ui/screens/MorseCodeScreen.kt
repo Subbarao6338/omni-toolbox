@@ -1,6 +1,8 @@
 package com.naturetools.app.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -30,7 +32,14 @@ fun MorseCodeScreen(navController: NavHostController) {
                 value = text,
                 onValueChange = { text = it },
                 label = { Text("Enter text") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    if (text.isNotEmpty()) {
+                        IconButton(onClick = { text = "" }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Clear")
+                        }
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text("Morse Code", style = MaterialTheme.typography.labelLarge)

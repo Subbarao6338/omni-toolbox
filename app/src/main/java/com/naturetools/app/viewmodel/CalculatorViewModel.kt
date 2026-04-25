@@ -58,6 +58,8 @@ class CalculatorViewModel : ViewModel() {
                 }
                 "eˣ" -> exp(currentValue)
                 "x²" -> currentValue * currentValue
+                "abs" -> abs(currentValue)
+                "π" -> PI
                 else -> currentValue
             }
         } catch (e: Exception) {

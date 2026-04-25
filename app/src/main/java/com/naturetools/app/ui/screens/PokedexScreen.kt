@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -106,7 +107,50 @@ fun PokedexScreen(navController: NavHostController) {
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     shape = MaterialTheme.shapes.medium
                 )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("External Resources", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    externalResources.take(2).forEach { (name, url) ->
+                        ElevatedCard(
+                            onClick = { navController.navigate("web?url=$url") },
+                            modifier = Modifier.weight(1f).height(60.dp),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
+                                Text(name, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
+                            }
+                        }
+                    }
+                }
+                if (externalResources.size > 2) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        externalResources.drop(2).forEach { (name, url) ->
+                            ElevatedCard(
+                                onClick = { navController.navigate("web?url=$url") },
+                                modifier = Modifier.weight(1f).height(60.dp),
+                                shape = MaterialTheme.shapes.medium
+                            ) {
+                                Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
+                                    Text(name, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
+                                }
+                            }
+                        }
+                        if (externalResources.size % 2 != 0) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+
+            item {
                 Spacer(modifier = Modifier.height(16.dp))
+                Text("Pokemon List", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             items(filteredList) { pokemon ->
@@ -136,27 +180,6 @@ fun PokedexScreen(navController: NavHostController) {
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                Text("External Resources", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            items(externalResources) { (name, url) ->
-                OutlinedCard(
-                    onClick = { navController.navigate("web?url=$url") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(name, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(20.dp))
                     }
                 }
             }

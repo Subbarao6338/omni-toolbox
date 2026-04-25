@@ -85,35 +85,36 @@ data class Tool(
 )
 
 val tools = listOf(
-    Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
-    Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion"),
-    Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
+    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer"),
+    Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
     Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Calculation"),
-    Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation"),
-    Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation"),
-    Tool("Web Search", Icons.Default.Search, "web", "Utility"),
+    Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation"),
+    Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity"),
+    Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media"),
     Tool("Compass", Icons.Default.Explore, "compass", "Sensors"),
+    Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion"),
+    Tool("Date Calc", Icons.Default.CalendarToday, "date_calc", "Calculation"),
+    Tool("Device", Icons.Default.Info, "device", "System"),
+    Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation"),
+    Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility"),
+    Tool("JSON Format", Icons.Default.DataObject, "json", "Developer"),
+    Tool("Level", Icons.Default.Architecture, "level", "Sensors"),
     Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors"),
     Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors"),
-    Tool("Level", Icons.Default.Architecture, "level", "Sensors"),
-    Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors"),
+    Tool("Morse Code", Icons.Default.Language, "morse", "Science"),
     Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity"),
-    Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity"),
-    Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility"),
-    Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
-    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility"),
-    Tool("Battery", Icons.Default.BatteryFull, "battery", "System"),
-    Tool("Device", Icons.Default.Info, "device", "System"),
-    Tool("Storage", Icons.Default.Storage, "storage", "System"),
-    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
-    Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
     Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science"),
     Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science"),
-    Tool("Morse Code", Icons.Default.Language, "morse", "Science"),
-    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer"),
-    Tool("JSON Format", Icons.Default.DataObject, "json", "Developer"),
+    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Science"),
+    Tool("Random Gen", Icons.Default.Casino, "random", "Utility"),
+    Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors"),
+    Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility"),
+    Tool("Storage", Icons.Default.Storage, "storage", "System"),
+    Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation"),
+    Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
     Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer"),
-    Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media")
+    Tool("Web Search", Icons.Default.Search, "web", "Utility"),
+    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility")
 )
 
 @Composable
@@ -177,6 +178,7 @@ fun NatureToolsApp(
         composable("url_encoder") { UrlEncoderScreen(navController) }
         composable("sensor_data") { SensorDataScreen(navController) }
         composable("color_picker") { ColorPickerScreen(navController) }
+        composable("date_calc") { DateCalculatorScreen(navController) }
     }
 }
 
@@ -222,6 +224,7 @@ fun HomeScreen(navController: NavHostController) {
                 selectedTabIndex = categories.indexOf(selectedCategory),
                 edgePadding = 16.dp,
                 divider = {},
+                indicator = {},
                 containerColor = androidx.compose.ui.graphics.Color.Transparent
             ) {
                 categories.forEach { category ->

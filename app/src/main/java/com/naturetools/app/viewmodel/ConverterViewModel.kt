@@ -21,7 +21,8 @@ class ConverterViewModel : ViewModel() {
         ConversionCategory("Area", listOf(Unit("Sq Meter", 1.0), Unit("Sq Kilometer", 0.000001), Unit("Sq Mile", 3.861e-7), Unit("Acre", 0.000247105))),
         ConversionCategory("Volume", listOf(Unit("Liter", 1.0), Unit("Milliliter", 1000.0), Unit("Gallon (US)", 0.264172), Unit("Cubic Meter", 0.001))),
         ConversionCategory("Digital", listOf(Unit("Byte", 1.0), Unit("Bit", 8.0), Unit("Kilobyte", 1.0/1024), Unit("Megabyte", 1.0/(1024*1024)), Unit("Gigabyte", 1.0/(1024.0*1024*1024)), Unit("Terabyte", 1.0/(1024.0*1024*1024*1024)))),
-        ConversionCategory("Pressure", listOf(Unit("Pascal", 1.0), Unit("Bar", 1e-5), Unit("PSI", 0.000145038), Unit("Atmosphere", 9.8692e-6)))
+        ConversionCategory("Pressure", listOf(Unit("Pascal", 1.0), Unit("Bar", 1e-5), Unit("PSI", 0.000145038), Unit("Atmosphere", 9.8692e-6))),
+        ConversionCategory("Fuel", listOf(Unit("L/100km", 1.0), Unit("MPG (US)", 0.0), Unit("MPG (UK)", 0.0)))
     )
 
     fun onInputChange(value: String) {
@@ -54,10 +55,29 @@ class ConverterViewModel : ViewModel() {
 
         result = if (category.name == "Temperature") {
             convertTemperature(value, fromUnit.name, toUnit.name)
+        } else if (category.name == "Fuel") {
+            convertFuel(value, fromUnit.name, toUnit.name)
         } else {
             val baseValue = value / fromUnit.factor
             (baseValue * toUnit.factor).format(4)
         }
+    }
+
+    private fun convertFuel(value: Double, from: String, to: String): String {
+        if (value <= 0) return "0"
+        val l100km = when (from) {
+            "L/100km" -> value
+            "MPG (US)" -> 235.215 / value
+            "MPG (UK)" -> 282.481 / value
+            else -> value
+        }
+        val resultValue = when (to) {
+            "L/100km" -> l100km
+            "MPG (US)" -> 235.215 / l100km
+            "MPG (UK)" -> 282.481 / l100km
+            else -> l100km
+        }
+        return resultValue.format(2)
     }
 
     private fun convertTemperature(value: Double, from: String, to: String): String {
