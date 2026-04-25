@@ -1,5 +1,6 @@
 package com.naturetools.app
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.automirrored.filled.*
@@ -15,11 +17,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.naturetools.app.ui.screens.*
@@ -28,9 +34,16 @@ import com.naturetools.app.ui.theme.NatureToolsTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+
         setContent {
-            var themeMode by rememberSaveable { mutableStateOf("system") }
-            var dynamicColor by rememberSaveable { mutableStateOf(true) }
+            var themeMode by rememberSaveable {
+                mutableStateOf(prefs.getString("theme_mode", "system") ?: "system")
+            }
+            var dynamicColor by rememberSaveable {
+                mutableStateOf(prefs.getBoolean("dynamic_color", true))
+            }
 
             val darkTheme = when (themeMode) {
                 "light" -> false
@@ -48,9 +61,15 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NatureToolsApp(
                         themeMode = themeMode,
-                        onThemeChange = { themeMode = it },
+                        onThemeChange = {
+                            themeMode = it
+                            prefs.edit().putString("theme_mode", it).apply()
+                        },
                         dynamicColor = dynamicColor,
-                        onDynamicColorChange = { dynamicColor = it }
+                        onDynamicColorChange = {
+                            dynamicColor = it
+                            prefs.edit().putBoolean("dynamic_color", it).apply()
+                        }
                     )
                 }
             }
@@ -125,7 +144,17 @@ fun NatureToolsApp(
         composable("bmi") { BMICalculatorScreen(navController) }
         composable("tip") { TipCalculatorScreen(navController) }
         composable("discount") { DiscountCalculatorScreen(navController) }
-        composable("web") { WebToolScreen(navController) }
+        composable(
+            "web?url={url}",
+            arguments = listOf(navArgument("url") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val url = backStackEntry.arguments?.getString("url")
+            WebToolScreen(navController, initialUrl = url)
+        }
         composable("compass") { CompassScreen(navController) }
         composable("light") { LightMeterScreen(navController) }
         composable("metal") { MetalDetectorScreen(navController) }
@@ -200,44 +229,43 @@ fun HomeScreen(navController: NavHostController) {
                         selected = selectedCategory == category,
                         onClick = { selectedCategory = category },
                         label = { Text(category) },
-                        modifier = Modifier.padding(horizontal = 4.dp)
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        shape = CircleShape
                     )
                 }
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 150.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                columns = GridCells.Fixed(4),
+                contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(filteredTools) { tool ->
                     ElevatedCard(
                         onClick = { navController.navigate(tool.route) },
-                        modifier = Modifier.fillMaxWidth().height(120.dp)
+                        modifier = Modifier.fillMaxWidth().height(90.dp)
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize().padding(4.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Icon(
                                 tool.icon,
                                 contentDescription = tool.name,
-                                modifier = Modifier.size(32.dp),
+                                modifier = Modifier.size(24.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 tool.name,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                tool.category,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.outline
+                                textAlign = TextAlign.Center,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }

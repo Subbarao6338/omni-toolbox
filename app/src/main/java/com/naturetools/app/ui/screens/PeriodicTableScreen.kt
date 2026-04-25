@@ -3,8 +3,11 @@ package com.naturetools.app.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -82,17 +85,50 @@ val elements = listOf(
 
 @Composable
 fun PeriodicTableScreen(navController: NavHostController) {
+    val externalResources = listOf(
+        "Byju's Periodic Table" to "https://byjus.com/periodic-table/",
+        "PTable" to "https://ptable.com/#Properties",
+        "Royal Society of Chemistry" to "https://periodic-table.rsc.org/",
+        "PubChem" to "https://pubchem.ncbi.nlm.nih.gov/periodic-table/"
+    )
+
     ToolScreen(title = "Periodic Table", onBack = { navController.popBackStack() }) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-            Text("Elements (1-54)", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 80.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(elements) { element ->
-                    ElementCard(element)
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 80.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(padding)
+        ) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text("Elements (1-54)", style = MaterialTheme.typography.titleMedium)
+            }
+
+            items(elements) { element ->
+                ElementCard(element)
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text("External Resources", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+
+            items(externalResources.size, span = { GridItemSpan(maxLineSpan) }) { index ->
+                val (name, url) = externalResources[index]
+                OutlinedCard(
+                    onClick = { navController.navigate("web?url=$url") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(name, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(20.dp))
+                    }
                 }
             }
         }
