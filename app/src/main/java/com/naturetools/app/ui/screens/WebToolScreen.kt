@@ -3,10 +3,12 @@ package com.naturetools.app.ui.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import java.net.URLEncoder
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -48,8 +50,12 @@ fun WebToolScreen(
 
     LaunchedEffect(urlToLoad, webView) {
         isOffline = !checkConnectivity()
-        if (!isOffline && webView != null && webView?.url != urlToLoad) {
-            webView?.loadUrl(urlToLoad)
+        if (!isOffline && webView != null) {
+            val currentUrl = webView?.url?.removeSuffix("/")
+            val targetUrl = urlToLoad.removeSuffix("/")
+            if (currentUrl != targetUrl) {
+                webView?.loadUrl(urlToLoad)
+            }
         }
     }
 
@@ -87,7 +93,12 @@ fun WebToolScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                        urlToLoad = if (urlInput.startsWith("http")) urlInput else "https://$urlInput"
+                        val trimmedInput = urlInput.trim()
+                        urlToLoad = when {
+                            trimmedInput.startsWith("http://") || trimmedInput.startsWith("https://") -> trimmedInput
+                            trimmedInput.contains(".") && !trimmedInput.contains(" ") -> "https://$trimmedInput"
+                            else -> "https://www.google.com/search?q=${URLEncoder.encode(trimmedInput, "UTF-8")}"
+                        }
                     }) {
                         Text("Go")
                     }
@@ -122,6 +133,7 @@ fun WebToolScreen(
                 AndroidView(
                     factory = {
                         WebView(it).apply {
+                            webChromeClient = WebChromeClient()
                             webViewClient = object : WebViewClient() {
                                 override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
                                     isLoading = true
@@ -147,7 +159,7 @@ fun WebToolScreen(
                                 setSupportZoom(true)
                                 builtInZoomControls = true
                                 displayZoomControls = false
-                                userAgentString = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36"
+                                userAgentString = WebSettings.getDefaultUserAgent(context)
                             }
                             webView = this
                         }
