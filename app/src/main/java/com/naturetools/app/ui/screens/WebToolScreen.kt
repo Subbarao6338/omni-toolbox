@@ -35,6 +35,7 @@ fun WebToolScreen(
     val defaultUrl = initialUrl ?: "https://www.google.com"
     var urlInput by remember { mutableStateOf(defaultUrl) }
     var urlToLoad by remember { mutableStateOf(defaultUrl) }
+    var lastLoadedUrl by remember { mutableStateOf<String?>(null) }
     var isOffline by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
@@ -48,8 +49,9 @@ fun WebToolScreen(
 
     LaunchedEffect(urlToLoad, webView) {
         isOffline = !checkConnectivity()
-        if (!isOffline && webView != null && webView?.url != urlToLoad) {
+        if (!isOffline && webView != null && lastLoadedUrl != urlToLoad) {
             webView?.loadUrl(urlToLoad)
+            lastLoadedUrl = urlToLoad
         }
     }
 
@@ -143,6 +145,8 @@ fun WebToolScreen(
                                 databaseEnabled = true
                                 useWideViewPort = true
                                 loadWithOverviewMode = true
+                                allowFileAccess = true
+                                allowContentAccess = true
                                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                                 setSupportZoom(true)
                                 builtInZoomControls = true
