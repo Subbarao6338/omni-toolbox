@@ -6,20 +6,19 @@ import android.content.Intent
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.webkit.CookieManager
+import android.webkit.GeolocationPermissions
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,7 +42,15 @@ fun WebToolScreen(
     var urlToLoad by remember { mutableStateOf(defaultUrl) }
     var isOffline by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
+    var isDesktopMode by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
+
+    val desktopUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    val mobileUserAgent = remember {
+        WebView(context).settings.userAgentString
+            .replace("; wv", "")
+            .replace("Version/4.0 ", "")
+    }
 
     fun checkConnectivity(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -71,6 +78,22 @@ fun WebToolScreen(
         title = title,
         onBack = { navController.popBackStack() },
         actions = {
+            IconButton(onClick = {
+                isDesktopMode = !isDesktopMode
+                webView?.settings?.userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
+                webView?.reload()
+            }) {
+                Icon(
+                    if (isDesktopMode) Icons.Default.Smartphone else Icons.Default.DesktopWindows,
+                    contentDescription = if (isDesktopMode) "Mobile Site" else "Desktop Site"
+                )
+            }
+            IconButton(onClick = {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webView?.url ?: urlToLoad))
+                context.startActivity(intent)
+            }) {
+                Icon(Icons.Default.OpenInBrowser, contentDescription = "Open in Browser")
+            }
             IconButton(onClick = { webView?.reload() }) {
                 Icon(Icons.Default.Refresh, contentDescription = "Refresh")
             }
@@ -129,65 +152,82 @@ fun WebToolScreen(
                     }
                 }
             } else {
-                AndroidView(
-                    factory = {
-                        WebView(it).apply {
-                            webViewClient = object : WebViewClient() {
-                                override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
-                                    isLoading = true
-                                    super.onPageStarted(view, url, favicon)
-                                }
-
-                                override fun onPageFinished(view: WebView?, url: String?) {
-                                    isLoading = false
-                                    super.onPageFinished(view, url)
-                                }
-
-                                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                    val url = request?.url?.toString() ?: return false
-                                    if (url.startsWith("http://") || url.startsWith("https://")) {
-                                        return false
+                Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                    AndroidView(
+                        factory = {
+                            WebView(it).apply {
+                                layoutParams = ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                )
+                                webViewClient = object : WebViewClient() {
+                                    override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                                        isLoading = true
+                                        super.onPageStarted(view, url, favicon)
                                     }
-                                    try {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        view?.context?.startActivity(intent)
-                                        return true
-                                    } catch (e: Exception) {
-                                        return false
+
+                                    override fun onPageFinished(view: WebView?, url: String?) {
+                                        isLoading = false
+                                        super.onPageFinished(view, url)
+                                    }
+
+                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                                        val url = request?.url?.toString() ?: return false
+                                        if (url.startsWith("http://") || url.startsWith("https://")) {
+                                            return false
+                                        }
+                                        try {
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                            view?.context?.startActivity(intent)
+                                            return true
+                                        } catch (e: Exception) {
+                                            return false
+                                        }
+                                    }
+
+                                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                                        isLoading = false
+                                        super.onReceivedError(view, request, error)
                                     }
                                 }
+                                webChromeClient = object : WebChromeClient() {
+                                    override fun onPermissionRequest(request: PermissionRequest?) {
+                                        request?.grant(request.resources)
+                                    }
 
-                                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                                    isLoading = false
-                                    super.onReceivedError(view, request, error)
+                                    override fun onGeolocationPermissionsShowPrompt(
+                                        origin: String?,
+                                        callback: GeolocationPermissions.Callback?
+                                    ) {
+                                        callback?.invoke(origin, true, false)
+                                    }
                                 }
+                                settings.apply {
+                                    javaScriptEnabled = true
+                                    domStorageEnabled = true
+                                    databaseEnabled = true
+                                    useWideViewPort = true
+                                    loadWithOverviewMode = true
+                                    mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                                    setSupportZoom(true)
+                                    builtInZoomControls = true
+                                    displayZoomControls = false
+                                    javaScriptCanOpenWindowsAutomatically = true
+                                    allowFileAccess = true
+                                    allowContentAccess = true
+                                    userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
+                                    mediaPlaybackRequiresUserGesture = false
+                                }
+                                CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+                                webView = this
                             }
-                            webChromeClient = WebChromeClient()
-                            settings.apply {
-                                javaScriptEnabled = true
-                                domStorageEnabled = true
-                                databaseEnabled = true
-                                useWideViewPort = true
-                                loadWithOverviewMode = true
-                                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-                                setSupportZoom(true)
-                                builtInZoomControls = true
-                                displayZoomControls = false
-                                javaScriptCanOpenWindowsAutomatically = true
-                                allowFileAccess = true
-                                allowContentAccess = true
-                                userAgentString = userAgentString.replace("; wv", "").replace("Version/4.0 ", "")
-                                mediaPlaybackRequiresUserGesture = false
-                            }
-                            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
-                            webView = this
-                        }
-                    },
-                    update = {
-                        // Avoid reload on recomposition if possible, but keep it filling space
-                    },
-                    modifier = Modifier.fillMaxWidth().weight(1f)
-                )
+                        },
+                        update = {
+                            // Avoid reload on recomposition if possible, but keep it filling space
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
     }
