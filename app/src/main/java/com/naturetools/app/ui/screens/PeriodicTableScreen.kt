@@ -8,12 +8,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -85,10 +87,15 @@ val elements = listOf(
 
 @Composable
 fun PeriodicTableScreen(navController: NavHostController) {
+    var searchQuery by remember { mutableStateOf("") }
+    val filteredElements = elements.filter {
+        it.name.contains(searchQuery, ignoreCase = true) || it.symbol.contains(searchQuery, ignoreCase = true)
+    }
+
     val externalResources = listOf(
-        "Byju's Periodic Table" to "https://byjus.com/periodic-table/",
+        "Byju's" to "https://byjus.com/periodic-table/",
         "PTable" to "https://ptable.com/#Properties",
-        "Royal Society of Chemistry" to "https://periodic-table.rsc.org/",
+        "RSC" to "https://periodic-table.rsc.org/",
         "PubChem" to "https://pubchem.ncbi.nlm.nih.gov/periodic-table/"
     )
 
@@ -101,28 +108,31 @@ fun PeriodicTableScreen(navController: NavHostController) {
             modifier = Modifier.padding(padding)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text("External Resources", style = MaterialTheme.typography.titleMedium)
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("Search elements...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    shape = MaterialTheme.shapes.medium
+                )
             }
 
-            items(externalResources) { (name, url) ->
-                ElevatedCard(
-                    onClick = { navController.navigate("web?url=$url") },
-                    modifier = Modifier.fillMaxWidth().height(60.dp),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            name,
-                            style = MaterialTheme.typography.labelMedium,
-                            maxLines = 2,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(16.dp))
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("External Resources", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        externalResources.take(2).forEach { (name, url) ->
+                            ExternalResourceCard(name, url, navController, Modifier.weight(1f))
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        externalResources.drop(2).forEach { (name, url) ->
+                            ExternalResourceCard(name, url, navController, Modifier.weight(1f))
+                        }
                     }
                 }
             }
@@ -135,9 +145,22 @@ fun PeriodicTableScreen(navController: NavHostController) {
                 }
             }
 
-            items(elements) { element ->
+            items(filteredElements) { element ->
                 ElementCard(element)
             }
+        }
+    }
+}
+
+@Composable
+fun ExternalResourceCard(name: String, url: String, navController: NavHostController, modifier: Modifier = Modifier) {
+    ElevatedCard(
+        onClick = { navController.navigate("web?url=$url&showBar=false") },
+        modifier = modifier.height(50.dp),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
+            Text(name, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
         }
     }
 }

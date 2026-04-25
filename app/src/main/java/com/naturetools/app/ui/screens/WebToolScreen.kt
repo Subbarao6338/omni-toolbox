@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
-fun WebToolScreen(navController: NavHostController, initialUrl: String? = null) {
+fun WebToolScreen(navController: NavHostController, initialUrl: String? = null, showUrlBar: Boolean = true) {
     val context = LocalContext.current
     val defaultUrl = initialUrl ?: "https://www.google.com"
     var urlInput by remember { mutableStateOf(defaultUrl) }
@@ -40,19 +40,24 @@ fun WebToolScreen(navController: NavHostController, initialUrl: String? = null) 
 
     ToolScreen(title = "Web Search", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
-            Row(modifier = Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                OutlinedTextField(
-                    value = urlInput,
-                    onValueChange = { urlInput = it },
-                    modifier = Modifier.weight(1f),
-                    label = { Text("URL") },
-                    leadingIcon = { Icon(Icons.Default.Language, contentDescription = null) }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = {
-                    urlToLoad = if (urlInput.startsWith("http")) urlInput else "https://$urlInput"
-                }) {
-                    Text("Go")
+            if (showUrlBar) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = urlInput,
+                        onValueChange = { urlInput = it },
+                        modifier = Modifier.weight(1f),
+                        label = { Text("URL") },
+                        leadingIcon = { Icon(Icons.Default.Language, contentDescription = null) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = {
+                        urlToLoad = if (urlInput.startsWith("http")) urlInput else "https://$urlInput"
+                    }) {
+                        Text("Go")
+                    }
                 }
             }
 
@@ -70,7 +75,11 @@ fun WebToolScreen(navController: NavHostController, initialUrl: String? = null) 
                 AndroidView(factory = {
                     WebView(it).apply {
                         webViewClient = WebViewClient()
-                        settings.javaScriptEnabled = true
+                        settings.apply {
+                            javaScriptEnabled = true
+                            domStorageEnabled = true
+                            databaseEnabled = true
+                        }
                         loadUrl(urlToLoad)
                     }
                 }, update = {

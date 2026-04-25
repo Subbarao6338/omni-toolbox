@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
@@ -64,15 +65,16 @@ fun BMIResultCard(bmi: Float) {
         else -> "Obese"
     }
     val color = when {
-        bmi < 18.5 -> MaterialTheme.colorScheme.tertiary
-        bmi < 25 -> MaterialTheme.colorScheme.primary
-        bmi < 30 -> MaterialTheme.colorScheme.errorContainer
-        else -> MaterialTheme.colorScheme.error
+        bmi < 18.5 -> Color(0xFF2196F3) // Sky Blue
+        bmi < 25 -> Color(0xFF4CAF50) // Leaf Green
+        bmi < 30 -> Color(0xFFFFC107) // Earthy Yellow
+        else -> Color(0xFFF44336) // Clay Red
     }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f)),
+        border = androidx.compose.foundation.BorderStroke(2.dp, color)
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
@@ -80,14 +82,15 @@ fun BMIResultCard(bmi: Float) {
         ) {
             Text("Your BMI", style = MaterialTheme.typography.titleMedium)
             Text("%.1f".format(bmi), style = MaterialTheme.typography.displayLarge, color = color)
-            Text(category, style = MaterialTheme.typography.headlineSmall, color = color)
+            Text(category, style = MaterialTheme.typography.headlineSmall, color = color, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             LinearProgressIndicator(
                 progress = (bmi / 40f).coerceIn(0f, 1f),
                 modifier = Modifier.fillMaxWidth(),
-                color = color
+                color = color,
+                trackColor = color.copy(alpha = 0.2f)
             )
         }
     }

@@ -1,9 +1,15 @@
 package com.naturetools.app.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
@@ -13,6 +19,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun UrlEncoderScreen(navController: NavHostController) {
+    val clipboardManager = LocalClipboardManager.current
     var input by remember { mutableStateOf("") }
     var output by remember { mutableStateOf("") }
 
@@ -22,7 +29,14 @@ fun UrlEncoderScreen(navController: NavHostController) {
                 value = input,
                 onValueChange = { input = it },
                 label = { Text("Input") },
-                modifier = Modifier.fillMaxWidth().height(150.dp)
+                modifier = Modifier.fillMaxWidth().height(150.dp),
+                trailingIcon = {
+                    if (input.isNotEmpty()) {
+                        IconButton(onClick = { input = "" }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Clear")
+                        }
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -46,7 +60,18 @@ fun UrlEncoderScreen(navController: NavHostController) {
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
-            Text("Result", style = MaterialTheme.typography.labelLarge)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Result", style = MaterialTheme.typography.labelLarge)
+                if (output.isNotEmpty() && !output.startsWith("Error")) {
+                    IconButton(onClick = { clipboardManager.setText(AnnotatedString(output)) }) {
+                        Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
                 modifier = Modifier.fillMaxWidth().weight(1f),

@@ -116,8 +116,8 @@ fun PokedexScreen(navController: NavHostController) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     externalResources.take(2).forEach { (name, url) ->
                         ElevatedCard(
-                            onClick = { navController.navigate("web?url=$url") },
-                            modifier = Modifier.weight(1f).height(60.dp),
+                            onClick = { navController.navigate("web?url=$url&showBar=false") },
+                            modifier = Modifier.weight(1f).height(50.dp),
                             shape = MaterialTheme.shapes.medium
                         ) {
                             Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
@@ -131,8 +131,8 @@ fun PokedexScreen(navController: NavHostController) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         externalResources.drop(2).forEach { (name, url) ->
                             ElevatedCard(
-                                onClick = { navController.navigate("web?url=$url") },
-                                modifier = Modifier.weight(1f).height(60.dp),
+                                onClick = { navController.navigate("web?url=$url&showBar=false") },
+                                modifier = Modifier.weight(1f).height(50.dp),
                                 shape = MaterialTheme.shapes.medium
                             ) {
                                 Box(modifier = Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.Center) {
