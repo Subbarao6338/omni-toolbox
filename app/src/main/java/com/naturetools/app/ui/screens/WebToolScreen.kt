@@ -2,7 +2,11 @@ package com.naturetools.app.ui.screens
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.content.Intent
 import android.net.NetworkCapabilities
+import android.net.Uri
+import android.webkit.CookieManager
+import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -140,7 +144,17 @@ fun WebToolScreen(
                                 }
 
                                 override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                    return false
+                                    val url = request?.url?.toString() ?: return false
+                                    if (url.startsWith("http://") || url.startsWith("https://")) {
+                                        return false
+                                    }
+                                    try {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                        view?.context?.startActivity(intent)
+                                        return true
+                                    } catch (e: Exception) {
+                                        return false
+                                    }
                                 }
 
                                 override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
@@ -160,7 +174,12 @@ fun WebToolScreen(
                                 builtInZoomControls = true
                                 displayZoomControls = false
                                 javaScriptCanOpenWindowsAutomatically = true
+                                allowFileAccess = true
+                                allowContentAccess = true
+                                userAgentString = userAgentString.replace("; wv", "").replace("Version/4.0 ", "")
+                                mediaPlaybackRequiresUserGesture = false
                             }
+                            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
                             webView = this
                         }
                     },
