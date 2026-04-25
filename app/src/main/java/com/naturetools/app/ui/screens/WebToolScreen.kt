@@ -3,8 +3,10 @@ package com.naturetools.app.ui.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Language
@@ -20,12 +22,19 @@ import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
-fun WebToolScreen(navController: NavHostController, initialUrl: String? = null, showUrlBar: Boolean = true) {
+fun WebToolScreen(
+    navController: NavHostController,
+    initialUrl: String? = null,
+    showUrlBar: Boolean = true,
+    title: String = "Web Search"
+) {
     val context = LocalContext.current
     val defaultUrl = initialUrl ?: "https://www.google.com"
     var urlInput by remember { mutableStateOf(defaultUrl) }
     var urlToLoad by remember { mutableStateOf(defaultUrl) }
     var isOffline by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+    var webView: WebView? by remember { mutableStateOf(null) }
 
     fun checkConnectivity(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -34,11 +43,18 @@ fun WebToolScreen(navController: NavHostController, initialUrl: String? = null, 
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
-    LaunchedEffect(urlToLoad) {
+    LaunchedEffect(urlToLoad, webView) {
         isOffline = !checkConnectivity()
+        if (!isOffline && webView != null && webView?.url != urlToLoad) {
+            webView?.loadUrl(urlToLoad)
+        }
     }
 
-    ToolScreen(title = "Web Search", onBack = { navController.popBackStack() }) { padding ->
+    BackHandler(enabled = webView?.canGoBack() == true) {
+        webView?.goBack()
+    }
+
+    ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             if (showUrlBar) {
                 Row(
@@ -61,30 +77,65 @@ fun WebToolScreen(navController: NavHostController, initialUrl: String? = null, 
                 }
             }
 
+            if (isLoading) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+
             if (isOffline) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.WifiOff, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.error)
+                        Icon(
+                            Icons.Default.WifiOff,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
                         Text("No Internet Connection", style = MaterialTheme.typography.titleLarge)
-                        Button(onClick = { isOffline = !checkConnectivity() }) {
+                        Button(onClick = {
+                            isOffline = !checkConnectivity()
+                            if (!isOffline) {
+                                webView?.loadUrl(urlToLoad)
+                            }
+                        }) {
                             Text("Retry")
                         }
                     }
                 }
             } else {
-                AndroidView(factory = {
-                    WebView(it).apply {
-                        webViewClient = WebViewClient()
-                        settings.apply {
-                            javaScriptEnabled = true
-                            domStorageEnabled = true
-                            databaseEnabled = true
+                AndroidView(
+                    factory = {
+                        WebView(it).apply {
+                            webViewClient = object : WebViewClient() {
+                                override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                                    isLoading = true
+                                    super.onPageStarted(view, url, favicon)
+                                }
+
+                                override fun onPageFinished(view: WebView?, url: String?) {
+                                    isLoading = false
+                                    super.onPageFinished(view, url)
+                                }
+
+                                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                                    return false
+                                }
+                            }
+                            settings.apply {
+                                javaScriptEnabled = true
+                                domStorageEnabled = true
+                                databaseEnabled = true
+                                useWideViewPort = true
+                                loadWithOverviewMode = true
+                                userAgentString = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36"
+                            }
+                            webView = this
                         }
-                        loadUrl(urlToLoad)
-                    }
-                }, update = {
-                    it.loadUrl(urlToLoad)
-                }, modifier = Modifier.fillMaxSize().weight(1f))
+                    },
+                    update = {
+                        webView = it
+                    },
+                    modifier = Modifier.fillMaxSize().weight(1f)
+                )
             }
         }
     }
