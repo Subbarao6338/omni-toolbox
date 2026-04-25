@@ -77,13 +77,19 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
                                     else -> viewModel.onDigit(label)
                                 }
                             },
-                            modifier = Modifier.weight(1f).aspectRatio(if (buttons.size > 4) 1.5f else 1.2f),
+                            modifier = Modifier
+                                .weight(1f)
+                                .heightIn(min = 48.dp)
+                                .aspectRatio(if (buttons.size > 4) 1.5f else 1.2f),
                             colors = if (label in "+-*/=modpow") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                                      else if (label == "C" || label == "AC") ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                                      else ButtonDefaults.filledTonalButtonColors(),
                             contentPadding = PaddingValues(0.dp)
                         ) {
-                            Text(label, style = if (label.length > 2) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleLarge)
+                            Text(
+                                label,
+                                style = if (label.length > 2) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleLarge
+                            )
                         }
                     }
                 }

@@ -3,15 +3,20 @@ package com.naturetools.app.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
 fun MorseCodeScreen(navController: NavHostController) {
+    val clipboardManager = LocalClipboardManager.current
     var text by remember { mutableStateOf("") }
 
     val morseMap = mapOf(
@@ -42,7 +47,18 @@ fun MorseCodeScreen(navController: NavHostController) {
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Text("Morse Code", style = MaterialTheme.typography.labelLarge)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Morse Code", style = MaterialTheme.typography.labelLarge)
+                if (morseOutput.isNotEmpty() && !morseOutput.contains("?")) {
+                    IconButton(onClick = { clipboardManager.setText(AnnotatedString(morseOutput)) }) {
+                        Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
                 modifier = Modifier.fillMaxWidth().weight(1f),

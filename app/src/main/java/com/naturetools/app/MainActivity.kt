@@ -114,7 +114,10 @@ val tools = listOf(
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion"),
     Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer"),
     Tool("Web Search", Icons.Default.Search, "web", "Utility"),
-    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility")
+    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility"),
+    Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility"),
+    Tool("Fuel Cost", Icons.Default.LocalGasStation, "fuel", "Calculation"),
+    Tool("Hub", Icons.Default.Hub, "hub", "Utility")
 )
 
 @Composable
@@ -146,15 +149,22 @@ fun NatureToolsApp(
         composable("tip") { TipCalculatorScreen(navController) }
         composable("discount") { DiscountCalculatorScreen(navController) }
         composable(
-            "web?url={url}",
-            arguments = listOf(navArgument("url") {
-                type = NavType.StringType
-                nullable = true
-                defaultValue = null
-            })
+            "web?url={url}&showBar={showBar}",
+            arguments = listOf(
+                navArgument("url") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                },
+                navArgument("showBar") {
+                    type = NavType.BoolType
+                    defaultValue = true
+                }
+            )
         ) { backStackEntry ->
             val url = backStackEntry.arguments?.getString("url")
-            WebToolScreen(navController, initialUrl = url)
+            val showBar = backStackEntry.arguments?.getBoolean("showBar") ?: true
+            WebToolScreen(navController, initialUrl = url, showUrlBar = showBar)
         }
         composable("compass") { CompassScreen(navController) }
         composable("light") { LightMeterScreen(navController) }
@@ -179,6 +189,9 @@ fun NatureToolsApp(
         composable("sensor_data") { SensorDataScreen(navController) }
         composable("color_picker") { ColorPickerScreen(navController) }
         composable("date_calc") { DateCalculatorScreen(navController) }
+        composable("bpm") { BpmCounterScreen(navController) }
+        composable("fuel") { FuelCostCalculatorScreen(navController) }
+        composable("hub") { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app/", showUrlBar = false) }
     }
 }
 
