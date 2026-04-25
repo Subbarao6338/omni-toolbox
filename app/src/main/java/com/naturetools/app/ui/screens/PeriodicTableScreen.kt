@@ -101,35 +101,42 @@ fun PeriodicTableScreen(navController: NavHostController) {
             modifier = Modifier.padding(padding)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text("Elements (1-54)", style = MaterialTheme.typography.titleMedium)
+                Text("External Resources", style = MaterialTheme.typography.titleMedium)
             }
 
-            items(elements) { element ->
-                ElementCard(element)
+            items(externalResources) { (name, url) ->
+                ElevatedCard(
+                    onClick = { navController.navigate("web?url=$url") },
+                    modifier = Modifier.fillMaxWidth().height(60.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            name,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 2,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(16.dp))
+                    }
+                }
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text("External Resources", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Elements (1-54)", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
 
-            items(externalResources.size, span = { GridItemSpan(maxLineSpan) }) { index ->
-                val (name, url) = externalResources[index]
-                OutlinedCard(
-                    onClick = { navController.navigate("web?url=$url") },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(name, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(20.dp))
-                    }
-                }
+            items(elements) { element ->
+                ElementCard(element)
             }
         }
     }

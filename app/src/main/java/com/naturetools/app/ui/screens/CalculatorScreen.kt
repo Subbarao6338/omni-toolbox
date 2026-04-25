@@ -39,7 +39,7 @@ fun CalculatorScreen(navController: NavHostController, viewModel: CalculatorView
 
             // Scientific Row
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("sin", "cos", "tan", "log", "√", "eˣ", "x²").forEach { op ->
+                listOf("sin", "cos", "tan", "log", "√", "eˣ", "x²", "abs", "π").forEach { op ->
                     FilledTonalButton(
                         onClick = { viewModel.onScientific(op) },
                         modifier = Modifier.weight(1f),
