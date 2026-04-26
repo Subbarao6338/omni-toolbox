@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             var themeMode by rememberSaveable { mutableStateOf(prefs.getString("theme_mode", "system") ?: "system") }
             var dynamicColor by rememberSaveable { mutableStateOf(prefs.getBoolean("dynamic_color", true)) }
+            var showCategoryCounts by rememberSaveable { mutableStateOf(prefs.getBoolean("show_category_counts", true)) }
             val darkTheme = when (themeMode) {
                 "light" -> false
                 "dark" -> true
@@ -59,6 +60,11 @@ class MainActivity : ComponentActivity() {
                         onDynamicColorChange = {
                             dynamicColor = it
                             prefs.edit().putBoolean("dynamic_color", it).apply()
+                        },
+                        showCategoryCounts = showCategoryCounts,
+                        onShowCategoryCountsChange = {
+                            showCategoryCounts = it
+                            prefs.edit().putBoolean("show_category_counts", it).apply()
                         }
                     )
                 }
@@ -152,12 +158,14 @@ fun NatureToolsApp(
     themeMode: String,
     onThemeChange: (String) -> Unit,
     dynamicColor: Boolean,
-    onDynamicColorChange: (Boolean) -> Unit
+    onDynamicColorChange: (Boolean) -> Unit,
+    showCategoryCounts: Boolean,
+    onShowCategoryCountsChange: (Boolean) -> Unit
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController) }
-        composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange) }
+        composable("home") { HomeScreen(navController, showCategoryCounts) }
+        composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange, showCategoryCounts, onShowCategoryCountsChange) }
         composable("converter") { UnitConverterScreen(navController) }
         composable("currency") { CurrencyConverterScreen(navController) }
         composable("calculator") { CalculatorScreen(navController) }
@@ -221,9 +229,14 @@ fun NatureToolsApp(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, showCategoryCounts: Boolean) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("All") }
+
+    val categoryCounts = remember {
+        val counts = tools.groupingBy { it.category }.eachCount()
+        counts + ("All" to tools.size)
+    }
 
     val categories = remember {
         listOf("All") + tools.map { it.category }.distinct().sorted()
@@ -268,10 +281,12 @@ fun HomeScreen(navController: NavHostController) {
                 containerColor = Color.Transparent
             ) {
                 categories.forEach { category ->
+                    val count = categoryCounts[category] ?: 0
+                    val label = if (showCategoryCounts) "$category ($count)" else category
                     FilterChip(
                         selected = selectedCategory == category,
                         onClick = { selectedCategory = category },
-                        label = { Text(category) },
+                        label = { Text(label) },
                         modifier = Modifier.padding(horizontal = 4.dp),
                         shape = CircleShape
                     )

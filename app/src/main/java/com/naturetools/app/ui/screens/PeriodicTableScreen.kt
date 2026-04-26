@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import android.net.Uri
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -155,7 +156,7 @@ fun PeriodicTableScreen(navController: NavHostController) {
 @Composable
 fun ExternalResourceCard(name: String, url: String, navController: NavHostController, modifier: Modifier = Modifier) {
     ElevatedCard(
-        onClick = { navController.navigate("web?url=$url&showBar=false") },
+        onClick = { navController.navigate("web?url=${Uri.encode(url)}&showBar=false") },
         modifier = modifier.height(50.dp),
         shape = MaterialTheme.shapes.medium
     ) {
