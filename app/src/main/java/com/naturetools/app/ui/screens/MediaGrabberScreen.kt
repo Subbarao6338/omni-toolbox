@@ -145,34 +145,46 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                 val script = """
                                     (function() {
                                         var links = new Set();
+
+                                        function addUrl(url) {
+                                            if (!url) return;
+                                            try {
+                                                var absolute = new URL(url, document.baseURI).href;
+                                                if (absolute.startsWith('http')) links.add(absolute);
+                                            } catch(e) {}
+                                        }
+
                                         var imgs = document.getElementsByTagName('img');
                                         for (var i = 0; i < imgs.length; i++) {
-                                            if (imgs[i].src) links.add(imgs[i].src);
+                                            addUrl(imgs[i].src);
                                             if (imgs[i].srcset) {
-                                                var srcset = imgs[i].srcset.split(',');
-                                                srcset.forEach(s => {
-                                                    var url = s.trim().split(' ')[0];
-                                                    if (url) {
-                                                        try { links.add(new URL(url, document.baseURI).href); } catch(e) {}
-                                                    }
-                                                });
+                                                imgs[i].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
                                             }
                                         }
+
                                         var videos = document.getElementsByTagName('video');
                                         for (var i = 0; i < videos.length; i++) {
-                                            if (videos[i].src) links.add(videos[i].src);
-                                            if (videos[i].poster) links.add(videos[i].poster);
+                                            addUrl(videos[i].src);
+                                            addUrl(videos[i].poster);
                                             var sources = videos[i].getElementsByTagName('source');
-                                            for (var j = 0; j < sources.length; j++) {
-                                                if (sources[j].src) links.add(sources[j].src);
+                                            for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
+                                        }
+
+                                        var allElements = document.getElementsByTagName('*');
+                                        for (var i = 0; i < allElements.length; i++) {
+                                            var bg = window.getComputedStyle(allElements[i]).backgroundImage;
+                                            if (bg && bg !== 'none' && bg.startsWith('url')) {
+                                                var url = bg.match(/url\(["']?([^"']+)["']?\)/);
+                                                if (url && url[1]) addUrl(url[1]);
                                             }
                                         }
+
                                         var metas = document.getElementsByTagName('meta');
                                         for (var i = 0; i < metas.length; i++) {
-                                            var prop = metas[i].getAttribute('property');
+                                            var prop = metas[i].getAttribute('property') || metas[i].getAttribute('name');
                                             var content = metas[i].getAttribute('content');
-                                            if (prop && (prop === 'og:image' || prop === 'og:video' || prop === 'og:image:secure_url') && content) {
-                                                try { links.add(new URL(content, document.baseURI).href); } catch(e) {}
+                                            if (prop && (prop.includes('image') || prop.includes('video')) && content) {
+                                                addUrl(content);
                                             }
                                         }
                                         return JSON.stringify(Array.from(links));
