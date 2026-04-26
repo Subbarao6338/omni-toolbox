@@ -89,6 +89,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.glance:glance-appwidget:1.1.0")
+    implementation("androidx.glance:glance-material3:1.1.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
