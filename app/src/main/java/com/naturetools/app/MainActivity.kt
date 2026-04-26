@@ -145,6 +145,7 @@ val tools = listOf(
     Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility", Color(0xFFF44336)),
     Tool("Random Gen", Icons.Default.Casino, "random", "Utility", Color(0xFFE91E63)),
     Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility", Color(0xFF9C27B0)),
+    Tool("Clock", Icons.Default.Schedule, "clock", "Utility", Color(0xFF2196F3)),
     Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),
     Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility", Color(0xFF3F51B5)),
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion", Color(0xFF2196F3)),
@@ -190,6 +191,7 @@ fun NatureToolsApp(
         composable("level") { LevelScreen(navController) }
         composable("flashlight") { FlashlightScreen(navController) }
         composable("stopwatch") { StopwatchScreen(navController) }
+        composable("clock") { ClockScreen(navController) }
         composable("world_clock") { WorldClockScreen(navController) }
         composable("battery") { BatteryScreen(navController) }
         composable("device") { DeviceScreen(navController) }
