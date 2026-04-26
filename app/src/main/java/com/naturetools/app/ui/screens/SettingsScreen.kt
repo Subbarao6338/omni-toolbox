@@ -17,7 +17,9 @@ fun SettingsScreen(
     themeMode: String,
     onThemeChange: (String) -> Unit,
     dynamicColor: Boolean,
-    onDynamicColorChange: (Boolean) -> Unit
+    onDynamicColorChange: (Boolean) -> Unit,
+    showCategoryCounts: Boolean,
+    onShowCategoryCountsChange: (Boolean) -> Unit
 ) {
     ToolScreen(title = "Settings", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
@@ -56,6 +58,24 @@ fun SettingsScreen(
                     Text("Use system colors (Android 12+)", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
                 }
                 Switch(checked = dynamicColor, onCheckedChange = onDynamicColorChange)
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            Text("General", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Default.Category, contentDescription = null)
+                Spacer(modifier = Modifier.width(16.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Show Category Counts", style = MaterialTheme.typography.bodyLarge)
+                    Text("Display number of tools in each category", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                }
+                Switch(checked = showCategoryCounts, onCheckedChange = onShowCategoryCountsChange)
             }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))

@@ -76,7 +76,13 @@ fun WebToolScreen(
 
     ToolScreen(
         title = title,
-        onBack = { navController.popBackStack() },
+        onBack = {
+            if (webView?.canGoBack() == true) {
+                webView?.goBack()
+            } else {
+                navController.popBackStack()
+            }
+        },
         actions = {
             IconButton(onClick = {
                 isDesktopMode = !isDesktopMode
