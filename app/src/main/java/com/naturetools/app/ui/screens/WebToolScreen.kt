@@ -44,6 +44,7 @@ fun WebToolScreen(
     var isLoading by remember { mutableStateOf(false) }
     var isDesktopMode by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
+    var canGoBack by remember { mutableStateOf(false) }
 
     val desktopUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     val mobileUserAgent = remember {
@@ -70,14 +71,14 @@ fun WebToolScreen(
         }
     }
 
-    BackHandler(enabled = webView?.canGoBack() == true) {
+    BackHandler(enabled = canGoBack) {
         webView?.goBack()
     }
 
     ToolScreen(
         title = title,
         onBack = {
-            if (webView?.canGoBack() == true) {
+            if (canGoBack) {
                 webView?.goBack()
             } else {
                 navController.popBackStack()
@@ -174,7 +175,13 @@ fun WebToolScreen(
 
                                     override fun onPageFinished(view: WebView?, url: String?) {
                                         isLoading = false
+                                        canGoBack = view?.canGoBack() ?: false
                                         super.onPageFinished(view, url)
+                                    }
+
+                                    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                                        canGoBack = view?.canGoBack() ?: false
+                                        super.doUpdateVisitedHistory(view, url, isReload)
                                     }
 
                                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
