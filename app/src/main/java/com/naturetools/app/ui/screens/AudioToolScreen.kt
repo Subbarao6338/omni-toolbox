@@ -7,28 +7,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
 fun AudioToolScreen(navController: NavHostController, title: String) {
-    ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "$title is coming soon!",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "This tool is under development.",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+    AudioBaseScreen(navController = navController, title = title) { columnScope, uri ->
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "$title features for this file are coming soon!",
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Processing: ${uri?.toString() ?: "Unknown"}",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
     }
 }

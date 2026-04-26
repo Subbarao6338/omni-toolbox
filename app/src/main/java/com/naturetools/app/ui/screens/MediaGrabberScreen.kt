@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.*
@@ -51,6 +52,11 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
         onBack = { navController.popBackStack() },
         actions = {
             if (mediaLinks.isNotEmpty()) {
+                IconButton(onClick = {
+                    mediaLinks = emptySet()
+                }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Clear Results")
+                }
                 IconButton(onClick = {
                     val allLinks = mediaLinks.joinToString("\n")
                     clipboardManager.setText(AnnotatedString(allLinks))
@@ -162,11 +168,28 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             }
                                         }
 
+                                        var pictures = document.getElementsByTagName('picture');
+                                        for (var i = 0; i < pictures.length; i++) {
+                                            var sources = pictures[i].getElementsByTagName('source');
+                                            for (var j = 0; j < sources.length; j++) {
+                                                if (sources[j].srcset) {
+                                                    sources[j].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
+                                                }
+                                            }
+                                        }
+
                                         var videos = document.getElementsByTagName('video');
                                         for (var i = 0; i < videos.length; i++) {
                                             addUrl(videos[i].src);
                                             addUrl(videos[i].poster);
                                             var sources = videos[i].getElementsByTagName('source');
+                                            for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
+                                        }
+
+                                        var audios = document.getElementsByTagName('audio');
+                                        for (var i = 0; i < audios.length; i++) {
+                                            addUrl(audios[i].src);
+                                            var sources = audios[i].getElementsByTagName('source');
                                             for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
                                         }
 
