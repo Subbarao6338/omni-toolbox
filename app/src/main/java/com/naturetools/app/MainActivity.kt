@@ -33,6 +33,7 @@ import androidx.navigation.navArgument
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.naturetools.app.ui.screens.*
+import com.naturetools.app.ui.screens.AudioToolScreen
 import com.naturetools.app.ui.theme.NatureToolsTheme
 
 class MainActivity : ComponentActivity() {
@@ -151,7 +152,52 @@ val tools = listOf(
     Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion", Color(0xFF2196F3)),
     Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion", Color(0xFF03A9F4)),
     Tool("Hub", Icons.Default.Hub, "hub", "Utility", Color(0xFF00BCD4)),
-    Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688))
+    Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
+    Tool("Trim Audio", Icons.Default.ContentCut, "trim_audio", "Audio Editor", Color(0xFFF44336)),
+    Tool("Mix Audio", Icons.Default.Merge, "mix_audio", "Audio Editor", Color(0xFF2196F3)),
+    Tool("Merge Audio", Icons.Default.Merge, "merge_audio", "Audio Editor", Color(0xFF4CAF50)),
+    Tool("Tag Editor", Icons.Default.Label, "tag_editor", "Audio Editor", Color(0xFFFF9800)),
+    Tool("Convert Audio", Icons.Default.Transform, "convert_audio", "Audio Editor", Color(0xFF9C27B0)),
+    Tool("Record Audio", Icons.Default.Mic, "record_audio", "Audio Editor", Color(0xFFE91E63)),
+    Tool("Split Audio", Icons.Default.VerticalSplit, "split_audio", "Audio Editor", Color(0xFF00BCD4)),
+    Tool("Reverse Audio", Icons.Default.SettingsBackupRestore, "reverse_audio", "Audio Editor", Color(0xFF795548)),
+    Tool("Voice Changer", Icons.Default.Face, "voice_changer", "Audio Editor", Color(0xFF673AB7)),
+    Tool("Add SFX", Icons.Default.MusicNote, "add_sfx", "Audio Editor", Color(0xFF3F51B5)),
+    Tool("Text To Speech", Icons.Default.RecordVoiceOver, "text_to_speech", "Audio Editor", Color(0xFF009688)),
+    Tool("Video To Audio", Icons.Default.VideoLibrary, "video_to_audio", "Audio Editor", Color(0xFFFFC107)),
+    Tool("Karaoke Effect", Icons.Default.Mic, "karaoke_effect", "Audio Editor", Color(0xFFCDDC39)),
+    Tool("Equalizer", Icons.Default.Equalizer, "equalizer", "Audio Editor", Color(0xFF8BC34A)),
+    Tool("Speed Changer", Icons.Default.Speed, "speed_changer", "Audio Editor", Color(0xFF607D8B)),
+    Tool("Pitch Changer", Icons.Default.Height, "pitch_changer", "Audio Editor", Color(0xFFFF5722)),
+    Tool("Silence Remover", Icons.Default.SpeakerNotesOff, "silence_remover", "Audio Lab", Color(0xFFF44336)),
+    Tool("Noise Remover", Icons.Default.MicOff, "noise_remover", "Audio Lab", Color(0xFF2196F3)),
+    Tool("Audio Effects", Icons.Default.AutoAwesome, "audio_effects_main", "Audio Lab", Color(0xFF4CAF50)),
+    Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "Audio Lab", Color(0xFFFF9800)),
+    Tool("Audio To Video", Icons.Default.Movie, "audio_to_video", "Audio Lab", Color(0xFF9C27B0)),
+    Tool("8D Audio", Icons.Default.Speaker, "eight_d_audio", "Audio Lab", Color(0xFFE91E63)),
+    Tool("Channel Manipulation", Icons.Default.Tune, "channel_manipulation", "Audio Lab", Color(0xFF00BCD4)),
+    Tool("Audio Normalizer", Icons.Default.GraphicEq, "audio_normalizer", "Audio Lab", Color(0xFF795548)),
+    Tool("Audio Compressor", Icons.Default.Settings, "audio_compressor", "Audio Lab", Color(0xFF673AB7)),
+    Tool("Bass Booster", Icons.Default.Speaker, "bass_booster", "Audio Lab", Color(0xFF3F51B5)),
+    Tool("Audio Echo", Icons.Default.SettingsBackupRestore, "audio_echo", "Audio Lab", Color(0xFF009688)),
+    Tool("Volume Booster", Icons.Default.VolumeUp, "volume_booster", "Audio Lab", Color(0xFFFFC107)),
+    Tool("Fun Record", Icons.Default.Mood, "fun_record", "Audio Lab", Color(0xFFCDDC39)),
+    Tool("Wave Generator", Icons.Default.Waves, "wave_generator", "Audio Lab", Color(0xFF8BC34A)),
+    Tool("Audio Merger", Icons.Default.Layers, "audio_merger", "Audio Lab", Color(0xFF607D8B)),
+    Tool("Silence Generator", Icons.Default.DoNotDisturbOn, "silence_generator", "Audio Lab", Color(0xFFFF5722)),
+    Tool("Audio Loop", Icons.Default.Loop, "audio_loop", "Audio Lab", Color(0xFFF44336)),
+    Tool("Multi Mix Audio", Icons.Default.LibraryMusic, "multi_mix", "Batch Processing", Color(0xFF2196F3)),
+    Tool("Multi Convert", Icons.Default.Refresh, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
+    Tool("Multi Video To Audio", Icons.Default.VideoLibrary, "multi_video_to_audio", "Batch Processing", Color(0xFFFF9800)),
+    Tool("Multi Volume Booster", Icons.Default.VolumeUp, "multi_volume_booster", "Batch Processing", Color(0xFF9C27B0)),
+    Tool("Text To Speech ", Icons.Default.RecordVoiceOver, "text_to_speech_other", "Other Tools", Color(0xFF009688)),
+    Tool("Speech To Text", Icons.Default.Hearing, "speech_to_text", "Other Tools", Color(0xFFE91E63)),
+    Tool("Metronome", Icons.Default.Timer, "metronome", "Other Tools", Color(0xFF00BCD4)),
+    Tool("Audio Media Info", Icons.Default.Info, "audio_info", "Other Tools", Color(0xFF795548)),
+    Tool("Video Media Info", Icons.Default.Movie, "video_info", "Other Tools", Color(0xFF673AB7)),
+    Tool("Device Codec", Icons.Default.PermDeviceInformation, "device_codec", "Other Tools", Color(0xFF3F51B5)),
+    Tool("Audio Output", Icons.Default.Folder, "audio_output", "Output", Color(0xFF2196F3)),
+    Tool("Video Output", Icons.Default.Folder, "video_output", "Output", Color(0xFF4CAF50))
 )
 
 @Composable
@@ -226,6 +272,51 @@ fun NatureToolsApp(
         composable("ping") { PingScreen(navController) }
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
+        composable("trim_audio") { AudioToolScreen(navController, "Trim Audio") }
+        composable("mix_audio") { AudioToolScreen(navController, "Mix Audio") }
+        composable("merge_audio") { AudioToolScreen(navController, "Merge Audio") }
+        composable("tag_editor") { AudioToolScreen(navController, "Tag Editor") }
+        composable("convert_audio") { AudioToolScreen(navController, "Convert Audio") }
+        composable("record_audio") { AudioToolScreen(navController, "Record Audio") }
+        composable("split_audio") { AudioToolScreen(navController, "Split Audio") }
+        composable("reverse_audio") { AudioToolScreen(navController, "Reverse Audio") }
+        composable("voice_changer") { AudioToolScreen(navController, "Voice Changer") }
+        composable("add_sfx") { AudioToolScreen(navController, "Add SFX") }
+        composable("text_to_speech") { AudioToolScreen(navController, "Text To Speech") }
+        composable("video_to_audio") { AudioToolScreen(navController, "Video To Audio") }
+        composable("karaoke_effect") { AudioToolScreen(navController, "Karaoke Effect") }
+        composable("equalizer") { AudioToolScreen(navController, "Equalizer") }
+        composable("speed_changer") { AudioToolScreen(navController, "Speed Changer") }
+        composable("pitch_changer") { AudioToolScreen(navController, "Pitch Changer") }
+        composable("silence_remover") { AudioToolScreen(navController, "Silence Remover") }
+        composable("noise_remover") { AudioToolScreen(navController, "Noise Remover") }
+        composable("audio_effects_main") { AudioToolScreen(navController, "Audio Effects") }
+        composable("vocal_remover") { AudioToolScreen(navController, "Vocal Remover") }
+        composable("audio_to_video") { AudioToolScreen(navController, "Audio To Video") }
+        composable("eight_d_audio") { AudioToolScreen(navController, "8D Audio") }
+        composable("channel_manipulation") { AudioToolScreen(navController, "Channel Manipulation") }
+        composable("audio_normalizer") { AudioToolScreen(navController, "Audio Normalizer") }
+        composable("audio_compressor") { AudioToolScreen(navController, "Audio Compressor") }
+        composable("bass_booster") { AudioToolScreen(navController, "Bass Booster") }
+        composable("audio_echo") { AudioToolScreen(navController, "Audio Echo") }
+        composable("volume_booster") { AudioToolScreen(navController, "Volume Booster") }
+        composable("fun_record") { AudioToolScreen(navController, "Fun Record") }
+        composable("wave_generator") { AudioToolScreen(navController, "Wave Generator") }
+        composable("audio_merger") { AudioToolScreen(navController, "Audio Merger") }
+        composable("silence_generator") { AudioToolScreen(navController, "Silence Generator") }
+        composable("audio_loop") { AudioToolScreen(navController, "Audio Loop") }
+        composable("multi_mix") { AudioToolScreen(navController, "Multi Mix Audio") }
+        composable("multi_convert") { AudioToolScreen(navController, "Multi Convert") }
+        composable("multi_video_to_audio") { AudioToolScreen(navController, "Multi Video To Audio") }
+        composable("multi_volume_booster") { AudioToolScreen(navController, "Multi Volume Booster") }
+        composable("text_to_speech_other") { AudioToolScreen(navController, "Text To Speech ") }
+        composable("speech_to_text") { AudioToolScreen(navController, "Speech To Text") }
+        composable("metronome") { AudioToolScreen(navController, "Metronome") }
+        composable("audio_info") { AudioToolScreen(navController, "Audio Media Info") }
+        composable("video_info") { AudioToolScreen(navController, "Video Media Info") }
+        composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
+        composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
+        composable("video_output") { AudioToolScreen(navController, "Video Output") }
     }
 }
 
