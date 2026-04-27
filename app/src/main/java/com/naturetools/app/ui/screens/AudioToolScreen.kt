@@ -119,10 +119,10 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                                 AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
                             }
                         }
-                        "Normalize" -> {
+                        "Normalize", "Audio Normalizer", "Volume Booster" -> {
                             AdjustmentSlider("Target Volume")
                         }
-                        "Compress" -> {
+                        "Compress", "Audio Compressor" -> {
                             if (isVideo) {
                                 AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 80f)
                                 AdjustmentSlider("Target Resolution (p)", valueRange = 144f..1080f, initialValue = 720f)
@@ -135,7 +135,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Silence Threshold", valueRange = -100f..0f, initialValue = -50f)
                             AdjustmentSlider("Min Silence Duration (ms)", valueRange = 100f..5000f, initialValue = 500f)
                         }
-                        "MIX" -> {
+                        "MIX", "Audio Mixer" -> {
                             AdjustmentSlider("Track 1 Volume")
                             AdjustmentSlider("Track 2 Volume")
                         }
@@ -163,13 +163,20 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Correction Amount")
                             AdjustmentSlider("Retune Speed")
                         }
-                        "8d Audio" -> {
+                        "Text to Speech", "Text To Speech" -> {
+                            AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                            AdjustmentSlider("Speech Rate", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                        }
+                        "8d Audio", "3D Audio" -> {
                             AdjustmentSlider("Rotation Speed", valueRange = 0.1f..2.0f, initialValue = 0.5f)
                             AdjustmentSlider("Orbit Radius")
                         }
-                        "Noise Generator" -> {
-                            AdjustmentSlider("White Noise Level")
-                            AdjustmentSlider("Pink Noise Level")
+                        "Audio Pan" -> {
+                            AdjustmentSlider("Left/Right Balance", valueRange = -1f..1f, initialValue = 0f)
+                        }
+                        "Noise Generator", "Noise Remover" -> {
+                            AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
+                            AdjustmentSlider("Sensitivity")
                         }
                         "Wave Generator" -> {
                             AdjustmentSlider("Frequency (Hz)", valueRange = 20f..20000f, initialValue = 440f)
@@ -178,7 +185,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                         "Key BPM finder" -> {
                             AdjustmentSlider("Detection Sensitivity")
                         }
-                        "Trim", "Splitter", "Delete", "Silence" -> {
+                        "Trim", "Splitter", "Delete", "Silence", "Audio Cutter", "Audio Splitter" -> {
                             AdjustmentSlider("Start Position (s)", valueRange = 0f..300f, initialValue = 0f)
                             AdjustmentSlider("End Position (s)", valueRange = 0f..300f, initialValue = 30f)
                         }
@@ -197,9 +204,19 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                         "Loop" -> {
                             AdjustmentSlider("Repeat Count", valueRange = 1f..100f, initialValue = 1f)
                         }
-                        "Record", "Fun Recording", "Karaoke" -> {
+                        "Record", "Fun Recording", "Karaoke", "Karaoke Maker" -> {
                             AdjustmentSlider("Microphone Gain")
                             AdjustmentSlider("Monitor Volume")
+                        }
+                        "Audio Pitch" -> {
+                            AdjustmentSlider("Pitch Octave", valueRange = -2f..2f, initialValue = 0f)
+                        }
+                        "Bass Booster" -> {
+                            AdjustmentSlider("Bass Gain (dB)", valueRange = 0f..15f, initialValue = 6f)
+                        }
+                        "Echo Effect" -> {
+                            AdjustmentSlider("Echo Delay", valueRange = 0f..2f, initialValue = 0.5f)
+                            AdjustmentSlider("Echo Decay", valueRange = 0f..1f, initialValue = 0.5f)
                         }
                         else -> {
                             AdjustmentSlider("Intensity")
