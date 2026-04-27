@@ -20,8 +20,8 @@ import androidx.navigation.NavHostController
 import kotlin.random.Random
 
 @Composable
-fun AudioToolScreen(navController: NavHostController, title: String) {
-    AudioBaseScreen(navController = navController, title = title) { _, uri ->
+fun AudioToolScreen(navController: NavHostController, title: String, mimeType: String = "audio/*") {
+    AudioBaseScreen(navController = navController, title = title, mimeType = mimeType) { _, uri ->
         var isPlaying by remember { mutableStateOf(false) }
         var progress by remember { mutableFloatStateOf(0f) }
         val scrollState = rememberScrollState()
@@ -103,6 +103,7 @@ fun AudioToolScreen(navController: NavHostController, title: String) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    val isVideo = mimeType.startsWith("video")
                     when (title) {
                         "Equalizer" -> {
                             AdjustmentSlider("Bass")
@@ -110,15 +111,25 @@ fun AudioToolScreen(navController: NavHostController, title: String) {
                             AdjustmentSlider("Treble")
                         }
                         "Speed Changer" -> {
-                            AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                            AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                            if (isVideo) {
+                                AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                                AdjustmentSlider("Maintain Pitch (0/1)", valueRange = 0f..1f, initialValue = 1f)
+                            } else {
+                                AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                                AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                            }
                         }
                         "Normalize" -> {
                             AdjustmentSlider("Target Volume")
                         }
                         "Compress" -> {
-                            AdjustmentSlider("Compression Ratio", valueRange = 1f..20f, initialValue = 4f)
-                            AdjustmentSlider("Threshold (dB)", valueRange = -60f..0f, initialValue = -20f)
+                            if (isVideo) {
+                                AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 80f)
+                                AdjustmentSlider("Target Resolution (p)", valueRange = 144f..1080f, initialValue = 720f)
+                            } else {
+                                AdjustmentSlider("Compression Ratio", valueRange = 1f..20f, initialValue = 4f)
+                                AdjustmentSlider("Threshold (dB)", valueRange = -60f..0f, initialValue = -20f)
+                            }
                         }
                         "Silence Remover" -> {
                             AdjustmentSlider("Silence Threshold", valueRange = -100f..0f, initialValue = -50f)
@@ -166,6 +177,25 @@ fun AudioToolScreen(navController: NavHostController, title: String) {
                         }
                         "Key BPM finder" -> {
                             AdjustmentSlider("Detection Sensitivity")
+                        }
+                        "Trim", "Splitter", "Delete", "Silence" -> {
+                            AdjustmentSlider("Start Position (s)", valueRange = 0f..300f, initialValue = 0f)
+                            AdjustmentSlider("End Position (s)", valueRange = 0f..300f, initialValue = 30f)
+                        }
+                        "Mix Video Audio" -> {
+                            AdjustmentSlider("Video Volume")
+                            AdjustmentSlider("Audio Overlay Volume")
+                        }
+                        "Video SFX" -> {
+                            AdjustmentSlider("Effect Intensity")
+                            AdjustmentSlider("Color Saturation")
+                        }
+                        "Video To GIF" -> {
+                            AdjustmentSlider("FPS", valueRange = 1f..60f, initialValue = 15f)
+                            AdjustmentSlider("Loop Count", valueRange = 0f..10f, initialValue = 0f)
+                        }
+                        "Loop" -> {
+                            AdjustmentSlider("Repeat Count", valueRange = 1f..100f, initialValue = 1f)
                         }
                         "Record", "Fun Recording", "Karaoke" -> {
                             AdjustmentSlider("Microphone Gain")

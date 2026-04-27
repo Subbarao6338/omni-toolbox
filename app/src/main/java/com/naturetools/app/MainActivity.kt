@@ -201,18 +201,32 @@ fun NatureToolsApp(
         composable("volume_booster") { AudioToolScreen(navController, "Volume Booster") }
         composable("noise_generator") { AudioToolScreen(navController, "Noise Generator") }
         composable("wave_generator") { AudioToolScreen(navController, "Wave Generator") }
-        composable("audio_to_video") { AudioToolScreen(navController, "Audio To Video") }
         composable("bass_booster") { AudioToolScreen(navController, "Bass Booster") }
         composable("audio_echo") { AudioToolScreen(navController, "Audio Echo") }
         composable("audio_merger") { AudioToolScreen(navController, "Audio Merger") }
         composable("silence_generator") { AudioToolScreen(navController, "Silence Generator") }
         composable("audio_loop") { AudioToolScreen(navController, "Audio Loop") }
         composable("text_to_speech") { AudioToolScreen(navController, "Text To Speech") }
-        composable("video_to_audio") { AudioToolScreen(navController, "Video To Audio") }
         composable("pitch_changer") { AudioToolScreen(navController, "Pitch Changer") }
 
+        // Video Editing Tools
+        composable("video_trim") { AudioToolScreen(navController, "Trim", "video/*") }
+        composable("audio_to_video") { AudioToolScreen(navController, "Audio To Video") }
+        composable("video_compress") { AudioToolScreen(navController, "Compress", "video/*") }
+        composable("video_reverse") { AudioToolScreen(navController, "Reverse", "video/*") }
+        composable("video_splitter") { AudioToolScreen(navController, "Splitter", "video/*") }
+        composable("mix_video_audio") { AudioToolScreen(navController, "Mix Video Audio", "video/*") }
+        composable("video_speed_changer") { AudioToolScreen(navController, "Speed Changer", "video/*") }
+        composable("video_sfx") { AudioToolScreen(navController, "Video SFX", "video/*") }
+        composable("video_to_audio") { AudioToolScreen(navController, "Video To Audio", "video/*") }
+        composable("video_to_gif") { AudioToolScreen(navController, "Video To GIF", "video/*") }
+        composable("video_volume_booster") { AudioToolScreen(navController, "Volume Booster", "video/*") }
+        composable("video_delete") { AudioToolScreen(navController, "Delete", "video/*") }
+        composable("video_silence") { AudioToolScreen(navController, "Silence", "video/*") }
+        composable("video_loop") { AudioToolScreen(navController, "Loop", "video/*") }
+
         composable("audio_noise_remover") { AudioToolScreen(navController, "Audio Noise Remover") }
-        composable("video_noise_remover") { AudioToolScreen(navController, "Video Noise Remover") }
+        composable("video_noise_remover") { AudioToolScreen(navController, "Video Noise Remover", "video/*") }
         composable("vocal_remover") { AudioToolScreen(navController, "Vocal Remover") }
         composable("ai_stems_splitter") { AudioToolScreen(navController, "AI Stems Splitter") }
         composable("vocal_autotuner") { AudioToolScreen(navController, "Vocal AutoTuner") }
@@ -227,7 +241,7 @@ fun NatureToolsApp(
 
         composable("multi_mix") { AudioToolScreen(navController, "Multi Mix Audio") }
         composable("multi_convert") { AudioToolScreen(navController, "Multi Convert") }
-        composable("multi_video_to_audio") { AudioToolScreen(navController, "Multi Video To Audio") }
+        composable("multi_video_to_audio") { AudioToolScreen(navController, "Multi Video To Audio", "video/*") }
         composable("multi_volume_booster") { AudioToolScreen(navController, "Multi Volume Booster") }
         composable("text_to_speech_other") { AudioToolScreen(navController, "Text To Speech ") }
         composable("speech_to_text") { AudioToolScreen(navController, "Speech To Text") }

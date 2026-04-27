@@ -5,8 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AudioFile
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +18,7 @@ import com.naturetools.app.ui.components.ToolScreen
 fun AudioBaseScreen(
     navController: NavHostController,
     title: String,
+    mimeType: String = "audio/*",
     content: @Composable (ColumnScope, Uri?) -> Unit
 ) {
     var selectedFileUri by remember { mutableStateOf<Uri?>(null) }
@@ -27,6 +27,8 @@ fun AudioBaseScreen(
     ) { uri: Uri? ->
         selectedFileUri = uri
     }
+
+    val typeLabel = if (mimeType.startsWith("video")) "video" else "audio"
 
     ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
         Column(
@@ -40,16 +42,16 @@ fun AudioBaseScreen(
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            Icons.Default.AudioFile,
+                            if (typeLabel == "video") Icons.Default.VideoLibrary else Icons.Default.AudioFile,
                             contentDescription = null,
                             modifier = Modifier.size(100.dp),
                             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text("No audio file selected", style = MaterialTheme.typography.bodyLarge)
+                        Text("No $typeLabel file selected", style = MaterialTheme.typography.bodyLarge)
                         Spacer(modifier = Modifier.height(24.dp))
-                        Button(onClick = { launcher.launch("audio/*") }) {
-                            Text("Select Audio File")
+                        Button(onClick = { launcher.launch(mimeType) }) {
+                            Text("Select ${typeLabel.replaceFirstChar { it.uppercase() }} File")
                         }
                     }
                 }
@@ -66,7 +68,7 @@ fun AudioBaseScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 OutlinedButton(
-                    onClick = { launcher.launch("audio/*") },
+                    onClick = { launcher.launch(mimeType) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Change File")
