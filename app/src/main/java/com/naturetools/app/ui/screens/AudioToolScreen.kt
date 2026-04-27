@@ -21,7 +21,7 @@ import kotlin.random.Random
 
 @Composable
 fun AudioToolScreen(navController: NavHostController, title: String, mimeType: String = "audio/*") {
-    AudioBaseScreen(navController = navController, title = title, mimeType = mimeType) { _, uri ->
+    AudioBaseScreen(navController = navController, title = title, mimeType = mimeType) { _, _ ->
         var isPlaying by remember { mutableStateOf(false) }
         var progress by remember { mutableFloatStateOf(0f) }
         val scrollState = rememberScrollState()
@@ -110,7 +110,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Mid")
                             AdjustmentSlider("Treble")
                         }
-                        "Speed Changer" -> {
+                        "Speed Changer", "Video Speed" -> {
                             if (isVideo) {
                                 AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
                                 AdjustmentSlider("Maintain Pitch (0/1)", valueRange = 0f..1f, initialValue = 1f)
@@ -119,10 +119,10 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                                 AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
                             }
                         }
-                        "Normalize", "Audio Normalizer", "Volume Booster" -> {
+                        "Normalize", "Audio Normalizer", "Volume Booster", "Video Volume", "Multi Volume Booster" -> {
                             AdjustmentSlider("Target Volume")
                         }
-                        "Compress", "Audio Compressor" -> {
+                        "Compress", "Audio Compressor", "Video Compressor" -> {
                             if (isVideo) {
                                 AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 80f)
                                 AdjustmentSlider("Target Resolution (p)", valueRange = 144f..1080f, initialValue = 720f)
@@ -135,15 +135,14 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Silence Threshold", valueRange = -100f..0f, initialValue = -50f)
                             AdjustmentSlider("Min Silence Duration (ms)", valueRange = 100f..5000f, initialValue = 500f)
                         }
-                        "MIX", "Audio Mixer" -> {
+                        "MIX", "Audio Mixer", "Multi Mix Audio" -> {
                             AdjustmentSlider("Track 1 Volume")
                             AdjustmentSlider("Track 2 Volume")
                         }
-                        "Channel Manipulation" -> {
-                            AdjustmentSlider("Left Volume")
-                            AdjustmentSlider("Right Volume")
+                        "Audio Pan" -> {
+                            AdjustmentSlider("Left/Right Balance", valueRange = -1f..1f, initialValue = 0f)
                         }
-                        "Audio Noise Remover", "Video Noise Remover", "AI Noise Remover" -> {
+                        "Audio Noise Remover", "Video Noise Remover", "AI Noise Remover", "Noise Remover" -> {
                             AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
                             AdjustmentSlider("Sensitivity")
                         }
@@ -171,21 +170,18 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Rotation Speed", valueRange = 0.1f..2.0f, initialValue = 0.5f)
                             AdjustmentSlider("Orbit Radius")
                         }
-                        "Audio Pan" -> {
-                            AdjustmentSlider("Left/Right Balance", valueRange = -1f..1f, initialValue = 0f)
-                        }
-                        "Noise Generator", "Noise Remover" -> {
-                            AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
-                            AdjustmentSlider("Sensitivity")
+                        "Noise Generator" -> {
+                            AdjustmentSlider("Noise Level")
+                            AdjustmentSlider("White/Pink/Brown (0-1)", valueRange = 0f..1f, initialValue = 0f)
                         }
                         "Wave Generator" -> {
                             AdjustmentSlider("Frequency (Hz)", valueRange = 20f..20000f, initialValue = 440f)
                             AdjustmentSlider("Amplitude")
                         }
-                        "Key BPM finder" -> {
+                        "Key BPM Finder", "Key BPM finder" -> {
                             AdjustmentSlider("Detection Sensitivity")
                         }
-                        "Trim", "Splitter", "Delete", "Silence", "Audio Cutter", "Audio Splitter" -> {
+                        "Trim", "Splitter", "Delete", "Silence", "Audio Cutter", "Audio Splitter", "Video Editor", "Video Splitter", "Delete Segment", "Silence Video" -> {
                             AdjustmentSlider("Start Position (s)", valueRange = 0f..300f, initialValue = 0f)
                             AdjustmentSlider("End Position (s)", valueRange = 0f..300f, initialValue = 30f)
                         }
@@ -201,22 +197,26 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("FPS", valueRange = 1f..60f, initialValue = 15f)
                             AdjustmentSlider("Loop Count", valueRange = 0f..10f, initialValue = 0f)
                         }
-                        "Loop" -> {
+                        "Loop", "Audio Loop", "Loop Video" -> {
                             AdjustmentSlider("Repeat Count", valueRange = 1f..100f, initialValue = 1f)
                         }
-                        "Record", "Fun Recording", "Karaoke", "Karaoke Maker" -> {
+                        "Record", "Fun Recording", "Karaoke", "Karaoke Maker", "Record Audio", "Karaoke Effect" -> {
                             AdjustmentSlider("Microphone Gain")
                             AdjustmentSlider("Monitor Volume")
                         }
-                        "Audio Pitch" -> {
+                        "Pitch Changer", "Audio Pitch" -> {
                             AdjustmentSlider("Pitch Octave", valueRange = -2f..2f, initialValue = 0f)
                         }
                         "Bass Booster" -> {
                             AdjustmentSlider("Bass Gain (dB)", valueRange = 0f..15f, initialValue = 6f)
                         }
-                        "Echo Effect" -> {
+                        "Echo Effect", "Audio Echo" -> {
                             AdjustmentSlider("Echo Delay", valueRange = 0f..2f, initialValue = 0.5f)
                             AdjustmentSlider("Echo Decay", valueRange = 0f..1f, initialValue = 0.5f)
+                        }
+                        "Audio Editor", "Audio Joiner", "Audio Tag Editor", "Reverse Audio", "Mute Audio", "Ringtone Maker", "Sound Mastering", "Add SFX", "Video to Audio", "Reverse Video", "Multi Convert", "Multi Video To Audio", "Metronome", "Audio Info", "Video Info", "Device Codec", "Audio Output", "Video Output" -> {
+                            AdjustmentSlider("Intensity")
+                            AdjustmentSlider("Threshold")
                         }
                         else -> {
                             AdjustmentSlider("Intensity")

@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsRun
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -58,7 +58,7 @@ fun StepCounterScreen(navController: NavHostController) {
                 Text("Step counter sensor not available on this device", color = MaterialTheme.colorScheme.error)
             } else {
                 Icon(
-                    Icons.Default.DirectionsRun,
+                    Icons.AutoMirrored.Filled.DirectionsRun,
                     contentDescription = null,
                     modifier = Modifier.size(120.dp),
                     tint = MaterialTheme.colorScheme.primary
