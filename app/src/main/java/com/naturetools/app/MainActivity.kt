@@ -1,6 +1,7 @@
 package com.naturetools.app
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,9 +53,19 @@ class MainActivity : ComponentActivity() {
                 "dark" -> true
                 else -> isSystemInDarkTheme()
             }
+    LaunchedEffect(intent) {
+        intent?.data?.let { uri ->
+            if (uri.scheme == "naturetools") {
+                // We'll handle this in NatureToolsApp or via a global navigator if possible.
+                // For now, let's just make sure the app is aware.
+            }
+        }
+    }
+
             NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NatureToolsApp(
+                intent = intent,
                         themeMode = themeMode,
                         onThemeChange = {
                             themeMode = it
@@ -85,9 +96,23 @@ fun NatureToolsApp(
     dynamicColor: Boolean,
     onDynamicColorChange: (Boolean) -> Unit,
     showCategoryCounts: Boolean,
-    onShowCategoryCountsChange: (Boolean) -> Unit
+    onShowCategoryCountsChange: (Boolean) -> Unit,
+    intent: Intent? = null
 ) {
     val navController = rememberNavController()
+
+    LaunchedEffect(intent) {
+        intent?.data?.let { uri ->
+            if (uri.scheme == "naturetools") {
+                val route = uri.host
+                if (route != null) {
+                    navController.navigate(route) {
+                        launchSingleTop = true
+                    }
+                }
+            }
+        }
+    }
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
     var favorites by remember {
@@ -174,6 +199,31 @@ fun NatureToolsApp(
         composable("ping") { PingScreen(navController) }
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
+
+        // New Tools Placeholder Screens
+        composable("sci_calc") { AudioToolScreen(navController, "Scientific Calc") }
+        composable("device_id") { AudioToolScreen(navController, "Device ID") }
+        composable("air_quality") { AudioToolScreen(navController, "Air Quality") }
+        composable("uv_index") { AudioToolScreen(navController, "UV Index") }
+        composable("habit_tracker") { AudioToolScreen(navController, "Habit Tracker") }
+        composable("meditation") { AudioToolScreen(navController, "Meditation Timer") }
+        composable("spl_meter") { AudioToolScreen(navController, "SPL Meter") }
+
+        // Even more new tools
+        composable("data_viz") { AudioToolScreen(navController, "Data Visualizer") }
+        composable("ai_image") { AudioToolScreen(navController, "AI Image Gen") }
+        composable("base_conv") { AudioToolScreen(navController, "Base Converter") }
+        composable("constants") { AudioToolScreen(navController, "Constants Table") }
+        composable("light_pollution") { AudioToolScreen(navController, "Light Pollution") }
+        composable("tax_calc") { AudioToolScreen(navController, "Tax Calculator") }
+        composable("calorie_calc") { AudioToolScreen(navController, "Calorie Calc") }
+        composable("exif_viewer") { AudioToolScreen(navController, "Exif Viewer") }
+        composable("port_scanner") { AudioToolScreen(navController, "Port Scanner") }
+        composable("pomodoro") { AudioToolScreen(navController, "Pomodoro") }
+        composable("hash_gen") { AudioToolScreen(navController, "Hash Generator") }
+        composable("sensors_list") { AudioToolScreen(navController, "Sensors List") }
+        composable("lorem") { AudioToolScreen(navController, "Lorem Ipsum") }
+        composable("vibration") { AudioToolScreen(navController, "Vibration Test") }
 
         // Audio Tools
         composable("m_audio_editor") { AudioToolScreen(navController, "Audio Editor") }

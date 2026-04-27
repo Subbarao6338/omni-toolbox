@@ -210,6 +210,15 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                 addUrl(content);
                                             }
                                         }
+
+                                        var anchors = document.getElementsByTagName('a');
+                                        for (var i = 0; i < anchors.length; i++) {
+                                            var href = anchors[i].href;
+                                            if (href && (href.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg|mp3|wav)$/) || href.includes('drive.google.com/file'))) {
+                                                addUrl(href);
+                                            }
+                                        }
+
                                         return JSON.stringify(Array.from(links));
                                     })();
                                 """.trimIndent()
