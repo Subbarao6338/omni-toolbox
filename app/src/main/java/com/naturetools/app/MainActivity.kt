@@ -174,14 +174,18 @@ fun NatureToolsApp(
         composable("ping") { PingScreen(navController) }
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
-        composable("trim_audio") { AudioToolScreen(navController, "Trim Audio") }
-        composable("mix_audio") { AudioToolScreen(navController, "Mix Audio") }
+        composable("advance_trim") { AudioToolScreen(navController, "Advance Trim") }
+        composable("simple_trim") { AudioToolScreen(navController, "Simple Trim") }
+        composable("two_wave_trim") { AudioToolScreen(navController, "Two Wave Trim") }
+        composable("mix_audio") { AudioToolScreen(navController, "MIX") }
         composable("merge_audio") { AudioToolScreen(navController, "Merge Audio") }
         composable("tag_editor") { AudioToolScreen(navController, "Tag Editor") }
         composable("convert_audio") { AudioToolScreen(navController, "Convert Audio") }
         composable("record_audio") { AudioToolScreen(navController, "Record Audio") }
-        composable("split_audio") { AudioToolScreen(navController, "Split Audio") }
-        composable("reverse_audio") { AudioToolScreen(navController, "Reverse Audio") }
+        composable("simple_splitter") { AudioToolScreen(navController, "Simple Splitter") }
+        composable("advance_splitter") { AudioToolScreen(navController, "Advance Splitter") }
+        composable("reverse_audio") { AudioToolScreen(navController, "Reverse") }
+        composable("sound_mastering") { AudioToolScreen(navController, "Sound Mastering") }
         composable("voice_changer") { AudioToolScreen(navController, "Voice Changer") }
         composable("add_sfx") { AudioToolScreen(navController, "Add SFX") }
         composable("text_to_speech") { AudioToolScreen(navController, "Text To Speech") }
@@ -192,13 +196,13 @@ fun NatureToolsApp(
         composable("pitch_changer") { AudioToolScreen(navController, "Pitch Changer") }
         composable("silence_remover") { AudioToolScreen(navController, "Silence Remover") }
         composable("noise_remover") { AudioToolScreen(navController, "Noise Remover") }
-        composable("audio_effects_main") { AudioToolScreen(navController, "Audio Effects") }
+        composable("audio_effects_main") { AudioToolScreen(navController, "Effects") }
         composable("vocal_remover") { AudioToolScreen(navController, "Vocal Remover") }
         composable("audio_to_video") { AudioToolScreen(navController, "Audio To Video") }
         composable("eight_d_audio") { AudioToolScreen(navController, "8D Audio") }
         composable("channel_manipulation") { AudioToolScreen(navController, "Channel Manipulation") }
-        composable("audio_normalizer") { AudioToolScreen(navController, "Audio Normalizer") }
-        composable("audio_compressor") { AudioToolScreen(navController, "Audio Compressor") }
+        composable("audio_normalizer") { AudioToolScreen(navController, "Normalize") }
+        composable("audio_compressor") { AudioToolScreen(navController, "Compress") }
         composable("bass_booster") { AudioToolScreen(navController, "Bass Booster") }
         composable("audio_echo") { AudioToolScreen(navController, "Audio Echo") }
         composable("volume_booster") { AudioToolScreen(navController, "Volume Booster") }
