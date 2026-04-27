@@ -6,12 +6,17 @@ import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
+enum class BadgeType {
+    NONE, NEW, PREMIUM
+}
+
 data class Tool(
     val name: String,
     val icon: ImageVector,
     val route: String,
     val category: String,
-    val color: Color = Color.Unspecified
+    val color: Color = Color.Unspecified,
+    val badge: BadgeType = BadgeType.NONE
 )
 
 object ToolProvider {
@@ -100,13 +105,13 @@ object ToolProvider {
         Tool("Tag Editor", Icons.Default.Badge, "tag_editor", "Audio Editor", Color(0xFFFF9800)),
         Tool("Convert", Icons.Default.Transform, "convert_audio", "Audio Editor", Color(0xFF9C27B0)),
         Tool("Compress", Icons.Default.Compress, "audio_compressor", "Audio Editor", Color(0xFF673AB7)),
-        Tool("Simple Splitter", Icons.Default.AltRoute, "simple_splitter", "Audio Editor", Color(0xFF00BCD4)),
-        Tool("Advance Splitter", Icons.Default.AltRoute, "advance_splitter", "Audio Editor", Color(0xFF00BCD4)),
+        Tool("Simple Splitter", Icons.AutoMirrored.Filled.AltRoute, "simple_splitter", "Audio Editor", Color(0xFF00BCD4)),
+        Tool("Advance Splitter", Icons.AutoMirrored.Filled.AltRoute, "advance_splitter", "Audio Editor", Color(0xFF00BCD4)),
         Tool("Channel Manipulation", Icons.Default.GraphicEq, "channel_manipulation", "Audio Editor", Color(0xFF00BCD4)),
         Tool("Silence Remover", Icons.Default.SpeakerNotesOff, "silence_remover", "Audio Editor", Color(0xFFF44336)),
         Tool("Effects", Icons.Default.BarChart, "audio_effects_main", "Audio Editor", Color(0xFF4CAF50)),
         Tool("Equalizer", Icons.Default.Equalizer, "equalizer", "Audio Editor", Color(0xFF8BC34A)),
-        Tool("Normalize", Icons.Default.VolumeUp, "audio_normalizer", "Audio Editor", Color(0xFF795548)),
+        Tool("Normalize", Icons.AutoMirrored.Filled.VolumeUp, "audio_normalizer", "Audio Editor", Color(0xFF795548)),
         Tool("Sound Mastering", Icons.Default.Insights, "sound_mastering", "Audio Editor", Color(0xFF3F51B5)),
         Tool("Voice Changer", Icons.Default.Face, "voice_changer", "Audio Editor", Color(0xFF673AB7)),
         Tool("Speed Changer", Icons.Default.FastForward, "speed_changer", "Audio Editor", Color(0xFF607D8B)),
@@ -117,19 +122,19 @@ object ToolProvider {
         Tool("Audio To Video", Icons.Default.Movie, "audio_to_video", "Video Editing Tools", Color(0xFF9C27B0)),
         Tool("Compress", Icons.Default.Compress, "video_compress", "Video Editing Tools", Color(0xFF673AB7)),
         Tool("Reverse", Icons.Default.History, "video_reverse", "Video Editing Tools", Color(0xFF795548)),
-        Tool("Splitter", Icons.Default.AltRoute, "video_splitter", "Video Editing Tools", Color(0xFF00BCD4)),
+        Tool("Splitter", Icons.AutoMirrored.Filled.AltRoute, "video_splitter", "Video Editing Tools", Color(0xFF00BCD4)),
         Tool("Mix Video Audio", Icons.Default.Tune, "mix_video_audio", "Video Editing Tools", Color(0xFF2196F3)),
         Tool("Speed Changer", Icons.Default.FastForward, "video_speed_changer", "Video Editing Tools", Color(0xFF607D8B)),
         Tool("Video SFX", Icons.Default.AutoAwesome, "video_sfx", "Video Editing Tools", Color(0xFF3F51B5)),
         Tool("Video To Audio", Icons.Default.VideoLibrary, "video_to_audio", "Video Editing Tools", Color(0xFFFFC107)),
         Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Video Editing Tools", Color(0xFFE91E63)),
-        Tool("Volume Booster", Icons.Default.VolumeUp, "video_volume_booster", "Video Editing Tools", Color(0xFFFFC107)),
+        Tool("Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Editing Tools", Color(0xFFFFC107)),
         Tool("Delete", Icons.Default.Delete, "video_delete", "Video Editing Tools", Color(0xFFF44336)),
-        Tool("Silence", Icons.Default.VolumeOff, "video_silence", "Video Editing Tools", Color(0xFF9E9E9E)),
+        Tool("Silence", Icons.AutoMirrored.Filled.VolumeOff, "video_silence", "Video Editing Tools", Color(0xFF9E9E9E)),
         Tool("Loop", Icons.Default.Loop, "video_loop", "Video Editing Tools", Color(0xFFFF5722)),
 
         Tool("8d Audio", Icons.Default.Headset, "eight_d_audio", "Audio Lab", Color(0xFFE91E63)),
-        Tool("Volume Booster", Icons.Default.VolumeUp, "volume_booster", "Audio Lab", Color(0xFFFFC107)),
+        Tool("Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "volume_booster", "Audio Lab", Color(0xFFFFC107)),
         Tool("Noise Generator", Icons.Default.GraphicEq, "noise_generator", "Audio Lab", Color(0xFF2196F3)),
         Tool("Wave Generator", Icons.Default.Waves, "wave_generator", "Audio Lab", Color(0xFF8BC34A)),
         Tool("Bass Booster", Icons.Default.Speaker, "bass_booster", "Audio Lab", Color(0xFF3F51B5)),
@@ -143,7 +148,7 @@ object ToolProvider {
         Tool("Audio Noise Remover", Icons.Default.MicOff, "audio_noise_remover", "AI Editing Tools", Color(0xFF2196F3)),
         Tool("Video Noise Remover", Icons.Default.MovieFilter, "video_noise_remover", "AI Editing Tools", Color(0xFF9C27B0)),
         Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "AI Editing Tools", Color(0xFFFF9800)),
-        Tool("AI Stems Splitter", Icons.Default.AltRoute, "ai_stems_splitter", "AI Editing Tools", Color(0xFF00BCD4)),
+        Tool("AI Stems Splitter", Icons.AutoMirrored.Filled.AltRoute, "ai_stems_splitter", "AI Editing Tools", Color(0xFF00BCD4)),
         Tool("Vocal AutoTuner", Icons.Default.SettingsVoice, "vocal_autotuner", "AI Editing Tools", Color(0xFFE91E63)),
         Tool("AI Noise Remover", Icons.Default.Hearing, "ai_noise_remover", "AI Editing Tools", Color(0xFF4CAF50)),
         Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "AI Editing Tools", Color(0xFF009688)),
@@ -153,17 +158,17 @@ object ToolProvider {
         Tool("Record", Icons.Default.Mic, "record_audio", "Recording Tools", Color(0xFFE91E63)),
         Tool("Fun Recording", Icons.Default.Mood, "fun_record", "Recording Tools", Color(0xFFCDDC39)),
         Tool("Karaoke", Icons.Default.Mic, "karaoke_effect", "Recording Tools", Color(0xFFCDDC39)),
-        Tool("Multi Mix Audio", Icons.Default.LibraryMusic, "multi_mix", "Batch Processing", Color(0xFF2196F3)),
-        Tool("Multi Convert", Icons.Default.Refresh, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
-        Tool("Multi Video To Audio", Icons.Default.VideoLibrary, "multi_video_to_audio", "Batch Processing", Color(0xFFFF9800)),
-        Tool("Multi Volume Booster", Icons.Default.VolumeUp, "multi_volume_booster", "Batch Processing", Color(0xFF9C27B0)),
-        Tool("Text To Speech ", Icons.Default.RecordVoiceOver, "text_to_speech_other", "Other Tools", Color(0xFF009688)),
-        Tool("Speech To Text", Icons.Default.Hearing, "speech_to_text", "Other Tools", Color(0xFFE91E63)),
-        Tool("Metronome", Icons.Default.Timer, "metronome", "Other Tools", Color(0xFF00BCD4)),
-        Tool("Audio Media Info", Icons.Default.Info, "audio_info", "Other Tools", Color(0xFF795548)),
-        Tool("Video Media Info", Icons.Default.Movie, "video_info", "Other Tools", Color(0xFF673AB7)),
-        Tool("Device Codec", Icons.Default.PermDeviceInformation, "device_codec", "Other Tools", Color(0xFF3F51B5)),
-        Tool("Audio Output", Icons.Default.Folder, "audio_output", "Output", Color(0xFF2196F3)),
-        Tool("Video Output", Icons.Default.Folder, "video_output", "Output", Color(0xFF4CAF50))
+        Tool("Multi Mix Audio", Icons.Default.Tune, "multi_mix", "Batch Processing", Color(0xFF2196F3)),
+        Tool("Multi Convert", Icons.Default.Autorenew, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
+        Tool("Multi Video To Audio", Icons.Default.MusicVideo, "multi_video_to_audio", "Batch Processing", Color(0xFFFF9800)),
+        Tool("Multi Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "multi_volume_booster", "Batch Processing", Color(0xFF9C27B0)),
+        Tool("Text To Speech", Icons.Default.SpeakerNotes, "text_to_speech_other", "Other Tools", Color(0xFF009688)),
+        Tool("Speech To Text", Icons.Default.Mic, "speech_to_text", "Other Tools", Color(0xFFE91E63)),
+        Tool("Metronome", Icons.Default.AvTimer, "metronome", "Other Tools", Color(0xFF00BCD4), BadgeType.NEW),
+        Tool("Audio Media Info", Icons.Default.AudioFile, "audio_info", "Other Tools", Color(0xFF795548), BadgeType.NEW),
+        Tool("Video Media Info", Icons.Default.VideoFile, "video_info", "Other Tools", Color(0xFF673AB7), BadgeType.NEW),
+        Tool("Device Codec", Icons.Default.PermDeviceInformation, "device_codec", "Other Tools", Color(0xFF3F51B5), BadgeType.PREMIUM),
+        Tool("Audio", Icons.Default.LibraryMusic, "audio_output", "Output", Color(0xFF2196F3)),
+        Tool("Video", Icons.Default.VideoLibrary, "video_output", "Output", Color(0xFF4CAF50))
     )
 }

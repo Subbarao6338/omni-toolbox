@@ -243,14 +243,14 @@ fun NatureToolsApp(
         composable("multi_convert") { AudioToolScreen(navController, "Multi Convert") }
         composable("multi_video_to_audio") { AudioToolScreen(navController, "Multi Video To Audio", "video/*") }
         composable("multi_volume_booster") { AudioToolScreen(navController, "Multi Volume Booster") }
-        composable("text_to_speech_other") { AudioToolScreen(navController, "Text To Speech ") }
+        composable("text_to_speech_other") { AudioToolScreen(navController, "Text To Speech") }
         composable("speech_to_text") { AudioToolScreen(navController, "Speech To Text") }
         composable("metronome") { AudioToolScreen(navController, "Metronome") }
         composable("audio_info") { AudioToolScreen(navController, "Audio Media Info") }
         composable("video_info") { AudioToolScreen(navController, "Video Media Info") }
         composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
-        composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
-        composable("video_output") { AudioToolScreen(navController, "Video Output") }
+        composable("audio_output") { AudioToolScreen(navController, "Audio") }
+        composable("video_output") { AudioToolScreen(navController, "Video") }
     }
 }
 
@@ -361,6 +361,19 @@ fun ToolCard(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
+            if (tool.badge != com.naturetools.app.model.BadgeType.NONE) {
+                val badgeIcon = when (tool.badge) {
+                    com.naturetools.app.model.BadgeType.NEW -> Icons.Default.CardGiftcard
+                    com.naturetools.app.model.BadgeType.PREMIUM -> Icons.Default.WorkspacePremium
+                    else -> Icons.Default.Star
+                }
+                Icon(
+                    badgeIcon,
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.TopStart).padding(8.dp).size(14.dp),
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                )
+            }
             IconButton(
                 onClick = onToggleFavorite,
                 modifier = Modifier.align(Alignment.TopEnd).size(32.dp).padding(4.dp)
