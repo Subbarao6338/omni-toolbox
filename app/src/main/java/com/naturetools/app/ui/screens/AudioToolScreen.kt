@@ -132,6 +132,45 @@ fun AudioToolScreen(navController: NavHostController, title: String) {
                             AdjustmentSlider("Left Volume")
                             AdjustmentSlider("Right Volume")
                         }
+                        "Audio Noise Remover", "Video Noise Remover", "AI Noise Remover" -> {
+                            AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
+                            AdjustmentSlider("Sensitivity")
+                        }
+                        "Vocal Remover" -> {
+                            AdjustmentSlider("Vocal Suppression")
+                            AdjustmentSlider("Center Pan Width")
+                        }
+                        "Echo Remover" -> {
+                            AdjustmentSlider("Echo Intensity")
+                            AdjustmentSlider("Delay Feedback")
+                        }
+                        "Reverb Remover" -> {
+                            AdjustmentSlider("Room Size Reduction")
+                            AdjustmentSlider("Damping")
+                        }
+                        "Vocal AutoTuner" -> {
+                            AdjustmentSlider("Correction Amount")
+                            AdjustmentSlider("Retune Speed")
+                        }
+                        "8d Audio" -> {
+                            AdjustmentSlider("Rotation Speed", valueRange = 0.1f..2.0f, initialValue = 0.5f)
+                            AdjustmentSlider("Orbit Radius")
+                        }
+                        "Noise Generator" -> {
+                            AdjustmentSlider("White Noise Level")
+                            AdjustmentSlider("Pink Noise Level")
+                        }
+                        "Wave Generator" -> {
+                            AdjustmentSlider("Frequency (Hz)", valueRange = 20f..20000f, initialValue = 440f)
+                            AdjustmentSlider("Amplitude")
+                        }
+                        "Key BPM finder" -> {
+                            AdjustmentSlider("Detection Sensitivity")
+                        }
+                        "Record", "Fun Recording", "Karaoke" -> {
+                            AdjustmentSlider("Microphone Gain")
+                            AdjustmentSlider("Monitor Volume")
+                        }
                         else -> {
                             AdjustmentSlider("Intensity")
                             AdjustmentSlider("Threshold")
