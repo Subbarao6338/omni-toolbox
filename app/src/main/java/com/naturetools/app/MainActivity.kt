@@ -230,8 +230,8 @@ fun HomeScreen(
     favorites: Set<String>,
     onToggleFavorite: (String) -> Unit
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("All") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var selectedCategory by rememberSaveable { mutableStateOf("All") }
 
     val categoryCounts = remember(favorites) {
         val counts = ToolProvider.tools.groupingBy { it.category }.eachCount()
