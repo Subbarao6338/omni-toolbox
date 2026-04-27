@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.naturetools.app.model.Tool
+import com.naturetools.app.model.ToolProvider
 import com.naturetools.app.ui.screens.*
 import com.naturetools.app.ui.screens.AudioToolScreen
 import com.naturetools.app.ui.theme.NatureToolsTheme
@@ -74,131 +77,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Tool(
-    val name: String,
-    val icon: ImageVector,
-    val route: String,
-    val category: String,
-    val color: Color = Color.Unspecified
-)
-
-val tools = listOf(
-    // Text
-    Tool("Case Converter", Icons.Default.TextFields, "case_converter", "Text", Color(0xFF9C27B0)),
-    Tool("Word Counter", Icons.Default.Abc, "word_counter", "Text", Color(0xFFE91E63)),
-    Tool("Morse Code", Icons.Default.Language, "morse", "Text", Color(0xFF673AB7)),
-    Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer", Color(0xFF3F51B5)),
-    Tool("JSON Format", Icons.Default.DataObject, "json", "Developer", Color(0xFF2196F3)),
-    Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", Color(0xFF03A9F4)),
-
-    // Network
-    Tool("My IP", Icons.Default.Public, "my_ip", "Network", Color(0xFF00BCD4)),
-    Tool("Ping", Icons.Default.SettingsEthernet, "ping", "Network", Color(0xFF009688)),
-
-    // Security
-    Tool("Password Manager", Icons.Default.Password, "password_manager", "Security", Color(0xFF4CAF50)),
-    Tool("QR Generator", Icons.Default.QrCode, "qr_gen", "Utility", Color(0xFF8BC34A)),
-
-    // Graphics
-    Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media", Color(0xFFCDDC39)),
-    Tool("Gradient Gen", Icons.Default.Gradient, "gradient_gen", "Media", Color(0xFFFFEB3B)),
-    Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Media", Color(0xFFFFC107)),
-
-    // Health
-    Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health", Color(0xFFFF9800)),
-    Tool("Step Counter", Icons.Default.DirectionsRun, "step_counter", "Health", Color(0xFFFF5722)),
-    Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health", Color(0xFF795548)),
-
-    // Calculation
-    Tool("Calculator", Icons.Default.Calculate, "calculator", "Calculation", Color(0xFF607D8B)),
-    Tool("Date Calc", Icons.Default.CalendarToday, "date_calc", "Calculation", Color(0xFF9E9E9E)),
-    Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation", Color(0xFFF44336)),
-    Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation", Color(0xFFE91E63)),
-    Tool("Fuel Cost", Icons.Default.LocalGasStation, "fuel", "Calculation", Color(0xFF9C27B0)),
-
-    // Finance
-    Tool("Loan Calculator", Icons.Default.AccountBalance, "loan_calc", "Finance", Color(0xFF673AB7)),
-    Tool("Compound Interest", Icons.Default.TrendingUp, "compound_interest", "Finance", Color(0xFF3F51B5)),
-
-    // Sensors
-    Tool("Compass", Icons.Default.Explore, "compass", "Sensors", Color(0xFF2196F3)),
-    Tool("Level", Icons.Default.Architecture, "level", "Sensors", Color(0xFF03A9F4)),
-    Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors", Color(0xFF00BCD4)),
-    Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors", Color(0xFF009688)),
-    Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors", Color(0xFF4CAF50)),
-
-    // Productivity
-    Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity", Color(0xFF8BC34A)),
-    Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity", Color(0xFFCDDC39)),
-
-    // Education
-    Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Education", Color(0xFFFFEB3B)),
-    Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Education", Color(0xFFFFC107)),
-    Tool("Prime Checker", Icons.Default.Filter7, "prime", "Education", Color(0xFFFF9800)),
-
-    // System
-    Tool("Battery", Icons.Default.BatteryFull, "battery", "System", Color(0xFFFF5722)),
-    Tool("CPU Info", Icons.Default.Memory, "cpu_info", "System", Color(0xFF795548)),
-    Tool("Device", Icons.Default.Info, "device", "System", Color(0xFF607D8B)),
-    Tool("Storage", Icons.Default.Storage, "storage", "System", Color(0xFF9E9E9E)),
-
-    // Utility
-    Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utility", Color(0xFFF44336)),
-    Tool("Random Gen", Icons.Default.Casino, "random", "Utility", Color(0xFFE91E63)),
-    Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility", Color(0xFF9C27B0)),
-    Tool("Clock", Icons.Default.Schedule, "clock", "Utility", Color(0xFF2196F3)),
-    Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),
-    Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility", Color(0xFF3F51B5)),
-    Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion", Color(0xFF2196F3)),
-    Tool("Currency", Icons.Default.CurrencyExchange, "currency", "Conversion", Color(0xFF03A9F4)),
-    Tool("Hub", Icons.Default.Hub, "hub", "Utility", Color(0xFF00BCD4)),
-    Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
-    Tool("Trim Audio", Icons.Default.ContentCut, "trim_audio", "Audio Editor", Color(0xFFF44336)),
-    Tool("Mix Audio", Icons.Default.Merge, "mix_audio", "Audio Editor", Color(0xFF2196F3)),
-    Tool("Merge Audio", Icons.Default.Merge, "merge_audio", "Audio Editor", Color(0xFF4CAF50)),
-    Tool("Tag Editor", Icons.Default.Label, "tag_editor", "Audio Editor", Color(0xFFFF9800)),
-    Tool("Convert Audio", Icons.Default.Transform, "convert_audio", "Audio Editor", Color(0xFF9C27B0)),
-    Tool("Record Audio", Icons.Default.Mic, "record_audio", "Audio Editor", Color(0xFFE91E63)),
-    Tool("Split Audio", Icons.Default.VerticalSplit, "split_audio", "Audio Editor", Color(0xFF00BCD4)),
-    Tool("Reverse Audio", Icons.Default.SettingsBackupRestore, "reverse_audio", "Audio Editor", Color(0xFF795548)),
-    Tool("Voice Changer", Icons.Default.Face, "voice_changer", "Audio Editor", Color(0xFF673AB7)),
-    Tool("Add SFX", Icons.Default.MusicNote, "add_sfx", "Audio Editor", Color(0xFF3F51B5)),
-    Tool("Text To Speech", Icons.Default.RecordVoiceOver, "text_to_speech", "Audio Editor", Color(0xFF009688)),
-    Tool("Video To Audio", Icons.Default.VideoLibrary, "video_to_audio", "Audio Editor", Color(0xFFFFC107)),
-    Tool("Karaoke Effect", Icons.Default.Mic, "karaoke_effect", "Audio Editor", Color(0xFFCDDC39)),
-    Tool("Equalizer", Icons.Default.Equalizer, "equalizer", "Audio Editor", Color(0xFF8BC34A)),
-    Tool("Speed Changer", Icons.Default.Speed, "speed_changer", "Audio Editor", Color(0xFF607D8B)),
-    Tool("Pitch Changer", Icons.Default.Height, "pitch_changer", "Audio Editor", Color(0xFFFF5722)),
-    Tool("Silence Remover", Icons.Default.SpeakerNotesOff, "silence_remover", "Audio Lab", Color(0xFFF44336)),
-    Tool("Noise Remover", Icons.Default.MicOff, "noise_remover", "Audio Lab", Color(0xFF2196F3)),
-    Tool("Audio Effects", Icons.Default.AutoAwesome, "audio_effects_main", "Audio Lab", Color(0xFF4CAF50)),
-    Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "Audio Lab", Color(0xFFFF9800)),
-    Tool("Audio To Video", Icons.Default.Movie, "audio_to_video", "Audio Lab", Color(0xFF9C27B0)),
-    Tool("8D Audio", Icons.Default.Speaker, "eight_d_audio", "Audio Lab", Color(0xFFE91E63)),
-    Tool("Channel Manipulation", Icons.Default.Tune, "channel_manipulation", "Audio Lab", Color(0xFF00BCD4)),
-    Tool("Audio Normalizer", Icons.Default.GraphicEq, "audio_normalizer", "Audio Lab", Color(0xFF795548)),
-    Tool("Audio Compressor", Icons.Default.Settings, "audio_compressor", "Audio Lab", Color(0xFF673AB7)),
-    Tool("Bass Booster", Icons.Default.Speaker, "bass_booster", "Audio Lab", Color(0xFF3F51B5)),
-    Tool("Audio Echo", Icons.Default.SettingsBackupRestore, "audio_echo", "Audio Lab", Color(0xFF009688)),
-    Tool("Volume Booster", Icons.Default.VolumeUp, "volume_booster", "Audio Lab", Color(0xFFFFC107)),
-    Tool("Fun Record", Icons.Default.Mood, "fun_record", "Audio Lab", Color(0xFFCDDC39)),
-    Tool("Wave Generator", Icons.Default.Waves, "wave_generator", "Audio Lab", Color(0xFF8BC34A)),
-    Tool("Audio Merger", Icons.Default.Layers, "audio_merger", "Audio Lab", Color(0xFF607D8B)),
-    Tool("Silence Generator", Icons.Default.DoNotDisturbOn, "silence_generator", "Audio Lab", Color(0xFFFF5722)),
-    Tool("Audio Loop", Icons.Default.Loop, "audio_loop", "Audio Lab", Color(0xFFF44336)),
-    Tool("Multi Mix Audio", Icons.Default.LibraryMusic, "multi_mix", "Batch Processing", Color(0xFF2196F3)),
-    Tool("Multi Convert", Icons.Default.Refresh, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
-    Tool("Multi Video To Audio", Icons.Default.VideoLibrary, "multi_video_to_audio", "Batch Processing", Color(0xFFFF9800)),
-    Tool("Multi Volume Booster", Icons.Default.VolumeUp, "multi_volume_booster", "Batch Processing", Color(0xFF9C27B0)),
-    Tool("Text To Speech ", Icons.Default.RecordVoiceOver, "text_to_speech_other", "Other Tools", Color(0xFF009688)),
-    Tool("Speech To Text", Icons.Default.Hearing, "speech_to_text", "Other Tools", Color(0xFFE91E63)),
-    Tool("Metronome", Icons.Default.Timer, "metronome", "Other Tools", Color(0xFF00BCD4)),
-    Tool("Audio Media Info", Icons.Default.Info, "audio_info", "Other Tools", Color(0xFF795548)),
-    Tool("Video Media Info", Icons.Default.Movie, "video_info", "Other Tools", Color(0xFF673AB7)),
-    Tool("Device Codec", Icons.Default.PermDeviceInformation, "device_codec", "Other Tools", Color(0xFF3F51B5)),
-    Tool("Audio Output", Icons.Default.Folder, "audio_output", "Output", Color(0xFF2196F3)),
-    Tool("Video Output", Icons.Default.Folder, "video_output", "Output", Color(0xFF4CAF50))
-)
 
 @Composable
 fun NatureToolsApp(
@@ -210,8 +88,29 @@ fun NatureToolsApp(
     onShowCategoryCountsChange: (Boolean) -> Unit
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
+    var favorites by remember {
+        mutableStateOf(prefs.getStringSet("favorites", emptySet<String>()) ?: emptySet<String>())
+    }
+
     NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController, showCategoryCounts) }
+        composable("home") {
+            HomeScreen(
+                navController,
+                showCategoryCounts,
+                favorites,
+                onToggleFavorite = { route ->
+                    val newFavorites = if (favorites.contains(route)) {
+                        favorites - route
+                    } else {
+                        favorites + route
+                    }
+                    favorites = newFavorites
+                    prefs.edit().putStringSet("favorites", newFavorites).apply()
+                }
+            )
+        }
         composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange, showCategoryCounts, onShowCategoryCountsChange) }
         composable("converter") { UnitConverterScreen(navController) }
         composable("currency") { CurrencyConverterScreen(navController) }
@@ -266,6 +165,9 @@ fun NatureToolsApp(
         composable("step_counter") { StepCounterScreen(navController) }
         composable("qr_gen") { QrGeneratorScreen(navController) }
         composable("cpu_info") { CpuInfoScreen(navController) }
+        composable("regex_tester") { RegexTesterScreen(navController) }
+        composable("markdown_preview") { MarkdownPreviewScreen(navController) }
+        composable("network_info") { NetworkInfoScreen(navController) }
         composable("case_converter") { CaseConverterScreen(navController) }
         composable("word_counter") { WordCounterScreen(navController) }
         composable("my_ip") { MyIPScreen(navController) }
@@ -322,22 +224,27 @@ fun NatureToolsApp(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, showCategoryCounts: Boolean) {
+fun HomeScreen(
+    navController: NavHostController,
+    showCategoryCounts: Boolean,
+    favorites: Set<String>,
+    onToggleFavorite: (String) -> Unit
+) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("All") }
 
-    val categoryCounts = remember {
-        val counts = tools.groupingBy { it.category }.eachCount()
-        counts + ("All" to tools.size)
+    val categoryCounts = remember(favorites) {
+        val counts = ToolProvider.tools.groupingBy { it.category }.eachCount()
+        counts + ("All" to ToolProvider.tools.size) + ("Favorites" to favorites.size)
     }
 
     val categories = remember {
-        listOf("All") + tools.map { it.category }.distinct().sorted()
+        listOf("All", "Favorites") + ToolProvider.tools.map { it.category }.distinct().sorted()
     }
 
-    val filteredTools = remember(searchQuery, selectedCategory) {
-        tools.filter {
-            (selectedCategory == "All" || it.category == selectedCategory) &&
+    val filteredTools = remember(searchQuery, selectedCategory, favorites) {
+        ToolProvider.tools.filter {
+            (selectedCategory == "All" || (selectedCategory == "Favorites" && favorites.contains(it.route)) || it.category == selectedCategory) &&
             (it.name.contains(searchQuery, ignoreCase = true))
         }.sortedBy { it.name }
     }
@@ -394,7 +301,12 @@ fun HomeScreen(navController: NavHostController, showCategoryCounts: Boolean) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(filteredTools) { tool ->
-                    ToolCard(tool) { navController.navigate(tool.route) }
+                    ToolCard(
+                        tool = tool,
+                        isFavorite = favorites.contains(tool.route),
+                        onToggleFavorite = { onToggleFavorite(tool.route) },
+                        onClick = { navController.navigate(tool.route) }
+                    )
                 }
             }
         }
@@ -402,7 +314,12 @@ fun HomeScreen(navController: NavHostController, showCategoryCounts: Boolean) {
 }
 
 @Composable
-fun ToolCard(tool: Tool, onClick: () -> Unit) {
+fun ToolCard(
+    tool: Tool,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    onClick: () -> Unit
+) {
     ElevatedCard(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().height(110.dp),
@@ -411,35 +328,48 @@ fun ToolCard(tool: Tool, onClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Surface(
-                modifier = Modifier.size(40.dp),
-                shape = CircleShape,
-                color = tool.color.copy(alpha = 0.2f)
+        Box(modifier = Modifier.fillMaxSize()) {
+            IconButton(
+                onClick = onToggleFavorite,
+                modifier = Modifier.align(Alignment.TopEnd).size(32.dp).padding(4.dp)
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        tool.icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = tool.color
-                    )
-                }
+                Icon(
+                    if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                    modifier = Modifier.size(16.dp),
+                    tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                tool.name,
-                style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp),
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                lineHeight = 12.sp,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Medium
-            )
+            Column(
+                modifier = Modifier.fillMaxSize().padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Surface(
+                    modifier = Modifier.size(40.dp),
+                    shape = CircleShape,
+                    color = tool.color.copy(alpha = 0.2f)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            tool.icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            tint = tool.color
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    tool.name,
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    lineHeight = 12.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }
