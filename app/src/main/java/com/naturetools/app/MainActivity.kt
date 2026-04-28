@@ -26,12 +26,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.naturetools.app.model.Tool
@@ -139,7 +142,10 @@ fun NatureToolsApp(
         composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange, showCategoryCounts, onShowCategoryCountsChange) }
         composable("converter") { UnitConverterScreen(navController) }
         composable("currency") { CurrencyConverterScreen(navController) }
-        composable("calculator") { CalculatorScreen(navController) }
+        composable(
+            route = "calculator",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://calculator" })
+        ) { CalculatorScreen(navController) }
         composable("bmi") { BMICalculatorScreen(navController) }
         composable("tip") { TipCalculatorScreen(navController) }
         composable("discount") { DiscountCalculatorScreen(navController) }
@@ -153,10 +159,16 @@ fun NatureToolsApp(
             val title = backStackEntry.arguments?.getString("title") ?: "Web Search"
             WebToolScreen(navController, initialUrl = url, showUrlBar = showBar, title = title)
         }
-        composable("compass") { CompassScreen(navController) }
+        composable(
+            route = "compass",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://compass" })
+        ) { CompassScreen(navController) }
         composable("light") { LightMeterScreen(navController) }
         composable("metal") { MetalDetectorScreen(navController) }
-        composable("note") { NotePadScreen(navController) }
+        composable(
+            route = "note",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://note" })
+        ) { NotePadScreen(navController) }
         composable("checklist") { ChecklistScreen(navController) }
         composable("level") { LevelScreen(navController) }
         composable("flashlight") { FlashlightScreen(navController) }
@@ -179,7 +191,10 @@ fun NatureToolsApp(
         composable("date_calc") { DateCalculatorScreen(navController) }
         composable("bpm") { BpmCounterScreen(navController) }
         composable("fuel") { FuelCostCalculatorScreen(navController) }
-        composable("hub") { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "Hub") }
+        composable(
+            route = "hub",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://hub" })
+        ) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "Hub") }
         composable("media_grabber?url={url}", arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null })) { backStackEntry ->
             val url = backStackEntry.arguments?.getString("url")
             MediaGrabberScreen(navController, initialUrl = url)
@@ -200,30 +215,61 @@ fun NatureToolsApp(
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
 
-        // New Tools Placeholder Screens
-        composable("sci_calc") { AudioToolScreen(navController, "Scientific Calc") }
-        composable("device_id") { AudioToolScreen(navController, "Device ID") }
+        // New Tools Screens
+        composable("sci_calc") { ScientificCalculatorScreen(navController) }
+        composable("device_id") { AudioToolScreen(navController, "Hardware ID") }
         composable("air_quality") { AudioToolScreen(navController, "Air Quality") }
         composable("uv_index") { AudioToolScreen(navController, "UV Index") }
-        composable("habit_tracker") { AudioToolScreen(navController, "Habit Tracker") }
-        composable("meditation") { AudioToolScreen(navController, "Meditation Timer") }
-        composable("spl_meter") { AudioToolScreen(navController, "SPL Meter") }
+        composable("habit_tracker") { HabitTrackerScreen(navController) }
+        composable("meditation") { MeditationTimerScreen(navController) }
+        composable("spl_meter") { SplMeterScreen(navController) }
 
         // Even more new tools
         composable("data_viz") { AudioToolScreen(navController, "Data Visualizer") }
         composable("ai_image") { AudioToolScreen(navController, "AI Image Gen") }
-        composable("base_conv") { AudioToolScreen(navController, "Base Converter") }
+        composable("base_conv") { BaseConverterScreen(navController) }
         composable("constants") { AudioToolScreen(navController, "Constants Table") }
         composable("light_pollution") { AudioToolScreen(navController, "Light Pollution") }
-        composable("tax_calc") { AudioToolScreen(navController, "Tax Calculator") }
-        composable("calorie_calc") { AudioToolScreen(navController, "Calorie Calc") }
-        composable("exif_viewer") { AudioToolScreen(navController, "Exif Viewer") }
-        composable("port_scanner") { AudioToolScreen(navController, "Port Scanner") }
-        composable("pomodoro") { AudioToolScreen(navController, "Pomodoro") }
-        composable("hash_gen") { AudioToolScreen(navController, "Hash Generator") }
-        composable("sensors_list") { AudioToolScreen(navController, "Sensors List") }
-        composable("lorem") { AudioToolScreen(navController, "Lorem Ipsum") }
-        composable("vibration") { AudioToolScreen(navController, "Vibration Test") }
+        composable("tax_calc") { TaxCalculatorScreen(navController) }
+        composable("calorie_calc") { CalorieCalculatorScreen(navController) }
+        composable("exif_viewer") { ExifViewerScreen(navController) }
+        composable("port_scanner") { PortScannerScreen(navController) }
+        composable("pomodoro") { PomodoroScreen(navController) }
+        composable("hash_gen") { HashGeneratorScreen(navController) }
+        composable("sensors_list") { SensorsListScreen(navController) }
+        composable("lorem") { LoremIpsumScreen(navController) }
+        composable("vibration") { VibrationTestScreen(navController) }
+
+        // New Additions from ToolProvider expansion
+        composable("ai_chat") { AudioToolScreen(navController, "AI Chat") }
+        composable("ai_summarizer") { AudioToolScreen(navController, "AI Summarizer") }
+        composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
+        composable("jwt_tool") { JwtToolScreen(navController) }
+        composable("world_map") { AudioToolScreen(navController, "World Map") }
+        composable("moon_phase") { AudioToolScreen(navController, "Moon Phase") }
+        composable("sleep_tracker") { AudioToolScreen(navController, "Sleep Tracker") }
+        composable("daily_quotes") { DailyQuotesScreen(navController) }
+        composable("plant_care") { AudioToolScreen(navController, "Plant Care") }
+        composable("image_compress") { AudioToolScreen(navController, "Image Compressor") }
+        composable("photo_filters") { AudioToolScreen(navController, "Photo Filters") }
+        composable("dns_lookup") { AudioToolScreen(navController, "DNS Lookup") }
+        composable("whois") { AudioToolScreen(navController, "Whois") }
+        composable("task_board") { AudioToolScreen(navController, "Task Board") }
+        composable("time_logger") { AudioToolScreen(navController, "Time Logger") }
+        composable("voice_memo") { AudioToolScreen(navController, "Voice Memo") }
+        composable("altimeter") { AudioToolScreen(navController, "Altimeter") }
+        composable("barometer") { AudioToolScreen(navController, "Barometer") }
+        composable("app_permissions") { AudioToolScreen(navController, "App Permissions") }
+        composable("privacy_check") { AudioToolScreen(navController, "Privacy Check") }
+        composable("app_info") { AudioToolScreen(navController, "App Info") }
+        composable("update_check") { AudioToolScreen(navController, "Update Check") }
+        composable("anagram") { AudioToolScreen(navController, "Anagram Finder") }
+        composable("text_diff") { AudioToolScreen(navController, "Text Diff") }
+        composable("ruler") { AudioToolScreen(navController, "Ruler") }
+        composable("unit_price") { UnitPriceCalculatorScreen(navController) }
+        composable("video_stabilizer") { AudioToolScreen(navController, "Video Stabilizer", "video/*") }
+        composable("multi_image_resize") { AudioToolScreen(navController, "Multi Image Resize") }
+        composable("currency_trends") { AudioToolScreen(navController, "Currency Trends") }
 
         // Audio Tools
         composable("m_audio_editor") { AudioToolScreen(navController, "Audio Editor") }
@@ -377,20 +423,28 @@ fun HomeScreen(
                 }
             }
 
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 100.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(filteredTools) { tool ->
-                    ToolCard(
-                        tool = tool,
-                        isFavorite = favorites.contains(tool.route),
-                        onToggleFavorite = { onToggleFavorite(tool.route) },
-                        onClick = { navController.navigate(tool.route) }
-                    )
+            AnimatedContent(
+                targetState = filteredTools,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+                },
+                label = "tools_grid"
+            ) { tools ->
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 100.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(tools, key = { it.route }) { tool ->
+                        ToolCard(
+                            tool = tool,
+                            isFavorite = favorites.contains(tool.route),
+                            onToggleFavorite = { onToggleFavorite(tool.route) },
+                            onClick = { navController.navigate(tool.route) }
+                        )
+                    }
                 }
             }
         }

@@ -22,7 +22,9 @@ data class Tool(
 object ToolProvider {
     val tools = listOf(
         // AI & Data
-        Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "AI & Data", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("AI Chat", Icons.Default.Chat, "ai_chat", "AI & Data", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("AI Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI & Data", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "AI & Data", Color(0xFF4CAF50)),
         Tool("Markdown Preview", Icons.Default.Description, "markdown_preview", "AI & Data", Color(0xFF3F51B5)),
         Tool("Regex Tester", Icons.Default.Code, "regex_tester", "AI & Data", Color(0xFF673AB7)),
 
@@ -72,6 +74,7 @@ object ToolProvider {
 
         // Batch Processing
         Tool("Multi Convert", Icons.Default.Autorenew, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
+        Tool("Multi Image Resize", Icons.Default.PhotoSizeSelectLarge, "multi_image_resize", "Batch Processing", Color(0xFF8BC34A), BadgeType.NEW),
         Tool("Multi Mix Audio", Icons.Default.Tune, "multi_mix", "Batch Processing", Color(0xFF2196F3)),
         Tool("Multi Video To Audio", Icons.Default.MusicVideo, "multi_video_to_audio", "Batch Processing", Color(0xFFFF9800)),
         Tool("Multi Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "multi_volume_booster", "Batch Processing", Color(0xFF9C27B0)),
@@ -81,7 +84,8 @@ object ToolProvider {
         Tool("Date Calc", Icons.Default.CalendarToday, "date_calc", "Calculation", Color(0xFF9E9E9E)),
         Tool("Discount Calc", Icons.Default.Percent, "discount", "Calculation", Color(0xFFF44336)),
         Tool("Fuel Cost", Icons.Default.LocalGasStation, "fuel", "Calculation", Color(0xFF9C27B0)),
-        Tool("Scientific Calc", Icons.Default.Functions, "sci_calc", "Calculation", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Mortgage Calc", Icons.Default.Home, "mortgage_calc", "Calculation", Color(0xFF795548), BadgeType.NEW),
+        Tool("Scientific Calc", Icons.Default.Functions, "sci_calc", "Calculation", Color(0xFF2196F3)),
         Tool("Tip Calc", Icons.Default.Receipt, "tip", "Calculation", Color(0xFFE91E63)),
 
         // Conversion
@@ -91,47 +95,54 @@ object ToolProvider {
 
         // Developer
         Tool("Base64 Tool", Icons.Default.Code, "base64", "Developer", Color(0xFF3F51B5)),
-        Tool("Device ID", Icons.Default.PermDeviceInformation, "device_id", "Developer", Color(0xFF607D8B), BadgeType.NEW),
         Tool("JSON Format", Icons.Default.DataObject, "json", "Developer", Color(0xFF2196F3)),
+        Tool("JWT Tool", Icons.Default.Key, "jwt_tool", "Developer", Color(0xFFFF5722), BadgeType.NEW),
         Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", Color(0xFF03A9F4)),
 
         // Education
-        Tool("Constants Table", Icons.Default.Functions, "constants", "Education", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Education", Color(0xFFFFEB3B)),
-        Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Education", Color(0xFFFFC107)),
         Tool("Prime Checker", Icons.Default.Filter7, "prime", "Education", Color(0xFFFF9800)),
+        Tool("World Map", Icons.Default.Map, "world_map", "Education", Color(0xFF4CAF50), BadgeType.NEW),
 
         // Environment
-        Tool("Air Quality", Icons.Default.Air, "air_quality", "Environment", Color(0xFF00BCD4), BadgeType.NEW),
-        Tool("Light Pollution", Icons.Default.NightsStay, "light_pollution", "Environment", Color(0xFF3F51B5), BadgeType.NEW),
-        Tool("UV Index", Icons.Default.WbSunny, "uv_index", "Environment", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Air Quality", Icons.Default.Air, "air_quality", "Environment", Color(0xFF00BCD4)),
+        Tool("Light Pollution", Icons.Default.NightsStay, "light_pollution", "Environment", Color(0xFF3F51B5)),
+        Tool("Moon Phase", Icons.Default.Brightness3, "moon_phase", "Environment", Color(0xFF9C27B0), BadgeType.NEW),
+        Tool("UV Index", Icons.Default.WbSunny, "uv_index", "Environment", Color(0xFFFF9800)),
 
         // Finance
         Tool("Compound Interest", Icons.AutoMirrored.Filled.TrendingUp, "compound_interest", "Finance", Color(0xFF3F51B5)),
+        Tool("Currency Trends", Icons.Default.Timeline, "currency_trends", "Finance", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Loan Calculator", Icons.Default.AccountBalance, "loan_calc", "Finance", Color(0xFF673AB7)),
-        Tool("Tax Calculator", Icons.Default.MoneyOff, "tax_calc", "Finance", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Tax Calculator", Icons.Default.MoneyOff, "tax_calc", "Finance", Color(0xFFF44336)),
 
         // Health
         Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health", Color(0xFFFF9800)),
-        Tool("Calorie Calc", Icons.Default.Restaurant, "calorie_calc", "Health", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Calorie Calc", Icons.Default.Restaurant, "calorie_calc", "Health", Color(0xFFE91E63)),
+        Tool("Sleep Tracker", Icons.Default.Bedtime, "sleep_tracker", "Health", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("Step Counter", Icons.AutoMirrored.Filled.DirectionsRun, "step_counter", "Health", Color(0xFFFF5722)),
         Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health", Color(0xFF795548)),
 
         // Lifestyle
-        Tool("Habit Tracker", Icons.Default.EventRepeat, "habit_tracker", "Lifestyle", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Meditation Timer", Icons.Default.SelfImprovement, "meditation", "Lifestyle", Color(0xFF9C27B0), BadgeType.NEW),
+        Tool("Daily Quotes", Icons.Default.FormatQuote, "daily_quotes", "Lifestyle", Color(0xFFFFC107), BadgeType.NEW),
+        Tool("Habit Tracker", Icons.Default.EventRepeat, "habit_tracker", "Lifestyle", Color(0xFF4CAF50)),
+        Tool("Meditation Timer", Icons.Default.SelfImprovement, "meditation", "Lifestyle", Color(0xFF9C27B0)),
+        Tool("Plant Care", Icons.Default.Eco, "plant_care", "Lifestyle", Color(0xFF4CAF50), BadgeType.NEW),
 
         // Media
         Tool("Color Picker", Icons.Default.Palette, "color_picker", "Media", Color(0xFFCDDC39)),
-        Tool("Exif Viewer", Icons.Default.CameraAlt, "exif_viewer", "Media", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Exif Viewer", Icons.Default.CameraAlt, "exif_viewer", "Media", Color(0xFF607D8B)),
         Tool("Gradient Gen", Icons.Default.Gradient, "gradient_gen", "Media", Color(0xFFFFEB3B)),
+        Tool("Image Compressor", Icons.Default.Compress, "image_compress", "Media", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Media", Color(0xFFFFC107)),
+        Tool("Photo Filters", Icons.Default.Filter, "photo_filters", "Media", Color(0xFFE91E63), BadgeType.NEW),
 
         // Network
+        Tool("DNS Lookup", Icons.Default.Dns, "dns_lookup", "Network", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("My IP", Icons.Default.Public, "my_ip", "Network", Color(0xFF00BCD4)),
         Tool("Network Details", Icons.Default.NetworkCheck, "network_info", "Network", Color(0xFF2196F3)),
         Tool("Ping", Icons.Default.SettingsEthernet, "ping", "Network", Color(0xFF009688)),
-        Tool("Port Scanner", Icons.Default.Search, "port_scanner", "Network", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Port Scanner", Icons.Default.Search, "port_scanner", "Network", Color(0xFFF44336)),
+        Tool("Whois", Icons.Default.QuestionMark, "whois", "Network", Color(0xFF607D8B), BadgeType.NEW),
 
         // Other Tools
         Tool("Audio Info", Icons.Default.AudioFile, "audio_info", "Other Tools", Color(0xFF795548), BadgeType.NEW),
@@ -146,36 +157,58 @@ object ToolProvider {
         // Productivity
         Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity", Color(0xFFCDDC39)),
         Tool("Note Pad", Icons.Default.NoteAlt, "note", "Productivity", Color(0xFF8BC34A)),
-        Tool("Pomodoro", Icons.Default.HourglassEmpty, "pomodoro", "Productivity", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Pomodoro", Icons.Default.HourglassEmpty, "pomodoro", "Productivity", Color(0xFFF44336)),
+        Tool("Task Board", Icons.Default.Dashboard, "task_board", "Productivity", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Time Logger", Icons.Default.HistoryToggleOff, "time_logger", "Productivity", Color(0xFF673AB7), BadgeType.NEW),
 
         // Recording Tools
         Tool("Fun Recording", Icons.Default.Mood, "fun_record", "Recording Tools", Color(0xFFCDDC39)),
         Tool("Karaoke Effect", Icons.Default.Mic, "karaoke_effect", "Recording Tools", Color(0xFFCDDC39)),
         Tool("Record Audio", Icons.Default.Mic, "record_audio", "Recording Tools", Color(0xFFE91E63)),
+        Tool("Voice Memo", Icons.Default.SettingsVoice, "voice_memo", "Recording Tools", Color(0xFF2196F3), BadgeType.NEW),
 
         // Sensors
+        Tool("Altimeter", Icons.Default.Landscape, "altimeter", "Sensors", Color(0xFF795548), BadgeType.NEW),
+        Tool("Barometer", Icons.Default.Compress, "barometer", "Sensors", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Compass", Icons.Default.Explore, "compass", "Sensors", Color(0xFF2196F3)),
         Tool("Level", Icons.Default.Architecture, "level", "Sensors", Color(0xFF03A9F4)),
         Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors", Color(0xFF00BCD4)),
         Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors", Color(0xFF009688)),
         Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors", Color(0xFF4CAF50)),
-        Tool("SPL Meter", Icons.Default.VolumeUp, "spl_meter", "Sensors", Color(0xFFF44336), BadgeType.NEW),
+        Tool("SPL Meter", Icons.Default.VolumeUp, "spl_meter", "Sensors", Color(0xFFF44336)),
+
+        // Hardware
+        Tool("Battery", Icons.Default.BatteryFull, "battery", "Hardware", Color(0xFFFF5722)),
+        Tool("CPU Info", Icons.Default.Memory, "cpu_info", "Hardware", Color(0xFF795548)),
+        Tool("Device Info", Icons.Default.Info, "device", "Hardware", Color(0xFF607D8B)),
+        Tool("Hardware ID", Icons.Default.PermDeviceInformation, "device_id", "Hardware", Color(0xFF607D8B)),
+        Tool("Sensors List", Icons.Default.List, "sensors_list", "Hardware", Color(0xFF4CAF50)),
+        Tool("Storage", Icons.Default.Storage, "storage", "Hardware", Color(0xFF9E9E9E)),
+
+        // Privacy
+        Tool("App Permissions", Icons.Default.Security, "app_permissions", "Privacy", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Privacy Check", Icons.Default.PrivacyTip, "privacy_check", "Privacy", Color(0xFFF44336), BadgeType.NEW),
+
+        // Science
+        Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Science", Color(0xFF673AB7)),
+        Tool("Constants Table", Icons.Default.Functions, "constants", "Science", Color(0xFFF44336)),
+        Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science", Color(0xFFFFEB3B)),
+        Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science", Color(0xFFFFC107)),
 
         // Security
-        Tool("Hash Generator", Icons.Default.Fingerprint, "hash_gen", "Security", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Hash Generator", Icons.Default.Fingerprint, "hash_gen", "Security", Color(0xFF607D8B)),
         Tool("Password Manager", Icons.Default.Password, "password_manager", "Security", Color(0xFF4CAF50)),
 
         // System
-        Tool("Battery", Icons.Default.BatteryFull, "battery", "System", Color(0xFFFF5722)),
-        Tool("CPU Info", Icons.Default.Memory, "cpu_info", "System", Color(0xFF795548)),
-        Tool("Device", Icons.Default.Info, "device", "System", Color(0xFF607D8B)),
-        Tool("Sensors List", Icons.Default.List, "sensors_list", "System", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Storage", Icons.Default.Storage, "storage", "System", Color(0xFF9E9E9E)),
+        Tool("App Info", Icons.Default.Apps, "app_info", "System", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Update Check", Icons.Default.SystemUpdate, "update_check", "System", Color(0xFF4CAF50), BadgeType.NEW),
 
         // Text
+        Tool("Anagram Finder", Icons.Default.SortByAlpha, "anagram", "Text", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Case Converter", Icons.Default.TextFields, "case_converter", "Text", Color(0xFF9C27B0)),
-        Tool("Lorem Ipsum", Icons.Default.Notes, "lorem", "Text", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Lorem Ipsum", Icons.Default.Notes, "lorem", "Text", Color(0xFF607D8B)),
         Tool("Morse Code", Icons.Default.Language, "morse", "Text", Color(0xFF673AB7)),
+        Tool("Text Diff", Icons.Default.Difference, "text_diff", "Text", Color(0xFFFF5722), BadgeType.NEW),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Text", Color(0xFFE91E63)),
 
         // Utility
@@ -185,8 +218,10 @@ object ToolProvider {
         Tool("Hub", Icons.Default.Hub, "hub", "Utility", Color(0xFF00BCD4)),
         Tool("QR Generator", Icons.Default.QrCode, "qr_gen", "Utility", Color(0xFF8BC34A)),
         Tool("Random Gen", Icons.Default.Casino, "random", "Utility", Color(0xFFE91E63)),
+        Tool("Ruler", Icons.Default.Straighten, "ruler", "Utility", Color(0xFF9E9E9E), BadgeType.NEW),
         Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility", Color(0xFF9C27B0)),
-        Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utility", Color(0xFFFF5722), BadgeType.NEW),
+        Tool("Unit Price Calc", Icons.Default.PriceCheck, "unit_price", "Utility", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utility", Color(0xFFFF5722)),
         Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),
 
@@ -201,6 +236,7 @@ object ToolProvider {
         Tool("Video SFX", Icons.Default.AutoAwesome, "video_sfx", "Video Tools", Color(0xFF3F51B5)),
         Tool("Video Speed", Icons.Default.FastForward, "video_speed_changer", "Video Tools", Color(0xFF607D8B)),
         Tool("Video Splitter", Icons.AutoMirrored.Filled.AltRoute, "video_splitter", "Video Tools", Color(0xFF00BCD4)),
+        Tool("Video Stabilizer", Icons.Default.Camera, "video_stabilizer", "Video Tools", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Video Tools", Color(0xFFFFC107)),
         Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Video Tools", Color(0xFFE91E63)),
         Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Tools", Color(0xFFFFC107))

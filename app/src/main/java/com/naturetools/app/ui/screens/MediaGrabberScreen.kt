@@ -160,62 +160,71 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             } catch(e) {}
                                         }
 
-                                        var imgs = document.getElementsByTagName('img');
-                                        for (var i = 0; i < imgs.length; i++) {
-                                            addUrl(imgs[i].src);
-                                            if (imgs[i].srcset) {
-                                                imgs[i].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
+                                        // Robust extraction logic
+                                        function scan(root) {
+                                            var imgs = root.getElementsByTagName('img');
+                                            for (var i = 0; i < imgs.length; i++) {
+                                                addUrl(imgs[i].src);
+                                                addUrl(imgs[i].dataset.src);
+                                                addUrl(imgs[i].dataset.lazySrc);
+                                                if (imgs[i].srcset) {
+                                                    imgs[i].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
+                                                }
                                             }
-                                        }
 
-                                        var pictures = document.getElementsByTagName('picture');
-                                        for (var i = 0; i < pictures.length; i++) {
-                                            var sources = pictures[i].getElementsByTagName('source');
-                                            for (var j = 0; j < sources.length; j++) {
-                                                if (sources[j].srcset) {
-                                                    sources[j].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
+                                            var pictures = root.getElementsByTagName('picture');
+                                            for (var i = 0; i < pictures.length; i++) {
+                                                var sources = pictures[i].getElementsByTagName('source');
+                                                for (var j = 0; j < sources.length; j++) {
+                                                    if (sources[j].srcset) {
+                                                        sources[j].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
+                                                    }
+                                                }
+                                            }
+
+                                            var videos = root.getElementsByTagName('video');
+                                            for (var i = 0; i < videos.length; i++) {
+                                                addUrl(videos[i].src);
+                                                addUrl(videos[i].poster);
+                                                var sources = videos[i].getElementsByTagName('source');
+                                                for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
+                                            }
+
+                                            var audios = root.getElementsByTagName('audio');
+                                            for (var i = 0; i < audios.length; i++) {
+                                                addUrl(audios[i].src);
+                                                var sources = audios[i].getElementsByTagName('source');
+                                                for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
+                                            }
+
+                                            var anchors = root.getElementsByTagName('a');
+                                            for (var i = 0; i < anchors.length; i++) {
+                                                var href = anchors[i].href;
+                                                if (href && (href.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg|mp3|wav|zip|pdf)$/i) || href.includes('drive.google.com/file'))) {
+                                                    addUrl(href);
                                                 }
                                             }
                                         }
 
-                                        var videos = document.getElementsByTagName('video');
-                                        for (var i = 0; i < videos.length; i++) {
-                                            addUrl(videos[i].src);
-                                            addUrl(videos[i].poster);
-                                            var sources = videos[i].getElementsByTagName('source');
-                                            for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
-                                        }
+                                        scan(document);
 
-                                        var audios = document.getElementsByTagName('audio');
-                                        for (var i = 0; i < audios.length; i++) {
-                                            addUrl(audios[i].src);
-                                            var sources = audios[i].getElementsByTagName('source');
-                                            for (var j = 0; j < sources.length; j++) addUrl(sources[j].src);
-                                        }
-
+                                        // Background images
                                         var allElements = document.getElementsByTagName('*');
                                         for (var i = 0; i < allElements.length; i++) {
                                             var bg = window.getComputedStyle(allElements[i]).backgroundImage;
-                                            if (bg && bg !== 'none' && bg.startsWith('url')) {
-                                                var url = bg.match(/url\(["']?([^"']+)["']?\)/);
-                                                if (url && url[1]) addUrl(url[1]);
+                                            if (bg && bg !== 'none' && bg.includes('url')) {
+                                                var urlMatch = bg.match(/url\(["']?([^"']+)["']?\)/);
+                                                if (urlMatch && urlMatch[1]) addUrl(urlMatch[1]);
                                             }
                                         }
 
+                                        // Metadata
                                         var metas = document.getElementsByTagName('meta');
                                         for (var i = 0; i < metas.length; i++) {
                                             var prop = metas[i].getAttribute('property') || metas[i].getAttribute('name');
                                             var content = metas[i].getAttribute('content');
-                                            if (prop && (prop.includes('image') || prop.includes('video')) && content) {
+                                            if (prop && (prop.includes('image') || prop.includes('video') || prop.includes('og:')) && content) {
                                                 addUrl(content);
-                                            }
-                                        }
-
-                                        var anchors = document.getElementsByTagName('a');
-                                        for (var i = 0; i < anchors.length; i++) {
-                                            var href = anchors[i].href;
-                                            if (href && (href.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg|mp3|wav)$/) || href.includes('drive.google.com/file'))) {
-                                                addUrl(href);
                                             }
                                         }
 
