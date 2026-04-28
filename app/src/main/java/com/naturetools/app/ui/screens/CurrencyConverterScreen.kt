@@ -69,7 +69,7 @@ fun CurrencyConverterScreen(navController: NavHostController) {
                 Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Result", style = MaterialTheme.typography.labelLarge)
                     Text(
-                        String.format("%.2f", result),
+                        java.lang.String.format(java.util.Locale.US, "%.2f", result),
                         style = MaterialTheme.typography.displayMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )

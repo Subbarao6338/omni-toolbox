@@ -27,7 +27,7 @@ fun StorageScreen(navController: NavHostController) {
 
     fun formatSize(size: Long): String {
         val gb = size.toDouble() / (1024 * 1024 * 1024)
-        return String.format("%.2f GB", gb)
+        return java.lang.String.format(java.util.Locale.US, "%.2f GB", gb)
     }
 
     ToolScreen(title = "Storage Info", onBack = { navController.popBackStack() }) { padding ->

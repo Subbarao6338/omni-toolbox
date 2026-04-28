@@ -2,12 +2,18 @@ package com.naturetools.app.ui.screens
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FlashlightOff
 import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Sos
 import androidx.compose.material3.*
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +32,9 @@ fun FlashlightScreen(navController: NavHostController) {
 
     var isOn by remember { mutableStateOf(false) }
     var isSosMode by remember { mutableStateOf(false) }
+    var isScreenLight by remember { mutableStateOf(false) }
+    var screenBrightness by remember { mutableFloatStateOf(1f) }
+    var screenColor by remember { mutableStateOf(androidx.compose.ui.graphics.Color.White) }
 
     fun setFlash(state: Boolean) {
         if (cameraId != null) {
@@ -64,6 +73,41 @@ fun FlashlightScreen(navController: NavHostController) {
     }
 
     ToolScreen(title = "Flashlight", onBack = { navController.popBackStack() }) { padding ->
+        if (isScreenLight) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(screenColor.copy(alpha = screenBrightness))
+                    .clickable { isScreenLight = false },
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Card(
+                    modifier = Modifier.padding(16.dp).fillMaxWidth().alpha(0.8f),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Screen Light", style = MaterialTheme.typography.titleMedium)
+                        Slider(value = screenBrightness, onValueChange = { screenBrightness = it })
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            listOf(Color.White, Color.Red, Color.Green, Color.Blue, Color.Yellow).forEach { color ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .background(color, CircleShape)
+                                        .clickable { screenColor = color }
+                                )
+                            }
+                        }
+                        Button(onClick = { isScreenLight = false }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Back to Flashlight")
+                        }
+                    }
+                }
+            }
+        } else {
         Column(
             modifier = Modifier.fillMaxSize().padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -102,6 +146,15 @@ fun FlashlightScreen(navController: NavHostController) {
                 VerticalDivider(modifier = Modifier.height(48.dp))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    FilledIconButton(onClick = { isScreenLight = true }) {
+                        Icon(Icons.Default.LightMode, contentDescription = "Screen Light")
+                    }
+                    Text("Screen", style = MaterialTheme.typography.labelMedium)
+                }
+
+                VerticalDivider(modifier = Modifier.height(48.dp))
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     FilledIconToggleButton(
                         checked = isSosMode,
                         onCheckedChange = {
@@ -117,6 +170,7 @@ fun FlashlightScreen(navController: NavHostController) {
                     }
                     Text("SOS Mode", style = MaterialTheme.typography.labelMedium)
                 }
+            }
             }
         }
     }

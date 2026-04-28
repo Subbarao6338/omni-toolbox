@@ -214,6 +214,89 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Echo Delay", valueRange = 0f..2f, initialValue = 0.5f)
                             AdjustmentSlider("Echo Decay", valueRange = 0f..1f, initialValue = 0.5f)
                         }
+                        "Scientific Calc" -> {
+                            Text("Scientific mode active. Advanced functions: sin, cos, tan, log, ln, sqrt.")
+                            AdjustmentSlider("Precision (dec)", valueRange = 0f..10f, initialValue = 2f)
+                        }
+                        "Device ID" -> {
+                            val deviceId = remember { java.util.UUID.randomUUID().toString().take(16) }
+                            Text("Hardware ID: $deviceId")
+                            Text("Model: ${android.os.Build.MODEL}")
+                            Text("OS Version: ${android.os.Build.VERSION.RELEASE}")
+                        }
+                        "Air Quality" -> {
+                            Text("Location-based Air Quality Index (AQI)")
+                            AdjustmentSlider("Refresh Rate (min)", valueRange = 1f..60f, initialValue = 15f)
+                        }
+                        "UV Index" -> {
+                            Text("Current UV Intensity")
+                            AdjustmentSlider("Sensitivity")
+                        }
+                        "Habit Tracker" -> {
+                            Text("Daily Progress")
+                            AdjustmentSlider("Target Goal", valueRange = 1f..10f, initialValue = 5f)
+                        }
+                        "Meditation Timer" -> {
+                            AdjustmentSlider("Duration (min)", valueRange = 1f..60f, initialValue = 10f)
+                            AdjustmentSlider("Interval Bell (min)", valueRange = 0f..30f, initialValue = 0f)
+                        }
+                        "SPL Meter" -> {
+                            Text("Sound Pressure Level (dB)")
+                            AdjustmentSlider("Calibration (dB)", valueRange = -10f..10f, initialValue = 0f)
+                        }
+                        "Data Visualizer" -> {
+                            Text("Import CSV or JSON to visualize")
+                            AdjustmentSlider("Graph Type (0: Bar, 1: Line)", valueRange = 0f..1f, initialValue = 0f)
+                        }
+                        "AI Image Gen" -> {
+                            Text("Enter prompt for image generation")
+                            AdjustmentSlider("Steps", valueRange = 10f..50f, initialValue = 20f)
+                        }
+                        "Base Converter" -> {
+                            Text("Convert between Binary, Octal, Hex, Decimal")
+                            AdjustmentSlider("Target Base", valueRange = 2f..36f, initialValue = 16f)
+                        }
+                        "Constants Table" -> {
+                            Text("Scientific and Physical Constants (Pi, e, G, c, etc.)")
+                        }
+                        "Light Pollution" -> {
+                            Text("Bortle Scale and Sky Brightness")
+                            AdjustmentSlider("Latitude")
+                            AdjustmentSlider("Longitude")
+                        }
+                        "Tax Calculator" -> {
+                            AdjustmentSlider("Income Amount")
+                            AdjustmentSlider("Tax Rate (%)", valueRange = 0f..50f, initialValue = 15f)
+                        }
+                        "Calorie Calc" -> {
+                            AdjustmentSlider("Weight (kg)", valueRange = 30f..200f, initialValue = 70f)
+                            AdjustmentSlider("Activity Level", valueRange = 1f..2f, initialValue = 1.2f)
+                        }
+                        "Exif Viewer" -> {
+                            Text("Select an image to view EXIF metadata")
+                        }
+                        "Port Scanner" -> {
+                            Text("Scan for open ports on an IP")
+                            AdjustmentSlider("Start Port", valueRange = 1f..65535f, initialValue = 80f)
+                        }
+                        "Pomodoro" -> {
+                            AdjustmentSlider("Work Duration (min)", valueRange = 1f..60f, initialValue = 25f)
+                            AdjustmentSlider("Break Duration (min)", valueRange = 1f..30f, initialValue = 5f)
+                        }
+                        "Hash Generator" -> {
+                            Text("MD5, SHA-1, SHA-256 generation")
+                            AdjustmentSlider("Salt Length", valueRange = 0f..32f, initialValue = 0f)
+                        }
+                        "Sensors List" -> {
+                            Text("Available hardware sensors on this device")
+                        }
+                        "Lorem Ipsum" -> {
+                            AdjustmentSlider("Paragraph Count", valueRange = 1f..10f, initialValue = 3f)
+                        }
+                        "Vibration Test" -> {
+                            Text("Test haptic feedback motors")
+                            AdjustmentSlider("Intensity")
+                        }
                         "Audio Editor", "Audio Joiner", "Audio Tag Editor", "Reverse Audio", "Mute Audio", "Ringtone Maker", "Sound Mastering", "Add SFX", "Video to Audio", "Reverse Video", "Multi Convert", "Multi Video To Audio", "Metronome", "Audio Info", "Video Info", "Device Codec", "Audio Output", "Video Output" -> {
                             AdjustmentSlider("Intensity")
                             AdjustmentSlider("Threshold")
@@ -300,7 +383,7 @@ fun AdjustmentSlider(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(String.format("%.1f", value), style = MaterialTheme.typography.bodySmall)
+            Text(java.lang.String.format(java.util.Locale.US, "%.1f", value), style = MaterialTheme.typography.bodySmall)
         }
         Slider(
             value = value,

@@ -56,10 +56,10 @@ fun DiscountCalculatorScreen(navController: NavHostController) {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
-                    ResultRow("Savings", "-$${String.format("%.2f", savings)}")
-                    ResultRow("Tax Amount", "+$${String.format("%.2f", taxAmount)}")
+                    ResultRow("Savings", "-$${java.lang.String.format(java.util.Locale.US, "%.2f", savings)}")
+                    ResultRow("Tax Amount", "+$${java.lang.String.format(java.util.Locale.US, "%.2f", taxAmount)}")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    ResultRow("Final Price", "$${String.format("%.2f", finalPrice)}", isBold = true)
+                    ResultRow("Final Price", "$${java.lang.String.format(java.util.Locale.US, "%.2f", finalPrice)}", isBold = true)
                 }
             }
         }

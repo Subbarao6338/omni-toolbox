@@ -19,7 +19,7 @@ fun ColorPickerScreen(navController: NavHostController) {
     var blue by remember { mutableFloatStateOf(0f) }
 
     val currentColor = Color(red / 255f, green / 255f, blue / 255f)
-    val hexCode = String.format("#%02X%02X%02X", red.toInt(), green.toInt(), blue.toInt())
+    val hexCode = java.lang.String.format(java.util.Locale.US, "#%02X%02X%02X", red.toInt(), green.toInt(), blue.toInt())
 
     ToolScreen(title = "Color Picker", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {

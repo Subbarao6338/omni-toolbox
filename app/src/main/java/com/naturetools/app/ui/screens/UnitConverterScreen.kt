@@ -44,10 +44,14 @@ fun UnitConverterScreen(navController: NavHostController, viewModel: ConverterVi
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            val currentUnits = remember(viewModel.selectedCategoryIndex) {
+                viewModel.categories[viewModel.selectedCategoryIndex].units.map { it.name }
+            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 UnitDropdown(
                     label = "From",
-                    options = viewModel.categories[viewModel.selectedCategoryIndex].units.map { it.name },
+                    options = currentUnits,
                     selectedIndex = viewModel.fromUnitIndex,
                     onSelectionChange = { viewModel.onFromUnitChange(it) },
                     modifier = Modifier.weight(1f)
@@ -61,7 +65,7 @@ fun UnitConverterScreen(navController: NavHostController, viewModel: ConverterVi
 
                 UnitDropdown(
                     label = "To",
-                    options = viewModel.categories[viewModel.selectedCategoryIndex].units.map { it.name },
+                    options = currentUnits,
                     selectedIndex = viewModel.toUnitIndex,
                     onSelectionChange = { viewModel.onToUnitChange(it) },
                     modifier = Modifier.weight(1f)
