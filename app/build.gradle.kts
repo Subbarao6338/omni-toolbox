@@ -95,6 +95,7 @@ dependencies {
     implementation("androidx.webkit:webkit:1.10.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.google.zxing:core:3.5.3")
+    implementation("net.objecthunter:exp4j:0.4.8")
 
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
