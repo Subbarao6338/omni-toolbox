@@ -156,7 +156,10 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             if (!url) return;
                                             try {
                                                 var absolute = new URL(url, document.baseURI).href;
-                                                if (absolute.startsWith('http')) links.add(absolute);
+                                                // Filter out small icons or common tracking pixels
+                                                if (absolute.startsWith('http') && !absolute.includes('pixel') && !absolute.includes('analytics')) {
+                                                    links.add(absolute);
+                                                }
                                             } catch(e) {}
                                         }
 

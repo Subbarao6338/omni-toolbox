@@ -118,6 +118,7 @@ object ToolProvider {
         // Health
         Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health", Color(0xFFFF9800)),
         Tool("Calorie Calc", Icons.Default.Restaurant, "calorie_calc", "Health", Color(0xFFE91E63)),
+        Tool("BMR Calculator", Icons.Default.Calculate, "bmr", "Health", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Sleep Tracker", Icons.Default.Bedtime, "sleep_tracker", "Health", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("Step Counter", Icons.AutoMirrored.Filled.DirectionsRun, "step_counter", "Health", Color(0xFFFF5722)),
         Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health", Color(0xFF795548)),
@@ -208,6 +209,7 @@ object ToolProvider {
         Tool("Case Converter", Icons.Default.TextFields, "case_converter", "Text", Color(0xFF9C27B0)),
         Tool("Lorem Ipsum", Icons.Default.Notes, "lorem", "Text", Color(0xFF607D8B)),
         Tool("Morse Code", Icons.Default.Language, "morse", "Text", Color(0xFF673AB7)),
+        Tool("Morse Decoder", Icons.Default.Language, "morse_decoder", "Text", Color(0xFF03A9F4), BadgeType.NEW),
         Tool("Text Diff", Icons.Default.Difference, "text_diff", "Text", Color(0xFFFF5722), BadgeType.NEW),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Text", Color(0xFFE91E63)),
 
