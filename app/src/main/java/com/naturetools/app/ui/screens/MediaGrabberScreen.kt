@@ -170,6 +170,9 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                 addUrl(imgs[i].src);
                                                 addUrl(imgs[i].dataset.src);
                                                 addUrl(imgs[i].dataset.lazySrc);
+                                                addUrl(imgs[i].dataset.original);
+                                                addUrl(imgs[i].getAttribute('data-src'));
+                                                addUrl(imgs[i].getAttribute('data-lazy-src'));
                                                 if (imgs[i].srcset) {
                                                     imgs[i].srcset.split(',').forEach(s => addUrl(s.trim().split(' ')[0]));
                                                 }
@@ -203,9 +206,15 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             var anchors = root.getElementsByTagName('a');
                                             for (var i = 0; i < anchors.length; i++) {
                                                 var href = anchors[i].href;
-                                                if (href && (href.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg|mp3|wav|zip|pdf)$/i) || href.includes('drive.google.com/file'))) {
+                                                if (href && (href.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg|mp3|wav|zip|pdf|apk)$/i) || href.includes('drive.google.com/file'))) {
                                                     addUrl(href);
                                                 }
+                                            }
+
+                                            // Iframes (YouTube, Vimeo, etc)
+                                            var iframes = root.getElementsByTagName('iframe');
+                                            for (var i = 0; i < iframes.length; i++) {
+                                                addUrl(iframes[i].src);
                                             }
                                         }
 

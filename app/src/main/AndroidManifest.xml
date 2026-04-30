@@ -123,10 +123,52 @@
                 android:resource="@xml/compass_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.StopwatchWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/stopwatch_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.CalculatorWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calculator_widget_info" />
+        </receiver>
+
         <service
             android:name=".service.FlashlightTileService"
             android:exported="true"
             android:label="Flashlight"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.StopwatchTileService"
+            android:exported="true"
+            android:label="Stopwatch"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.MetronomeTileService"
+            android:exported="true"
+            android:label="Metronome"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

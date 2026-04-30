@@ -16,8 +16,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -255,6 +258,17 @@ fun NatureToolsApp(
         composable("lorem") { LoremIpsumScreen(navController) }
         composable("vibration") { VibrationTestScreen(navController) }
 
+        // Astronomy
+        composable("star_map") { StarMapScreen(navController) }
+        composable("constellations") { AudioToolScreen(navController, "Constellations") }
+
+        // Survival
+        composable("sos") { EmergencySOSScreen(navController) }
+        composable("signal_mirror") { SignalMirrorScreen(navController) }
+
+        // Physics
+        composable("physics_formulas") { PhysicsFormulasScreen(navController) }
+
         // New Additions from ToolProvider expansion
         composable("ai_chat") { AudioToolScreen(navController, "AI Chat") }
         composable("ai_summarizer") { AudioToolScreen(navController, "AI Summarizer") }
@@ -476,9 +490,20 @@ fun ToolCard(
     onToggleFavorite: () -> Unit,
     onClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        label = "tool_card_scale"
+    )
+
     ElevatedCard(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().height(110.dp),
+        interactionSource = interactionSource,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(110.dp)
+            .graphicsLayer(scaleX = scale, scaleY = scale),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
