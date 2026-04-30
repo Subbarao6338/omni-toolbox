@@ -202,6 +202,7 @@ fun NatureToolsApp(
         composable("loan_calc") { LoanCalculatorScreen(navController) }
         composable("compound_interest") { CompoundInterestScreen(navController) }
         composable("water") { WaterTrackerScreen(navController) }
+        composable("bmr") { BmrCalculatorScreen(navController) }
         composable("step_counter") { StepCounterScreen(navController) }
         composable("qr_gen") { QrGeneratorScreen(navController) }
         composable("cpu_info") { CpuInfoScreen(navController) }
@@ -214,6 +215,19 @@ fun NatureToolsApp(
         composable("ping") { PingScreen(navController) }
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
+        composable("ruler") { RulerScreen(navController) }
+        composable("altimeter") { AltimeterScreen(navController) }
+        composable("barometer") { BarometerScreen(navController) }
+        composable("binaural") { BinauralBeatsScreen(navController) }
+        composable("area_calc") { AreaCalcScreen(navController) }
+        composable("volume_calc") { VolumeCalcScreen(navController) }
+        composable("ram_info") { RamInfoScreen(navController) }
+        composable(
+            route = "qr_scanner",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://qr_scanner" })
+        ) { QrScannerScreen(navController) }
+        composable("zodiac") { ZodiacFinderScreen(navController) }
+        composable("white_noise") { AudioToolScreen(navController, "White Noise") }
 
         // New Tools Screens
         composable("sci_calc") { ScientificCalculatorScreen(navController) }
@@ -235,6 +249,7 @@ fun NatureToolsApp(
         composable("exif_viewer") { ExifViewerScreen(navController) }
         composable("port_scanner") { PortScannerScreen(navController) }
         composable("pomodoro") { PomodoroScreen(navController) }
+        composable("morse_decoder") { MorseDecoderScreen(navController) }
         composable("hash_gen") { HashGeneratorScreen(navController) }
         composable("sensors_list") { SensorsListScreen(navController) }
         composable("lorem") { LoremIpsumScreen(navController) }
@@ -245,7 +260,7 @@ fun NatureToolsApp(
         composable("ai_summarizer") { AudioToolScreen(navController, "AI Summarizer") }
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
-        composable("world_map") { AudioToolScreen(navController, "World Map") }
+        composable("world_map") { WorldMapScreen(navController) }
         composable("moon_phase") { AudioToolScreen(navController, "Moon Phase") }
         composable("sleep_tracker") { AudioToolScreen(navController, "Sleep Tracker") }
         composable("daily_quotes") { DailyQuotesScreen(navController) }
@@ -341,7 +356,10 @@ fun NatureToolsApp(
         composable("multi_volume_booster") { AudioToolScreen(navController, "Multi Volume Booster") }
 
         // Other Tools
-        composable("metronome") { AudioToolScreen(navController, "Metronome") }
+        composable(
+            route = "metronome",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://metronome" })
+        ) { MetronomeScreen(navController) }
         composable("audio_info") { AudioToolScreen(navController, "Audio Info") }
         composable("video_info") { AudioToolScreen(navController, "Video Info") }
         composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
