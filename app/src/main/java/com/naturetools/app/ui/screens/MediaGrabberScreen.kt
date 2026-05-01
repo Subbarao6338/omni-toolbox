@@ -128,12 +128,27 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             RoundedCornerShape(4.dp)
                                         )
                                 ) {
-                                    Icon(
-                                        Icons.Default.ContentCopy,
-                                        contentDescription = "Copy Link",
-                                        modifier = Modifier.size(20.dp).padding(2.dp),
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(
+                                            Icons.Default.ContentCopy,
+                                            contentDescription = "Copy Link",
+                                            modifier = Modifier.size(24.dp).padding(4.dp),
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                        Icon(
+                                            Icons.Default.Download,
+                                            contentDescription = "Download",
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                                .padding(4.dp)
+                                                .clickable {
+                                                    // Simulated download via Intent
+                                                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                                                    webView?.context?.startActivity(intent)
+                                                },
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -215,6 +230,26 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             var iframes = root.getElementsByTagName('iframe');
                                             for (var i = 0; i < iframes.length; i++) {
                                                 addUrl(iframes[i].src);
+                                            }
+
+                                            // Specialized Social Media extraction
+                                            if (window.location.hostname.includes('instagram.com')) {
+                                                var scripts = root.getElementsByTagName('script');
+                                                for (var i = 0; i < scripts.length; i++) {
+                                                    if (scripts[i].innerText.includes('display_url')) {
+                                                        var match = scripts[i].innerText.match(/"display_url":"([^"]+)"/);
+                                                        if (match) addUrl(match[1].replace(/\\u0026/g, '&'));
+                                                    }
+                                                }
+                                            }
+                                            if (window.location.hostname.includes('twitter.com') || window.location.hostname.includes('x.com')) {
+                                                var metaTags = root.getElementsByTagName('meta');
+                                                for (var i = 0; i < metaTags.length; i++) {
+                                                    var ogVideo = metaTags[i].getAttribute('property');
+                                                    if (ogVideo === 'og:video:url' || ogVideo === 'og:image') {
+                                                        addUrl(metaTags[i].getAttribute('content'));
+                                                    }
+                                                }
                                             }
                                         }
 

@@ -145,10 +145,52 @@
                 android:resource="@xml/calculator_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.UnitConverterWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/unit_converter_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.BmiWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bmi_widget_info" />
+        </receiver>
+
         <service
             android:name=".service.FlashlightTileService"
             android:exported="true"
             android:label="Flashlight"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.QrScannerTileService"
+            android:exported="true"
+            android:label="QR Scanner"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.UnitConverterTileService"
+            android:exported="true"
+            android:label="Unit Converter"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

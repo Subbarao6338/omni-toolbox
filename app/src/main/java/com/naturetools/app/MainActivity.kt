@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -152,6 +154,23 @@ fun NatureToolsApp(
         composable("bmi") { BMICalculatorScreen(navController) }
         composable("tip") { TipCalculatorScreen(navController) }
         composable("discount") { DiscountCalculatorScreen(navController) }
+        composable("water_reminder") { AudioToolScreen(navController, "Water Reminder") }
+        composable("medication_tracker") { AudioToolScreen(navController, "Medication Tracker") }
+        composable("compass_pro") { CompassScreen(navController) }
+        composable("altimeter_pro") { AltimeterScreen(navController) }
+        composable("gps_status") { NetworkToolScreen(navController, "GPS Status") }
+        composable("area_calc_pro") { AreaCalcScreen(navController) }
+        composable("coin_tracker") { NetworkToolScreen(navController, "Coin Tracker") }
+        composable("crypto_conv") { CurrencyConverterScreen(navController) }
+        composable("wallet_explorer") { NetworkToolScreen(navController, "Wallet Explorer") }
+        composable("coin_flip") { RandomGeneratorScreen(navController) }
+        composable("dice_roller") { RandomGeneratorScreen(navController) }
+        composable("number_guessing") { RandomGeneratorScreen(navController) }
+        composable("tic_tac_toe") { AudioToolScreen(navController, "Tic Tac Toe") }
+        composable("file_explorer") { FileToolScreen(navController, "File Explorer") }
+        composable("storage_cleaner") { FileToolScreen(navController, "Storage Cleaner") }
+        composable("zip_unzip") { FileToolScreen(navController, "Zip/Unzip") }
+        composable("duplicate_finder") { FileToolScreen(navController, "Duplicate Finder") }
         composable("web?url={url}&showBar={showBar}&title={title}", arguments = listOf(
             navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null },
             navArgument("showBar") { type = NavType.BoolType; defaultValue = true },
@@ -215,7 +234,7 @@ fun NatureToolsApp(
         composable("case_converter") { CaseConverterScreen(navController) }
         composable("word_counter") { WordCounterScreen(navController) }
         composable("my_ip") { MyIPScreen(navController) }
-        composable("ping") { PingScreen(navController) }
+        composable("ping") { NetworkToolScreen(navController, "Ping") }
         composable("password_manager") { PasswordManagerScreen(navController) }
         composable("gradient_gen") { GradientGeneratorScreen(navController) }
         composable("ruler") { RulerScreen(navController) }
@@ -250,7 +269,7 @@ fun NatureToolsApp(
         composable("tax_calc") { TaxCalculatorScreen(navController) }
         composable("calorie_calc") { CalorieCalculatorScreen(navController) }
         composable("exif_viewer") { ExifViewerScreen(navController) }
-        composable("port_scanner") { PortScannerScreen(navController) }
+        composable("port_scanner") { NetworkToolScreen(navController, "Port Scanner") }
         composable("pomodoro") { PomodoroScreen(navController) }
         composable("morse_decoder") { MorseDecoderScreen(navController) }
         composable("hash_gen") { HashGeneratorScreen(navController) }
@@ -270,8 +289,8 @@ fun NatureToolsApp(
         composable("physics_formulas") { PhysicsFormulasScreen(navController) }
 
         // New Additions from ToolProvider expansion
-        composable("ai_chat") { AudioToolScreen(navController, "AI Chat") }
-        composable("ai_summarizer") { AudioToolScreen(navController, "AI Summarizer") }
+        composable("ai_chat") { AIToolScreen(navController, "AI Chat") }
+        composable("ai_summarizer") { AIToolScreen(navController, "AI Summarizer") }
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
         composable("world_map") { WorldMapScreen(navController) }
@@ -282,7 +301,7 @@ fun NatureToolsApp(
         composable("image_compress") { AudioToolScreen(navController, "Image Compressor") }
         composable("photo_filters") { AudioToolScreen(navController, "Photo Filters") }
         composable("dns_lookup") { AudioToolScreen(navController, "DNS Lookup") }
-        composable("whois") { AudioToolScreen(navController, "Whois") }
+        composable("whois") { NetworkToolScreen(navController, "Whois") }
         composable("task_board") { AudioToolScreen(navController, "Task Board") }
         composable("time_logger") { AudioToolScreen(navController, "Time Logger") }
         composable("voice_memo") { AudioToolScreen(navController, "Voice Memo") }
@@ -377,9 +396,9 @@ fun NatureToolsApp(
 
         // Image Toolbox
         composable("image_single_edit") { AudioToolScreen(navController, "Single Edit", "image/*") }
-        composable("image_resize_conv") { AudioToolScreen(navController, "Resize and Convert", "image/*") }
+        composable("image_resize_conv") { ImageToolScreen(navController, "Resize and Convert") }
         composable("image_format_conv") { AudioToolScreen(navController, "Format Conversion", "image/*") }
-        composable("image_crop") { AudioToolScreen(navController, "Crop", "image/*") }
+        composable("image_crop") { ImageToolScreen(navController, "Crop") }
         composable("image_cutting") { AudioToolScreen(navController, "Image Cutting", "image/*") }
         composable("image_resize_weight") { AudioToolScreen(navController, "Resize by Weight", "image/*") }
         composable("image_resize_limits") { AudioToolScreen(navController, "Resize by Limits", "image/*") }
@@ -389,7 +408,7 @@ fun NatureToolsApp(
         composable("image_bg_remover") { AudioToolScreen(navController, "Background Remover", "image/*") }
         composable("image_collage") { AudioToolScreen(navController, "Collage Maker", "image/*") }
         composable("image_draw") { AudioToolScreen(navController, "Draw", "image/*") }
-        composable("image_filter") { AudioToolScreen(navController, "Filter", "image/*") }
+        composable("image_filter") { ImageToolScreen(navController, "Filter") }
         composable("image_stacking") { AudioToolScreen(navController, "Image Stacking", "image/*") }
         composable("image_stitching") { AudioToolScreen(navController, "Image Stitching", "image/*") }
         composable("image_markup") { AudioToolScreen(navController, "Markup Layers", "image/*") }
@@ -466,6 +485,38 @@ fun HomeScreen(
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             ) {}
+
+            // Recent Tools Section
+            Text(
+                "Recent Tools",
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                // Showing a mix of popular tools for now
+                val recentTools = ToolProvider.tools.shuffled().take(5)
+                items(recentTools) { tool ->
+                    Surface(
+                        onClick = { navController.navigate(tool.route) },
+                        shape = CircleShape,
+                        color = tool.color.copy(alpha = 0.1f),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, tool.color.copy(alpha = 0.2f))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Icon(tool.icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = tool.color)
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(tool.name, style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+                }
+            }
 
             ScrollableTabRow(
                 selectedTabIndex = categories.indexOf(selectedCategory),
