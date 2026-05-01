@@ -28,7 +28,11 @@ fun AudioBaseScreen(
         selectedFileUri = uri
     }
 
-    val typeLabel = if (mimeType.startsWith("video")) "video" else "audio"
+    val typeLabel = when {
+        mimeType.startsWith("video") -> "video"
+        mimeType.startsWith("image") -> "image"
+        else -> "audio"
+    }
 
     ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
         Column(
@@ -42,7 +46,11 @@ fun AudioBaseScreen(
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            if (typeLabel == "video") Icons.Default.VideoLibrary else Icons.Default.AudioFile,
+                            when (typeLabel) {
+                                "video" -> Icons.Default.VideoLibrary
+                                "image" -> Icons.Default.Image
+                                else -> Icons.Default.AudioFile
+                            },
                             contentDescription = null,
                             modifier = Modifier.size(100.dp),
                             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
