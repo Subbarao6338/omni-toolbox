@@ -196,6 +196,17 @@ object ToolProvider {
         Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science", Color(0xFFFFEB3B)),
         Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science", Color(0xFFFFC107)),
 
+        // Astronomy
+        Tool("Star Map", Icons.Default.AutoAwesome, "star_map", "Astronomy", Color(0xFF3F51B5), BadgeType.NEW),
+        Tool("Constellations", Icons.Default.Stars, "constellations", "Astronomy", Color(0xFF673AB7)),
+
+        // Survival
+        Tool("Emergency SOS", Icons.Default.Sos, "sos", "Survival", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Signal Mirror", Icons.Default.FlashlightOn, "signal_mirror", "Survival", Color(0xFFFFC107)),
+
+        // Physics
+        Tool("Formula Sheet", Icons.Default.Functions, "physics_formulas", "Physics", Color(0xFF4CAF50), BadgeType.NEW),
+
         // Security
         Tool("Hash Generator", Icons.Default.Fingerprint, "hash_gen", "Security", Color(0xFF607D8B)),
         Tool("Password Manager", Icons.Default.Password, "password_manager", "Security", Color(0xFF4CAF50)),

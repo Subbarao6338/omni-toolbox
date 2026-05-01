@@ -21,11 +21,12 @@ import java.util.*
 fun ScientificCalculatorScreen(navController: NavHostController) {
     var expression by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("0") }
+    var history by remember { mutableStateOf(listOf<String>()) }
 
     val buttons = listOf(
-        "sin", "cos", "tan", "deg",
-        "log", "ln", "(", ")",
-        "sqrt", "^", "π", "e",
+        "sin", "cos", "tan", "log",
+        "ln", "log10", "!", "(",
+        ")", "sqrt", "^", "π",
         "7", "8", "9", "÷",
         "4", "5", "6", "×",
         "1", "2", "3", "−",
@@ -76,11 +77,19 @@ fun ScientificCalculatorScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            if (history.isNotEmpty()) {
+                Text(
+                    "History: ${history.takeLast(3).joinToString(" | ")}",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2.5f)
             ) {
                 items(buttons) { btn ->
                     Button(
@@ -92,20 +101,33 @@ fun ScientificCalculatorScreen(navController: NavHostController) {
                                 }
                                 "=" -> {
                                     try {
-                                        val evalExpr = expression
+                                        var evalExpr = expression
                                             .replace("×", "*")
                                             .replace("÷", "/")
                                             .replace("−", "-")
                                             .replace("π", "PI")
                                             .replace("e", "E")
+
+                                        // Handle factorial (very basic implementation for positive integers)
+                                        if (evalExpr.contains("!")) {
+                                            val regex = "(\\d+)!".toRegex()
+                                            evalExpr = regex.replace(evalExpr) { match ->
+                                                val n = match.groupValues[1].toLong()
+                                                var fact = 1L
+                                                for (i in 1..n) fact *= i
+                                                fact.toString()
+                                            }
+                                        }
+
                                         val e = ExpressionBuilder(evalExpr).build()
                                         val res = e.evaluate()
-                                        result = if (res % 1 == 0.0) res.toInt().toString() else String.format(Locale.US, "%.4f", res)
+                                        val formattedResult = if (res % 1 == 0.0) res.toLong().toString() else String.format(Locale.US, "%.4f", res)
+                                        history = (history + "$expression = $formattedResult").takeLast(10)
+                                        result = formattedResult
                                     } catch (e: Exception) {
                                         result = "Error"
                                     }
                                 }
-                                "deg" -> { /* Logic for deg/rad */ }
                                 else -> {
                                     expression += btn
                                 }

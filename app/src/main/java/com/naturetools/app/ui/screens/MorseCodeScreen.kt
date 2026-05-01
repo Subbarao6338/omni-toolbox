@@ -1,23 +1,37 @@
 package com.naturetools.app.ui.screens
 
+import android.content.Context
+import android.hardware.camera2.CameraManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.FlashlightOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import kotlinx.coroutines.delay
 
 @Composable
 fun MorseCodeScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     var text by remember { mutableStateOf("") }
+    var isSignaling by remember { mutableStateOf(false) }
+
+    val cameraManager = remember { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
+    val cameraId = remember {
+        cameraManager.cameraIdList.firstOrNull { id ->
+            cameraManager.getCameraCharacteristics(id).get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+        }
+    }
 
     val morseMap = mapOf(
         'A' to ".-", 'B' to "-...", 'C' to "-.-.", 'D' to "-..", 'E' to ".", 'F' to "..-.",
@@ -30,6 +44,34 @@ fun MorseCodeScreen(navController: NavHostController) {
     )
 
     val morseOutput = text.uppercase().map { morseMap[it] ?: "?" }.joinToString(" ")
+
+    LaunchedEffect(isSignaling) {
+        if (isSignaling && cameraId != null) {
+            try {
+                for (char in morseOutput) {
+                    when (char) {
+                        '.' -> {
+                            cameraManager.setTorchMode(cameraId, true)
+                            delay(200)
+                            cameraManager.setTorchMode(cameraId, false)
+                            delay(200)
+                        }
+                        '-' -> {
+                            cameraManager.setTorchMode(cameraId, true)
+                            delay(600)
+                            cameraManager.setTorchMode(cameraId, false)
+                            delay(200)
+                        }
+                        '/' -> delay(600)
+                        ' ' -> delay(200)
+                    }
+                }
+            } finally {
+                isSignaling = false
+                cameraManager.setTorchMode(cameraId, false)
+            }
+        }
+    }
 
     ToolScreen(title = "Morse Code", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
@@ -54,8 +96,20 @@ fun MorseCodeScreen(navController: NavHostController) {
             ) {
                 Text("Morse Code", style = MaterialTheme.typography.labelLarge)
                 if (morseOutput.isNotEmpty() && !morseOutput.contains("?")) {
-                    IconButton(onClick = { clipboardManager.setText(AnnotatedString(morseOutput)) }) {
-                        Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
+                    Row {
+                        IconButton(
+                            onClick = { isSignaling = !isSignaling },
+                            enabled = cameraId != null && !isSignaling
+                        ) {
+                            Icon(
+                                Icons.Default.FlashlightOn,
+                                contentDescription = "Signal with Flashlight",
+                                tint = if (isSignaling) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                            )
+                        }
+                        IconButton(onClick = { clipboardManager.setText(AnnotatedString(morseOutput)) }) {
+                            Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
+                        }
                     }
                 }
             }
