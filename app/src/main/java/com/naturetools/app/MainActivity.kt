@@ -375,6 +375,41 @@ fun NatureToolsApp(
         composable("video_info") { AudioToolScreen(navController, "Video Info") }
         composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
 
+        // Image Toolbox
+        composable("image_single_edit") { AudioToolScreen(navController, "Single Edit", "image/*") }
+        composable("image_resize_conv") { AudioToolScreen(navController, "Resize and Convert", "image/*") }
+        composable("image_format_conv") { AudioToolScreen(navController, "Format Conversion", "image/*") }
+        composable("image_crop") { AudioToolScreen(navController, "Crop", "image/*") }
+        composable("image_cutting") { AudioToolScreen(navController, "Image Cutting", "image/*") }
+        composable("image_resize_weight") { AudioToolScreen(navController, "Resize by Weight", "image/*") }
+        composable("image_resize_limits") { AudioToolScreen(navController, "Resize by Limits", "image/*") }
+        composable("image_edit_exif") { AudioToolScreen(navController, "Edit EXIF", "image/*") }
+        composable("image_delete_exif") { AudioToolScreen(navController, "Delete EXIF", "image/*") }
+        composable("image_ai_tools") { AudioToolScreen(navController, "AI Tools", "image/*") }
+        composable("image_bg_remover") { AudioToolScreen(navController, "Background Remover", "image/*") }
+        composable("image_collage") { AudioToolScreen(navController, "Collage Maker", "image/*") }
+        composable("image_draw") { AudioToolScreen(navController, "Draw", "image/*") }
+        composable("image_filter") { AudioToolScreen(navController, "Filter", "image/*") }
+        composable("image_stacking") { AudioToolScreen(navController, "Image Stacking", "image/*") }
+        composable("image_stitching") { AudioToolScreen(navController, "Image Stitching", "image/*") }
+        composable("image_markup") { AudioToolScreen(navController, "Markup Layers", "image/*") }
+        composable("image_noise_gen") { AudioToolScreen(navController, "Noise Generation", "image/*") }
+        composable("image_watermark") { AudioToolScreen(navController, "Watermarking", "image/*") }
+        composable("image_compare") { AudioToolScreen(navController, "Compare", "image/*") }
+        composable("image_wallpapers") { AudioToolScreen(navController, "Wallpapers Export", "image/*") }
+        composable("image_to_svg") { AudioToolScreen(navController, "Images to SVG", "image/*") }
+        composable("image_web_load") { AudioToolScreen(navController, "Web Image Loading", "image/*") }
+        composable("image_ocr") { AudioToolScreen(navController, "OCR", "image/*") }
+        composable("image_preview") { AudioToolScreen(navController, "Image Preview", "image/*") }
+        composable("image_base64") { AudioToolScreen(navController, "Base64 Tools", "image/*") }
+        composable("image_palette") { AudioToolScreen(navController, "Palette Tools", "image/*") }
+        composable("image_color_picker") { AudioToolScreen(navController, "Color Picker", "image/*") }
+        composable("image_mask_filter") { AudioToolScreen(navController, "Mask Filter", "image/*") }
+        composable("image_draw_bg") { AudioToolScreen(navController, "Draw on background", "image/*") }
+        composable("image_layers_img") { AudioToolScreen(navController, "Layers on image", "image/*") }
+        composable("image_layers_bg") { AudioToolScreen(navController, "Layers on background", "image/*") }
+        composable("image_open_project") { AudioToolScreen(navController, "Open project", "image/*") }
+
         // Output
         composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
         composable("video_output") { AudioToolScreen(navController, "Video Output") }
