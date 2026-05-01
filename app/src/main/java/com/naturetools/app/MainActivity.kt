@@ -286,15 +286,12 @@ fun NatureToolsApp(
         composable("task_board") { AudioToolScreen(navController, "Task Board") }
         composable("time_logger") { AudioToolScreen(navController, "Time Logger") }
         composable("voice_memo") { AudioToolScreen(navController, "Voice Memo") }
-        composable("altimeter") { AudioToolScreen(navController, "Altimeter") }
-        composable("barometer") { AudioToolScreen(navController, "Barometer") }
         composable("app_permissions") { AudioToolScreen(navController, "App Permissions") }
         composable("privacy_check") { AudioToolScreen(navController, "Privacy Check") }
         composable("app_info") { AudioToolScreen(navController, "App Info") }
         composable("update_check") { AudioToolScreen(navController, "Update Check") }
         composable("anagram") { AudioToolScreen(navController, "Anagram Finder") }
         composable("text_diff") { AudioToolScreen(navController, "Text Diff") }
-        composable("ruler") { AudioToolScreen(navController, "Ruler") }
         composable("unit_price") { UnitPriceCalculatorScreen(navController) }
         composable("video_stabilizer") { AudioToolScreen(navController, "Video Stabilizer", "video/*") }
         composable("multi_image_resize") { AudioToolScreen(navController, "Multi Image Resize") }
