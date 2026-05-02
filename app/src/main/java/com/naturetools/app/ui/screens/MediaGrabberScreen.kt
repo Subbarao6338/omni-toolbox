@@ -240,14 +240,28 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                         var match = scripts[i].innerText.match(/"display_url":"([^"]+)"/);
                                                         if (match) addUrl(match[1].replace(/\\u0026/g, '&'));
                                                     }
+                                                    if (scripts[i].innerText.includes('video_url')) {
+                                                        var match = scripts[i].innerText.match(/"video_url":"([^"]+)"/);
+                                                        if (match) addUrl(match[1].replace(/\\u0026/g, '&'));
+                                                    }
                                                 }
                                             }
                                             if (window.location.hostname.includes('twitter.com') || window.location.hostname.includes('x.com')) {
                                                 var metaTags = root.getElementsByTagName('meta');
                                                 for (var i = 0; i < metaTags.length; i++) {
                                                     var ogVideo = metaTags[i].getAttribute('property');
-                                                    if (ogVideo === 'og:video:url' || ogVideo === 'og:image') {
+                                                    if (ogVideo === 'og:video:url' || ogVideo === 'og:image' || ogVideo === 'twitter:image') {
                                                         addUrl(metaTags[i].getAttribute('content'));
+                                                    }
+                                                }
+                                            }
+                                            if (window.location.hostname.includes('tiktok.com')) {
+                                                var scripts = root.getElementsByTagName('script');
+                                                for (var i = 0; i < scripts.length; i++) {
+                                                    if (scripts[i].id === 'SIGI_STATE' || scripts[i].id === '__UNIVERSAL_DATA_FOR_REHYDRATION__') {
+                                                        var content = scripts[i].innerText;
+                                                        var matches = content.match(/"(https?:\/\/[^"]+?\.mp4[^"]*?)"/g);
+                                                        if (matches) matches.forEach(m => addUrl(JSON.parse(m)));
                                                     }
                                                 }
                                             }
