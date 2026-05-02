@@ -122,6 +122,31 @@ object ToolProvider {
         Tool("Sleep Tracker", Icons.Default.Bedtime, "sleep_tracker", "Health", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("Step Counter", Icons.AutoMirrored.Filled.DirectionsRun, "step_counter", "Health", Color(0xFFFF5722)),
         Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health", Color(0xFF795548)),
+        Tool("Water Reminder", Icons.Default.NotificationsActive, "water_reminder", "Health", Color(0xFF03A9F4), BadgeType.NEW),
+        Tool("Medication Tracker", Icons.Default.MedicalServices, "medication_tracker", "Health", Color(0xFFE91E63), BadgeType.NEW),
+
+        // Navigation
+        Tool("Compass Pro", Icons.Default.Explore, "compass_pro", "Navigation", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Altimeter Pro", Icons.Default.Landscape, "altimeter_pro", "Navigation", Color(0xFF795548), BadgeType.NEW),
+        Tool("GPS Status", Icons.Default.GpsFixed, "gps_status", "Navigation", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Area Calculator", Icons.Default.SquareFoot, "area_calc_pro", "Navigation", Color(0xFFFF9800), BadgeType.NEW),
+
+        // Cryptocurrency
+        Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Cryptocurrency", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Crypto Converter", Icons.Default.CurrencyExchange, "crypto_conv", "Cryptocurrency", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Wallet Explorer", Icons.Default.AccountBalanceWallet, "wallet_explorer", "Cryptocurrency", Color(0xFF673AB7), BadgeType.NEW),
+
+        // Games
+        Tool("Coin Flip", Icons.Default.Paid, "coin_flip", "Games", Color(0xFFFFC107), BadgeType.NEW),
+        Tool("Dice Roller", Icons.Default.Casino, "dice_roller", "Games", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Number Guessing", Icons.Default.QuestionMark, "number_guessing", "Games", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Tic Tac Toe", Icons.Default.Close, "tic_tac_toe", "Games", Color(0xFF4CAF50), BadgeType.NEW),
+
+        // Files
+        Tool("File Explorer", Icons.Default.Folder, "file_explorer", "Files", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Storage Cleaner", Icons.Default.CleaningServices, "storage_cleaner", "Files", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Zip/Unzip", Icons.Default.FolderZip, "zip_unzip", "Files", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Duplicate Finder", Icons.Default.ContentCopy, "duplicate_finder", "Files", Color(0xFF3F51B5), BadgeType.NEW),
 
         // Lifestyle
         Tool("Daily Quotes", Icons.Default.FormatQuote, "daily_quotes", "Lifestyle", Color(0xFFFFC107), BadgeType.NEW),
