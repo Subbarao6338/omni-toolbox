@@ -312,6 +312,42 @@ object ToolProvider {
         Tool("Video Stabilizer", Icons.Default.Camera, "video_stabilizer", "Video Tools", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Video Tools", Color(0xFFFFC107)),
         Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Video Tools", Color(0xFFE91E63)),
-        Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Tools", Color(0xFFFFC107))
+        Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Tools", Color(0xFFFFC107)),
+
+        // Engineering
+        Tool("Resistor Color Code", Icons.Default.Palette, "resistor_color", "Engineering", Color(0xFF795548), BadgeType.NEW),
+        Tool("Signal Generator", Icons.Default.Waves, "signal_gen", "Engineering", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Logic Gates", Icons.Default.SettingsInputComponent, "logic_gates", "Engineering", Color(0xFF673AB7), BadgeType.NEW),
+        Tool("PCB Trace", Icons.Default.Architecture, "pcb_trace", "Engineering", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Antenna Calc", Icons.Default.SettingsInputAntenna, "antenna_calc", "Engineering", Color(0xFFE91E63), BadgeType.NEW),
+
+        // Photography
+        Tool("DOF Calculator", Icons.Default.CameraAlt, "dof_calc", "Photography", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Golden Hour", Icons.Default.WbSunny, "golden_hour", "Photography", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Rule of Thirds", Icons.Default.Grid4x4, "rule_of_thirds", "Photography", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("ISO/Shutter/Aperture", Icons.Default.Exposure, "camera_settings", "Photography", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Focal Length", Icons.Default.SettingsOverscan, "focal_length", "Photography", Color(0xFF9C27B0), BadgeType.NEW),
+
+        // Music
+        Tool("Guitar Tuner", Icons.Default.MusicNote, "guitar_tuner", "Music", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Piano Keyboard", Icons.Default.Piano, "piano", "Music", Color(0xFF3F51B5), BadgeType.NEW),
+        Tool("Circle of Fifths", Icons.Default.Loop, "circle_fifths", "Music", Color(0xFF00BCD4), BadgeType.NEW),
+        Tool("Chord Library", Icons.Default.LibraryMusic, "chords", "Music", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Frequency Gen", Icons.Default.GraphicEq, "freq_gen", "Music", Color(0xFFFF5722), BadgeType.NEW),
+
+        // System Lab
+        Tool("Kernel Info", Icons.Default.Terminal, "kernel_info", "System Lab", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Build Prop", Icons.Default.Description, "build_prop", "System Lab", Color(0xFF3F51B5), BadgeType.NEW),
+        Tool("Logcat Viewer", Icons.Default.ListAlt, "logcat", "System Lab", Color(0xFFF44336), BadgeType.NEW),
+        // App Inspector is deprecated - use App Info instead, but we can add Thermal Status
+        Tool("Thermal Status", Icons.Default.Thermostat, "thermal", "System Lab", Color(0xFFFF5722), BadgeType.NEW),
+        Tool("Process List", Icons.Default.Reorder, "processes", "System Lab", Color(0xFF4CAF50), BadgeType.NEW),
+
+        // Outdoor
+        Tool("Knot Guide", Icons.Default.Hiking, "knots", "Outdoor", Color(0xFF795548), BadgeType.NEW),
+        Tool("Trail Tracker", Icons.AutoMirrored.Filled.DirectionsRun, "trails", "Outdoor", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Survival Kit", Icons.Default.CardTravel, "survival_kit", "Outdoor", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Weather Pro", Icons.Default.Cloud, "weather_pro", "Outdoor", Color(0xFF03A9F4), BadgeType.NEW),
+        Tool("Moon Light", Icons.Default.Brightness2, "moon_light", "Outdoor", Color(0xFF9C27B0), BadgeType.NEW)
     )
 }

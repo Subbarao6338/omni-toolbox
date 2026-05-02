@@ -432,6 +432,41 @@ fun NatureToolsApp(
         // Output
         composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
         composable("video_output") { AudioToolScreen(navController, "Video Output") }
+
+        // Engineering
+        composable("resistor_color") { EngineeringToolScreen(navController, "Resistor Color Code") }
+        composable("signal_gen") { EngineeringToolScreen(navController, "Signal Generator") }
+        composable("logic_gates") { EngineeringToolScreen(navController, "Logic Gates") }
+        composable("pcb_trace") { EngineeringToolScreen(navController, "PCB Trace") }
+        composable("antenna_calc") { EngineeringToolScreen(navController, "Antenna Calc") }
+
+        // Photography
+        composable("dof_calc") { PhotographyToolScreen(navController, "DOF Calculator") }
+        composable("golden_hour") { PhotographyToolScreen(navController, "Golden Hour") }
+        composable("rule_of_thirds") { PhotographyToolScreen(navController, "Rule of Thirds") }
+        composable("camera_settings") { PhotographyToolScreen(navController, "ISO/Shutter/Aperture") }
+        composable("focal_length") { PhotographyToolScreen(navController, "Focal Length") }
+
+        // Music
+        composable("guitar_tuner") { MusicToolScreen(navController, "Guitar Tuner") }
+        composable("piano") { MusicToolScreen(navController, "Piano Keyboard") }
+        composable("circle_fifths") { MusicToolScreen(navController, "Circle of Fifths") }
+        composable("chords") { MusicToolScreen(navController, "Chord Library") }
+        composable("freq_gen") { MusicToolScreen(navController, "Frequency Gen") }
+
+        // System Lab
+        composable("kernel_info") { SystemLabScreen(navController, "Kernel Info") }
+        composable("build_prop") { SystemLabScreen(navController, "Build Prop") }
+        composable("logcat") { SystemLabScreen(navController, "Logcat Viewer") }
+        composable("thermal") { SystemLabScreen(navController, "Thermal Status") }
+        composable("processes") { SystemLabScreen(navController, "Process List") }
+
+        // Outdoor
+        composable("knots") { OutdoorToolScreen(navController, "Knot Guide") }
+        composable("trails") { OutdoorToolScreen(navController, "Trail Tracker") }
+        composable("survival_kit") { OutdoorToolScreen(navController, "Survival Kit") }
+        composable("weather_pro") { OutdoorToolScreen(navController, "Weather Pro") }
+        composable("moon_light") { OutdoorToolScreen(navController, "Moon Light") }
     }
 }
 
@@ -498,8 +533,8 @@ fun HomeScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             ) {
                 // Showing a mix of popular tools for now
-                val recentTools = ToolProvider.tools.shuffled().take(5)
-                items(recentTools) { tool ->
+                val recentTools = ToolProvider.tools.take(10) // Stable list for demo
+                items(recentTools, key = { it.route }) { tool ->
                     Surface(
                         onClick = { navController.navigate(tool.route) },
                         shape = CircleShape,
