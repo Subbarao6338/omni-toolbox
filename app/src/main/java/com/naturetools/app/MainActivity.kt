@@ -99,11 +99,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        intent?.getStringExtra("navigate_to")?.let { route ->
-            navController.navigate(route) {
-                launchSingleTop = true
-            }
-        }
     }
 }
 
