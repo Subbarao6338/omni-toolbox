@@ -251,6 +251,14 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                     }
                                                 }
                                             }
+                                            if (window.location.hostname.includes('pinterest.com')) {
+                                                var pinImgs = root.querySelectorAll('img.H_j');
+                                                for (var i = 0; i < pinImgs.length; i++) addUrl(pinImgs[i].src);
+                                            }
+                                            if (window.location.hostname.includes('reddit.com')) {
+                                                var redditMedia = root.querySelectorAll('img.ImageBox-image, video source');
+                                                for (var i = 0; i < redditMedia.length; i++) addUrl(redditMedia[i].src);
+                                            }
                                         }
 
                                         scan(document);
