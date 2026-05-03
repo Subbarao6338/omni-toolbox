@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -22,6 +24,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
@@ -67,6 +70,9 @@ class MainActivity : ComponentActivity() {
                 // We'll handle this in NatureToolsApp or via a global navigator if possible.
                 // For now, let's just make sure the app is aware.
             }
+        }
+        intent?.getStringExtra("navigate_to")?.let { route ->
+             // Handled in NatureToolsApp
         }
     }
 
@@ -261,10 +267,10 @@ fun NatureToolsApp(
         composable("spl_meter") { SplMeterScreen(navController) }
 
         // Even more new tools
-        composable("data_viz") { AudioToolScreen(navController, "Data Visualizer") }
+        composable("data_viz") { DataVisualizerScreen(navController) }
         composable("ai_image") { AudioToolScreen(navController, "AI Image Gen") }
         composable("base_conv") { BaseConverterScreen(navController) }
-        composable("constants") { AudioToolScreen(navController, "Constants Table") }
+        composable("constants") { ConstantsTableScreen(navController) }
         composable("light_pollution") { AudioToolScreen(navController, "Light Pollution") }
         composable("tax_calc") { TaxCalculatorScreen(navController) }
         composable("calorie_calc") { CalorieCalculatorScreen(navController) }
@@ -294,23 +300,23 @@ fun NatureToolsApp(
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
         composable("world_map") { WorldMapScreen(navController) }
-        composable("moon_phase") { AudioToolScreen(navController, "Moon Phase") }
+        composable("moon_phase") { MoonPhaseScreen(navController) }
         composable("sleep_tracker") { AudioToolScreen(navController, "Sleep Tracker") }
         composable("daily_quotes") { DailyQuotesScreen(navController) }
-        composable("plant_care") { AudioToolScreen(navController, "Plant Care") }
+        composable("plant_care") { PlantCareScreen(navController) }
         composable("image_compress") { AudioToolScreen(navController, "Image Compressor") }
         composable("photo_filters") { AudioToolScreen(navController, "Photo Filters") }
         composable("dns_lookup") { AudioToolScreen(navController, "DNS Lookup") }
         composable("whois") { NetworkToolScreen(navController, "Whois") }
-        composable("task_board") { AudioToolScreen(navController, "Task Board") }
-        composable("time_logger") { AudioToolScreen(navController, "Time Logger") }
-        composable("voice_memo") { AudioToolScreen(navController, "Voice Memo") }
+        composable("task_board") { TaskBoardScreen(navController) }
+        composable("time_logger") { TimeLoggerScreen(navController) }
+        composable("voice_memo") { VoiceMemoScreen(navController) }
         composable("app_permissions") { AudioToolScreen(navController, "App Permissions") }
         composable("privacy_check") { AudioToolScreen(navController, "Privacy Check") }
-        composable("app_info") { AudioToolScreen(navController, "App Info") }
+        composable("app_info") { AppInfoScreen(navController) }
         composable("update_check") { AudioToolScreen(navController, "Update Check") }
         composable("anagram") { AudioToolScreen(navController, "Anagram Finder") }
-        composable("text_diff") { AudioToolScreen(navController, "Text Diff") }
+        composable("text_diff") { TextDiffScreen(navController) }
         composable("unit_price") { UnitPriceCalculatorScreen(navController) }
         composable("video_stabilizer") { AudioToolScreen(navController, "Video Stabilizer", "video/*") }
         composable("multi_image_resize") { AudioToolScreen(navController, "Multi Image Resize") }
@@ -435,7 +441,7 @@ fun NatureToolsApp(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -518,12 +524,9 @@ fun HomeScreen(
                 }
             }
 
-            ScrollableTabRow(
-                selectedTabIndex = categories.indexOf(selectedCategory),
-                edgePadding = 16.dp,
-                divider = {},
-                indicator = {},
-                containerColor = Color.Transparent
+            FlowRow(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 categories.forEach { category ->
                     val count = categoryCounts[category] ?: 0
@@ -532,7 +535,7 @@ fun HomeScreen(
                         selected = selectedCategory == category,
                         onClick = { selectedCategory = category },
                         label = { Text(label) },
-                        modifier = Modifier.padding(horizontal = 4.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                         shape = CircleShape
                     )
                 }
@@ -586,7 +589,8 @@ fun ToolCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .graphicsLayer(scaleX = scale, scaleY = scale),
+            .graphicsLayer(scaleX = scale, scaleY = scale)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
