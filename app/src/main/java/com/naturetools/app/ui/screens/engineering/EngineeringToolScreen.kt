@@ -1,0 +1,135 @@
+package com.naturetools.app.ui.screens.engineering
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.naturetools.app.ui.components.ToolScreen
+
+@Composable
+fun EngineeringToolScreen(navController: NavHostController, title: String) {
+    ToolScreen(
+        title = title,
+        onBack = { navController.popBackStack() }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (title) {
+                "Resistor Color Code" -> ResistorCalculator()
+                "Logic Gates" -> LogicGateSim()
+                else -> {
+                    Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Specialized engineering tool for $title")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ResistorCalculator() {
+    var band1 by remember { mutableStateOf(0) }
+    var band2 by remember { mutableStateOf(0) }
+    var multiplier by remember { mutableStateOf(1) }
+
+    val colors = listOf(
+        Color.Black, Color(0xFF8B4513), Color.Red, Color(0xFFFFA500),
+        Color.Yellow, Color.Green, Color.Blue, Color(0xFF800080),
+        Color.Gray, Color.White
+    )
+
+    val resistance = (band1 * 10 + band2) * Math.pow(10.0, multiplier.toDouble())
+
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Resistor Visualizer", style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Canvas(modifier = Modifier.fillMaxWidth().height(60.dp)) {
+                val center = size.height / 2
+                drawRect(Color.LightGray, Offset(0f, center - 5f), Size(size.width, 10f))
+                drawRect(Color(0xFFDEB887), Offset(size.width * 0.2f, 0f), Size(size.width * 0.6f, size.height))
+
+                drawRect(colors[band1], Offset(size.width * 0.3f, 0f), Size(size.width * 0.05f, size.height))
+                drawRect(colors[band2], Offset(size.width * 0.45f, 0f), Size(size.width * 0.05f, size.height))
+                drawRect(colors[multiplier], Offset(size.width * 0.6f, 0f), Size(size.width * 0.05f, size.height))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Value: ${formatResistance(resistance)} Ω", style = MaterialTheme.typography.headlineMedium)
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    BandSelector("Band 1", band1) { band1 = it }
+    BandSelector("Band 2", band2) { band2 = it }
+    BandSelector("Multiplier", multiplier) { multiplier = it }
+}
+
+fun formatResistance(r: Double): String {
+    return when {
+        r >= 1_000_000 -> String.format("%.1f M", r / 1_000_000)
+        r >= 1_000 -> String.format("%.1f k", r / 1_000)
+        else -> r.toInt().toString()
+    }
+}
+
+@Composable
+fun BandSelector(label: String, selected: Int, onSelect: (Int) -> Unit) {
+    Text(label, style = MaterialTheme.typography.labelLarge)
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        (0..9).forEach { i ->
+            FilterChip(
+                selected = selected == i,
+                onClick = { onSelect(i) },
+                label = { Text(i.toString()) }
+            )
+        }
+    }
+}
+
+@Composable
+fun LogicGateSim() {
+    var inputA by remember { mutableStateOf(false) }
+    var inputB by remember { mutableStateOf(false) }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Switch(checked = inputA, onCheckedChange = { inputA = it })
+            Text(" Input A")
+            Spacer(modifier = Modifier.width(32.dp))
+            Switch(checked = inputB, onCheckedChange = { inputB = it })
+            Text(" Input B")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        LogicResult("AND", inputA && inputB)
+        LogicResult("OR", inputA || inputB)
+        LogicResult("XOR", inputA xor inputB)
+        LogicResult("NAND", !(inputA && inputB))
+    }
+}
+
+@Composable
+fun LogicResult(name: String, result: Boolean) {
+    Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(name)
+        Text(if (result) "HIGH (1)" else "LOW (0)", color = if (result) Color.Green else Color.Red)
+    }
+}

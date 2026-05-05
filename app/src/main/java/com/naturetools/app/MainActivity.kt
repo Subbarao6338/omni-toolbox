@@ -44,8 +44,28 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.naturetools.app.model.Tool
 import com.naturetools.app.model.ToolProvider
-import com.naturetools.app.ui.screens.*
-import com.naturetools.app.ui.screens.AudioToolScreen
+import com.naturetools.app.ui.screens.ai.*
+import com.naturetools.app.ui.screens.astronomy.*
+import com.naturetools.app.ui.screens.audio.*
+import com.naturetools.app.ui.screens.calculation.*
+import com.naturetools.app.ui.screens.conversion.*
+import com.naturetools.app.ui.screens.developer.*
+import com.naturetools.app.ui.screens.health.*
+import com.naturetools.app.ui.screens.image.*
+import com.naturetools.app.ui.screens.lifestyle.*
+import com.naturetools.app.ui.screens.media.*
+import com.naturetools.app.ui.screens.network.*
+import com.naturetools.app.ui.screens.physics.*
+import com.naturetools.app.ui.screens.productivity.*
+import com.naturetools.app.ui.screens.science.*
+import com.naturetools.app.ui.screens.sensor.*
+import com.naturetools.app.ui.screens.survival.*
+import com.naturetools.app.ui.screens.system.*
+import com.naturetools.app.ui.screens.text.*
+import com.naturetools.app.ui.screens.utility.*
+import com.naturetools.app.ui.screens.engineering.*
+import com.naturetools.app.ui.screens.photography.*
+import com.naturetools.app.ui.screens.music.*
 import com.naturetools.app.ui.theme.NatureToolsTheme
 
 class MainActivity : ComponentActivity() {
@@ -61,19 +81,17 @@ class MainActivity : ComponentActivity() {
                 "dark" -> true
                 else -> isSystemInDarkTheme()
             }
-    LaunchedEffect(intent) {
-        intent?.data?.let { uri ->
-            if (uri.scheme == "naturetools") {
-                // We'll handle this in NatureToolsApp or via a global navigator if possible.
-                // For now, let's just make sure the app is aware.
+            LaunchedEffect(intent) {
+                intent?.data?.let { uri ->
+                    if (uri.scheme == "naturetools") {
+                    }
+                }
             }
-        }
-    }
 
             NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NatureToolsApp(
-                intent = intent,
+                        intent = intent,
                         themeMode = themeMode,
                         onThemeChange = {
                             themeMode = it
@@ -96,7 +114,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun NatureToolsApp(
     themeMode: String,
@@ -112,7 +129,9 @@ fun NatureToolsApp(
     LaunchedEffect(intent) {
         intent?.data?.let { uri ->
             if (uri.scheme == "naturetools") {
-                val route = uri.host
+                val host = uri.host
+                val path = uri.path
+                val route = if (path != null && path.length > 1) "$host$path" else host
                 if (route != null) {
                     navController.navigate(route) {
                         launchSingleTop = true
@@ -217,7 +236,11 @@ fun NatureToolsApp(
             route = "hub",
             deepLinks = listOf(navDeepLink { uriPattern = "naturetools://hub" })
         ) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "Hub") }
-        composable("media_grabber?url={url}", arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null })) { backStackEntry ->
+        composable(
+            route = "media_grabber?url={url}",
+            arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null }),
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://media_grabber?url={url}" })
+        ) { backStackEntry ->
             val url = backStackEntry.arguments?.getString("url")
             MediaGrabberScreen(navController, initialUrl = url)
         }
@@ -251,21 +274,18 @@ fun NatureToolsApp(
         composable("zodiac") { ZodiacFinderScreen(navController) }
         composable("white_noise") { AudioToolScreen(navController, "White Noise") }
 
-        // New Tools Screens
         composable("sci_calc") { ScientificCalculatorScreen(navController) }
         composable("device_id") { AudioToolScreen(navController, "Hardware ID") }
-        composable("air_quality") { AudioToolScreen(navController, "Air Quality") }
-        composable("uv_index") { AudioToolScreen(navController, "UV Index") }
+        composable("air_quality") { EngineeringToolScreen(navController, "Air Quality") }
+        composable("uv_index") { EngineeringToolScreen(navController, "UV Index") }
         composable("habit_tracker") { HabitTrackerScreen(navController) }
         composable("meditation") { MeditationTimerScreen(navController) }
         composable("spl_meter") { SplMeterScreen(navController) }
-
-        // Even more new tools
-        composable("data_viz") { AudioToolScreen(navController, "Data Visualizer") }
-        composable("ai_image") { AudioToolScreen(navController, "AI Image Gen") }
+        composable("data_viz") { EngineeringToolScreen(navController, "Data Visualizer") }
+        composable("ai_image") { EngineeringToolScreen(navController, "AI Image Gen") }
         composable("base_conv") { BaseConverterScreen(navController) }
-        composable("constants") { AudioToolScreen(navController, "Constants Table") }
-        composable("light_pollution") { AudioToolScreen(navController, "Light Pollution") }
+        composable("constants") { ConstantsTableScreen(navController) }
+        composable("light_pollution") { EngineeringToolScreen(navController, "Light Pollution") }
         composable("tax_calc") { TaxCalculatorScreen(navController) }
         composable("calorie_calc") { CalorieCalculatorScreen(navController) }
         composable("exif_viewer") { ExifViewerScreen(navController) }
@@ -276,47 +296,51 @@ fun NatureToolsApp(
         composable("sensors_list") { SensorsListScreen(navController) }
         composable("lorem") { LoremIpsumScreen(navController) }
         composable("vibration") { VibrationTestScreen(navController) }
-
-        // Astronomy
         composable("star_map") { StarMapScreen(navController) }
-        composable("constellations") { AudioToolScreen(navController, "Constellations") }
-
-        // Survival
-        composable("sos") { EmergencySOSScreen(navController) }
+        composable("constellations") { EngineeringToolScreen(navController, "Constellations") }
+        composable(
+            route = "sos",
+            deepLinks = listOf(navDeepLink { uriPattern = "naturetools://sos" })
+        ) { EmergencySOSScreen(navController) }
         composable("signal_mirror") { SignalMirrorScreen(navController) }
-
-        // Physics
         composable("physics_formulas") { PhysicsFormulasScreen(navController) }
-
-        // New Additions from ToolProvider expansion
         composable("ai_chat") { AIToolScreen(navController, "AI Chat") }
         composable("ai_summarizer") { AIToolScreen(navController, "AI Summarizer") }
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
         composable("world_map") { WorldMapScreen(navController) }
-        composable("moon_phase") { AudioToolScreen(navController, "Moon Phase") }
-        composable("sleep_tracker") { AudioToolScreen(navController, "Sleep Tracker") }
+        composable("moon_phase") { MoonPhaseScreen(navController) }
+        composable("sleep_tracker") { EngineeringToolScreen(navController, "Sleep Tracker") }
         composable("daily_quotes") { DailyQuotesScreen(navController) }
-        composable("plant_care") { AudioToolScreen(navController, "Plant Care") }
-        composable("image_compress") { AudioToolScreen(navController, "Image Compressor") }
-        composable("photo_filters") { AudioToolScreen(navController, "Photo Filters") }
-        composable("dns_lookup") { AudioToolScreen(navController, "DNS Lookup") }
+        composable("plant_care") { PlantCareScreen(navController) }
+        composable("image_compress") { EngineeringToolScreen(navController, "Image Compressor") }
+        composable("photo_filters") { EngineeringToolScreen(navController, "Photo Filters") }
+        composable("dns_lookup") { EngineeringToolScreen(navController, "DNS Lookup") }
         composable("whois") { NetworkToolScreen(navController, "Whois") }
-        composable("task_board") { AudioToolScreen(navController, "Task Board") }
-        composable("time_logger") { AudioToolScreen(navController, "Time Logger") }
-        composable("voice_memo") { AudioToolScreen(navController, "Voice Memo") }
-        composable("app_permissions") { AudioToolScreen(navController, "App Permissions") }
-        composable("privacy_check") { AudioToolScreen(navController, "Privacy Check") }
-        composable("app_info") { AudioToolScreen(navController, "App Info") }
-        composable("update_check") { AudioToolScreen(navController, "Update Check") }
-        composable("anagram") { AudioToolScreen(navController, "Anagram Finder") }
-        composable("text_diff") { AudioToolScreen(navController, "Text Diff") }
+        composable("task_board") { TaskBoardScreen(navController) }
+        composable("time_logger") { TimeLoggerScreen(navController) }
+        composable("voice_memo") { VoiceMemoScreen(navController) }
+        composable("app_permissions") { SystemLabScreen(navController, "App Permissions") }
+        composable("privacy_check") { SystemLabScreen(navController, "Privacy Check") }
+        composable("app_info") { AppInfoScreen(navController) }
+        composable("update_check") { EngineeringToolScreen(navController, "Update Check") }
+        composable("anagram") { EngineeringToolScreen(navController, "Anagram Finder") }
+        composable("text_diff") { TextDiffScreen(navController) }
+        composable("resistor_code") { EngineeringToolScreen(navController, "Resistor Color Code") }
+        composable("logic_gates") { EngineeringToolScreen(navController, "Logic Gates") }
+        composable("exposure_calc") { PhotographyToolScreen(navController, "Exposure Calculator") }
+        composable("dof_calc") { PhotographyToolScreen(navController, "Depth of Field") }
+        composable("guitar_tuner") { MusicToolScreen(navController, "Guitar Tuner") }
         composable("unit_price") { UnitPriceCalculatorScreen(navController) }
+        composable("unit_price_compare") { UnitPriceCalculatorScreen(navController) }
+        composable("freq_gen") { AudioToolScreen(navController, "Freq Generator") }
+        composable("stereo_widener") { AudioToolScreen(navController, "Stereo Widener") }
+        composable("subnet_calc") { NetworkToolScreen(navController, "Subnet Calc") }
+        composable("route_planner") { NetworkToolScreen(navController, "Route Planner") }
         composable("video_stabilizer") { AudioToolScreen(navController, "Video Stabilizer", "video/*") }
         composable("multi_image_resize") { AudioToolScreen(navController, "Multi Image Resize") }
         composable("currency_trends") { AudioToolScreen(navController, "Currency Trends") }
 
-        // Audio Tools
         composable("m_audio_editor") { AudioToolScreen(navController, "Audio Editor") }
         composable("m_audio_cutter") { AudioToolScreen(navController, "Audio Cutter") }
         composable("m_audio_joiner") { AudioToolScreen(navController, "Audio Joiner") }
@@ -348,7 +372,6 @@ fun NatureToolsApp(
         composable("sound_mastering") { AudioToolScreen(navController, "Sound Mastering") }
         composable("add_sfx") { AudioToolScreen(navController, "Add SFX") }
 
-        // Video Tools
         composable("video_trim") { AudioToolScreen(navController, "Video Editor", "video/*") }
         composable("m_video_to_audio") { AudioToolScreen(navController, "Video to Audio", "video/*") }
         composable("video_compress") { AudioToolScreen(navController, "Video Compressor", "video/*") }
@@ -363,7 +386,6 @@ fun NatureToolsApp(
         composable("video_silence") { AudioToolScreen(navController, "Silence Video", "video/*") }
         composable("video_loop") { AudioToolScreen(navController, "Loop Video", "video/*") }
 
-        // AI Tools
         composable("vocal_remover") { AudioToolScreen(navController, "Vocal Remover") }
         composable("ai_stems_splitter") { AudioToolScreen(navController, "AI Stems Splitter") }
         composable("vocal_autotuner") { AudioToolScreen(navController, "Vocal AutoTuner") }
@@ -374,18 +396,15 @@ fun NatureToolsApp(
         composable("audio_noise_remover") { AudioToolScreen(navController, "Audio Noise Remover") }
         composable("video_noise_remover") { AudioToolScreen(navController, "Video Noise Remover", "video/*") }
 
-        // Recording Tools
         composable("record_audio") { AudioToolScreen(navController, "Record Audio") }
         composable("fun_record") { AudioToolScreen(navController, "Fun Recording") }
         composable("karaoke_effect") { AudioToolScreen(navController, "Karaoke Effect") }
 
-        // Batch Processing
         composable("multi_mix") { AudioToolScreen(navController, "Multi Mix Audio") }
         composable("multi_convert") { AudioToolScreen(navController, "Multi Convert") }
         composable("multi_video_to_audio") { AudioToolScreen(navController, "Multi Video To Audio", "video/*") }
         composable("multi_volume_booster") { AudioToolScreen(navController, "Multi Volume Booster") }
 
-        // Other Tools
         composable(
             route = "metronome",
             deepLinks = listOf(navDeepLink { uriPattern = "naturetools://metronome" })
@@ -394,7 +413,6 @@ fun NatureToolsApp(
         composable("video_info") { AudioToolScreen(navController, "Video Info") }
         composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
 
-        // Image Toolbox
         composable("image_single_edit") { AudioToolScreen(navController, "Single Edit", "image/*") }
         composable("image_resize_conv") { ImageToolScreen(navController, "Resize and Convert") }
         composable("image_format_conv") { AudioToolScreen(navController, "Format Conversion", "image/*") }
@@ -429,7 +447,6 @@ fun NatureToolsApp(
         composable("image_layers_bg") { AudioToolScreen(navController, "Layers on background", "image/*") }
         composable("image_open_project") { AudioToolScreen(navController, "Open project", "image/*") }
 
-        // Output
         composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
         composable("video_output") { AudioToolScreen(navController, "Video Output") }
     }
@@ -462,6 +479,19 @@ fun HomeScreen(
         }.sortedBy { it.name }
     }
 
+    val context = LocalContext.current
+    val recentPrefs = remember { context.getSharedPreferences("recent_tools", Context.MODE_PRIVATE) }
+    var recentRoutes by remember {
+        mutableStateOf(recentPrefs.getString("routes", "")?.split(",")?.filter { it.isNotEmpty() } ?: emptyList())
+    }
+
+    fun onToolClick(route: String) {
+        val newRecent = (listOf(route) + recentRoutes.filter { it != route }).take(10)
+        recentRoutes = newRecent
+        recentPrefs.edit().putString("routes", newRecent.joinToString(",")).apply()
+        navController.navigate(route)
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -486,33 +516,33 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             ) {}
 
-            // Recent Tools Section
-            Text(
-                "Recent Tools",
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(bottom = 8.dp)
-            ) {
-                // Showing a mix of popular tools for now
-                val recentTools = ToolProvider.tools.shuffled().take(5)
-                items(recentTools) { tool ->
-                    Surface(
-                        onClick = { navController.navigate(tool.route) },
-                        shape = CircleShape,
-                        color = tool.color.copy(alpha = 0.1f),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, tool.color.copy(alpha = 0.2f))
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            if (recentRoutes.isNotEmpty()) {
+                Text(
+                    "Recent Tools",
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    val recentTools = recentRoutes.mapNotNull { route -> ToolProvider.tools.find { it.route == route } }
+                    items(recentTools, key = { it.route }) { tool ->
+                        Surface(
+                            onClick = { onToolClick(tool.route) },
+                            shape = CircleShape,
+                            color = tool.color.copy(alpha = 0.1f),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, tool.color.copy(alpha = 0.2f))
                         ) {
-                            Icon(tool.icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = tool.color)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(tool.name, style = MaterialTheme.typography.labelSmall)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Icon(tool.icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = tool.color)
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(tool.name, style = MaterialTheme.typography.labelSmall)
+                            }
                         }
                     }
                 }
@@ -540,9 +570,6 @@ fun HomeScreen(
 
             AnimatedContent(
                 targetState = filteredTools,
-                transitionSpec = {
-                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
-                },
                 label = "tools_grid"
             ) { tools ->
                 LazyVerticalGrid(
@@ -557,7 +584,7 @@ fun HomeScreen(
                             tool = tool,
                             isFavorite = favorites.contains(tool.route),
                             onToggleFavorite = { onToggleFavorite(tool.route) },
-                            onClick = { navController.navigate(tool.route) }
+                            onClick = { onToolClick(tool.route) }
                         )
                     }
                 }
