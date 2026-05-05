@@ -51,10 +51,16 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
         onBack = { navController.popBackStack() },
         actions = {
             if (mediaLinks.isNotEmpty()) {
+                IconButton(onClick = {
+                    val allLinks = mediaLinks.joinToString("\n")
+                    clipboardManager.setText(AnnotatedString(allLinks))
+                }) {
+                    Icon(Icons.Default.CopyAll, contentDescription = "Copy All")
+                }
                 if (selectedLinks.isNotEmpty()) {
                     IconButton(onClick = {
-                        val allLinks = selectedLinks.joinToString("\n")
-                        clipboardManager.setText(AnnotatedString(allLinks))
+                        val selLinks = selectedLinks.joinToString("\n")
+                        clipboardManager.setText(AnnotatedString(selLinks))
                     }) {
                         Icon(Icons.Default.ContentCopy, contentDescription = "Copy Selected")
                     }
@@ -104,7 +110,7 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(mediaLinks.toList()) { link ->
+                    items(mediaLinks.toList(), key = { it }) { link ->
                         val isSelected = selectedLinks.contains(link)
                         ElevatedCard(
                             modifier = Modifier
@@ -187,10 +193,10 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                 addUrl(videos[i].src);
                                                 addUrl(videos[i].poster);
                                             }
-                                            // Instagram / TikTok specific
-                                            if (location.href.includes('instagram.com') || location.href.includes('tiktok.com')) {
-                                                var all = root.querySelectorAll('img, video');
-                                                all.forEach(el => addUrl(el.src));
+                                            // Instagram / TikTok / Pinterest specific
+                                            if (location.href.includes('instagram.com') || location.href.includes('tiktok.com') || location.href.includes('pinterest.com')) {
+                                                var all = root.querySelectorAll('img, video, img.H_j');
+                                                all.forEach(el => addUrl(el.src || el.poster || el.currentSrc));
                                             }
                                         }
                                         scan(document);
