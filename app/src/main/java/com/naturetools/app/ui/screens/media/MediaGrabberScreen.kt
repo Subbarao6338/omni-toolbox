@@ -1,0 +1,228 @@
+package com.naturetools.app.ui.screens.media
+
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import com.naturetools.app.ui.components.ToolScreen
+import org.json.JSONArray
+
+@Composable
+fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = null) {
+    var urlInput by remember { mutableStateOf(initialUrl ?: "") }
+    var urlToLoad by remember { mutableStateOf(initialUrl ?: "") }
+    var mediaLinks by remember { mutableStateOf(setOf<String>()) }
+    var selectedLinks by remember { mutableStateOf(setOf<String>()) }
+    var isLoading by remember { mutableStateOf(false) }
+    var webView: WebView? by remember { mutableStateOf(null) }
+    val clipboardManager = LocalClipboardManager.current
+
+    LaunchedEffect(urlToLoad, webView) {
+        if (urlToLoad.isNotEmpty() && webView != null) {
+            mediaLinks = emptySet()
+            selectedLinks = emptySet()
+            isLoading = true
+            webView?.loadUrl(urlToLoad)
+        }
+    }
+
+    ToolScreen(
+        title = "Media Grabber",
+        onBack = { navController.popBackStack() },
+        actions = {
+            if (mediaLinks.isNotEmpty()) {
+                if (selectedLinks.isNotEmpty()) {
+                    IconButton(onClick = {
+                        val allLinks = selectedLinks.joinToString("\n")
+                        clipboardManager.setText(AnnotatedString(allLinks))
+                    }) {
+                        Icon(Icons.Default.ContentCopy, contentDescription = "Copy Selected")
+                    }
+                }
+                IconButton(onClick = {
+                    mediaLinks = emptySet()
+                    selectedLinks = emptySet()
+                }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Clear Results")
+                }
+            }
+        }
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = urlInput,
+                    onValueChange = { urlInput = it },
+                    modifier = Modifier.weight(1f),
+                    label = { Text("Website URL") },
+                    leadingIcon = { Icon(Icons.Default.Language, contentDescription = null) }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = {
+                    urlToLoad = if (urlInput.startsWith("http")) urlInput else "https://$urlInput"
+                }) {
+                    Text("Grab")
+                }
+            }
+
+            if (isLoading) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+
+            if (mediaLinks.isEmpty() && !isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Enter a URL to grab images and videos", style = MaterialTheme.typography.bodyLarge)
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(mediaLinks.toList()) { link ->
+                        val isSelected = selectedLinks.contains(link)
+                        ElevatedCard(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    selectedLinks = if (isSelected) selectedLinks - link else selectedLinks + link
+                                },
+                            colors = if (isSelected) CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer) else CardDefaults.elevatedCardColors(),
+                            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                AsyncImage(
+                                    model = link,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                                if (isSelected) {
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(4.dp)
+                                        .background(
+                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                ) {
+                                    Icon(
+                                        Icons.Default.Download,
+                                        contentDescription = "Download",
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .padding(4.dp)
+                                            .clickable {
+                                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                                                webView?.context?.startActivity(intent)
+                                            },
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            AndroidView(
+                factory = {
+                    WebView(it).apply {
+                        settings.javaScriptEnabled = true
+                        webViewClient = object : WebViewClient() {
+                            override fun onPageFinished(view: WebView?, url: String?) {
+                                val script = """
+                                    (function() {
+                                        var links = new Set();
+                                        function addUrl(url) {
+                                            if (!url) return;
+                                            try {
+                                                var absolute = new URL(url, document.baseURI).href;
+                                                if (absolute.startsWith('http')) links.add(absolute);
+                                            } catch(e) {}
+                                        }
+
+                                        function scan(root) {
+                                            var imgs = root.getElementsByTagName('img');
+                                            for (var i = 0; i < imgs.length; i++) {
+                                                addUrl(imgs[i].src);
+                                                addUrl(imgs[i].dataset.src);
+                                            }
+                                            var videos = root.getElementsByTagName('video');
+                                            for (var i = 0; i < videos.length; i++) {
+                                                addUrl(videos[i].src);
+                                                addUrl(videos[i].poster);
+                                            }
+                                            // Instagram / TikTok specific
+                                            if (location.href.includes('instagram.com') || location.href.includes('tiktok.com')) {
+                                                var all = root.querySelectorAll('img, video');
+                                                all.forEach(el => addUrl(el.src));
+                                            }
+                                        }
+                                        scan(document);
+                                        return JSON.stringify(Array.from(links));
+                                    })();
+                                """.trimIndent()
+
+                                view?.evaluateJavascript(script) { result ->
+                                    if (result != null && result != "null") {
+                                        try {
+                                            val jsonString = if (result.startsWith("\"") && result.endsWith("\"")) {
+                                                result.substring(1, result.length - 1).replace("\\\"", "\"").replace("\\\\", "\\")
+                                            } else result
+                                            val jsonArray = JSONArray(jsonString)
+                                            val links = mutableSetOf<String>()
+                                            for (i in 0 until jsonArray.length()) {
+                                                val link = jsonArray.getString(i)
+                                                if (link.startsWith("http")) links.add(link)
+                                            }
+                                            mediaLinks = links
+                                        } catch (e: Exception) {}
+                                    }
+                                    isLoading = false
+                                }
+                            }
+                        }
+                        webView = this
+                    }
+                },
+                update = { webView = it },
+                modifier = Modifier.size(1.dp).alpha(0f)
+            )
+        }
+    }
+}

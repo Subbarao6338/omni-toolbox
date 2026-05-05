@@ -71,6 +71,8 @@ object ToolProvider {
         Tool("Voice Changer", Icons.Default.Face, "m_voice_changer", "Audio Tools", Color(0xFF673AB7)),
         Tool("Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "m_volume_booster", "Audio Tools", Color(0xFFFFC107)),
         Tool("Wave Generator", Icons.Default.Waves, "wave_generator", "Audio Tools", Color(0xFF8BC34A)),
+        Tool("Freq Generator", Icons.Default.GraphicEq, "freq_gen", "Audio Tools", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Stereo Widener", Icons.Default.SettingsInputComponent, "stereo_widener", "Audio Tools", Color(0xFF00BCD4), BadgeType.NEW),
 
         // Batch Processing
         Tool("Multi Convert", Icons.Default.Autorenew, "multi_convert", "Batch Processing", Color(0xFF4CAF50)),
@@ -98,6 +100,7 @@ object ToolProvider {
         Tool("JSON Format", Icons.Default.DataObject, "json", "Developer", Color(0xFF2196F3)),
         Tool("JWT Tool", Icons.Default.Key, "jwt_tool", "Developer", Color(0xFFFF5722), BadgeType.NEW),
         Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", Color(0xFF03A9F4)),
+        Tool("Subnet Calc", Icons.Default.SettingsEthernet, "subnet_calc", "Developer", Color(0xFF009688), BadgeType.NEW),
 
         // Education
         Tool("Prime Checker", Icons.Default.Filter7, "prime", "Education", Color(0xFFFF9800)),
@@ -130,6 +133,7 @@ object ToolProvider {
         Tool("Altimeter Pro", Icons.Default.Landscape, "altimeter_pro", "Navigation", Color(0xFF795548), BadgeType.NEW),
         Tool("GPS Status", Icons.Default.GpsFixed, "gps_status", "Navigation", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Area Calculator", Icons.Default.SquareFoot, "area_calc_pro", "Navigation", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Route Planner", Icons.Default.Directions, "route_planner", "Navigation", Color(0xFF2196F3), BadgeType.NEW),
 
         // Cryptocurrency
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Cryptocurrency", Color(0xFFFF9800), BadgeType.NEW),
@@ -294,6 +298,7 @@ object ToolProvider {
         Tool("Ruler", Icons.Default.Straighten, "ruler", "Utility", Color(0xFF9E9E9E), BadgeType.NEW),
         Tool("Stopwatch", Icons.Default.Timer, "stopwatch", "Utility", Color(0xFF9C27B0)),
         Tool("Unit Price Calc", Icons.Default.PriceCheck, "unit_price", "Utility", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Unit Price Compare", Icons.Default.Compare, "unit_price_compare", "Utility", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utility", Color(0xFFFF5722)),
         Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),

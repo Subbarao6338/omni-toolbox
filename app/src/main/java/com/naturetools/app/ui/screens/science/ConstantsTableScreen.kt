@@ -1,0 +1,41 @@
+package com.naturetools.app.ui.screens.science
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.naturetools.app.ui.components.ToolScreen
+
+data class Constant(val name: String, val symbol: String, val value: String)
+
+@Composable
+fun ConstantsTableScreen(navController: NavHostController) {
+    val constants = listOf(
+        Constant("Speed of Light", "c", "299,792,458 m/s"),
+        Constant("Gravitational Constant", "G", "6.674 × 10⁻¹¹ m³/kg·s²"),
+        Constant("Planck Constant", "h", "6.626 × 10⁻³⁴ J·s"),
+        Constant("Elementary Charge", "e", "1.602 × 10⁻¹⁹ C"),
+        Constant("Avogadro Constant", "Nₐ", "6.022 × 10²³ mol⁻¹"),
+        Constant("Boltzmann Constant", "k", "1.381 × 10⁻²³ J/K")
+    )
+
+    ToolScreen(
+        title = "Scientific Constants",
+        onBack = { navController.popBackStack() }
+    ) { padding ->
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
+            items(constants) { item ->
+                ListItem(
+                    headlineContent = { Text(item.name) },
+                    supportingContent = { Text(item.value) },
+                    trailingContent = { Text(item.symbol, style = MaterialTheme.typography.titleMedium) }
+                )
+                HorizontalDivider()
+            }
+        }
+    }
+}
