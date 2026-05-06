@@ -66,6 +66,8 @@ import com.naturetools.app.ui.screens.utility.*
 import com.naturetools.app.ui.screens.engineering.*
 import com.naturetools.app.ui.screens.photography.*
 import com.naturetools.app.ui.screens.music.*
+import com.naturetools.app.ui.screens.outdoor.*
+import com.naturetools.app.ui.screens.environment.*
 import com.naturetools.app.ui.theme.NatureToolsTheme
 
 class MainActivity : ComponentActivity() {
@@ -80,12 +82,6 @@ class MainActivity : ComponentActivity() {
                 "light" -> false
                 "dark" -> true
                 else -> isSystemInDarkTheme()
-            }
-            LaunchedEffect(intent) {
-                intent?.data?.let { uri ->
-                    if (uri.scheme == "naturetools") {
-                    }
-                }
             }
 
             NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
@@ -127,6 +123,11 @@ fun NatureToolsApp(
     val navController = rememberNavController()
 
     LaunchedEffect(intent) {
+        intent?.getStringExtra("route")?.let { route ->
+            navController.navigate(route) {
+                launchSingleTop = true
+            }
+        }
         intent?.data?.let { uri ->
             if (uri.scheme == "naturetools") {
                 val host = uri.host
@@ -276,8 +277,8 @@ fun NatureToolsApp(
 
         composable("sci_calc") { ScientificCalculatorScreen(navController) }
         composable("device_id") { AudioToolScreen(navController, "Hardware ID") }
-        composable("air_quality") { EngineeringToolScreen(navController, "Air Quality") }
-        composable("uv_index") { EngineeringToolScreen(navController, "UV Index") }
+        composable("air_quality") { EnvironmentToolScreen(navController, "Air Quality") }
+        composable("uv_index") { EnvironmentToolScreen(navController, "UV Index") }
         composable("habit_tracker") { HabitTrackerScreen(navController) }
         composable("meditation") { MeditationTimerScreen(navController) }
         composable("spl_meter") { SplMeterScreen(navController) }
@@ -285,7 +286,7 @@ fun NatureToolsApp(
         composable("ai_image") { EngineeringToolScreen(navController, "AI Image Gen") }
         composable("base_conv") { BaseConverterScreen(navController) }
         composable("constants") { ConstantsTableScreen(navController) }
-        composable("light_pollution") { EngineeringToolScreen(navController, "Light Pollution") }
+        composable("light_pollution") { EnvironmentToolScreen(navController, "Light Pollution") }
         composable("tax_calc") { TaxCalculatorScreen(navController) }
         composable("calorie_calc") { CalorieCalculatorScreen(navController) }
         composable("exif_viewer") { ExifViewerScreen(navController) }
@@ -309,13 +310,13 @@ fun NatureToolsApp(
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
         composable("world_map") { WorldMapScreen(navController) }
-        composable("moon_phase") { MoonPhaseScreen(navController) }
-        composable("sleep_tracker") { EngineeringToolScreen(navController, "Sleep Tracker") }
+        composable("moon_phase") { EnvironmentToolScreen(navController, "Moon Phase") }
+        composable("sleep_tracker") { HealthScreen(navController, "Sleep Tracker") }
         composable("daily_quotes") { DailyQuotesScreen(navController) }
         composable("plant_care") { PlantCareScreen(navController) }
-        composable("image_compress") { EngineeringToolScreen(navController, "Image Compressor") }
-        composable("photo_filters") { EngineeringToolScreen(navController, "Photo Filters") }
-        composable("dns_lookup") { EngineeringToolScreen(navController, "DNS Lookup") }
+        composable("image_compress") { ImageToolScreen(navController, "Image Compressor") }
+        composable("photo_filters") { ImageToolScreen(navController, "Photo Filters") }
+        composable("dns_lookup") { NetworkToolScreen(navController, "DNS Lookup") }
         composable("whois") { NetworkToolScreen(navController, "Whois") }
         composable("task_board") { TaskBoardScreen(navController) }
         composable("time_logger") { TimeLoggerScreen(navController) }
@@ -323,7 +324,7 @@ fun NatureToolsApp(
         composable("app_permissions") { SystemLabScreen(navController, "App Permissions") }
         composable("privacy_check") { SystemLabScreen(navController, "Privacy Check") }
         composable("app_info") { AppInfoScreen(navController) }
-        composable("update_check") { EngineeringToolScreen(navController, "Update Check") }
+        composable("update_check") { SystemLabScreen(navController, "Update Check") }
         composable("anagram") { EngineeringToolScreen(navController, "Anagram Finder") }
         composable("text_diff") { TextDiffScreen(navController) }
         composable("resistor_code") { EngineeringToolScreen(navController, "Resistor Color Code") }
@@ -338,7 +339,7 @@ fun NatureToolsApp(
         composable("subnet_calc") { NetworkToolScreen(navController, "Subnet Calc") }
         composable("route_planner") { NetworkToolScreen(navController, "Route Planner") }
         composable("video_stabilizer") { AudioToolScreen(navController, "Video Stabilizer", "video/*") }
-        composable("multi_image_resize") { AudioToolScreen(navController, "Multi Image Resize") }
+        composable("multi_image_resize") { ImageToolScreen(navController, "Multi Image Resize") }
         composable("currency_trends") { AudioToolScreen(navController, "Currency Trends") }
 
         composable("m_audio_editor") { AudioToolScreen(navController, "Audio Editor") }
@@ -413,42 +414,86 @@ fun NatureToolsApp(
         composable("video_info") { AudioToolScreen(navController, "Video Info") }
         composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
 
-        composable("image_single_edit") { AudioToolScreen(navController, "Single Edit", "image/*") }
+        composable("image_single_edit") { ImageToolScreen(navController, "Single Edit") }
         composable("image_resize_conv") { ImageToolScreen(navController, "Resize and Convert") }
-        composable("image_format_conv") { AudioToolScreen(navController, "Format Conversion", "image/*") }
+        composable("image_format_conv") { ImageToolScreen(navController, "Format Conversion") }
         composable("image_crop") { ImageToolScreen(navController, "Crop") }
-        composable("image_cutting") { AudioToolScreen(navController, "Image Cutting", "image/*") }
-        composable("image_resize_weight") { AudioToolScreen(navController, "Resize by Weight", "image/*") }
-        composable("image_resize_limits") { AudioToolScreen(navController, "Resize by Limits", "image/*") }
-        composable("image_edit_exif") { AudioToolScreen(navController, "Edit EXIF", "image/*") }
-        composable("image_delete_exif") { AudioToolScreen(navController, "Delete EXIF", "image/*") }
-        composable("image_ai_tools") { AudioToolScreen(navController, "AI Tools", "image/*") }
-        composable("image_bg_remover") { AudioToolScreen(navController, "Background Remover", "image/*") }
-        composable("image_collage") { AudioToolScreen(navController, "Collage Maker", "image/*") }
-        composable("image_draw") { AudioToolScreen(navController, "Draw", "image/*") }
+        composable("image_cutting") { ImageToolScreen(navController, "Image Cutting") }
+        composable("image_resize_weight") { ImageToolScreen(navController, "Resize by Weight") }
+        composable("image_resize_limits") { ImageToolScreen(navController, "Resize by Limits") }
+        composable("image_edit_exif") { ImageToolScreen(navController, "Edit EXIF") }
+        composable("image_delete_exif") { ImageToolScreen(navController, "Delete EXIF") }
+        composable("image_ai_tools") { ImageToolScreen(navController, "AI Tools") }
+        composable("image_bg_remover") { ImageToolScreen(navController, "Background Remover") }
+        composable("image_collage") { ImageToolScreen(navController, "Collage Maker") }
+        composable("image_draw") { ImageToolScreen(navController, "Draw") }
         composable("image_filter") { ImageToolScreen(navController, "Filter") }
-        composable("image_stacking") { AudioToolScreen(navController, "Image Stacking", "image/*") }
-        composable("image_stitching") { AudioToolScreen(navController, "Image Stitching", "image/*") }
-        composable("image_markup") { AudioToolScreen(navController, "Markup Layers", "image/*") }
-        composable("image_noise_gen") { AudioToolScreen(navController, "Noise Generation", "image/*") }
-        composable("image_watermark") { AudioToolScreen(navController, "Watermarking", "image/*") }
-        composable("image_compare") { AudioToolScreen(navController, "Compare", "image/*") }
-        composable("image_wallpapers") { AudioToolScreen(navController, "Wallpapers Export", "image/*") }
-        composable("image_to_svg") { AudioToolScreen(navController, "Images to SVG", "image/*") }
-        composable("image_web_load") { AudioToolScreen(navController, "Web Image Loading", "image/*") }
-        composable("image_ocr") { AudioToolScreen(navController, "OCR", "image/*") }
-        composable("image_preview") { AudioToolScreen(navController, "Image Preview", "image/*") }
-        composable("image_base64") { AudioToolScreen(navController, "Base64 Tools", "image/*") }
-        composable("image_palette") { AudioToolScreen(navController, "Palette Tools", "image/*") }
-        composable("image_color_picker") { AudioToolScreen(navController, "Color Picker", "image/*") }
-        composable("image_mask_filter") { AudioToolScreen(navController, "Mask Filter", "image/*") }
-        composable("image_draw_bg") { AudioToolScreen(navController, "Draw on background", "image/*") }
-        composable("image_layers_img") { AudioToolScreen(navController, "Layers on image", "image/*") }
-        composable("image_layers_bg") { AudioToolScreen(navController, "Layers on background", "image/*") }
-        composable("image_open_project") { AudioToolScreen(navController, "Open project", "image/*") }
+        composable("image_stacking") { ImageToolScreen(navController, "Image Stacking") }
+        composable("image_stitching") { ImageToolScreen(navController, "Image Stitching") }
+        composable("image_markup") { ImageToolScreen(navController, "Markup Layers") }
+        composable("image_noise_gen") { ImageToolScreen(navController, "Noise Generation") }
+        composable("image_watermark") { ImageToolScreen(navController, "Watermarking") }
+        composable("image_compare") { ImageToolScreen(navController, "Compare") }
+        composable("image_wallpapers") { ImageToolScreen(navController, "Wallpapers Export") }
+        composable("image_to_svg") { ImageToolScreen(navController, "Images to SVG") }
+        composable("image_web_load") { ImageToolScreen(navController, "Web Image Loading") }
+        composable("image_ocr") { ImageToolScreen(navController, "OCR") }
+        composable("image_preview") { ImageToolScreen(navController, "Image Preview") }
+        composable("image_base64") { ImageToolScreen(navController, "Base64 Tools") }
+        composable("image_palette") { ImageToolScreen(navController, "Palette Tools") }
+        composable("image_color_picker") { ImageToolScreen(navController, "Color Picker") }
+        composable("image_mask_filter") { ImageToolScreen(navController, "Mask Filter") }
+        composable("image_draw_bg") { ImageToolScreen(navController, "Draw on background") }
+        composable("image_layers_img") { ImageToolScreen(navController, "Layers on image") }
+        composable("image_layers_bg") { ImageToolScreen(navController, "Layers on background") }
+        composable("image_open_project") { ImageToolScreen(navController, "Open project") }
 
         composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
         composable("video_output") { AudioToolScreen(navController, "Video Output") }
+
+        // New tools from ToolProvider
+        composable("ai_code") { AIToolScreen(navController, "AI Code Assistant") }
+        composable("csv_to_json") { AIToolScreen(navController, "CSV to JSON") }
+        composable("ai_voice_mimic") { AudioToolScreen(navController, "AI Voice Mimic") }
+        composable("audio_reverb") { AudioToolScreen(navController, "Audio Reverb") }
+        composable("multi_crop") { ImageToolScreen(navController, "Multi Crop") }
+        composable("binary_calc") { ScientificCalculatorScreen(navController) }
+        composable("torque_conv") { UnitConverterScreen(navController) }
+        composable("yaml_to_json") { JsonFormatterScreen(navController) }
+        composable("solar_system") { OutdoorToolScreen(navController, "Solar System Explorer") }
+        composable("rain_radar") { EnvironmentToolScreen(navController, "Rain Radar") }
+        composable("pcb_trace") { EngineeringToolScreen(navController, "PCB Trace Width") }
+        composable("golden_hour") { PhotographyToolScreen(navController, "Golden Hour") }
+        composable("chord_lib") { MusicToolScreen(navController, "Chord Library") }
+        composable("hiking_trails") { OutdoorToolScreen(navController, "Hiking Trails") }
+        composable("campfire_guide") { OutdoorToolScreen(navController, "Campfire Guide") }
+        composable("weather_forecast") { OutdoorToolScreen(navController, "Weather Forecast") }
+        composable("knots_guide") { OutdoorToolScreen(navController, "Knots Guide") }
+        composable("expense_tracker") { LoanCalculatorScreen(navController) }
+        composable("yoga_guide") { HealthScreen(navController, "Yoga Guide") }
+        composable("altitude_graph") { SensorDataScreen(navController) }
+        composable("nft_viewer") { NetworkToolScreen(navController, "NFT Viewer") }
+        composable("memory_game") { RandomGeneratorScreen(navController) }
+        composable("file_shredder") { FileToolScreen(navController, "File Shredder") }
+        composable("daily_journal") { NotePadScreen(navController) }
+        composable("pixel_art") { ImageToolScreen(navController, "Pixel Art Maker") }
+        composable("frame_grabber") { AudioToolScreen(navController, "Video Frame Grabber", "video/*") }
+        composable("speed_test") { NetworkToolScreen(navController, "Speed Test") }
+        composable("dog_whistle") { AudioToolScreen(navController, "Dog Whistle") }
+        composable("log_viewer") { FileToolScreen(navController, "Log Viewer") }
+        composable("kanban") { TaskBoardScreen(navController) }
+        composable("nature_sounds") { AudioToolScreen(navController, "Nature Sounds") }
+        composable("gforce_meter") { SensorDataScreen(navController) }
+        composable("thermal_info") { DeviceScreen(navController) }
+        composable("perm_manager") { SystemLabScreen(navController, "Permission Manager") }
+        composable("dna_viz") { EngineeringToolScreen(navController, "DNA Visualizer") }
+        composable("planet_finder") { OutdoorToolScreen(navController, "Planet Finder") }
+        composable("force_calc") { ScientificCalculatorScreen(navController) }
+        composable("app_locker") { SystemLabScreen(navController, "App Locker") }
+        composable("process_manager") { SystemLabScreen(navController, "Process Manager") }
+        composable("text_art") { CaseConverterScreen(navController) }
+        composable("protractor") { RulerScreen(navController) }
+        composable("video_flip") { AudioToolScreen(navController, "Video Flip", "video/*") }
     }
 }
 
