@@ -330,6 +330,7 @@ object ToolProvider {
         Tool("App Info", Icons.Default.Apps, "app_info", "System", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Update Check", Icons.Default.SystemUpdate, "update_check", "System", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Process Manager", Icons.Default.Dns, "process_manager", "System", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("System Lab", Icons.Default.Science, "system_lab", "System", Color(0xFF9C27B0), BadgeType.NEW),
 
         // Text
         Tool("Anagram Finder", Icons.Default.SortByAlpha, "anagram", "Text", Color(0xFF4CAF50), BadgeType.NEW),
@@ -356,6 +357,19 @@ object ToolProvider {
         Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),
         Tool("Protractor", Icons.Default.Architecture, "protractor", "Utility", Color(0xFFCDDC39), BadgeType.NEW),
+
+        // Automotive
+        Tool("Speedometer", Icons.Default.Speed, "speedometer", "Automotive", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Fuel Consumption", Icons.Default.LocalGasStation, "fuel_consumption", "Automotive", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Car Maintenance", Icons.Default.Build, "car_maintenance", "Automotive", Color(0xFF2196F3), BadgeType.NEW),
+
+        // Social
+        Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Bio Linker", Icons.Default.Link, "bio_linker", "Social", Color(0xFF9C27B0), BadgeType.NEW),
+
+        // Electronics
+        Tool("Ohm's Law", Icons.Default.ElectricalServices, "ohms_law", "Electronics", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("Circuit Calc", Icons.Default.Memory, "circuit_calc", "Electronics", Color(0xFF607D8B), BadgeType.NEW),
 
         // Video Tools
         Tool("Delete Segment", Icons.Default.Delete, "video_delete", "Video Tools", Color(0xFFF44336)),

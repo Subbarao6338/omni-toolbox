@@ -200,6 +200,17 @@
                 android:resource="@xml/currency_converter_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.TaskWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/task_widget_info" />
+        </receiver>
+
         <service
             android:name=".service.FlashlightTileService"
             android:exported="true"
@@ -324,6 +335,26 @@
             android:name=".service.BatteryTileService"
             android:exported="true"
             android:label="Battery Level"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.SpeedometerTileService"
+            android:exported="true"
+            android:label="Speedometer"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.OhmsLawTileService"
+            android:exported="true"
+            android:label="Ohm's Law"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

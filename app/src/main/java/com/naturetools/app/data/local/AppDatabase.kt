@@ -4,17 +4,27 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.naturetools.app.model.ChecklistItem
-import com.naturetools.app.model.Note
-import com.naturetools.app.model.WaterLog
-import com.naturetools.app.model.Password
+import com.naturetools.app.model.*
 
-@Database(entities = [Note::class, ChecklistItem::class, WaterLog::class, Password::class], version = 3, exportSchema = false)
+@Database(
+    entities = [
+        Note::class,
+        ChecklistItem::class,
+        WaterLog::class,
+        Password::class,
+        TaskEntry::class,
+        TimeLogEntry::class
+    ],
+    version = 4,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
     abstract fun checklistDao(): ChecklistDao
     abstract fun waterLogDao(): WaterLogDao
     abstract fun passwordDao(): PasswordDao
+    abstract fun taskDao(): TaskDao
+    abstract fun timeLogDao(): TimeLogDao
 
     companion object {
         @Volatile
