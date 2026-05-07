@@ -68,11 +68,17 @@ import com.naturetools.app.ui.screens.photography.*
 import com.naturetools.app.ui.screens.music.*
 import com.naturetools.app.ui.screens.outdoor.*
 import com.naturetools.app.ui.screens.environment.*
+import com.naturetools.app.ui.screens.automotive.*
+import com.naturetools.app.ui.screens.social.*
+import com.naturetools.app.ui.screens.electronics.*
 import com.naturetools.app.ui.theme.NatureToolsTheme
 
 class MainActivity : ComponentActivity() {
+    private val intentState = mutableStateOf<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        intentState.value = intent
         val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
         setContent {
             var themeMode by rememberSaveable { mutableStateOf(prefs.getString("theme_mode", "system") ?: "system") }
@@ -87,7 +93,7 @@ class MainActivity : ComponentActivity() {
             NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NatureToolsApp(
-                        intent = intent,
+                        intent = intentState.value,
                         themeMode = themeMode,
                         onThemeChange = {
                             themeMode = it
@@ -107,6 +113,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intentState.value = intent
     }
 }
 
@@ -494,6 +505,21 @@ fun NatureToolsApp(
         composable("text_art") { CaseConverterScreen(navController) }
         composable("protractor") { RulerScreen(navController) }
         composable("video_flip") { AudioToolScreen(navController, "Video Flip", "video/*") }
+
+        // Automotive
+        composable("speedometer") { AutomotiveToolScreen(navController, "Speedometer") }
+        composable("fuel_consumption") { AutomotiveToolScreen(navController, "Fuel Consumption") }
+        composable("car_maintenance") { AutomotiveToolScreen(navController, "Car Maintenance") }
+
+        // Social
+        composable("social_preview") { SocialToolScreen(navController, "Social Preview") }
+        composable("bio_linker") { SocialToolScreen(navController, "Bio Linker") }
+
+        // Electronics
+        composable("ohms_law") { ElectronicsToolScreen(navController, "Ohm's Law") }
+        composable("circuit_calc") { ElectronicsToolScreen(navController, "Circuit Calc") }
+
+        composable("system_lab") { SystemLabScreen(navController, "System Lab") }
     }
 }
 
@@ -509,19 +535,25 @@ fun HomeScreen(
     var selectedCategory by rememberSaveable { mutableStateOf("All") }
 
     val categoryCounts = remember(favorites) {
-        val counts = ToolProvider.tools.groupingBy { it.category }.eachCount()
-        counts + ("All" to ToolProvider.tools.size) + ("Favorites" to favorites.size)
+        derivedStateOf {
+            val counts = ToolProvider.tools.groupingBy { it.category }.eachCount()
+            counts + ("All" to ToolProvider.tools.size) + ("Favorites" to favorites.size)
+        }
     }
 
     val categories = remember {
-        listOf("All", "Favorites") + ToolProvider.tools.map { it.category }.distinct().sorted()
+        derivedStateOf {
+            listOf("All", "Favorites") + ToolProvider.tools.map { it.category }.distinct().sorted()
+        }
     }
 
     val filteredTools = remember(searchQuery, selectedCategory, favorites) {
-        ToolProvider.tools.filter {
-            (selectedCategory == "All" || (selectedCategory == "Favorites" && favorites.contains(it.route)) || it.category == selectedCategory) &&
-            (it.name.contains(searchQuery, ignoreCase = true))
-        }.sortedBy { it.name }
+        derivedStateOf {
+            ToolProvider.tools.filter {
+                (selectedCategory == "All" || (selectedCategory == "Favorites" && favorites.contains(it.route)) || it.category == selectedCategory) &&
+                (it.name.contains(searchQuery, ignoreCase = true))
+            }.sortedBy { it.name }
+        }
     }
 
     val context = LocalContext.current
@@ -594,28 +626,31 @@ fun HomeScreen(
             }
 
             ScrollableTabRow(
-                selectedTabIndex = categories.indexOf(selectedCategory),
+                selectedTabIndex = categories.value.indexOf(selectedCategory),
                 edgePadding = 16.dp,
                 divider = {},
                 indicator = {},
                 containerColor = Color.Transparent
             ) {
-                categories.forEach { category ->
-                    val count = categoryCounts[category] ?: 0
+                categories.value.forEach { category ->
+                    val count = categoryCounts.value[category] ?: 0
                     val label = if (showCategoryCounts) "$category ($count)" else category
                     FilterChip(
                         selected = selectedCategory == category,
                         onClick = { selectedCategory = category },
                         label = { Text(label) },
-                        modifier = Modifier.padding(horizontal = 4.dp),
+                        modifier = Modifier.padding(horizontal = 4.dp).animateContentSize(),
                         shape = CircleShape
                     )
                 }
             }
 
             AnimatedContent(
-                targetState = filteredTools,
-                label = "tools_grid"
+                targetState = filteredTools.value,
+                label = "tools_grid",
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+                }
             ) { tools ->
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 100.dp),
