@@ -72,11 +72,17 @@ fun AIToolScreen(navController: NavHostController, title: String) {
                     IconButton(
                         onClick = {
                             if (inputText.isNotBlank()) {
+                                val userQuery = when(title) {
+                                    "AI Summarizer" -> "Summarize the following text: $inputText"
+                                    "AI Code Assistant" -> "As a coding expert, help me with this: $inputText"
+                                    "CSV to JSON" -> "Convert this CSV data to JSON format: $inputText"
+                                    else -> inputText
+                                }
                                 messages.add(ChatMessage(inputText, true))
-                                val userQuery = inputText
                                 inputText = ""
                                 // Simulated AI response
-                                messages.add(ChatMessage("Processing '$userQuery'...", false))
+                                messages.add(ChatMessage("AI ($title): Processing request...", false))
+                                messages.add(ChatMessage("Here is the result for your $title request based on: '${userQuery.take(50)}...'", false))
                             }
                         },
                         enabled = inputText.isNotBlank(),

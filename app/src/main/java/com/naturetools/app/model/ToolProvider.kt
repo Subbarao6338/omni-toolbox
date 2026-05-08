@@ -371,6 +371,13 @@ object ToolProvider {
         Tool("Ohm's Law", Icons.Default.ElectricalServices, "ohms_law", "Electronics", Color(0xFFFF9800), BadgeType.NEW),
         Tool("Circuit Calc", Icons.Default.Memory, "circuit_calc", "Electronics", Color(0xFF607D8B), BadgeType.NEW),
 
+        // Science
+        Tool("Pendulum Calc", Icons.Default.VerticalAlignBottom, "pendulum_calc", "Science", Color(0xFF3F51B5), BadgeType.NEW),
+
+        // Kitchen
+        Tool("Egg Timer", Icons.Default.Timer, "egg_timer", "Kitchen", Color(0xFFFFC107), BadgeType.NEW),
+        Tool("Recipe Scaler", Icons.Default.Scale, "recipe_scaler", "Kitchen", Color(0xFF4CAF50), BadgeType.NEW),
+
         // Video Tools
         Tool("Delete Segment", Icons.Default.Delete, "video_delete", "Video Tools", Color(0xFFF44336)),
         Tool("Loop Video", Icons.Default.Loop, "video_loop", "Video Tools", Color(0xFFFF5722)),

@@ -194,12 +194,23 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                 addUrl(videos[i].src);
                                                 addUrl(videos[i].poster);
                                             }
-                                            // Instagram / TikTok / Pinterest specific
-                                            if (location.href.includes('instagram.com') || location.href.includes('tiktok.com') || location.href.includes('pinterest.com') || location.href.includes('reddit.com')) {
+                                            // Instagram / TikTok / Pinterest / Twitter specific
+                                            if (location.href.includes('instagram.com') || location.href.includes('tiktok.com') ||
+                                                location.href.includes('pinterest.com') || location.href.includes('reddit.com') ||
+                                                location.href.includes('twitter.com') || location.href.includes('x.com')) {
+
                                                 var all = root.querySelectorAll('img, video, img.H_j, source, a[href$=".jpg"], a[href$=".png"], a[href$=".mp4"]');
                                                 all.forEach(el => {
                                                     addUrl(el.src || el.poster || el.currentSrc || el.href);
                                                 });
+
+                                                // Regex based extraction for embedded media
+                                                var html = root.innerHTML;
+                                                var imgRegex = /https?:\/\/[^"'\s]+\.(?:jpg|jpeg|png|webp|gif)/g;
+                                                var vidRegex = /https?:\/\/[^"'\s]+\.(?:mp4|webm|m3u8)/g;
+                                                var match;
+                                                while ((match = imgRegex.exec(html)) !== null) addUrl(match[0]);
+                                                while ((match = vidRegex.exec(html)) !== null) addUrl(match[0]);
                                             }
                                         }
                                         scan(document);
