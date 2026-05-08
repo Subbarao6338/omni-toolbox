@@ -33,6 +33,7 @@ jobs:
       with:
         name: nature-tools-debug
         path: nature-tools-debug.apk
+        retention-days: 7
 
   release:
     needs: build
