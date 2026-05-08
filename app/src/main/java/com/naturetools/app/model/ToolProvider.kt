@@ -311,7 +311,6 @@ object ToolProvider {
         Tool("Permission Manager", Icons.Default.ManageAccounts, "perm_manager", "Privacy", Color(0xFF2196F3), BadgeType.NEW),
 
         // Science
-        Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Science", Color(0xFF673AB7)),
         Tool("Constants Table", Icons.Default.Functions, "constants", "Science", Color(0xFFF44336)),
         Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science", Color(0xFFFFEB3B)),
         Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science", Color(0xFFFFC107)),
