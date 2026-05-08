@@ -70,12 +70,52 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                             "Crop" -> Text("Select aspect ratio and drag to crop.")
                             "Filter" -> Text("Select a filter to apply.")
                             "Resize" -> Text("Enter new dimensions or percentage.")
+                            "Compress PDFs/Document", "Compress Image" -> {
+                                AdjustmentSlider("Quality", initialValue = 0.8f)
+                                AdjustmentSlider("Target Size (KB)", valueRange = 10f..5000f, initialValue = 500f)
+                            }
+                            "Merge PDFs/Document" -> {
+                                Text("Select multiple files to merge.")
+                                AdjustmentSlider("Overlap/Spacing")
+                            }
+                            "Split PDFs/Document", "Remove/Delete Pages" -> {
+                                Text("Select pages to extract or remove.")
+                                AdjustmentSlider("Page Range Start")
+                                AdjustmentSlider("Page Range End")
+                            }
+                            "Rotate Pages/PDF", "Rotate & Flip" -> {
+                                AdjustmentSlider("Rotation Angle", valueRange = 0f..360f, initialValue = 0f)
+                                Text("Choose Flip orientation below.")
+                            }
+                            "Crop Pages", "Crop Image" -> {
+                                AdjustmentSlider("Top Margin", initialValue = 0f)
+                                AdjustmentSlider("Bottom Margin", initialValue = 0f)
+                                AdjustmentSlider("Left Margin", initialValue = 0f)
+                                AdjustmentSlider("Right Margin", initialValue = 0f)
+                            }
+                            "Image → PDF" -> {
+                                Text("Converting selected images to a PDF document.")
+                                AdjustmentSlider("Page Margin", initialValue = 20f, valueRange = 0f..100f)
+                            }
+                            "Extract Images" -> {
+                                Text("Extracting embedded images from the document.")
+                                AdjustmentSlider("Detection Sensitivity")
+                            }
+                            "Document Info" -> {
+                                Text("Metadata and technical details of the file.")
+                            }
+                            "ICO Converter", "SVG Converter", "AVIF Converter", "WEBP Converter", "GIF Converter", "HEIC Converter" -> {
+                                Text("Select target format and quality.")
+                                AdjustmentSlider("Quality", initialValue = 0.9f)
+                            }
                             else -> Text("Processing options for $title")
                         }
 
-                        AdjustmentSlider("Brightness")
-                        AdjustmentSlider("Contrast")
-                        AdjustmentSlider("Saturation")
+                        if (title == "Single Edit" || title == "Painter") {
+                            AdjustmentSlider("Brightness")
+                            AdjustmentSlider("Contrast")
+                            AdjustmentSlider("Saturation")
+                        }
                     }
                 }
 

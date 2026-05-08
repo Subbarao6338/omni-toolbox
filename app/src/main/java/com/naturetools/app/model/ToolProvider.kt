@@ -404,6 +404,73 @@ object ToolProvider {
         Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Video Tools", Color(0xFFFFC107)),
         Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Video Tools", Color(0xFFE91E63)),
         Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Tools", Color(0xFFFFC107)),
-        Tool("Video Flip", Icons.Default.Flip, "video_flip", "Video Tools", Color(0xFF607D8B), BadgeType.NEW)
+        Tool("Video Flip", Icons.Default.Flip, "video_flip", "Video Tools", Color(0xFF607D8B), BadgeType.NEW),
+
+        // 1. PDF & Document Tools
+        Tool("PDF Creation Studio", Icons.Default.AddCircle, "pdf_create_studio", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Compress PDFs/Document", Icons.Default.Compress, "pdf_compress_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Merge PDFs/Document", Icons.Default.Merge, "pdf_merge_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Split PDFs/Document", Icons.Default.CallSplit, "pdf_split_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Remove/Delete Pages", Icons.Default.Delete, "pdf_remove_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Rotate Pages/PDF", Icons.Default.RotateRight, "pdf_rotate_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Crop Pages", Icons.Default.Crop, "pdf_crop_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("PDF/Document Resizer", Icons.Default.AspectRatio, "pdf_resize", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Extract Images", Icons.Default.Image, "pdf_extract_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Lock/Unlock PDF", Icons.Default.Lock, "pdf_security", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("PDF Modifier", Icons.Default.Edit, "pdf_modifier", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Document Info", Icons.Default.Info, "doc_info", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Document Sorter", Icons.Default.Sort, "doc_sort", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Document Viewer", Icons.Default.Preview, "pdf_view_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("Reorder PDF Pages", Icons.Default.Reorder, "pdf_reorder_v2", "PDF & Document Tools", Color(0xFFF44336)),
+        Tool("ICO Converter", Icons.Default.Transform, "conv_ico", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("SVG Converter", Icons.Default.Transform, "conv_svg", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("AVIF Converter", Icons.Default.Transform, "conv_avif", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+
+        // 2. Image Tools
+        Tool("JPG → PNG", Icons.Default.Transform, "img_jpg_png", "Image Tools", Color(0xFF4CAF50)),
+        Tool("PNG → JPG", Icons.Default.Transform, "img_png_jpg", "Image Tools", Color(0xFF4CAF50)),
+        Tool("WEBP Converter", Icons.Default.Transform, "img_webp_conv", "Image Tools", Color(0xFF4CAF50)),
+        Tool("GIF Converter", Icons.Default.Transform, "img_gif_conv", "Image Tools", Color(0xFF4CAF50)),
+        Tool("HEIC Converter", Icons.Default.Transform, "img_heic_conv", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Resize Image", Icons.Default.PhotoSizeSelectLarge, "img_resize_v2", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Compress Image", Icons.Default.Compress, "img_compress_v2", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Rotate & Flip", Icons.Default.Flip, "img_rotate_flip", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Crop Image", Icons.Default.Crop, "img_crop_v3", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Collage Maker", Icons.Default.AutoAwesomeMosaic, "img_collage_v2", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Image → PDF", Icons.Default.PictureAsPdf, "img_to_pdf_v2", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Metadata Viewer", Icons.Default.Info, "img_meta_v2", "Image Tools", Color(0xFF4CAF50)),
+        Tool("Painter", Icons.Default.Brush, "img_painter", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
+
+        // 3. Video Tools
+        Tool("Video Frame Annotator", Icons.Default.Edit, "vid_annotator", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Trim/Split Video", Icons.Default.ContentCut, "vid_trim_v2", "Video Tools", Color(0xFF2196F3)),
+        Tool("Merge Videos", Icons.Default.Merge, "vid_merge", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Convert to MP4", Icons.Default.Transform, "vid_to_mp4", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Video to PDF", Icons.Default.PictureAsPdf, "vid_to_pdf", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Video to Images", Icons.Default.Collections, "vid_to_img", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Change Video Speed", Icons.Default.FastForward, "vid_speed_v2", "Video Tools", Color(0xFF2196F3)),
+        Tool("Rotate/Crop Video", Icons.Default.Crop, "vid_rotate_crop", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Mute/Extract Audio", Icons.AutoMirrored.Filled.VolumeOff, "vid_mute_extract", "Video Tools", Color(0xFF2196F3)),
+        Tool("Compress Video", Icons.Default.Compress, "vid_compress_v2", "Video Tools", Color(0xFF2196F3)),
+        Tool("Video Info", Icons.Default.Info, "vid_info_v2", "Video Tools", Color(0xFF2196F3)),
+        Tool("Thumbnail Extractor", Icons.Default.Image, "vid_thumb", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
+
+        // 4. Audio Tools
+        Tool("Audio Converter", Icons.Default.Transform, "aud_conv", "Audio Tools", Color(0xFF673AB7), BadgeType.NEW),
+        Tool("Audio Info", Icons.Default.Info, "aud_info_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Merge/Split/Trim Audio", Icons.Default.ContentCut, "aud_edit_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Change Speed", Icons.Default.FastForward, "aud_speed_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Mute Audio", Icons.AutoMirrored.Filled.VolumeOff, "aud_mute_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Audio Equalizer", Icons.Default.Equalizer, "aud_eq_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Bass Booster", Icons.Default.Speaker, "aud_bass_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Noise Remover", Icons.Default.Hearing, "aud_noise_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Audio Compressor", Icons.Default.Compress, "aud_comp_v2", "Audio Tools", Color(0xFF673AB7)),
+        Tool("Add Audio to Video", Icons.Default.LibraryMusic, "aud_to_vid", "Audio Tools", Color(0xFF673AB7), BadgeType.NEW),
+
+        // 5. Text Tools
+        Tool("Word/Char Count", Icons.Default.Abc, "txt_count", "Text Tools", Color(0xFF009688)),
+        Tool("Case Modifiers", Icons.Default.TextFields, "txt_case", "Text Tools", Color(0xFF009688)),
+        Tool("Text to PDF", Icons.Default.PictureAsPdf, "txt_to_pdf", "Text Tools", Color(0xFF009688), BadgeType.NEW),
+        Tool("Copy/Clear", Icons.Default.ContentCopy, "txt_copy_clear", "Text Tools", Color(0xFF009688), BadgeType.NEW)
     )
 }
