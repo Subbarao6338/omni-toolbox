@@ -119,12 +119,12 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
 
                     val isVideo = mimeType.startsWith("video")
                     when (title) {
-                        "Equalizer" -> {
+                        "Equalizer", "Audio Equalizer" -> {
                             AdjustmentSlider("Bass")
                             AdjustmentSlider("Mid")
                             AdjustmentSlider("Treble")
                         }
-                        "Speed Changer", "Video Speed" -> {
+                        "Speed Changer", "Video Speed", "Change Speed", "Change Video Speed" -> {
                             if (isVideo) {
                                 AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
                                 AdjustmentSlider("Maintain Pitch (0/1)", valueRange = 0f..1f, initialValue = 1f)
@@ -136,7 +136,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                         "Normalize", "Audio Normalizer", "Volume Booster", "Video Volume", "Multi Volume Booster" -> {
                             AdjustmentSlider("Target Volume")
                         }
-                        "Compress", "Audio Compressor", "Video Compressor" -> {
+                        "Compress", "Audio Compressor", "Video Compressor", "Compress Video" -> {
                             if (isVideo) {
                                 AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 80f)
                                 AdjustmentSlider("Target Resolution (p)", valueRange = 144f..1080f, initialValue = 720f)
@@ -159,6 +159,43 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                         "Audio Noise Remover", "Video Noise Remover", "AI Noise Remover", "Noise Remover" -> {
                             AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
                             AdjustmentSlider("Sensitivity")
+                        }
+                        "Video Frame Annotator" -> {
+                            AdjustmentSlider("Frame Number", valueRange = 0f..1000f, initialValue = 0f)
+                            AdjustmentSlider("Pen Size", valueRange = 1f..20f, initialValue = 5f)
+                            Text("Draw on the video frame selected.")
+                        }
+                        "Merge Videos" -> {
+                            Text("Select multiple files to merge.")
+                            AdjustmentSlider("Overlap Duration (s)", valueRange = 0f..5f, initialValue = 0f)
+                        }
+                        "Convert to MP4", "Audio Converter" -> {
+                            Text("Select target format and quality.")
+                            AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 85f)
+                        }
+                        "Video to PDF" -> {
+                            Text("Converting to PDF format.")
+                            AdjustmentSlider("Page Margin", valueRange = 0f..50f, initialValue = 20f)
+                        }
+                        "Video to Images" -> {
+                            Text("Extracting frames.")
+                            AdjustmentSlider("Interval/Frequency")
+                        }
+                        "Rotate/Crop Video" -> {
+                            AdjustmentSlider("Rotation Angle", valueRange = 0f..360f, initialValue = 0f)
+                            AdjustmentSlider("Crop Scale", valueRange = 0.1f..1.0f, initialValue = 1.0f)
+                        }
+                        "Mute/Extract Audio" -> {
+                            AdjustmentSlider("Extract Track Index", valueRange = 0f..5f, initialValue = 0f)
+                            Text("Enable 'Mute' to remove audio.")
+                        }
+                        "Thumbnail Extractor" -> {
+                            AdjustmentSlider("Timestamp (s)", valueRange = 0f..300f, initialValue = 10f)
+                            Text("Capture moment as thumbnail.")
+                        }
+                        "Add Audio to Video" -> {
+                            Text("Layer audio over video.")
+                            AdjustmentSlider("Audio Volume Balance", valueRange = 0f..1f, initialValue = 0.5f)
                         }
                         "Vocal Remover" -> {
                             AdjustmentSlider("Vocal Suppression")
