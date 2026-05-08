@@ -188,6 +188,7 @@ object ToolProvider {
         Tool("Zip/Unzip", Icons.Default.FolderZip, "zip_unzip", "Files", Color(0xFFFF9800), BadgeType.NEW),
         Tool("Duplicate Finder", Icons.Default.ContentCopy, "duplicate_finder", "Files", Color(0xFF3F51B5), BadgeType.NEW),
         Tool("File Shredder", Icons.Default.DeleteForever, "file_shredder", "Files", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Zip", Icons.Default.FolderZip, "zip_tools", "Files", Color(0xFF4CAF50), BadgeType.NEW),
 
         // Lifestyle
         Tool("Daily Quotes", Icons.Default.FormatQuote, "daily_quotes", "Lifestyle", Color(0xFFFFC107), BadgeType.NEW),
@@ -224,6 +225,12 @@ object ToolProvider {
         Tool("Single Edit", Icons.Default.Edit, "image_single_edit", "Image Toolbox", Color(0xFFE91E63), BadgeType.NEW),
         Tool("Wallpapers Export", Icons.Default.Wallpaper, "image_wallpapers", "Image Toolbox", Color(0xFFFF9800), BadgeType.NEW),
         Tool("Watermarking", Icons.Default.BrandingWatermark, "image_watermark", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("WEBP Tools", Icons.Default.Animation, "webp_tools", "Image Toolbox", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("APNG Tools", Icons.Default.Animation, "apng_tools", "Image Toolbox", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("PDF Tools", Icons.Default.PictureAsPdf, "pdf_tools", "Image Toolbox", Color(0xFFF44336), BadgeType.NEW),
+        Tool("JXL Tools", Icons.Default.Animation, "jxl_tools", "Image Toolbox", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("GIF Tools", Icons.Default.Animation, "gif_tools", "Image Toolbox", Color(0xFF9C27B0), BadgeType.NEW),
+        Tool("Color & Palette Tools", Icons.Default.Palette, "color_palette_tools", "Image Toolbox", Color(0xFF00BCD4), BadgeType.NEW),
         Tool("Web Image Loading", Icons.Default.CloudDownload, "image_web_load", "Image Toolbox", Color(0xFF03A9F4), BadgeType.NEW),
         Tool("Mask Filter", Icons.Default.Texture, "image_mask_filter", "Image Toolbox", Color(0xFF9C27B0), BadgeType.NEW),
         Tool("Draw on background", Icons.Default.Brush, "image_draw_bg", "Image Toolbox", Color(0xFFE91E63), BadgeType.NEW),
@@ -240,6 +247,7 @@ object ToolProvider {
         Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Media", Color(0xFFFFC107)),
         Tool("Photo Filters", Icons.Default.Filter, "photo_filters", "Media", Color(0xFFE91E63), BadgeType.NEW),
         Tool("Video Frame Grabber", Icons.Default.CropOriginal, "frame_grabber", "Media", Color(0xFF009688), BadgeType.NEW),
+        Tool("Document Scanner", Icons.Default.Scanner, "doc_scanner", "Media", Color(0xFF3F51B5), BadgeType.NEW),
 
         // Network
         Tool("DNS Lookup", Icons.Default.Dns, "dns_lookup", "Network", Color(0xFF3F51B5), BadgeType.NEW),
@@ -255,6 +263,7 @@ object ToolProvider {
         Tool("Device Codec", Icons.Default.PermDeviceInformation, "device_codec", "Other Tools", Color(0xFF3F51B5), BadgeType.PREMIUM),
         Tool("Video Info", Icons.Default.VideoFile, "video_info", "Other Tools", Color(0xFF673AB7), BadgeType.NEW),
         Tool("Dog Whistle", Icons.Default.Hearing, "dog_whistle", "Other Tools", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Audio Covers", Icons.Default.Album, "audio_covers", "Other Tools", Color(0xFFE91E63), BadgeType.NEW),
 
         // Output
         Tool("Audio Output", Icons.Default.LibraryMusic, "audio_output", "Output", Color(0xFF2196F3)),
@@ -325,6 +334,7 @@ object ToolProvider {
         Tool("Hash Generator", Icons.Default.Fingerprint, "hash_gen", "Security", Color(0xFF607D8B)),
         Tool("Password Manager", Icons.Default.Password, "password_manager", "Security", Color(0xFF4CAF50)),
         Tool("App Locker", Icons.Default.Lock, "app_locker", "Security", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Cipher", Icons.Default.Security, "cipher_tools", "Security", Color(0xFF2196F3), BadgeType.NEW),
 
         // System
         Tool("App Info", Icons.Default.Apps, "app_info", "System", Color(0xFF2196F3), BadgeType.NEW),
@@ -341,6 +351,7 @@ object ToolProvider {
         Tool("Text Diff", Icons.Default.Difference, "text_diff", "Text", Color(0xFFFF5722), BadgeType.NEW),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Text", Color(0xFFE91E63)),
         Tool("Text Art", Icons.Default.Palette, "text_art", "Text", Color(0xFFFF9800), BadgeType.NEW),
+        Tool("ASCII Art", Icons.Default.Texture, "ascii_art", "Text", Color(0xFF607D8B), BadgeType.NEW),
 
         // Utility
         Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility", Color(0xFF3F51B5)),

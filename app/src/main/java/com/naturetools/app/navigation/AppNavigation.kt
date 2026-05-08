@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
@@ -377,6 +379,158 @@ fun NatureToolsApp(
         composable("image_layers_img") { ImageToolScreen(navController, "Layers on image") }
         composable("image_layers_bg") { ImageToolScreen(navController, "Layers on background") }
         composable("image_open_project") { ImageToolScreen(navController, "Open project") }
+
+        composable("webp_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "WEBP Tools",
+                subTools = listOf(
+                    SubTool("Images to WEBP", "Convert batch of images to WEBP file", Icons.Default.Transform, "image_to_webp"),
+                    SubTool("WEBP to images", "Convert WEBP file to batch of pictures", Icons.Default.Collections, "webp_to_images")
+                )
+            )
+        }
+        composable("apng_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "APNG Tools",
+                subTools = listOf(
+                    SubTool("Images to APNG", "Convert batch of images to APNG file", Icons.Default.Transform, "image_to_apng"),
+                    SubTool("APNG to images", "Convert APNG file to batch of pictures", Icons.Default.Collections, "apng_to_images"),
+                    SubTool("APNG to JXL", "Convert APNG images to JXL animated pictures", Icons.Default.Animation, "apng_to_jxl")
+                )
+            )
+        }
+
+        composable("image_to_webp") { ImageToolScreen(navController, "Images to WEBP") }
+        composable("webp_to_images") { ImageToolScreen(navController, "WEBP to images") }
+        composable("image_to_apng") { ImageToolScreen(navController, "Images to APNG") }
+        composable("apng_to_images") { ImageToolScreen(navController, "APNG to images") }
+        composable("apng_to_jxl") { ImageToolScreen(navController, "APNG to JXL") }
+
+        composable("pdf_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "PDF Tools",
+                subTools = listOf(
+                    SubTool("Preview PDF", "View PDF files directly within the app", Icons.Default.Preview, "pdf_preview"),
+                    SubTool("Images to PDF", "Pack a selection of images into a single PDF file", Icons.Default.PictureAsPdf, "images_to_pdf"),
+                    SubTool("PDF to Images", "Convert PDF pages into individual image files", Icons.Default.Collections, "pdf_to_images"),
+                    SubTool("Merge PDF", "Combine multiple PDF files into one document", Icons.Default.Merge, "pdf_merge"),
+                    SubTool("Split PDF", "Extract specific pages from a PDF", Icons.Default.CallSplit, "pdf_split"),
+                    SubTool("Remove PDF pages", "Delete unwanted pages from a document", Icons.Default.Delete, "pdf_remove_pages"),
+                    SubTool("Rotate PDF", "Permanently fix the orientation of PDF pages", Icons.Default.RotateRight, "pdf_rotate"),
+                    SubTool("Rearrange PDF", "Reorder pages using drag-and-drop functionality", Icons.Default.Reorder, "pdf_rearrange"),
+                    SubTool("Crop PDF", "Trim PDF pages to specific boundaries", Icons.Default.Crop, "pdf_crop"),
+                    SubTool("Page Numbers", "Automatically add numbering to document pages", Icons.Default.FormatListNumbered, "pdf_page_numbers"),
+                    SubTool("Watermarking", "Overlay custom text for branding or security", Icons.Default.BrandingWatermark, "pdf_watermark"),
+                    SubTool("Signature", "Add electronic signatures to any document", Icons.Default.Draw, "pdf_signature"),
+                    SubTool("Compress PDF", "Optimize and reduce file size", Icons.Default.Compress, "pdf_compress"),
+                    SubTool("Flatten PDF", "Make PDFs unmodifiable", Icons.Default.LayersClear, "pdf_flatten"),
+                    SubTool("Print PDF", "Prepare documents for printing", Icons.Default.Print, "pdf_print"),
+                    SubTool("Grayscale", "Convert PDF images to black and white", Icons.Default.ColorLens, "pdf_grayscale"),
+                    SubTool("Repair PDF", "Attempt to fix corrupted or unreadable documents", Icons.Default.Build, "pdf_repair"),
+                    SubTool("Protect PDF", "Secure documents with strong encryption", Icons.Default.Lock, "pdf_protect"),
+                    SubTool("Unlock PDF", "Remove password protection from files", Icons.Default.LockOpen, "pdf_unlock"),
+                    SubTool("Metadata", "Edit document properties", Icons.Default.Info, "pdf_metadata"),
+                    SubTool("Extract Images", "Save images embedded in PDFs", Icons.Default.Image, "pdf_extract_images"),
+                    SubTool("PDF to Text (OCR)", "Extract plain text from PDF documents", Icons.Default.TextFields, "pdf_ocr"),
+                    SubTool("Zip PDF", "Split documents and pack them into a zip archive", Icons.Default.FolderZip, "pdf_zip")
+                )
+            )
+        }
+
+        composable("jxl_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "JXL Tools",
+                subTools = listOf(
+                    SubTool("JPEG to JXL", "Lossless transcoding from JPEG to JXL", Icons.Default.Transform, "jpeg_to_jxl"),
+                    SubTool("JXL to JPEG", "Lossless transcoding from JXL back to JPEG", Icons.Default.Transform, "jxl_to_jpeg"),
+                    SubTool("JXL to Images", "Convert JXL animations into a batch of pictures", Icons.Default.Collections, "jxl_to_images"),
+                    SubTool("Images to JXL", "Convert a batch of pictures into a JXL animation", Icons.Default.Animation, "images_to_jxl")
+                )
+            )
+        }
+
+        composable("gif_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "GIF Tools",
+                subTools = listOf(
+                    SubTool("Images to GIF", "Convert a batch of images to a GIF file", Icons.Default.Animation, "images_to_gif"),
+                    SubTool("GIF to images", "Convert a GIF file into individual frames", Icons.Default.Collections, "gif_to_images"),
+                    SubTool("GIF to JXL", "Convert GIF images to JXL animated pictures", Icons.Default.Transform, "gif_to_jxl"),
+                    SubTool("GIF to WEBP", "Convert GIF images to WEBP animated pictures", Icons.Default.Transform, "gif_to_webp")
+                )
+            )
+        }
+
+        composable("color_palette_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "Color & Palette Tools",
+                subTools = listOf(
+                    SubTool("Color Info", "Provides detailed data for a selected color", Icons.Default.Info, "color_info"),
+                    SubTool("Color Mixing", "Blend colors together", Icons.Default.InvertColors, "color_mixing"),
+                    SubTool("Color Harmonies", "Generate color schemes", Icons.Default.Palette, "color_harmonies"),
+                    SubTool("Color Shading", "Create shades and tints", Icons.Default.Gradient, "color_shading"),
+                    SubTool("Histogram", "View color distribution of an image", Icons.Default.BarChart, "image_histogram"),
+                    SubTool("Generate Palette", "Create palette from an image", Icons.Default.ColorLens, "generate_palette"),
+                    SubTool("Material You", "Create Material You palette from an image", Icons.Default.AutoAwesome, "material_you_palette"),
+                    SubTool("Edit Palette", "Export or import palettes", Icons.Default.Edit, "edit_palette")
+                )
+            )
+        }
+
+        composable("pdf_preview") { ImageToolScreen(navController, "Preview PDF") }
+        composable("images_to_pdf") { ImageToolScreen(navController, "Images to PDF") }
+        composable("pdf_to_images") { ImageToolScreen(navController, "PDF to Images") }
+        composable("pdf_merge") { ImageToolScreen(navController, "Merge PDF") }
+        composable("pdf_split") { ImageToolScreen(navController, "Split PDF") }
+        composable("pdf_remove_pages") { ImageToolScreen(navController, "Remove PDF pages") }
+        composable("pdf_rotate") { ImageToolScreen(navController, "Rotate PDF") }
+        composable("pdf_rearrange") { ImageToolScreen(navController, "Rearrange PDF") }
+        composable("pdf_crop") { ImageToolScreen(navController, "Crop PDF") }
+        composable("pdf_page_numbers") { ImageToolScreen(navController, "Page Numbers") }
+        composable("pdf_watermark") { ImageToolScreen(navController, "Watermarking") }
+        composable("pdf_signature") { ImageToolScreen(navController, "Signature") }
+        composable("pdf_compress") { ImageToolScreen(navController, "Compress PDF") }
+        composable("pdf_flatten") { ImageToolScreen(navController, "Flatten PDF") }
+        composable("pdf_print") { ImageToolScreen(navController, "Print PDF") }
+        composable("pdf_grayscale") { ImageToolScreen(navController, "Grayscale") }
+        composable("pdf_repair") { ImageToolScreen(navController, "Repair PDF") }
+        composable("pdf_protect") { ImageToolScreen(navController, "Protect PDF") }
+        composable("pdf_unlock") { ImageToolScreen(navController, "Unlock PDF") }
+        composable("pdf_metadata") { ImageToolScreen(navController, "Metadata") }
+        composable("pdf_extract_images") { ImageToolScreen(navController, "Extract Images") }
+        composable("pdf_ocr") { ImageToolScreen(navController, "PDF to Text (OCR)") }
+        composable("pdf_zip") { ImageToolScreen(navController, "Zip PDF") }
+
+        composable("jpeg_to_jxl") { ImageToolScreen(navController, "JPEG to JXL") }
+        composable("jxl_to_jpeg") { ImageToolScreen(navController, "JXL to JPEG") }
+        composable("jxl_to_images") { ImageToolScreen(navController, "JXL to Images") }
+        composable("images_to_jxl") { ImageToolScreen(navController, "Images to JXL") }
+
+        composable("images_to_gif") { ImageToolScreen(navController, "Images to GIF") }
+        composable("gif_to_images") { ImageToolScreen(navController, "GIF to images") }
+        composable("gif_to_jxl") { ImageToolScreen(navController, "GIF to JXL") }
+        composable("gif_to_webp") { ImageToolScreen(navController, "GIF to WEBP") }
+
+        composable("color_info") { ColorPickerScreen(navController) }
+        composable("color_mixing") { ColorPickerScreen(navController) }
+        composable("color_harmonies") { ColorPickerScreen(navController) }
+        composable("color_shading") { ColorPickerScreen(navController) }
+        composable("image_histogram") { ImageToolScreen(navController, "Histogram") }
+        composable("generate_palette") { ColorPickerScreen(navController) }
+        composable("material_you_palette") { ColorPickerScreen(navController) }
+        composable("edit_palette") { ColorPickerScreen(navController) }
+
+        composable("zip_tools") { FileToolScreen(navController, "Zip") }
+        composable("doc_scanner") { ImageToolScreen(navController, "Document Scanner") }
+        composable("audio_covers") { AudioToolScreen(navController, "Audio Covers") }
+        composable("cipher_tools") { FileToolScreen(navController, "Cipher") }
+        composable("ascii_art") { ImageToolScreen(navController, "ASCII Art") }
 
         composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
         composable("video_output") { AudioToolScreen(navController, "Video Output") }
