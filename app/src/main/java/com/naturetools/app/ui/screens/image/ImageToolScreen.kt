@@ -70,20 +70,20 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                             "Crop" -> Text("Select aspect ratio and drag to crop.")
                             "Filter" -> Text("Select a filter to apply.")
                             "Resize" -> Text("Enter new dimensions or percentage.")
-                            "Compress PDFs/Document", "Compress Image" -> {
+                            "Compress PDFs/Document", "Compress Image", "Compress PDF" -> {
                                 AdjustmentSlider("Quality", initialValue = 0.8f)
                                 AdjustmentSlider("Target Size (KB)", valueRange = 10f..5000f, initialValue = 500f)
                             }
-                            "Merge PDFs/Document" -> {
+                            "Merge PDFs/Document", "Merge PDF" -> {
                                 Text("Select multiple files to merge.")
                                 AdjustmentSlider("Overlap/Spacing")
                             }
-                            "Split PDFs/Document", "Remove/Delete Pages" -> {
+                            "Split PDFs/Document", "Remove/Delete Pages", "Split PDF", "Delete Pages", "Extract Pages" -> {
                                 Text("Select pages to extract or remove.")
                                 AdjustmentSlider("Page Range Start")
                                 AdjustmentSlider("Page Range End")
                             }
-                            "Rotate Pages/PDF", "Rotate & Flip" -> {
+                            "Rotate Pages/PDF", "Rotate & Flip", "Rotate Pages" -> {
                                 AdjustmentSlider("Rotation Angle", valueRange = 0f..360f, initialValue = 0f)
                                 Text("Choose Flip orientation below.")
                             }
@@ -93,7 +93,7 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                                 AdjustmentSlider("Left Margin", initialValue = 0f)
                                 AdjustmentSlider("Right Margin", initialValue = 0f)
                             }
-                            "Image → PDF" -> {
+                            "Image → PDF", "Images to PDF" -> {
                                 Text("Converting selected images to a PDF document.")
                                 AdjustmentSlider("Page Margin", initialValue = 20f, valueRange = 0f..100f)
                             }
@@ -101,14 +101,33 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                                 Text("Extracting embedded images from the document.")
                                 AdjustmentSlider("Detection Sensitivity")
                             }
-                            "Document Info" -> {
+                            "Document Info", "View Metadata", "Metadata / Edit Props", "Strip Metadata" -> {
                                 Text("Metadata and technical details of the file.")
                             }
-                            "ICO Converter", "SVG Converter", "AVIF Converter", "WEBP Converter", "GIF Converter", "HEIC Converter" -> {
+                            "ICO Converter", "SVG Converter", "AVIF Converter", "WEBP Converter", "GIF Converter", "HEIC Converter", "Convert Format", "Resize Image" -> {
                                 Text("Select target format and quality.")
                                 AdjustmentSlider("Quality", initialValue = 0.9f)
                             }
-                            else -> Text("Processing options for $title")
+                            "Lock PDF", "Unlock PDF" -> {
+                                Text("Enter password in the dialog after clicking apply.")
+                                AdjustmentSlider("Security Level", valueRange = 1f..5f, initialValue = 3f)
+                            }
+                            "Add Watermark" -> {
+                                AdjustmentSlider("Opacity", initialValue = 0.5f)
+                                AdjustmentSlider("Watermark Scale", initialValue = 1.0f, valueRange = 0.1f..3.0f)
+                            }
+                            "Add Text", "Add Images" -> {
+                                AdjustmentSlider("Position X", valueRange = 0f..1000f)
+                                AdjustmentSlider("Position Y", valueRange = 0f..1000f)
+                            }
+                            "Page Numbers" -> {
+                                AdjustmentSlider("Font Size", valueRange = 6f..72f, initialValue = 12f)
+                                AdjustmentSlider("Vertical Offset", valueRange = 0f..100f, initialValue = 20f)
+                            }
+                            "HTML → PDF", "Excel to PDF", "Text to PDF" -> {
+                                Text("Select the source file to start conversion.")
+                            }
+                            else -> Text("Processing options for $title. Tap the button below to process your document.")
                         }
 
                         if (title == "Single Edit" || title == "Painter") {
