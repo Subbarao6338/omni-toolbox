@@ -667,5 +667,35 @@ fun NatureToolsApp(
         composable("txt_case") { CaseConverterScreen(navController) }
         composable("txt_to_pdf") { WordCounterScreen(navController) } // Reuse WordCounter for input
         composable("txt_copy_clear") { CaseConverterScreen(navController) }
+            composable("ai_grammar") { AIToolScreen(navController, "AI Grammar") }
+        composable("ai_obj_detect") { AIToolScreen(navController, "AI Object Detect") }
+        composable("ai_sentiment") { AIToolScreen(navController, "AI Sentiment") }
+        composable("ai_text_ext") { AIToolScreen(navController, "AI Text Extractor") }
+        composable("ai_translate") { AIToolScreen(navController, "AI Translation") }
+        composable("calculator") { AudioToolScreen(navController, "Calculator") }
+        composable("color_conv_pro") { FileToolScreen(navController, "Color Converter Pro") }
+        composable("crontab_gen") { FileToolScreen(navController, "Crontab Gen") }
+        composable("port_checker") { FileToolScreen(navController, "Port Checker") }
+        composable("sql_format") { FileToolScreen(navController, "SQL Formatter") }
+        composable("antenna_calc") { EngineeringToolScreen(navController, "Antenna Calc") }
+        composable("filter_design") { EngineeringToolScreen(navController, "Filter Designer") }
+        composable("signal_gen_pro") { EngineeringToolScreen(navController, "Signal Gen Pro") }
+        composable("dividend_calc") { LoanCalculatorScreen(navController) }
+        composable("inflation_calc") { LoanCalculatorScreen(navController) }
+        composable("roi_calc") { LoanCalculatorScreen(navController) }
+        composable("salary_calc") { LoanCalculatorScreen(navController) }
+        composable("stock_profit") { LoanCalculatorScreen(navController) }
+        composable("eye_exercise") { HealthScreen(navController, "Eye Exercise") }
+        composable("posture_check") { HealthScreen(navController, "Posture Checker") }
+        composable("stretch_guide") { HealthScreen(navController, "Stretching Guide") }
+        composable("media_grabber") { AudioToolScreen(navController, "Media Grabber") }
+        composable("metronome") { AudioToolScreen(navController, "Metronome") }
+        composable("note") { AudioToolScreen(navController, "Note Pad") }
+        composable("compass") { AudioToolScreen(navController, "Compass") }
+        composable("smart_scan") { NetworkToolScreen(navController, "Device Scanner") }
+        composable("wifi_anal") { NetworkToolScreen(navController, "WIFI Analyzer") }
+        composable("wake_on_lan") { NetworkToolScreen(navController, "Wake On LAN") }
+        composable("sos") { AudioToolScreen(navController, "Emergency SOS") }
+        composable("hub") { AudioToolScreen(navController, "Hub") }
     }
 }
