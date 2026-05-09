@@ -53,7 +53,9 @@ jobs:
       with:
         tag_name: v${{ steps.get_version.outputs.VERSION }}
         name: Release v${{ steps.get_version.outputs.VERSION }}
-        files: nature-tools-debug.apk
-        prerelease: ${{ github.event_name == 'pull_request' }}
+        files: nature-tools-v${{ steps.get_version.outputs.VERSION }}.apk
+        prerelease: false
+        make_latest: true
+        generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
