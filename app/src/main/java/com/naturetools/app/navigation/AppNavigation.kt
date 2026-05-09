@@ -579,6 +579,11 @@ fun NatureToolsApp(
         composable("text_art") { CaseConverterScreen(navController) }
         composable("protractor") { RulerScreen(navController) }
         composable("video_flip") { AudioToolScreen(navController, "Video Flip", "video/*") }
+        composable("vid_to_aud_pro") { AudioToolScreen(navController, "Video To Audio Pro", "video/*") }
+        composable("batch_img_pro") { ImageToolScreen(navController, "Batch Image Pro") }
+        composable("media_grab_pro") { MediaGrabberScreen(navController) }
+        composable("vid_edit_pro") { AudioToolScreen(navController, "Video Editor Pro", "video/*") }
+        composable("aud_master_pro") { AudioToolScreen(navController, "Audio Mastering Pro") }
 
         // Automotive
         composable("speedometer") { AutomotiveToolScreen(navController, "Speedometer") }
@@ -727,5 +732,33 @@ fun NatureToolsApp(
         composable("smart_scan") { NetworkToolScreen(navController, "Device Scanner") }
         composable("wifi_anal") { NetworkToolScreen(navController, "WIFI Analyzer") }
         composable("wake_on_lan") { NetworkToolScreen(navController, "Wake On LAN") }
+
+        composable("device_discovery") { NetworkToolScreen(navController, "Device Discovery") }
+        composable("mqtt_tester") { NetworkToolScreen(navController, "MQTT Tester") }
+        composable("smart_hub") { SystemLabScreen(navController, "Smart Hub") }
+
+        // Math & Logic
+        composable("matrix_calc") { MathToolScreen(navController, "Matrix Calc") }
+        composable("eq_solver") { MathToolScreen(navController, "Equation Solver") }
+        composable("fraction_calc") { MathToolScreen(navController, "Fraction Calc") }
+        composable("truth_table") { MathToolScreen(navController, "Truth Table Gen") }
+        composable("stats_pro") { MathToolScreen(navController, "Statistics Pro") }
+
+        // Developer Expert (mapping some developer tools to new screen)
+        composable("hex_viewer") { DeveloperExpertScreen(navController, "Hex Viewer") }
+        composable("ascii_table") { DeveloperExpertScreen(navController, "ASCII Table") }
+        composable("binary_pro") { DeveloperExpertScreen(navController, "Binary Pro") }
+        composable("regex_pro") { DeveloperExpertScreen(navController, "Regex Pro") }
+
+        // Finance Pro
+        composable("sip_calc") { FinanceToolScreen(navController, "SIP Calculator") }
+        composable("gst_calc") { FinanceToolScreen(navController, "GST Calculator") }
+        composable("retirement_planner") { FinanceToolScreen(navController, "Retirement Planner") }
+        composable("compound_pro") { FinanceToolScreen(navController, "Compound Interest Pro") }
+        composable("loan_emi_pro") { FinanceToolScreen(navController, "Loan EMI Pro") }
+        composable("unit_price_pro") { FinanceToolScreen(navController, "Unit Price Pro") }
+
+        // Health Plus
+        composable("period_tracker") { HealthScreen(navController, "Period Tracker") }
     }
 }

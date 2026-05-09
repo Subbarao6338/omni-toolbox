@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,7 +42,13 @@ fun HomeScreen(
     onToggleFavorite: (String) -> Unit
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
+    var debouncedSearchQuery by remember { mutableStateOf("") }
     var selectedCategory by rememberSaveable { mutableStateOf("All") }
+
+    LaunchedEffect(searchQuery) {
+        delay(300)
+        debouncedSearchQuery = searchQuery
+    }
 
     val categoryCounts = remember(favorites) {
         derivedStateOf {
@@ -56,11 +63,11 @@ fun HomeScreen(
         }
     }
 
-    val filteredTools = remember(searchQuery, selectedCategory, favorites) {
+    val filteredTools = remember(debouncedSearchQuery, selectedCategory, favorites) {
         derivedStateOf {
             ToolProvider.tools.filter {
                 (selectedCategory == "All" || (selectedCategory == "Favorites" && favorites.contains(it.route)) || it.category == selectedCategory) &&
-                (it.name.contains(searchQuery, ignoreCase = true))
+                (it.name.contains(debouncedSearchQuery, ignoreCase = true))
             }.sortedBy { it.name }
         }
     }
@@ -199,6 +206,7 @@ fun ToolCard(
 
     val elevation by animateDpAsState(
         targetValue = if (isPressed) 2.dp else 4.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
         label = "tool_card_elevation"
     )
 

@@ -52,6 +52,15 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
         actions = {
             if (mediaLinks.isNotEmpty()) {
                 IconButton(onClick = {
+                    val linksToDownload = if (selectedLinks.isNotEmpty()) selectedLinks else mediaLinks
+                    linksToDownload.forEach { link ->
+                        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                        navController.context.startActivity(intent)
+                    }
+                }) {
+                    Icon(Icons.Default.DownloadForOffline, contentDescription = "Download All")
+                }
+                IconButton(onClick = {
                     selectedLinks = if (selectedLinks.size == mediaLinks.size) emptySet() else mediaLinks
                 }) {
                     Icon(
@@ -211,6 +220,20 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                                 var match;
                                                 while ((match = imgRegex.exec(html)) !== null) addUrl(match[0]);
                                                 while ((match = vidRegex.exec(html)) !== null) addUrl(match[0]);
+                                            }
+
+                                            // Additional social media detection (TikTok/Instagram specialized)
+                                            var scripts = root.getElementsByTagName('script');
+                                            for(var i=0; i<scripts.length; i++) {
+                                                var content = scripts[i].innerHTML;
+                                                if(content.includes('video_url')) {
+                                                    var m = content.match(/"video_url":"([^"]+)"/);
+                                                    if(m) addUrl(m[1].replace(/\\u0026/g, '&'));
+                                                }
+                                                if(content.includes('display_url')) {
+                                                    var m = content.match(/"display_url":"([^"]+)"/);
+                                                    if(m) addUrl(m[1].replace(/\\u0026/g, '&'));
+                                                }
                                             }
                                         }
                                         scan(document);
