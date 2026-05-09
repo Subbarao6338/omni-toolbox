@@ -54,7 +54,7 @@ fun GradientGeneratorScreen(navController: NavHostController) {
                     ColorSlider("Color 1 Green", color1.green) { color1 = color1.copy(green = it) }
                     ColorSlider("Color 1 Blue", color1.blue) { color1 = color1.copy(blue = it) }
 
-                    Divider()
+                    HorizontalDivider()
 
                     ColorSlider("Color 2 Red", color2.red) { color2 = color2.copy(red = it) }
                     ColorSlider("Color 2 Green", color2.green) { color2 = color2.copy(green = it) }

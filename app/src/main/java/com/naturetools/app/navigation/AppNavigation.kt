@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
@@ -417,13 +418,13 @@ fun NatureToolsApp(
                     SubTool("Images to PDF", "Pack a selection of images into a single PDF file", Icons.Default.PictureAsPdf, "images_to_pdf"),
                     SubTool("PDF to Images", "Convert PDF pages into individual image files", Icons.Default.Collections, "pdf_to_images"),
                     SubTool("Merge PDF", "Combine multiple PDF files into one document", Icons.Default.Merge, "pdf_merge"),
-                    SubTool("Split PDF", "Extract specific pages from a PDF", Icons.Default.CallSplit, "pdf_split"),
+                    SubTool("Split PDF", "Extract specific pages from a PDF", Icons.AutoMirrored.Filled.CallSplit, "pdf_split"),
                     SubTool("Remove PDF pages", "Delete unwanted pages from a document", Icons.Default.Delete, "pdf_remove_pages"),
-                    SubTool("Rotate PDF", "Permanently fix the orientation of PDF pages", Icons.Default.RotateRight, "pdf_rotate"),
+                    SubTool("Rotate PDF", "Permanently fix the orientation of PDF pages", Icons.AutoMirrored.Filled.RotateRight, "pdf_rotate"),
                     SubTool("Rearrange PDF", "Reorder pages using drag-and-drop functionality", Icons.Default.Reorder, "pdf_rearrange"),
                     SubTool("Crop PDF", "Trim PDF pages to specific boundaries", Icons.Default.Crop, "pdf_crop"),
                     SubTool("Page Numbers", "Automatically add numbering to document pages", Icons.Default.FormatListNumbered, "pdf_page_numbers"),
-                    SubTool("Watermarking", "Overlay custom text for branding or security", Icons.Default.BrandingWatermark, "pdf_watermark"),
+                    SubTool("Watermarking", "Overlay custom text for branding or security", Icons.AutoMirrored.Filled.BrandingWatermark, "pdf_watermark"),
                     SubTool("Signature", "Add electronic signatures to any document", Icons.Default.Draw, "pdf_signature"),
                     SubTool("Compress PDF", "Optimize and reduce file size", Icons.Default.Compress, "pdf_compress"),
                     SubTool("Flatten PDF", "Make PDFs unmodifiable", Icons.Default.LayersClear, "pdf_flatten"),
@@ -708,7 +709,6 @@ fun NatureToolsApp(
         composable("ai_sentiment") { AIToolScreen(navController, "AI Sentiment") }
         composable("ai_text_ext") { AIToolScreen(navController, "AI Text Extractor") }
         composable("ai_translate") { AIToolScreen(navController, "AI Translation") }
-        composable("calculator") { AudioToolScreen(navController, "Calculator") }
         composable("color_conv_pro") { FileToolScreen(navController, "Color Converter Pro") }
         composable("crontab_gen") { FileToolScreen(navController, "Crontab Gen") }
         composable("port_checker") { FileToolScreen(navController, "Port Checker") }
@@ -724,14 +724,8 @@ fun NatureToolsApp(
         composable("eye_exercise") { HealthScreen(navController, "Eye Exercise") }
         composable("posture_check") { HealthScreen(navController, "Posture Checker") }
         composable("stretch_guide") { HealthScreen(navController, "Stretching Guide") }
-        composable("media_grabber") { AudioToolScreen(navController, "Media Grabber") }
-        composable("metronome") { AudioToolScreen(navController, "Metronome") }
-        composable("note") { AudioToolScreen(navController, "Note Pad") }
-        composable("compass") { AudioToolScreen(navController, "Compass") }
         composable("smart_scan") { NetworkToolScreen(navController, "Device Scanner") }
         composable("wifi_anal") { NetworkToolScreen(navController, "WIFI Analyzer") }
         composable("wake_on_lan") { NetworkToolScreen(navController, "Wake On LAN") }
-        composable("sos") { AudioToolScreen(navController, "Emergency SOS") }
-        composable("hub") { AudioToolScreen(navController, "Hub") }
     }
 }

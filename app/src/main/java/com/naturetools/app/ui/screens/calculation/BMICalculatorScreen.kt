@@ -87,7 +87,7 @@ fun BMIResultCard(bmi: Float) {
             Spacer(modifier = Modifier.height(16.dp))
 
             LinearProgressIndicator(
-                progress = (bmi / 40f).coerceIn(0f, 1f),
+                progress = { (bmi / 40f).coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth(),
                 color = color,
                 trackColor = color.copy(alpha = 0.2f)

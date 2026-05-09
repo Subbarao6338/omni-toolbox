@@ -36,7 +36,7 @@ fun StorageScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(32.dp))
             Box(contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
-                    progress = usedPercentage,
+                    progress = { usedPercentage },
                     modifier = Modifier.size(200.dp),
                     strokeWidth = 16.dp
                 )
