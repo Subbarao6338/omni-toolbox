@@ -12,7 +12,7 @@ data class Tool(val name: String, val icon: ImageVector, val route: String, val 
 
 object ToolProvider {
     val tools = listOf(
-        Tool("AI Chat", Icons.Default.Chat, "ai_chat", "AI & Data", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("AI Chat", Icons.AutoMirrored.Filled.Chat, "ai_chat", "AI & Data", Color(0xFF2196F3), BadgeType.NEW),
         Tool("AI Code Assistant", Icons.Default.Code, "ai_code", "AI & Data", Color(0xFF673AB7), BadgeType.NEW),
         Tool("AI Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI & Data", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("CSV to JSON", Icons.Default.Transform, "csv_to_json", "AI & Data", Color(0xFF009688), BadgeType.NEW),
@@ -145,9 +145,9 @@ object ToolProvider {
         Tool("Tax Calculator", Icons.Default.MoneyOff, "tax_calc", "Finance", Color(0xFFF44336), BadgeType.NONE),
         Tool("Dividend Calc", Icons.Default.Payments, "dividend_calc", "Financial Pro", Color(0xFF8BC34A), BadgeType.NEW),
         Tool("Inflation Calc", Icons.Default.MoneyOff, "inflation_calc", "Financial Pro", Color(0xFFF44336), BadgeType.NEW),
-        Tool("ROI Calculator", Icons.Default.ShowChart, "roi_calc", "Financial Pro", Color(0xFF009688), BadgeType.NEW),
+        Tool("ROI Calculator", Icons.AutoMirrored.Filled.ShowChart, "roi_calc", "Financial Pro", Color(0xFF009688), BadgeType.NEW),
         Tool("Salary Calc", Icons.Default.Work, "salary_calc", "Financial Pro", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("Stock Profit", Icons.Default.TrendingUp, "stock_profit", "Financial Pro", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Stock Profit", Icons.AutoMirrored.Filled.TrendingUp, "stock_profit", "Financial Pro", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Coin Flip", Icons.Default.Paid, "coin_flip", "Games", Color(0xFFFFC107), BadgeType.NEW),
         Tool("Dice Roller", Icons.Default.Casino, "dice_roller", "Games", Color(0xFFE91E63), BadgeType.NEW),
         Tool("Memory Game", Icons.Default.Extension, "memory_game", "Games", Color(0xFF9C27B0), BadgeType.NEW),
@@ -157,7 +157,7 @@ object ToolProvider {
         Tool("CPU Info", Icons.Default.Memory, "cpu_info", "Hardware", Color(0xFF795548), BadgeType.NONE),
         Tool("Device Info", Icons.Default.Info, "device", "Hardware", Color(0xFF607D8B), BadgeType.NONE),
         Tool("Hardware ID", Icons.Default.PermDeviceInformation, "device_id", "Hardware", Color(0xFF607D8B), BadgeType.NONE),
-        Tool("Sensors List", Icons.Default.List, "sensors_list", "Hardware", Color(0xFF4CAF50), BadgeType.NONE),
+        Tool("Sensors List", Icons.AutoMirrored.Filled.List, "sensors_list", "Hardware", Color(0xFF4CAF50), BadgeType.NONE),
         Tool("Storage", Icons.Default.Storage, "storage", "Hardware", Color(0xFF9E9E9E), BadgeType.NONE),
         Tool("Thermal Info", Icons.Default.DeviceThermostat, "thermal_info", "Hardware", Color(0xFFF44336), BadgeType.NEW),
         Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health", Color(0xFFFF9800), BadgeType.NONE),
@@ -199,7 +199,7 @@ object ToolProvider {
         Tool("Markup Layers", Icons.Default.DashboardCustomize, "image_markup", "Image Toolbox", Color(0xFFFF9800), BadgeType.NEW),
         Tool("Mask Filter", Icons.Default.Texture, "image_mask_filter", "Image Toolbox", Color(0xFF9C27B0), BadgeType.NEW),
         Tool("Noise Generation", Icons.Default.BlurOn, "image_noise_gen", "Image Toolbox", Color(0xFF9E9E9E), BadgeType.NEW),
-        Tool("OCR", Icons.Default.ManageSearch, "image_ocr", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("OCR", Icons.AutoMirrored.Filled.ManageSearch, "image_ocr", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Open project", Icons.Default.FolderOpen, "image_open_project", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
         Tool("PDF Tools", Icons.Default.PictureAsPdf, "pdf_tools", "Image Toolbox", Color(0xFFF44336), BadgeType.NEW),
         Tool("Palette Tools", Icons.Default.ColorLens, "image_palette", "Image Toolbox", Color(0xFF009688), BadgeType.NEW),
@@ -210,7 +210,7 @@ object ToolProvider {
         Tool("Single Edit", Icons.Default.Edit, "image_single_edit", "Image Toolbox", Color(0xFFE91E63), BadgeType.NEW),
         Tool("WEBP Tools", Icons.Default.Animation, "webp_tools", "Image Toolbox", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Wallpapers Export", Icons.Default.Wallpaper, "image_wallpapers", "Image Toolbox", Color(0xFFFF9800), BadgeType.NEW),
-        Tool("Watermarking", Icons.Default.BrandingWatermark, "image_watermark", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Watermarking", Icons.AutoMirrored.Filled.BrandingWatermark, "image_watermark", "Image Toolbox", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Web Image Loading", Icons.Default.CloudDownload, "image_web_load", "Image Toolbox", Color(0xFF03A9F4), BadgeType.NEW),
         Tool("Collage Maker", Icons.Default.AutoAwesomeMosaic, "img_collage_v2", "Image Tools", Color(0xFF4CAF50), BadgeType.NONE),
         Tool("Compress Image", Icons.Default.Compress, "img_compress_v2", "Image Tools", Color(0xFF4CAF50), BadgeType.NONE),
@@ -244,7 +244,7 @@ object ToolProvider {
         Tool("Guitar Tuner", Icons.Default.MusicNote, "guitar_tuner", "Music", Color(0xFFE91E63), BadgeType.NEW),
         Tool("Metronome", Icons.Default.AvTimer, "metronome", "Music", Color(0xFF00BCD4), BadgeType.NONE),
         Tool("Altimeter Pro", Icons.Default.Landscape, "altimeter_pro", "Navigation", Color(0xFF795548), BadgeType.NEW),
-        Tool("Altitude Graph", Icons.Default.ShowChart, "altitude_graph", "Navigation", Color(0xFF00BCD4), BadgeType.NEW),
+        Tool("Altitude Graph", Icons.AutoMirrored.Filled.ShowChart, "altitude_graph", "Navigation", Color(0xFF00BCD4), BadgeType.NEW),
         Tool("Area Calculator", Icons.Default.SquareFoot, "area_calc_pro", "Navigation", Color(0xFFFF9800), BadgeType.NEW),
         Tool("Compass Pro", Icons.Default.Explore, "compass_pro", "Navigation", Color(0xFF2196F3), BadgeType.NEW),
         Tool("GPS Status", Icons.Default.GpsFixed, "gps_status", "Navigation", Color(0xFF4CAF50), BadgeType.NEW),
@@ -266,26 +266,23 @@ object ToolProvider {
         Tool("Knots Guide", Icons.Default.InvertColors, "knots_guide", "Outdoor", Color(0xFF795548), BadgeType.NEW),
         Tool("Weather Forecast", Icons.Default.WbCloudy, "weather_forecast", "Outdoor", Color(0xFF03A9F4), BadgeType.NEW),
         Tool("Audio Output", Icons.Default.LibraryMusic, "audio_output", "Output", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Log Viewer", Icons.Default.FormatListBulleted, "log_viewer", "Output", Color(0xFF607D8B), BadgeType.NEW),
+        Tool("Log Viewer", Icons.AutoMirrored.Filled.FormatListBulleted, "log_viewer", "Output", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Video Output", Icons.Default.VideoLibrary, "video_output", "Output", Color(0xFF4CAF50), BadgeType.NONE),
         Tool("AVIF Converter", Icons.Default.Transform, "conv_avif", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Compress PDFs/Document", Icons.Default.Compress, "pdf_compress_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Crop Pages", Icons.Default.Crop, "pdf_crop_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("Document Info", Icons.Default.Info, "doc_info", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Document Sorter", Icons.Default.Sort, "doc_sort", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
+        Tool("Document Sorter", Icons.AutoMirrored.Filled.Sort, "doc_sort", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("Document Viewer", Icons.Default.Preview, "pdf_view_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("Extract Images", Icons.Default.Image, "pdf_extract_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("ICO Converter", Icons.Default.Transform, "conv_ico", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("Lock/Unlock PDF", Icons.Default.Lock, "pdf_security", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Merge PDFs/Document", Icons.Default.Merge, "pdf_merge_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("PDF Creation Studio", Icons.Default.AddCircle, "pdf_create_studio", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("PDF Modifier", Icons.Default.Edit, "pdf_modifier", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("PDF/Document Resizer", Icons.Default.AspectRatio, "pdf_resize", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("Remove/Delete Pages", Icons.Default.Delete, "pdf_remove_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("Reorder PDF Pages", Icons.Default.Reorder, "pdf_reorder_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Rotate Pages/PDF", Icons.Default.RotateRight, "pdf_rotate_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
+        Tool("Rotate Pages/PDF", Icons.AutoMirrored.Filled.RotateRight, "pdf_rotate_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("SVG Converter", Icons.Default.Transform, "conv_svg", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Split PDFs/Document", Icons.Default.CallSplit, "pdf_split_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
+        Tool("Split PDFs/Document", Icons.AutoMirrored.Filled.CallSplit, "pdf_split_v2", "PDF & Document Tools", Color(0xFFF44336), BadgeType.NONE),
         Tool("Depth of Field", Icons.Default.FilterHdr, "dof_calc", "Photography", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Exposure Calculator", Icons.Default.Camera, "exposure_calc", "Photography", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Golden Hour", Icons.Default.WbSunny, "golden_hour", "Photography", Color(0xFFFF9800), BadgeType.NEW),
@@ -321,7 +318,7 @@ object ToolProvider {
         Tool("Level", Icons.Default.Architecture, "level", "Sensors", Color(0xFF03A9F4), BadgeType.NONE),
         Tool("Light Meter", Icons.Default.LightMode, "light", "Sensors", Color(0xFF00BCD4), BadgeType.NONE),
         Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Sensors", Color(0xFF009688), BadgeType.NONE),
-        Tool("SPL Meter", Icons.Default.VolumeUp, "spl_meter", "Sensors", Color(0xFFF44336), BadgeType.NONE),
+        Tool("SPL Meter", Icons.AutoMirrored.Filled.VolumeUp, "spl_meter", "Sensors", Color(0xFFF44336), BadgeType.NONE),
         Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Sensors", Color(0xFF4CAF50), BadgeType.NONE),
         Tool("Device Scanner", Icons.Default.Devices, "smart_scan", "Smart Home", Color(0xFF009688), BadgeType.NEW),
         Tool("WIFI Analyzer", Icons.Default.Wifi, "wifi_anal", "Smart Home", Color(0xFF673AB7), BadgeType.NEW),
@@ -330,29 +327,12 @@ object ToolProvider {
         Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", Color(0xFFE91E63), BadgeType.NEW),
 
         // Hardware
-        Tool("Battery", Icons.Default.BatteryFull, "battery", "Hardware", Color(0xFFFF5722)),
-        Tool("CPU Info", Icons.Default.Memory, "cpu_info", "Hardware", Color(0xFF795548)),
-        Tool("Device Info", Icons.Default.Info, "device", "Hardware", Color(0xFF607D8B)),
-        Tool("Hardware ID", Icons.Default.PermDeviceInformation, "device_id", "Hardware", Color(0xFF607D8B)),
-        Tool("Sensors List", Icons.Default.List, "sensors_list", "Hardware", Color(0xFF4CAF50)),
-        Tool("Storage", Icons.Default.Storage, "storage", "Hardware", Color(0xFF9E9E9E)),
-        Tool("Thermal Info", Icons.Default.DeviceThermostat, "thermal_info", "Hardware", Color(0xFFF44336), BadgeType.NEW),
 
         // Privacy
-        Tool("App Permissions", Icons.Default.Security, "app_permissions", "Privacy", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Privacy Check", Icons.Default.PrivacyTip, "privacy_check", "Privacy", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Permission Manager", Icons.Default.ManageAccounts, "perm_manager", "Privacy", Color(0xFF2196F3), BadgeType.NEW),
 
         // Science
-        Tool("Constants Table", Icons.Default.Functions, "constants", "Science", Color(0xFFF44336)),
-        Tool("Periodic Table", Icons.Default.GridOn, "periodic_table", "Science", Color(0xFFFFEB3B)),
-        Tool("Pokedex", Icons.Default.CatchingPokemon, "pokedex", "Science", Color(0xFFFFC107)),
-        Tool("DNA Visualizer", Icons.Default.Hub, "dna_viz", "Science", Color(0xFF9C27B0), BadgeType.NEW),
 
         // Astronomy
-        Tool("Star Map", Icons.Default.AutoAwesome, "star_map", "Astronomy", Color(0xFF3F51B5), BadgeType.NEW),
-        Tool("Constellations", Icons.Default.Stars, "constellations", "Astronomy", Color(0xFF673AB7)),
-        Tool("Planet Finder", Icons.Default.BrightnessHigh, "planet_finder", "Astronomy", Color(0xFFFFC107), BadgeType.NEW),
 
         // Survival
         Tool("Emergency SOS", Icons.Default.Sos, "sos", "Survival", Color(0xFFF44336), BadgeType.NEW),
@@ -364,7 +344,7 @@ object ToolProvider {
         Tool("ASCII Art", Icons.Default.Texture, "ascii_art", "Text", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Anagram Finder", Icons.Default.SortByAlpha, "anagram", "Text", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Case Converter", Icons.Default.TextFields, "case_converter", "Text", Color(0xFF9C27B0), BadgeType.NONE),
-        Tool("Lorem Ipsum", Icons.Default.Notes, "lorem", "Text", Color(0xFF607D8B), BadgeType.NONE),
+        Tool("Lorem Ipsum", Icons.AutoMirrored.Filled.Notes, "lorem", "Text", Color(0xFF607D8B), BadgeType.NONE),
         Tool("Morse Code", Icons.Default.Language, "morse", "Text", Color(0xFF673AB7), BadgeType.NONE),
         Tool("Morse Decoder", Icons.Default.Language, "morse_decoder", "Text", Color(0xFF03A9F4), BadgeType.NEW),
         Tool("Text Art", Icons.Default.Palette, "text_art", "Text", Color(0xFFFF9800), BadgeType.NEW),
@@ -390,30 +370,16 @@ object ToolProvider {
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7), BadgeType.NONE),
         Tool("Change Video Speed", Icons.Default.FastForward, "vid_speed_v2", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
         Tool("Compress Video", Icons.Default.Compress, "vid_compress_v2", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utility", Color(0xFFFF5722)),
-        Tool("Web Search", Icons.Default.Search, "web", "Utility", Color(0xFF009688)),
-        Tool("World Clock", Icons.Default.Public, "world_clock", "Utility", Color(0xFF673AB7)),
-        Tool("Protractor", Icons.Default.Architecture, "protractor", "Utility", Color(0xFFCDDC39), BadgeType.NEW),
 
         // Automotive
-        Tool("Speedometer", Icons.Default.Speed, "speedometer", "Automotive", Color(0xFFF44336), BadgeType.NEW),
-        Tool("Fuel Consumption", Icons.Default.LocalGasStation, "fuel_consumption", "Automotive", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Car Maintenance", Icons.Default.Build, "car_maintenance", "Automotive", Color(0xFF2196F3), BadgeType.NEW),
 
         // Social
-        Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", Color(0xFFE91E63), BadgeType.NEW),
-        Tool("Bio Linker", Icons.Default.Link, "bio_linker", "Social", Color(0xFF9C27B0), BadgeType.NEW),
 
         // Electronics
-        Tool("Ohm's Law", Icons.Default.ElectricalServices, "ohms_law", "Electronics", Color(0xFFFF9800), BadgeType.NEW),
-        Tool("Circuit Calc", Icons.Default.Memory, "circuit_calc", "Electronics", Color(0xFF607D8B), BadgeType.NEW),
 
         // Science
-        Tool("Pendulum Calc", Icons.Default.VerticalAlignBottom, "pendulum_calc", "Science", Color(0xFF3F51B5), BadgeType.NEW),
 
         // Kitchen
-        Tool("Egg Timer", Icons.Default.Timer, "egg_timer", "Kitchen", Color(0xFFFFC107), BadgeType.NEW),
-        Tool("Recipe Scaler", Icons.Default.Scale, "recipe_scaler", "Kitchen", Color(0xFF4CAF50), BadgeType.NEW),
 
         // Video Tools
         Tool("Delete Segment", Icons.Default.Delete, "video_delete", "Video Tools", Color(0xFFF44336)),
@@ -448,9 +414,9 @@ object ToolProvider {
 
         // Document Organization & Editing
         Tool("Merge PDF", Icons.Default.Merge, "merge_pdf_v3", "Document Organization & Editing", Color(0xFFF44336)),
-        Tool("Split PDF", Icons.Default.CallSplit, "split_pdf_v3", "Document Organization & Editing", Color(0xFFF44336)),
+        Tool("Split PDF", Icons.AutoMirrored.Filled.CallSplit, "split_pdf_v3", "Document Organization & Editing", Color(0xFFF44336)),
         Tool("Reorder Pages", Icons.Default.Reorder, "reorder_pages_v3", "Document Organization & Editing", Color(0xFFF44336)),
-        Tool("Rotate Pages", Icons.Default.RotateRight, "rotate_pages_v3", "Document Organization & Editing", Color(0xFFF44336)),
+        Tool("Rotate Pages", Icons.AutoMirrored.Filled.RotateRight, "rotate_pages_v3", "Document Organization & Editing", Color(0xFFF44336)),
         Tool("Delete Pages", Icons.Default.Delete, "delete_pages_v3", "Document Organization & Editing", Color(0xFFF44336)),
         Tool("Extract Pages", Icons.Default.ContentCopy, "extract_pages_v3", "Document Organization & Editing", Color(0xFFF44336)),
         Tool("Add Page from Gallery", Icons.Default.AddPhotoAlternate, "add_page_gallery_v3", "Document Organization & Editing", Color(0xFFF44336)),
@@ -461,7 +427,7 @@ object ToolProvider {
 
         // Optimization & Enhancement
         Tool("Compress PDF", Icons.Default.Compress, "compress_pdf_v3", "Optimization & Enhancement", Color(0xFFF44336)),
-        Tool("Add Watermark", Icons.Default.BrandingWatermark, "add_watermark_v3", "Optimization & Enhancement", Color(0xFFF44336)),
+        Tool("Add Watermark", Icons.AutoMirrored.Filled.BrandingWatermark, "add_watermark_v3", "Optimization & Enhancement", Color(0xFFF44336)),
         Tool("Add Text", Icons.Default.TextFields, "add_text_v3", "Optimization & Enhancement", Color(0xFFF44336)),
         Tool("Add Images", Icons.Default.AddPhotoAlternate, "add_images_v3", "Optimization & Enhancement", Color(0xFFF44336)),
         Tool("Grayscale", Icons.Default.ColorLens, "grayscale_v3", "Optimization & Enhancement", Color(0xFFF44336)),
@@ -489,47 +455,16 @@ object ToolProvider {
         Tool("Convert Format", Icons.Default.Transform, "convert_format_v3", "Specialized & View Tools", Color(0xFFF44336)),
 
         // 2. Image Tools
-        Tool("JPG → PNG", Icons.Default.Transform, "img_jpg_png", "Image Tools", Color(0xFF4CAF50)),
-        Tool("PNG → JPG", Icons.Default.Transform, "img_png_jpg", "Image Tools", Color(0xFF4CAF50)),
-        Tool("WEBP Converter", Icons.Default.Transform, "img_webp_conv", "Image Tools", Color(0xFF4CAF50)),
-        Tool("GIF Converter", Icons.Default.Transform, "img_gif_conv", "Image Tools", Color(0xFF4CAF50)),
-        Tool("HEIC Converter", Icons.Default.Transform, "img_heic_conv", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Resize Image", Icons.Default.PhotoSizeSelectLarge, "img_resize_v2", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Compress Image", Icons.Default.Compress, "img_compress_v2", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Rotate & Flip", Icons.Default.Flip, "img_rotate_flip", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Crop Image", Icons.Default.Crop, "img_crop_v3", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Collage Maker", Icons.Default.AutoAwesomeMosaic, "img_collage_v2", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Image → PDF", Icons.Default.PictureAsPdf, "img_to_pdf_v2", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Metadata Viewer", Icons.Default.Info, "img_meta_v2", "Image Tools", Color(0xFF4CAF50)),
-        Tool("Painter", Icons.Default.Brush, "img_painter", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
 
         // 3. Video Tools
         Tool("Video Frame Annotator", Icons.Default.Edit, "vid_annotator", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Trim/Split Video", Icons.Default.ContentCut, "vid_trim_v2", "Video Tools", Color(0xFF2196F3)),
         Tool("Merge Videos", Icons.Default.Merge, "vid_merge", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Convert to MP4", Icons.Default.Transform, "vid_to_mp4", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("Delete Segment", Icons.Default.Delete, "video_delete", "Video Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Loop Video", Icons.Default.Loop, "video_loop", "Video Tools", Color(0xFFFF5722), BadgeType.NONE),
-        Tool("Merge Videos", Icons.Default.Merge, "vid_merge", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("Mix Video Audio", Icons.Default.Tune, "mix_video_audio", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
         Tool("Mute/Extract Audio", Icons.AutoMirrored.Filled.VolumeOff, "vid_mute_extract", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Reverse Video", Icons.Default.History, "video_reverse", "Video Tools", Color(0xFF795548), BadgeType.NONE),
         Tool("Rotate/Crop Video", Icons.Default.Crop, "vid_rotate_crop", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("Silence Video", Icons.AutoMirrored.Filled.VolumeOff, "video_silence", "Video Tools", Color(0xFF9E9E9E), BadgeType.NONE),
         Tool("Thumbnail Extractor", Icons.Default.Image, "vid_thumb", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("Trim/Split Video", Icons.Default.ContentCut, "vid_trim_v2", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Video Compressor", Icons.Default.Compress, "video_compress", "Video Tools", Color(0xFF673AB7), BadgeType.NONE),
-        Tool("Video Editor", Icons.Default.Edit, "video_trim", "Video Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Video Flip", Icons.Default.Flip, "video_flip", "Video Tools", Color(0xFF607D8B), BadgeType.NEW),
-        Tool("Video Frame Annotator", Icons.Default.Edit, "vid_annotator", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Video Info", Icons.Default.Info, "vid_info_v2", "Video Tools", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Video SFX", Icons.Default.AutoAwesome, "video_sfx", "Video Tools", Color(0xFF3F51B5), BadgeType.NONE),
-        Tool("Video Speed", Icons.Default.FastForward, "video_speed_changer", "Video Tools", Color(0xFF607D8B), BadgeType.NONE),
-        Tool("Video Splitter", Icons.AutoMirrored.Filled.AltRoute, "video_splitter", "Video Tools", Color(0xFF00BCD4), BadgeType.NONE),
-        Tool("Video Stabilizer", Icons.Default.Camera, "video_stabilizer", "Video Tools", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Video Tools", Color(0xFFE91E63), BadgeType.NONE),
-        Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Video Tools", Color(0xFFFFC107), BadgeType.NONE),
-        Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Video Tools", Color(0xFFFFC107), BadgeType.NONE),
         Tool("Video to Images", Icons.Default.Collections, "vid_to_img", "Video Tools", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Video to PDF", Icons.Default.PictureAsPdf, "vid_to_pdf", "Video Tools", Color(0xFF2196F3), BadgeType.NEW)
     )

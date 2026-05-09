@@ -64,7 +64,7 @@ fun InfoSection(title: String, info: Map<String, String>) {
                     Text(key, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
                     Text(value, style = MaterialTheme.typography.bodyMedium)
                 }
-                Divider(modifier = Modifier.alpha(0.5f))
+                HorizontalDivider(modifier = Modifier.alpha(0.5f))
             }
         }
     }

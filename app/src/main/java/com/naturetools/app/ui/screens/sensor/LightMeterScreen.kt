@@ -60,7 +60,7 @@ fun LightMeterScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(32.dp))
             LinearProgressIndicator(
-                progress = (lux / 1000f).coerceIn(0f, 1f),
+                progress = { (lux / 1000f).coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth(0.8f).height(12.dp)
             )
         }

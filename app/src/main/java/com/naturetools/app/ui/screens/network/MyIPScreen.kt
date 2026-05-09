@@ -46,7 +46,7 @@ fun MyIPScreen(navController: NavHostController) {
                     val addrs = Collections.list(intf.inetAddresses)
                     for (addr in addrs) {
                         if (!addr.isLoopbackAddress) {
-                            val sAddr = addr.hostAddress
+                            val sAddr = addr.hostAddress ?: ""
                             val isIPv4 = sAddr.indexOf(':') < 0
                             if (isIPv4) {
                                 foundLocalIp = sAddr

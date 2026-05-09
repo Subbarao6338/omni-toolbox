@@ -69,7 +69,7 @@ fun MetalDetectorScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(48.dp))
 
             LinearProgressIndicator(
-                progress = (animatedStrength / 200f).coerceIn(0f, 1f),
+                progress = { (animatedStrength / 200f).coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth(0.8f).height(16.dp),
                 color = if (magneticFieldStrength > 100) Color.Red else MaterialTheme.colorScheme.primary
             )
