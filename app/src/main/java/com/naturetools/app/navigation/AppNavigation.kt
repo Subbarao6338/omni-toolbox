@@ -601,25 +601,61 @@ fun NatureToolsApp(
         composable("egg_timer") { StopwatchScreen(navController) }
         composable("recipe_scaler") { UnitPriceCalculatorScreen(navController) }
 
-        // 1. PDF & Document Tools
-        composable("pdf_create_studio") { ImageToolScreen(navController, "PDF Creation Studio") }
-        composable("pdf_compress_v2") { ImageToolScreen(navController, "Compress PDFs/Document") }
-        composable("pdf_merge_v2") { ImageToolScreen(navController, "Merge PDFs/Document") }
-        composable("pdf_split_v2") { ImageToolScreen(navController, "Split PDFs/Document") }
-        composable("pdf_remove_v2") { ImageToolScreen(navController, "Remove/Delete Pages") }
-        composable("pdf_rotate_v2") { ImageToolScreen(navController, "Rotate Pages/PDF") }
-        composable("pdf_crop_v2") { ImageToolScreen(navController, "Crop Pages") }
-        composable("pdf_resize") { ImageToolScreen(navController, "PDF/Document Resizer") }
-        composable("pdf_extract_v2") { ImageToolScreen(navController, "Extract Images") }
-        composable("pdf_security") { ImageToolScreen(navController, "Lock/Unlock PDF") }
-        composable("pdf_modifier") { ImageToolScreen(navController, "PDF Modifier") }
-        composable("doc_info") { ImageToolScreen(navController, "Document Info") }
-        composable("doc_sort") { FileToolScreen(navController, "Document Sorter") }
-        composable("pdf_view_v2") { ImageToolScreen(navController, "Document Viewer") }
-        composable("pdf_reorder_v2") { ImageToolScreen(navController, "Reorder PDF Pages") }
-        composable("conv_ico") { ImageToolScreen(navController, "ICO Converter") }
-        composable("conv_svg") { ImageToolScreen(navController, "SVG Converter") }
-        composable("conv_avif") { ImageToolScreen(navController, "AVIF Converter") }
+        // Document Creation & Conversion
+        composable("img_to_pdf_v3") { ImageToolScreen(navController, "Images to PDF") }
+        composable("text_to_pdf_v3") { ImageToolScreen(navController, "Text to PDF") }
+        composable("html_to_pdf_v3") { ImageToolScreen(navController, "HTML → PDF") }
+        composable("excel_to_pdf_v3") { ImageToolScreen(navController, "Excel to PDF") }
+        composable("scan_to_pdf_v3") { ImageToolScreen(navController, "Scan to PDF") }
+        composable("qr_barcode_to_pdf_v3") { ImageToolScreen(navController, "QR & Barcodes") }
+        composable("zip_to_pdf_v3") { ImageToolScreen(navController, "ZIP to PDF") }
+        composable("pdf_to_img_v3") { ImageToolScreen(navController, "PDF to Image") }
+        composable("pdf_to_zip_v3") { ImageToolScreen(navController, "PDF to ZIP") }
+        composable("ocr_v3") { WordCounterScreen(navController, title = "OCR") }
+        composable("extract_text_v3") { WordCounterScreen(navController, title = "Extract Text") }
+        composable("pdf_to_txt_v3") { WordCounterScreen(navController, title = "PDF to Text") }
+
+        // Document Organization & Editing
+        composable("merge_pdf_v3") { ImageToolScreen(navController, "Merge PDF") }
+        composable("split_pdf_v3") { ImageToolScreen(navController, "Split PDF") }
+        composable("reorder_pages_v3") { ImageToolScreen(navController, "Reorder Pages") }
+        composable("rotate_pages_v3") { ImageToolScreen(navController, "Rotate Pages") }
+        composable("delete_pages_v3") { ImageToolScreen(navController, "Delete Pages") }
+        composable("extract_pages_v3") { ImageToolScreen(navController, "Extract Pages") }
+        composable("add_page_gallery_v3") { ImageToolScreen(navController, "Add Page from Gallery") }
+        composable("page_size_v3") { ImageToolScreen(navController, "Page Size") }
+        composable("page_adjust_v3") { ImageToolScreen(navController, "Page Adjust/Rotate/Delete") }
+        composable("remove_duplicate_pages_v3") { ImageToolScreen(navController, "Remove Duplicate Pages") }
+        composable("bookmarks_v3") { ImageToolScreen(navController, "Bookmarks") }
+
+        // Optimization & Enhancement
+        composable("compress_pdf_v3") { ImageToolScreen(navController, "Compress PDF") }
+        composable("add_watermark_v3") { ImageToolScreen(navController, "Add Watermark") }
+        composable("add_text_v3") { ImageToolScreen(navController, "Add Text") }
+        composable("add_images_v3") { ImageToolScreen(navController, "Add Images") }
+        composable("grayscale_v3") { ImageToolScreen(navController, "Grayscale") }
+        composable("repair_v3") { ImageToolScreen(navController, "Repair") }
+        composable("invert_pdf_v3") { ImageToolScreen(navController, "Invert PDF") }
+        composable("flatten_pdf_v3") { ImageToolScreen(navController, "Flatten PDF") }
+        composable("page_numbers_v3") { ImageToolScreen(navController, "Page Numbers") }
+
+        // Security & Metadata
+        composable("lock_pdf_v3") { ImageToolScreen(navController, "Lock PDF") }
+        composable("unlock_pdf_v3") { ImageToolScreen(navController, "Unlock PDF") }
+        composable("sign_pdf_v3") { ImageToolScreen(navController, "Sign PDF") }
+        composable("view_metadata_v3") { ImageToolScreen(navController, "View Metadata") }
+        composable("edit_metadata_v3") { ImageToolScreen(navController, "Metadata / Edit Props") }
+        composable("strip_metadata_v3") { ImageToolScreen(navController, "Strip Metadata") }
+
+        // Specialized & View Tools
+        composable("compare_pdf_v3") { ImageToolScreen(navController, "Compare") }
+        composable("view_pdf_v3") { ImageToolScreen(navController, "View PDF") }
+        composable("pdf_history_v3") { FileToolScreen(navController, "History") }
+        composable("long_image_v3") { ImageToolScreen(navController, "Share as Long Image") }
+        composable("pdf_link_v3") { ImageToolScreen(navController, "Link") }
+        composable("extract_images_v3") { ImageToolScreen(navController, "Extract Images") }
+        composable("resize_image_v3") { ImageToolScreen(navController, "Resize Image") }
+        composable("convert_format_v3") { ImageToolScreen(navController, "Convert Format") }
 
         // 2. Image Tools
         composable("img_jpg_png") { ImageToolScreen(navController, "JPG → PNG") }

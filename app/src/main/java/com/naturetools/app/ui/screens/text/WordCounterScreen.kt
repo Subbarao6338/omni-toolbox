@@ -10,8 +10,8 @@ import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 
 @Composable
-fun WordCounterScreen(navController: NavHostController) {
-    var text by remember { mutableStateOf("") }
+fun WordCounterScreen(navController: NavHostController, title: String = "Word Counter", initialText: String = "") {
+    var text by remember { mutableStateOf(initialText) }
 
     val wordCount = remember(text) {
         if (text.isBlank()) 0 else text.trim().split("\\s+".toRegex()).size
@@ -25,7 +25,7 @@ fun WordCounterScreen(navController: NavHostController) {
         if (text.isBlank()) 0 else text.split("\n+".toRegex()).filter { it.isNotBlank() }.size
     }
 
-    ToolScreen(title = "Word Counter", onBack = { navController.popBackStack() }) { padding ->
+    ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
