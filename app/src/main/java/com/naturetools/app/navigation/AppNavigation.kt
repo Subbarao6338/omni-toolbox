@@ -209,7 +209,7 @@ fun NatureToolsApp(
         composable("meditation") { MeditationTimerScreen(navController) }
         composable("spl_meter") { SplMeterScreen(navController) }
         composable("data_viz") { EngineeringToolScreen(navController, "Data Visualizer") }
-        composable("ai_image") { EngineeringToolScreen(navController, "AI Image Gen") }
+        composable("ai_image") { EngineeringToolScreen(navController, "Image Generator") }
         composable("base_conv") { BaseConverterScreen(navController) }
         composable("constants") { ConstantsTableScreen(navController) }
         composable("light_pollution") { EnvironmentToolScreen(navController, "Light Pollution") }
@@ -231,8 +231,8 @@ fun NatureToolsApp(
         ) { EmergencySOSScreen(navController) }
         composable("signal_mirror") { SignalMirrorScreen(navController) }
         composable("physics_formulas") { PhysicsFormulasScreen(navController) }
-        composable("ai_chat") { AIToolScreen(navController, "AI Chat") }
-        composable("ai_summarizer") { AIToolScreen(navController, "AI Summarizer") }
+        composable("ai_chat") { ChatToolScreen(navController, "Smart Chat") }
+        composable("ai_summarizer") { ChatToolScreen(navController, "Text Summarizer") }
         composable("mortgage_calc") { MortgageCalculatorScreen(navController) }
         composable("jwt_tool") { JwtToolScreen(navController) }
         composable("world_map") { WorldMapScreen(navController) }
@@ -313,9 +313,9 @@ fun NatureToolsApp(
         composable("video_loop") { AudioToolScreen(navController, "Loop Video", "video/*") }
 
         composable("vocal_remover") { AudioToolScreen(navController, "Vocal Remover") }
-        composable("ai_stems_splitter") { AudioToolScreen(navController, "AI Stems Splitter") }
+        composable("ai_stems_splitter") { AudioToolScreen(navController, "Stems Splitter") }
         composable("vocal_autotuner") { AudioToolScreen(navController, "Vocal AutoTuner") }
-        composable("ai_noise_remover") { AudioToolScreen(navController, "AI Noise Remover") }
+        composable("ai_noise_remover") { AudioToolScreen(navController, "Noise Remover") }
         composable("echo_remover") { AudioToolScreen(navController, "Echo Remover") }
         composable("reverb_remover") { AudioToolScreen(navController, "Reverb Remover") }
         composable("key_bpm_finder") { AudioToolScreen(navController, "Key BPM Finder") }
@@ -343,7 +343,7 @@ fun NatureToolsApp(
         composable("image_resize_limits") { ImageToolScreen(navController, "Resize by Limits") }
         composable("image_edit_exif") { ImageToolScreen(navController, "Edit EXIF") }
         composable("image_delete_exif") { ImageToolScreen(navController, "Delete EXIF") }
-        composable("image_ai_tools") { ImageToolScreen(navController, "AI Tools") }
+        composable("image_ai_tools") { ImageToolScreen(navController, "Smart Tools") }
         composable("image_bg_remover") { ImageToolScreen(navController, "Background Remover") }
         composable("image_collage") { ImageToolScreen(navController, "Collage Maker") }
         composable("image_draw") { ImageToolScreen(navController, "Draw") }
@@ -480,9 +480,9 @@ fun NatureToolsApp(
 
 
         // New tools from ToolProvider
-        composable("ai_code") { AIToolScreen(navController, "AI Code Assistant") }
-        composable("csv_to_json") { AIToolScreen(navController, "CSV to JSON") }
-        composable("ai_voice_mimic") { AudioToolScreen(navController, "AI Voice Mimic") }
+        composable("ai_code") { ChatToolScreen(navController, "Code Helper") }
+        composable("csv_to_json") { ChatToolScreen(navController, "CSV to JSON") }
+        composable("ai_voice_mimic") { AudioToolScreen(navController, "Voice Mimic") }
         composable("audio_reverb") { AudioToolScreen(navController, "Audio Reverb") }
         composable("multi_crop") { ImageToolScreen(navController, "Multi Crop") }
         composable("binary_calc") { ScientificCalculatorScreen(navController) }
@@ -523,6 +523,23 @@ fun NatureToolsApp(
         composable("media_grab_pro") { MediaGrabberScreen(navController) }
         composable("vid_edit_pro") { AudioToolScreen(navController, "Video Editor Pro", "video/*") }
         composable("aud_master_pro") { AudioToolScreen(navController, "Audio Mastering Pro") }
+
+        composable("perchance_tools") {
+            AnimatedImageToolGroupScreen(
+                navController = navController,
+                title = "Perchance Tools",
+                subTools = listOf(
+                    SubTool("Perchance Hub", "Explore the Perchance platform", Icons.Default.Hub, "per_hub"),
+                    SubTool("Image Generator", "Generate images via Perchance", Icons.Default.Image, "per_image"),
+                    SubTool("Story Generator", "Write stories using Perchance", Icons.Default.AutoAwesome, "per_story"),
+                    SubTool("Character Generator", "Create characters with Perchance", Icons.Default.Person, "per_character")
+                )
+            )
+        }
+        composable("per_hub") { WebToolScreen(navController, "https://perchance.org/welcome", false, "Perchance Hub") }
+        composable("per_image") { WebToolScreen(navController, "https://perchance.org/ai-image-generator", false, "Image Generator") }
+        composable("per_story") { WebToolScreen(navController, "https://perchance.org/ai-story-generator", false, "Story Generator") }
+        composable("per_character") { WebToolScreen(navController, "https://perchance.org/ai-character-generator", false, "Character Generator") }
 
         // Automotive
         composable("speedometer") { AutomotiveToolScreen(navController, "Speedometer") }
@@ -568,11 +585,11 @@ fun NatureToolsApp(
         composable("aud_to_vid") { AudioToolScreen(navController, "Add Audio to Video") }
 
         // 5. Text Tools
-            composable("ai_grammar") { AIToolScreen(navController, "AI Grammar") }
-        composable("ai_obj_detect") { AIToolScreen(navController, "AI Object Detect") }
-        composable("ai_sentiment") { AIToolScreen(navController, "AI Sentiment") }
-        composable("ai_text_ext") { AIToolScreen(navController, "AI Text Extractor") }
-        composable("ai_translate") { AIToolScreen(navController, "AI Translation") }
+        composable("ai_grammar") { ChatToolScreen(navController, "Grammar Checker") }
+        composable("ai_obj_detect") { ChatToolScreen(navController, "Object Detector") }
+        composable("ai_sentiment") { ChatToolScreen(navController, "Sentiment Analysis") }
+        composable("ai_text_ext") { ChatToolScreen(navController, "Text Extractor") }
+        composable("ai_translate") { ChatToolScreen(navController, "Translator") }
         composable("color_conv_pro") { FileToolScreen(navController, "Color Converter Pro") }
         composable("crontab_gen") { FileToolScreen(navController, "Crontab Gen") }
         composable("port_checker") { FileToolScreen(navController, "Port Checker") }

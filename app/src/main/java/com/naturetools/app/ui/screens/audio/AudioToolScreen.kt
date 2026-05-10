@@ -156,7 +156,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                         "Audio Pan" -> {
                             AdjustmentSlider("Left/Right Balance", valueRange = -1f..1f, initialValue = 0f)
                         }
-                        "Audio Noise Remover", "Video Noise Remover", "AI Noise Remover", "Noise Remover" -> {
+                        "Audio Noise Remover", "Video Noise Remover", "Noise Remover" -> {
                             AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
                             AdjustmentSlider("Sensitivity")
                         }
@@ -209,7 +209,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Room Size Reduction")
                             AdjustmentSlider("Damping")
                         }
-                        "Vocal AutoTuner" -> {
+                        "Vocal AutoTuner", "Voice Mimic" -> {
                             AdjustmentSlider("Correction Amount")
                             AdjustmentSlider("Retune Speed")
                         }
@@ -299,7 +299,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             Text("Import CSV or JSON to visualize")
                             AdjustmentSlider("Graph Type (0: Bar, 1: Line)", valueRange = 0f..1f, initialValue = 0f)
                         }
-                        "AI Image Gen" -> {
+                        "Image Generator" -> {
                             Text("Enter prompt for image generation")
                             AdjustmentSlider("Steps", valueRange = 10f..50f, initialValue = 20f)
                         }
@@ -401,7 +401,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Margin", initialValue = 8f, valueRange = 0f..50f)
                             AdjustmentSlider("Corner Radius", initialValue = 8f, valueRange = 0f..100f)
                         }
-                        "AI Tools" -> {
+                        "Smart Tools" -> {
                             AdjustmentSlider("Model Version", initialValue = 1f, valueRange = 1f..3f)
                             AdjustmentSlider("Denoise Strength")
                         }
