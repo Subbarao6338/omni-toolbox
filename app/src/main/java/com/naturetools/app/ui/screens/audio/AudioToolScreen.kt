@@ -111,7 +111,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Adjustments",
+                        text = "Adjustments & Filters",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -120,367 +120,88 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                     val isVideo = mimeType.startsWith("video")
                     when (title) {
                         "Equalizer", "Audio Equalizer" -> {
-                            AdjustmentSlider("Bass")
-                            AdjustmentSlider("Mid")
-                            AdjustmentSlider("Treble")
+                            AdjustmentSlider("Low Bass (32Hz)", initialValue = 0.5f)
+                            AdjustmentSlider("Bass (125Hz)", initialValue = 0.5f)
+                            AdjustmentSlider("Mid (500Hz)", initialValue = 0.5f)
+                            AdjustmentSlider("High Mid (2kHz)", initialValue = 0.5f)
+                            AdjustmentSlider("Treble (8kHz)", initialValue = 0.5f)
                         }
                         "Speed Changer", "Video Speed", "Change Speed", "Change Video Speed" -> {
-                            if (isVideo) {
-                                AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                                AdjustmentSlider("Maintain Pitch (0/1)", valueRange = 0f..1f, initialValue = 1f)
-                            } else {
-                                AdjustmentSlider("Playback Speed", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                                AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                            }
+                            AdjustmentSlider("Playback Speed", valueRange = 0.25f..4.0f, initialValue = 1.0f)
+                            if (!isVideo) AdjustmentSlider("Maintain Pitch", valueRange = 0f..1f, initialValue = 1f)
                         }
                         "Normalize", "Audio Normalizer", "Volume Booster", "Video Volume", "Multi Volume Booster" -> {
-                            AdjustmentSlider("Target Volume")
+                            AdjustmentSlider("Gain (dB)", valueRange = -20f..20f, initialValue = 0f)
+                            AdjustmentSlider("Peak Normalization", initialValue = 0.95f)
                         }
                         "Compress", "Audio Compressor", "Video Compressor", "Compress Video" -> {
                             if (isVideo) {
-                                AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 80f)
-                                AdjustmentSlider("Target Resolution (p)", valueRange = 144f..1080f, initialValue = 720f)
+                                AdjustmentSlider("Target Bitrate (kbps)", valueRange = 500f..10000f, initialValue = 2500f)
+                                AdjustmentSlider("Video Quality (CRF)", valueRange = 0f..51f, initialValue = 23f)
                             } else {
-                                AdjustmentSlider("Compression Ratio", valueRange = 1f..20f, initialValue = 4f)
                                 AdjustmentSlider("Threshold (dB)", valueRange = -60f..0f, initialValue = -20f)
+                                AdjustmentSlider("Ratio", valueRange = 1f..20f, initialValue = 4f)
+                                AdjustmentSlider("Attack (ms)", valueRange = 1f..100f, initialValue = 10f)
                             }
                         }
                         "Silence Remover" -> {
-                            AdjustmentSlider("Silence Threshold", valueRange = -100f..0f, initialValue = -50f)
+                            AdjustmentSlider("Silence Threshold (dB)", valueRange = -100f..0f, initialValue = -50f)
                             AdjustmentSlider("Min Silence Duration (ms)", valueRange = 100f..5000f, initialValue = 500f)
-                        }
-                        "MIX", "Audio Mixer", "Multi Mix Audio" -> {
-                            AdjustmentSlider("Track 1 Volume")
-                            AdjustmentSlider("Track 2 Volume")
-                        }
-                        "Audio Pan" -> {
-                            AdjustmentSlider("Left/Right Balance", valueRange = -1f..1f, initialValue = 0f)
+                            AdjustmentSlider("Padding (ms)", valueRange = 0f..500f, initialValue = 100f)
                         }
                         "Audio Noise Remover", "Video Noise Remover", "Noise Remover" -> {
-                            AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..30f, initialValue = 12f)
-                            AdjustmentSlider("Sensitivity")
-                        }
-                        "Video Frame Annotator" -> {
-                            AdjustmentSlider("Frame Number", valueRange = 0f..1000f, initialValue = 0f)
-                            AdjustmentSlider("Pen Size", valueRange = 1f..20f, initialValue = 5f)
-                            Text("Draw on the video frame selected.")
-                        }
-                        "Merge Videos" -> {
-                            Text("Select multiple files to merge.")
-                            AdjustmentSlider("Overlap Duration (s)", valueRange = 0f..5f, initialValue = 0f)
-                        }
-                        "Convert to MP4", "Audio Converter" -> {
-                            Text("Select target format and quality.")
-                            AdjustmentSlider("Quality (0-100)", valueRange = 0f..100f, initialValue = 85f)
-                        }
-                        "Video to PDF" -> {
-                            Text("Converting to PDF format.")
-                            AdjustmentSlider("Page Margin", valueRange = 0f..50f, initialValue = 20f)
-                        }
-                        "Video to Images" -> {
-                            Text("Extracting frames.")
-                            AdjustmentSlider("Interval/Frequency")
-                        }
-                        "Rotate/Crop Video" -> {
-                            AdjustmentSlider("Rotation Angle", valueRange = 0f..360f, initialValue = 0f)
-                            AdjustmentSlider("Crop Scale", valueRange = 0.1f..1.0f, initialValue = 1.0f)
-                        }
-                        "Mute/Extract Audio" -> {
-                            AdjustmentSlider("Extract Track Index", valueRange = 0f..5f, initialValue = 0f)
-                            Text("Enable 'Mute' to remove audio.")
-                        }
-                        "Thumbnail Extractor" -> {
-                            AdjustmentSlider("Timestamp (s)", valueRange = 0f..300f, initialValue = 10f)
-                            Text("Capture moment as thumbnail.")
-                        }
-                        "Add Audio to Video" -> {
-                            Text("Layer audio over video.")
-                            AdjustmentSlider("Audio Volume Balance", valueRange = 0f..1f, initialValue = 0.5f)
+                            AdjustmentSlider("Noise Floor (dB)", valueRange = -100f..0f, initialValue = -60f)
+                            AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..40f, initialValue = 12f)
+                            AdjustmentSlider("Smoothing", initialValue = 0.5f)
                         }
                         "Vocal Remover" -> {
-                            AdjustmentSlider("Vocal Suppression")
-                            AdjustmentSlider("Center Pan Width")
+                            AdjustmentSlider("Vocal Reduction", initialValue = 0.8f)
+                            AdjustmentSlider("Instrumental Boost", initialValue = 0.2f)
+                            AdjustmentSlider("Frequency Cutoff", valueRange = 100f..10000f, initialValue = 5000f)
                         }
-                        "Echo Remover" -> {
-                            AdjustmentSlider("Echo Intensity")
-                            AdjustmentSlider("Delay Feedback")
-                        }
-                        "Reverb Remover" -> {
-                            AdjustmentSlider("Room Size Reduction")
-                            AdjustmentSlider("Damping")
+                        "Reverb Remover", "Echo Remover" -> {
+                            AdjustmentSlider("De-reverb Intensity", initialValue = 0.6f)
+                            AdjustmentSlider("Damping", initialValue = 0.4f)
+                            AdjustmentSlider("Dry/Wet Mix", initialValue = 0.5f)
                         }
                         "Vocal AutoTuner", "Voice Mimic" -> {
-                            AdjustmentSlider("Correction Amount")
-                            AdjustmentSlider("Retune Speed")
+                            AdjustmentSlider("Correction Speed", initialValue = 0.7f)
+                            AdjustmentSlider("Humanize", initialValue = 0.3f)
+                            AdjustmentSlider("Scale Sensitivity", initialValue = 0.5f)
                         }
-                        "Text to Speech", "Text To Speech" -> {
-                            AdjustmentSlider("Pitch", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                            AdjustmentSlider("Speech Rate", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                        "3D Audio", "8d Audio" -> {
+                            AdjustmentSlider("Rotation Speed (Hz)", valueRange = 0.1f..5f, initialValue = 0.5f)
+                            AdjustmentSlider("Orbit Radius", initialValue = 0.8f)
+                            AdjustmentSlider("Doppler Effect", initialValue = 0.2f)
                         }
-                        "8d Audio", "3D Audio" -> {
-                            AdjustmentSlider("Rotation Speed", valueRange = 0.1f..2.0f, initialValue = 0.5f)
-                            AdjustmentSlider("Orbit Radius")
-                        }
-                        "Noise Generator" -> {
-                            AdjustmentSlider("Noise Level")
-                            AdjustmentSlider("White/Pink/Brown (0-1)", valueRange = 0f..1f, initialValue = 0f)
-                        }
-                        "Wave Generator" -> {
-                            AdjustmentSlider("Frequency (Hz)", valueRange = 20f..20000f, initialValue = 440f)
-                            AdjustmentSlider("Amplitude")
-                        }
-                        "Key BPM Finder", "Key BPM finder" -> {
-                            AdjustmentSlider("Detection Sensitivity")
-                        }
-                        "Trim", "Splitter", "Delete", "Silence", "Audio Cutter", "Audio Splitter", "Video Editor", "Video Splitter", "Delete Segment", "Silence Video" -> {
-                            AdjustmentSlider("Start Position (s)", valueRange = 0f..300f, initialValue = 0f)
-                            AdjustmentSlider("End Position (s)", valueRange = 0f..300f, initialValue = 30f)
-                        }
-                        "Mix Video Audio" -> {
-                            AdjustmentSlider("Video Volume")
-                            AdjustmentSlider("Audio Overlay Volume")
-                        }
-                        "Video SFX" -> {
-                            AdjustmentSlider("Effect Intensity")
-                            AdjustmentSlider("Color Saturation")
+                        "Video Flip", "Rotate/Crop Video" -> {
+                            AdjustmentSlider("Rotation (°)", valueRange = 0f..360f, initialValue = 0f)
+                            AdjustmentSlider("Horizontal Flip", valueRange = 0f..1f, initialValue = 0f)
+                            AdjustmentSlider("Vertical Flip", valueRange = 0f..1f, initialValue = 0f)
                         }
                         "Video To GIF" -> {
-                            AdjustmentSlider("FPS", valueRange = 1f..60f, initialValue = 15f)
-                            AdjustmentSlider("Loop Count", valueRange = 0f..10f, initialValue = 0f)
+                            AdjustmentSlider("Frames Per Second", valueRange = 1f..30f, initialValue = 15f)
+                            AdjustmentSlider("Scale (Width)", valueRange = 100f..1080f, initialValue = 480f)
+                            AdjustmentSlider("Dithering Intensity", initialValue = 0.5f)
                         }
-                        "Loop", "Audio Loop", "Loop Video" -> {
-                            AdjustmentSlider("Repeat Count", valueRange = 1f..100f, initialValue = 1f)
+                        "Thumbnail Extractor" -> {
+                            AdjustmentSlider("Seek Position (s)", valueRange = 0f..600f, initialValue = 10f)
+                            AdjustmentSlider("Quality (JPEG)", initialValue = 0.9f)
                         }
-                        "Record", "Fun Recording", "Karaoke", "Karaoke Maker", "Record Audio", "Karaoke Effect" -> {
-                            AdjustmentSlider("Microphone Gain")
-                            AdjustmentSlider("Monitor Volume")
+                        "Audio Converter", "Convert to MP4", "Multi Convert" -> {
+                            AdjustmentSlider("Sample Rate (kHz)", valueRange = 8f..192f, initialValue = 44.1f)
+                            AdjustmentSlider("Channels (1:Mono, 2:Stereo)", valueRange = 1f..2f, initialValue = 2f)
+                            AdjustmentSlider("Bitrate (kbps)", valueRange = 32f..320f, initialValue = 192f)
                         }
-                        "Pitch Changer", "Audio Pitch" -> {
-                            AdjustmentSlider("Pitch Octave", valueRange = -2f..2f, initialValue = 0f)
-                        }
-                        "Bass Booster" -> {
-                            AdjustmentSlider("Bass Gain (dB)", valueRange = 0f..15f, initialValue = 6f)
-                        }
-                        "Echo Effect", "Audio Echo" -> {
-                            AdjustmentSlider("Echo Delay", valueRange = 0f..2f, initialValue = 0.5f)
-                            AdjustmentSlider("Echo Decay", valueRange = 0f..1f, initialValue = 0.5f)
-                        }
-                        "Scientific Calc" -> {
-                            Text("Scientific mode active. Advanced functions: sin, cos, tan, log, ln, sqrt.")
-                            AdjustmentSlider("Precision (dec)", valueRange = 0f..10f, initialValue = 2f)
-                        }
-                        "Device ID" -> {
-                            val deviceId = remember { java.util.UUID.randomUUID().toString().take(16) }
-                            Text("Hardware ID: $deviceId")
-                            Text("Model: ${android.os.Build.MODEL}")
-                            Text("OS Version: ${android.os.Build.VERSION.RELEASE}")
-                        }
-                        "Air Quality" -> {
-                            Text("Location-based Air Quality Index (AQI)")
-                            AdjustmentSlider("Refresh Rate (min)", valueRange = 1f..60f, initialValue = 15f)
-                        }
-                        "UV Index" -> {
-                            Text("Current UV Intensity")
-                            AdjustmentSlider("Sensitivity")
-                        }
-                        "Habit Tracker" -> {
-                            Text("Daily Progress")
-                            AdjustmentSlider("Target Goal", valueRange = 1f..10f, initialValue = 5f)
-                        }
-                        "Meditation Timer" -> {
-                            AdjustmentSlider("Duration (min)", valueRange = 1f..60f, initialValue = 10f)
-                            AdjustmentSlider("Interval Bell (min)", valueRange = 0f..30f, initialValue = 0f)
-                        }
-                        "SPL Meter" -> {
-                            Text("Sound Pressure Level (dB)")
-                            AdjustmentSlider("Calibration (dB)", valueRange = -10f..10f, initialValue = 0f)
-                        }
-                        "Data Visualizer" -> {
-                            Text("Import CSV or JSON to visualize")
-                            AdjustmentSlider("Graph Type (0: Bar, 1: Line)", valueRange = 0f..1f, initialValue = 0f)
-                        }
-                        "Image Generator" -> {
-                            Text("Enter prompt for image generation")
-                            AdjustmentSlider("Steps", valueRange = 10f..50f, initialValue = 20f)
-                        }
-                        "Base Converter" -> {
-                            Text("Convert between Binary, Octal, Hex, Decimal")
-                            AdjustmentSlider("Target Base", valueRange = 2f..36f, initialValue = 16f)
-                        }
-                        "Constants Table" -> {
-                            Text("Scientific and Physical Constants (Pi, e, G, c, etc.)")
-                        }
-                        "Light Pollution" -> {
-                            Text("Bortle Scale and Sky Brightness")
-                            AdjustmentSlider("Latitude")
-                            AdjustmentSlider("Longitude")
-                        }
-                        "Tax Calculator" -> {
-                            AdjustmentSlider("Income Amount")
-                            AdjustmentSlider("Tax Rate (%)", valueRange = 0f..50f, initialValue = 15f)
-                        }
-                        "Calorie Calc" -> {
-                            AdjustmentSlider("Weight (kg)", valueRange = 30f..200f, initialValue = 70f)
-                            AdjustmentSlider("Activity Level", valueRange = 1f..2f, initialValue = 1.2f)
-                        }
-                        "Exif Viewer" -> {
-                            Text("Select an image to view EXIF metadata")
-                        }
-                        "Port Scanner" -> {
-                            Text("Scan for open ports on an IP")
-                            AdjustmentSlider("Start Port", valueRange = 1f..65535f, initialValue = 80f)
-                        }
-                        "Pomodoro" -> {
-                            AdjustmentSlider("Work Duration (min)", valueRange = 1f..60f, initialValue = 25f)
-                            AdjustmentSlider("Break Duration (min)", valueRange = 1f..30f, initialValue = 5f)
-                        }
-                        "Hash Generator" -> {
-                            Text("MD5, SHA-1, SHA-256 generation")
-                            AdjustmentSlider("Salt Length", valueRange = 0f..32f, initialValue = 0f)
-                        }
-                        "Sensors List" -> {
-                            Text("Available hardware sensors on this device")
-                        }
-                        "Lorem Ipsum" -> {
-                            AdjustmentSlider("Paragraph Count", valueRange = 1f..10f, initialValue = 3f)
-                        }
-                        "Vibration Test" -> {
-                            Text("Test haptic feedback motors")
-                            AdjustmentSlider("Intensity")
-                        }
-                        "Single Edit" -> {
-                            AdjustmentSlider("Brightness")
-                            AdjustmentSlider("Contrast")
-                            AdjustmentSlider("Saturation")
-                        }
-                        "Resize and Convert" -> {
-                            AdjustmentSlider("Quality", initialValue = 0.8f)
-                            AdjustmentSlider("Scale", initialValue = 1.0f, valueRange = 0.1f..2.0f)
-                        }
-                        "Format Conversion" -> {
-                            AdjustmentSlider("Quality", initialValue = 0.9f)
-                        }
-                        "Crop" -> {
-                            AdjustmentSlider("Top Margin", initialValue = 0f)
-                            AdjustmentSlider("Bottom Margin", initialValue = 0f)
-                            AdjustmentSlider("Left Margin", initialValue = 0f)
-                            AdjustmentSlider("Right Margin", initialValue = 0f)
-                        }
-                        "Image Cutting" -> {
-                            AdjustmentSlider("Columns", initialValue = 2f, valueRange = 1f..10f)
-                            AdjustmentSlider("Rows", initialValue = 2f, valueRange = 1f..10f)
-                        }
-                        "Resize by Weight" -> {
-                            AdjustmentSlider("Target Size (KB)", initialValue = 500f, valueRange = 10f..5000f)
-                        }
-                        "Resize by Limits" -> {
-                            AdjustmentSlider("Max Width", initialValue = 1920f, valueRange = 100f..8000f)
-                            AdjustmentSlider("Max Height", initialValue = 1080f, valueRange = 100f..8000f)
-                        }
-                        "Edit EXIF" -> {
-                            AdjustmentSlider("Metadata Detail", initialValue = 0.5f)
-                        }
-                        "Delete EXIF" -> {
-                            Text("All EXIF metadata will be removed from the selected image.")
-                        }
-                        "Filter" -> {
-                            AdjustmentSlider("Intensity")
-                        }
-                        "Draw" -> {
-                            AdjustmentSlider("Brush Size", initialValue = 10f, valueRange = 1f..100f)
-                            AdjustmentSlider("Opacity", initialValue = 1.0f)
-                        }
-                        "Background Remover" -> {
-                            AdjustmentSlider("Edge Smoothing")
-                            AdjustmentSlider("Sensitivity")
-                        }
-                        "Markup Layers" -> {
-                            AdjustmentSlider("Layer Count", initialValue = 1f, valueRange = 1f..10f)
-                        }
-                        "Collage Maker" -> {
-                            AdjustmentSlider("Margin", initialValue = 8f, valueRange = 0f..50f)
-                            AdjustmentSlider("Corner Radius", initialValue = 8f, valueRange = 0f..100f)
-                        }
-                        "Smart Tools" -> {
-                            AdjustmentSlider("Model Version", initialValue = 1f, valueRange = 1f..3f)
-                            AdjustmentSlider("Denoise Strength")
-                        }
-                        "Image Stitching" -> {
-                            AdjustmentSlider("Spacing", initialValue = 0f, valueRange = 0f..100f)
-                            AdjustmentSlider("Orientation (0:H, 1:V)", initialValue = 0f, valueRange = 0f..1f)
-                        }
-                        "Image Stacking" -> {
-                            AdjustmentSlider("Blend Mode", initialValue = 0f, valueRange = 0f..10f)
-                            AdjustmentSlider("Opacity")
-                        }
-                        "Watermarking" -> {
-                            AdjustmentSlider("Text Size", initialValue = 24f, valueRange = 10f..100f)
-                            AdjustmentSlider("Transparency", initialValue = 0.5f)
-                        }
-                        "Noise Generation" -> {
-                            AdjustmentSlider("Noise Type", initialValue = 0f, valueRange = 0f..5f)
-                            AdjustmentSlider("Scale", initialValue = 1.0f, valueRange = 0.1f..10.0f)
-                        }
-                        "Compare" -> {
-                            AdjustmentSlider("Diff Threshold")
-                            AdjustmentSlider("Highlight Color (0-1)", initialValue = 0f)
-                        }
-                        "Wallpapers Export" -> {
-                            Text("Current system wallpapers will be exported.")
-                            AdjustmentSlider("Output Quality", initialValue = 1.0f)
-                        }
-                        "Images to SVG" -> {
-                            AdjustmentSlider("Simplify Threshold")
-                            AdjustmentSlider("Detail Level", initialValue = 0.7f)
-                        }
-                        "Web Image Loading" -> {
-                            Text("Enter URL to load and process image.")
-                            AdjustmentSlider("Cache Size (MB)", initialValue = 50f, valueRange = 10f..500f)
-                        }
-                        "OCR" -> {
-                            Text("Optical Character Recognition")
-                            AdjustmentSlider("Language Index", initialValue = 0f, valueRange = 0f..10f)
-                            AdjustmentSlider("DPI", initialValue = 300f, valueRange = 72f..600f)
-                        }
-                        "Image Preview" -> {
-                            AdjustmentSlider("Zoom Level", initialValue = 1.0f, valueRange = 1.0f..5.0f)
-                        }
-                        "Base64 Tools" -> {
-                            Text("Encode to or Decode from Base64 string.")
-                            AdjustmentSlider("Line Wrap Width", initialValue = 76f, valueRange = 0f..120f)
-                        }
-                        "Palette Tools" -> {
-                            AdjustmentSlider("Max Colors", initialValue = 16f, valueRange = 2f..256f)
-                            AdjustmentSlider("Color Space (0:RGB, 1:LAB)", initialValue = 0f)
-                        }
-                        "Color Picker" -> {
-                            AdjustmentSlider("Precision")
-                            Text("Touch the image to pick a color.")
-                        }
-                        "Mask Filter" -> {
-                            AdjustmentSlider("Radius", initialValue = 10f, valueRange = 1f..50f)
-                            AdjustmentSlider("Sigma", initialValue = 5f, valueRange = 1f..20f)
-                        }
-                        "Draw on background", "Layers on background" -> {
-                            AdjustmentSlider("Background Color (0-1)")
-                            AdjustmentSlider("Canvas Width", initialValue = 1080f, valueRange = 100f..4000f)
-                            AdjustmentSlider("Canvas Height", initialValue = 1920f, valueRange = 100f..4000f)
-                        }
-                        "Layers on image" -> {
-                            AdjustmentSlider("Opacity")
-                            AdjustmentSlider("Overlay Position X")
-                            AdjustmentSlider("Overlay Position Y")
-                        }
-                        "Open project" -> {
-                            Text("Select a project file to resume editing.")
-                        }
-                        "Audio Editor", "Audio Joiner", "Audio Tag Editor", "Reverse Audio", "Mute Audio", "Ringtone Maker", "Sound Mastering", "Add SFX", "Video to Audio", "Reverse Video", "Multi Convert", "Multi Video To Audio", "Metronome", "Audio Info", "Video Info", "Device Codec", "Audio Output", "Video Output" -> {
-                            AdjustmentSlider("Intensity")
-                            AdjustmentSlider("Threshold")
+                        "Record Audio", "Karaoke Maker" -> {
+                            AdjustmentSlider("Input Gain", initialValue = 0.5f)
+                            AdjustmentSlider("Mic Echo", initialValue = 0.1f)
+                            AdjustmentSlider("Noise Gate", initialValue = 0.2f)
                         }
                         else -> {
-                            AdjustmentSlider("Intensity")
-                            AdjustmentSlider("Threshold")
+                            AdjustmentSlider("Intensity", initialValue = 0.5f)
+                            AdjustmentSlider("Threshold", initialValue = 0.3f)
+                            AdjustmentSlider("Quality", initialValue = 0.8f)
                         }
                     }
                 }
@@ -489,7 +210,7 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* Process file */ },
+                onClick = { /* Process file logic */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Process and Save")
@@ -561,7 +282,7 @@ fun AdjustmentSlider(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(java.lang.String.format(java.util.Locale.US, "%.1f", value), style = MaterialTheme.typography.bodySmall)
+            Text(java.lang.String.format(java.util.Locale.US, "%.2f", value), style = MaterialTheme.typography.bodySmall)
         }
         Slider(
             value = value,
