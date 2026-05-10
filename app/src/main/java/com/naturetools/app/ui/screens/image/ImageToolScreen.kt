@@ -67,6 +67,11 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                         Spacer(modifier = Modifier.height(16.dp))
 
                         when (title) {
+                            "Smart Tools", "Offline Tools" -> {
+                                Text("Offline AI enhancement selected. Using local model for optimization.")
+                                AdjustmentSlider("Model Strength")
+                                AdjustmentSlider("Denoise")
+                            }
                             "Crop" -> Text("Select aspect ratio and drag to crop.")
                             "Filter" -> Text("Select a filter to apply.")
                             "Resize" -> Text("Enter new dimensions or percentage.")

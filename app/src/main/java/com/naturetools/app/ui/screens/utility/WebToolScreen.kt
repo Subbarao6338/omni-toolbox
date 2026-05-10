@@ -236,7 +236,21 @@ fun WebToolScreen(
                             }
                         },
                         update = {
-                            // Avoid reload on recomposition if possible, but keep it filling space
+                             // Correct implementation for Perchance improvements
+                             if (title.contains("Perchance", ignoreCase = true)) {
+                                 val improveJS = """
+                                    (function() {
+                                        var style = document.getElementById('perchance-custom-style');
+                                        if (!style) {
+                                            style = document.createElement('style');
+                                            style.id = 'perchance-custom-style';
+                                            style.innerHTML = '.ad-unit, .adsbygoogle, #google_ads_frame { display: none !important; } body { zoom: 0.95; }';
+                                            document.head.appendChild(style);
+                                        }
+                                    })();
+                                 """.trimIndent()
+                                 it.evaluateJavascript(improveJS, null)
+                             }
                         },
                         modifier = Modifier.fillMaxSize()
                     )

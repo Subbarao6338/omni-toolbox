@@ -208,8 +208,8 @@ fun NatureToolsApp(
         composable("habit_tracker") { HabitTrackerScreen(navController) }
         composable("meditation") { MeditationTimerScreen(navController) }
         composable("spl_meter") { SplMeterScreen(navController) }
-        composable("data_viz") { EngineeringToolScreen(navController, "Data Visualizer") }
-        composable("ai_image") { EngineeringToolScreen(navController, "Image Generator") }
+        composable("data_viz") { DataVisualizerScreen(navController) }
+        composable("ai_image") { ImageGeneratorScreen(navController) }
         composable("base_conv") { BaseConverterScreen(navController) }
         composable("constants") { ConstantsTableScreen(navController) }
         composable("light_pollution") { EnvironmentToolScreen(navController, "Light Pollution") }
@@ -524,22 +524,11 @@ fun NatureToolsApp(
         composable("vid_edit_pro") { AudioToolScreen(navController, "Video Editor Pro", "video/*") }
         composable("aud_master_pro") { AudioToolScreen(navController, "Audio Mastering Pro") }
 
-        composable("perchance_tools") {
-            AnimatedImageToolGroupScreen(
-                navController = navController,
-                title = "Perchance Tools",
-                subTools = listOf(
-                    SubTool("Perchance Hub", "Explore the Perchance platform", Icons.Default.Hub, "per_hub"),
-                    SubTool("Image Generator", "Generate images via Perchance", Icons.Default.Image, "per_image"),
-                    SubTool("Story Generator", "Write stories using Perchance", Icons.Default.AutoAwesome, "per_story"),
-                    SubTool("Character Generator", "Create characters with Perchance", Icons.Default.Person, "per_character")
-                )
-            )
-        }
+        composable("perchance_tools") { PerchanceHubScreen(navController) }
         composable("per_hub") { WebToolScreen(navController, "https://perchance.org/welcome", false, "Perchance Hub") }
-        composable("per_image") { WebToolScreen(navController, "https://perchance.org/ai-image-generator", false, "Image Generator") }
-        composable("per_story") { WebToolScreen(navController, "https://perchance.org/ai-story-generator", false, "Story Generator") }
-        composable("per_character") { WebToolScreen(navController, "https://perchance.org/ai-character-generator", false, "Character Generator") }
+        composable("per_image") { WebToolScreen(navController, "https://perchance.org/ai-image-generator", false, "Perchance Image Generator") }
+        composable("per_story") { WebToolScreen(navController, "https://perchance.org/ai-story-generator", false, "Perchance Story Generator") }
+        composable("per_character") { WebToolScreen(navController, "https://perchance.org/ai-character-generator", false, "Perchance Character Generator") }
 
         // Automotive
         composable("speedometer") { AutomotiveToolScreen(navController, "Speedometer") }
