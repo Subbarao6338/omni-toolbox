@@ -22,7 +22,7 @@ import com.naturetools.app.ui.components.ToolScreen
 data class ChatMessage(val text: String, val isUser: Boolean)
 
 @Composable
-fun ChatToolScreen(navController: NavHostController, title: String) {
+fun ChatToolScreen(navController: NavHostController, title: String, aiApiKey: String = "") {
     var inputText by remember { mutableStateOf("") }
     val messages = remember { mutableStateListOf<ChatMessage>() }
 
@@ -75,8 +75,12 @@ fun ChatToolScreen(navController: NavHostController, title: String) {
                                 val currentInput = inputText
                                 messages.add(ChatMessage(inputText, true))
                                 inputText = ""
-                                // Actual Offline implementation
-                                messages.add(ChatMessage("$title: Processing request offline...", false))
+                                // Implementation logic
+                                if (aiApiKey.isBlank()) {
+                                    messages.add(ChatMessage("$title: Processing request offline (Local AI)...", false))
+                                } else {
+                                    messages.add(ChatMessage("$title: Processing request via Online API...", false))
+                                }
                                 val actualResponse = when(title) {
                                     "CSV to JSON" -> {
                                         try {

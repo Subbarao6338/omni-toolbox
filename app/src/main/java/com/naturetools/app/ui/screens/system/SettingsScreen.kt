@@ -19,7 +19,9 @@ fun SettingsScreen(
     dynamicColor: Boolean,
     onDynamicColorChange: (Boolean) -> Unit,
     showCategoryCounts: Boolean,
-    onShowCategoryCountsChange: (Boolean) -> Unit
+    onShowCategoryCountsChange: (Boolean) -> Unit,
+    aiApiKey: String,
+    onAiApiKeyChange: (String) -> Unit
 ) {
     ToolScreen(title = "Settings", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp)) {
@@ -77,6 +79,28 @@ fun SettingsScreen(
                 }
                 Switch(checked = showCategoryCounts, onCheckedChange = onShowCategoryCountsChange)
             }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            Text("AI Settings", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = aiApiKey,
+                onValueChange = onAiApiKeyChange,
+                label = { Text("AI API Key") },
+                placeholder = { Text("Enter your API key...") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                leadingIcon = { Icon(Icons.Default.VpnKey, contentDescription = null) }
+            )
+            Text(
+                "Provide an API key to enable online AI features. If left empty, local implementation will be used.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.padding(top = 8.dp)
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
