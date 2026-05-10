@@ -22,13 +22,13 @@ import com.naturetools.app.ui.components.ToolScreen
 data class ChatMessage(val text: String, val isUser: Boolean)
 
 @Composable
-fun AIToolScreen(navController: NavHostController, title: String) {
+fun ChatToolScreen(navController: NavHostController, title: String) {
     var inputText by remember { mutableStateOf("") }
     val messages = remember { mutableStateListOf<ChatMessage>() }
 
     LaunchedEffect(Unit) {
         if (messages.isEmpty()) {
-            messages.add(ChatMessage("Hello! I am your AI assistant for $title. How can I help you today?", false))
+            messages.add(ChatMessage("Hello! I am your assistant for $title. How can I help you today?", false))
         }
     }
 
@@ -73,15 +73,15 @@ fun AIToolScreen(navController: NavHostController, title: String) {
                         onClick = {
                             if (inputText.isNotBlank()) {
                                 val userQuery = when(title) {
-                                    "AI Summarizer" -> "Summarize the following text: $inputText"
-                                    "AI Code Assistant" -> "As a coding expert, help me with this: $inputText"
+                                    "Text Summarizer" -> "Summarize the following text: $inputText"
+                                    "Code Helper" -> "As a coding expert, help me with this: $inputText"
                                     "CSV to JSON" -> "Convert this CSV data to JSON format: $inputText"
                                     else -> inputText
                                 }
                                 messages.add(ChatMessage(inputText, true))
                                 inputText = ""
-                                // Simulated AI response
-                                messages.add(ChatMessage("AI ($title): Processing request...", false))
+                                // Simulated response
+                                messages.add(ChatMessage("$title: Processing request...", false))
                                 messages.add(ChatMessage("Here is the result for your $title request based on: '${userQuery.take(50)}...'", false))
                             }
                         },

@@ -12,34 +12,34 @@ data class Tool(val name: String, val icon: ImageVector, val route: String, val 
 
 object ToolProvider {
     val tools = listOf(
-        // AI & Data
-        Tool("AI Chat", Icons.AutoMirrored.Filled.Chat, "ai_chat", "AI Tools", Color(0xFF2196F3), BadgeType.NEW),
-        Tool("AI Code Assistant", Icons.Default.Code, "ai_code", "AI Tools", Color(0xFF673AB7), BadgeType.NEW),
-        Tool("AI Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI Tools", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("CSV to JSON", Icons.Default.Transform, "csv_to_json", "AI Tools", Color(0xFF009688), BadgeType.NEW),
-        Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "AI Tools", Color(0xFF4CAF50), BadgeType.NONE),
-        Tool("Markdown Preview", Icons.Default.Description, "markdown_preview", "AI Tools", Color(0xFF3F51B5), BadgeType.NONE),
-        Tool("Regex Tester", Icons.Default.Code, "regex_tester", "AI Tools", Color(0xFF673AB7), BadgeType.NONE),
+        // Smart Utilities
+        Tool("Smart Chat", Icons.AutoMirrored.Filled.Chat, "ai_chat", "Smart Utilities", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Code Helper", Icons.Default.Code, "ai_code", "Smart Utilities", Color(0xFF673AB7), BadgeType.NEW),
+        Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "Smart Utilities", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("CSV to JSON", Icons.Default.Transform, "csv_to_json", "Smart Utilities", Color(0xFF009688), BadgeType.NEW),
+        Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "Smart Utilities", Color(0xFF4CAF50), BadgeType.NONE),
+        Tool("Markdown Preview", Icons.Default.Description, "markdown_preview", "Smart Utilities", Color(0xFF3F51B5), BadgeType.NONE),
+        Tool("Regex Tester", Icons.Default.Code, "regex_tester", "Smart Utilities", Color(0xFF673AB7), BadgeType.NONE),
 
-        // AI Advanced
-        Tool("AI Grammar", Icons.Default.Spellcheck, "ai_grammar", "AI Tools", Color(0xFF4CAF50), BadgeType.NEW),
-        Tool("AI Object Detect", Icons.Default.CenterFocusStrong, "ai_obj_detect", "AI Tools", Color(0xFF673AB7), BadgeType.NEW),
-        Tool("AI Sentiment", Icons.Default.Mood, "ai_sentiment", "AI Tools", Color(0xFFFFC107), BadgeType.NEW),
-        Tool("AI Text Extractor", Icons.Default.Scanner, "ai_text_ext", "AI Tools", Color(0xFFE91E63), BadgeType.NEW),
-        Tool("AI Translation", Icons.Default.Translate, "ai_translate", "AI Tools", Color(0xFF2196F3), BadgeType.NEW),
+        // Advanced Smart Utilities
+        Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "Smart Utilities", Color(0xFF4CAF50), BadgeType.NEW),
+        Tool("Object Detector", Icons.Default.CenterFocusStrong, "ai_obj_detect", "Smart Utilities", Color(0xFF673AB7), BadgeType.NEW),
+        Tool("Sentiment Analysis", Icons.Default.Mood, "ai_sentiment", "Smart Utilities", Color(0xFFFFC107), BadgeType.NEW),
+        Tool("Text Extractor", Icons.Default.Scanner, "ai_text_ext", "Smart Utilities", Color(0xFFE91E63), BadgeType.NEW),
+        Tool("Translator", Icons.Default.Translate, "ai_translate", "Smart Utilities", Color(0xFF2196F3), BadgeType.NEW),
 
-        // AI Tools
-        Tool("AI Image Gen", Icons.Default.Image, "ai_image", "AI Tools", Color(0xFFFFC107), BadgeType.NEW),
-        Tool("AI Noise Remover", Icons.Default.Hearing, "ai_noise_remover", "AI Tools", Color(0xFF4CAF50), BadgeType.NONE),
-        Tool("AI Stems Splitter", Icons.AutoMirrored.Filled.AltRoute, "ai_stems_splitter", "AI Tools", Color(0xFF00BCD4), BadgeType.NONE),
-        Tool("AI Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "AI Tools", Color(0xFF3F51B5), BadgeType.NEW),
-        Tool("Audio Noise Remover", Icons.Default.MicOff, "audio_noise_remover", "AI Tools", Color(0xFF2196F3), BadgeType.NONE),
-        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "AI Tools", Color(0xFF009688), BadgeType.NONE),
-        Tool("Key BPM Finder", Icons.Default.MusicNote, "key_bpm_finder", "AI Tools", Color(0xFFF44336), BadgeType.NONE),
-        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "AI Tools", Color(0xFF607D8B), BadgeType.NONE),
-        Tool("Video Noise Remover", Icons.Default.MovieFilter, "video_noise_remover", "AI Tools", Color(0xFF9C27B0), BadgeType.NONE),
-        Tool("Vocal AutoTuner", Icons.Default.SettingsVoice, "vocal_autotuner", "AI Tools", Color(0xFFE91E63), BadgeType.NONE),
-        Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "AI Tools", Color(0xFFFF9800), BadgeType.NONE),
+        // Smart Tools
+        Tool("Image Generator", Icons.Default.Image, "ai_image", "Smart Utilities", Color(0xFFFFC107), BadgeType.NEW),
+        Tool("Noise Remover", Icons.Default.Hearing, "ai_noise_remover", "Smart Utilities", Color(0xFF4CAF50), BadgeType.NONE),
+        Tool("Stems Splitter", Icons.AutoMirrored.Filled.AltRoute, "ai_stems_splitter", "Smart Utilities", Color(0xFF00BCD4), BadgeType.NONE),
+        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "Smart Utilities", Color(0xFF3F51B5), BadgeType.NEW),
+        Tool("Audio Noise Remover", Icons.Default.MicOff, "audio_noise_remover", "Smart Utilities", Color(0xFF2196F3), BadgeType.NONE),
+        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "Smart Utilities", Color(0xFF009688), BadgeType.NONE),
+        Tool("Key BPM Finder", Icons.Default.MusicNote, "key_bpm_finder", "Smart Utilities", Color(0xFFF44336), BadgeType.NONE),
+        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "Smart Utilities", Color(0xFF607D8B), BadgeType.NONE),
+        Tool("Video Noise Remover", Icons.Default.MovieFilter, "video_noise_remover", "Smart Utilities", Color(0xFF9C27B0), BadgeType.NONE),
+        Tool("Vocal AutoTuner", Icons.Default.SettingsVoice, "vocal_autotuner", "Smart Utilities", Color(0xFFE91E63), BadgeType.NONE),
+        Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "Smart Utilities", Color(0xFFFF9800), BadgeType.NONE),
 
         // Astronomy
         Tool("Constellations", Icons.Default.Stars, "constellations", "Science & Education", Color(0xFF673AB7), BadgeType.NONE),
@@ -229,7 +229,7 @@ object ToolProvider {
         Tool("Period Tracker", Icons.Default.CalendarMonth, "period_tracker", "Health & Lifestyle", Color(0xFFE91E63), BadgeType.NEW),
 
         // Image Toolbox
-        Tool("AI Tools", Icons.Default.Psychology, "image_ai_tools", "Image Tools", Color(0xFF9C27B0), BadgeType.NEW),
+        Tool("Smart Tools", Icons.Default.Psychology, "image_ai_tools", "Image Tools", Color(0xFF9C27B0), BadgeType.NEW),
         Tool("APNG Tools", Icons.Default.Animation, "apng_tools", "Image Tools", Color(0xFF4CAF50), BadgeType.NEW),
         Tool("Background Remover", Icons.Default.LayersClear, "image_bg_remover", "Image Tools", Color(0xFFF44336), BadgeType.NEW),
         Tool("Base64 Tools", Icons.Default.Code, "image_base64", "Image Tools", Color(0xFF3F51B5), BadgeType.NEW),
@@ -445,6 +445,7 @@ object ToolProvider {
         Tool("Video Flip", Icons.Default.Flip, "video_flip", "Video & Media", Color(0xFF607D8B), BadgeType.NEW),
         Tool("Thumbnail Extractor", Icons.Default.Image, "vid_thumb", "Video & Media", Color(0xFF2196F3), BadgeType.NEW),
         Tool("Video Frame Annotator", Icons.Default.Edit, "vid_annotator", "Video & Media", Color(0xFF2196F3), BadgeType.NEW),
+        Tool("Perchance Tools", Icons.Default.AutoAwesome, "perchance_tools", "Video & Media", Color(0xFFE91E63), BadgeType.NEW),
         Tool("Tiles & Widgets", Icons.Default.Widgets, "tiles_widgets", "Utility & Misc", Color(0xFF607D8B), BadgeType.NEW)
     )
 }
