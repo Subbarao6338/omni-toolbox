@@ -3,8 +3,6 @@ name: Android CI/CD
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build-and-release:
@@ -55,7 +53,7 @@ jobs:
       run: mv app/build/outputs/apk/debug/app-debug.apk ${{ steps.get_version.outputs.APK_NAME }}
 
     - name: Create Release
-      if: github.event_name == 'push' || github.event_name == 'pull_request'
+      if: github.event_name == 'push'
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.get_version.outputs.TAG_NAME }}
