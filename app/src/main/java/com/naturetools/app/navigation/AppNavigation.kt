@@ -52,6 +52,8 @@ fun NatureToolsApp(
     onDynamicColorChange: (Boolean) -> Unit,
     showCategoryCounts: Boolean,
     onShowCategoryCountsChange: (Boolean) -> Unit,
+    aiApiKey: String,
+    onAiApiKeyChange: (String) -> Unit,
     intent: Intent? = null
 ) {
     val navController = rememberNavController()
@@ -100,7 +102,7 @@ fun NatureToolsApp(
                 onToggleFavorite = toggleFavorite
             )
         }
-        composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange, showCategoryCounts, onShowCategoryCountsChange) }
+        composable("settings") { SettingsScreen(navController, themeMode, onThemeChange, dynamicColor, onDynamicColorChange, showCategoryCounts, onShowCategoryCountsChange, aiApiKey, onAiApiKeyChange) }
 
         // Special routes with arguments or deep links
         composable(
@@ -180,13 +182,13 @@ fun NatureToolsApp(
                         if (tool.route == "csv_to_json") {
                             CsvToJsonScreen(navController)
                         } else if (listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate").contains(tool.route)) {
-                            ChatToolScreen(navController, tool.name)
+                            ChatToolScreen(navController, tool.name, aiApiKey)
                         } else if (tool.route == "data_viz") {
                             DataVisualizerScreen(navController)
                         } else if (tool.route == "markdown_preview") {
                             MarkdownPreviewScreen(navController)
                         } else if (tool.route == "ai_image") {
-                            ImageGeneratorScreen(navController)
+                            ImageGeneratorScreen(navController, aiApiKey)
                         } else if (tool.route == "regex_tester") {
                             RegexTesterScreen(navController)
                         } else {

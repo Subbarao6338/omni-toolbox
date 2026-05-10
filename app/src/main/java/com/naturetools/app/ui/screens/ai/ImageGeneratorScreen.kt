@@ -17,7 +17,7 @@ import com.naturetools.app.ui.components.ToolScreen
 import kotlin.random.Random
 
 @Composable
-fun ImageGeneratorScreen(navController: NavHostController) {
+fun ImageGeneratorScreen(navController: NavHostController, aiApiKey: String = "") {
     var prompt by remember { mutableStateOf("") }
     var seed by remember { mutableStateOf(0L) }
 
@@ -43,7 +43,7 @@ fun ImageGeneratorScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = { seed = prompt.hashCode().toLong() + Random.nextLong() }) {
-                Text("Generate Offline")
+                Text(if (aiApiKey.isBlank()) "Generate Offline (Local AI)" else "Generate Online (AI API)")
             }
 
             Spacer(modifier = Modifier.height(24.dp))

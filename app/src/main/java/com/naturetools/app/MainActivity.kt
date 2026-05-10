@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
             var themeMode by rememberSaveable { mutableStateOf(prefs.getString("theme_mode", "system") ?: "system") }
             var dynamicColor by rememberSaveable { mutableStateOf(prefs.getBoolean("dynamic_color", true)) }
             var showCategoryCounts by rememberSaveable { mutableStateOf(prefs.getBoolean("show_category_counts", true)) }
+            var aiApiKey by rememberSaveable { mutableStateOf(prefs.getString("ai_api_key", "") ?: "") }
             val darkTheme = when (themeMode) {
                 "light" -> false
                 "dark" -> true
@@ -52,6 +53,11 @@ class MainActivity : ComponentActivity() {
                         onShowCategoryCountsChange = {
                             showCategoryCounts = it
                             prefs.edit().putBoolean("show_category_counts", it).apply()
+                        },
+                        aiApiKey = aiApiKey,
+                        onAiApiKeyChange = {
+                            aiApiKey = it
+                            prefs.edit().putString("ai_api_key", it).apply()
                         }
                     )
                 }
