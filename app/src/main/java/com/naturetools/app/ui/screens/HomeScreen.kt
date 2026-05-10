@@ -237,19 +237,6 @@ fun ToolCard(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            if (tool.badge != com.naturetools.app.model.BadgeType.NONE) {
-                val badgeIcon = when (tool.badge) {
-                    com.naturetools.app.model.BadgeType.NEW -> Icons.Default.CardGiftcard
-                    com.naturetools.app.model.BadgeType.PREMIUM -> Icons.Default.WorkspacePremium
-                    else -> Icons.Default.Star
-                }
-                Icon(
-                    badgeIcon,
-                    contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart).padding(8.dp).size(14.dp),
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                )
-            }
             IconButton(
                 onClick = onToggleFavorite,
                 modifier = Modifier.align(Alignment.TopEnd).size(32.dp).padding(4.dp)

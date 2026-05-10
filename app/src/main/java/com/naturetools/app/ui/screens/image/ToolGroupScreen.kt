@@ -38,7 +38,7 @@ fun ToolGroupScreen(
     val subTools = remember(groupTool) {
         groupTool.subToolRoutes?.mapNotNull { route ->
             ToolProvider.tools.find { it.route == route }
-        } ?: emptyList()
+        }?.sortedBy { it.name } ?: emptyList()
     }
 
     ToolScreen(
