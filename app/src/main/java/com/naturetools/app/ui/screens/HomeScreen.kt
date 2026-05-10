@@ -52,22 +52,31 @@ fun HomeScreen(
 
     val categoryCounts = remember(favorites) {
         derivedStateOf {
-            val counts = ToolProvider.tools.groupingBy { it.category }.eachCount()
-            counts + ("All" to ToolProvider.tools.size) + ("Favorites" to favorites.size)
+            val visibleTools = ToolProvider.tools.filter { it.isVisibleOnHome }
+            val counts = visibleTools.groupingBy { it.category }.eachCount()
+            counts + ("All" to visibleTools.size) + ("Favorites" to favorites.size)
         }
     }
 
     val categories = remember {
         derivedStateOf {
-            listOf("All", "Favorites") + ToolProvider.tools.map { it.category }.distinct().sorted()
+            listOf("All", "Favorites") + ToolProvider.tools.filter { it.isVisibleOnHome }.map { it.category }.distinct().sorted()
         }
     }
 
     val filteredTools = remember(debouncedSearchQuery, selectedCategory, favorites) {
         derivedStateOf {
-            ToolProvider.tools.filter {
-                (selectedCategory == "All" || (selectedCategory == "Favorites" && favorites.contains(it.route)) || it.category == selectedCategory) &&
-                (it.name.contains(debouncedSearchQuery, ignoreCase = true))
+            ToolProvider.tools.filter { tool ->
+                val matchesSearch = tool.name.contains(debouncedSearchQuery, ignoreCase = true) ||
+                        (tool.description?.contains(debouncedSearchQuery, ignoreCase = true) ?: false)
+
+                val matchesCategory = when (selectedCategory) {
+                    "All" -> tool.isVisibleOnHome
+                    "Favorites" -> favorites.contains(tool.route)
+                    else -> tool.category == selectedCategory && tool.isVisibleOnHome
+                }
+
+                matchesSearch && matchesCategory
             }.sortedBy { it.name }
         }
     }
@@ -104,7 +113,7 @@ fun HomeScreen(
                 onSearch = { },
                 active = false,
                 onActiveChange = { },
-                placeholder = { Text("Search tools...") },
+                placeholder = { Text("Search tools & sub-tools...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             ) {}
@@ -142,7 +151,7 @@ fun HomeScreen(
             }
 
             ScrollableTabRow(
-                selectedTabIndex = categories.value.indexOf(selectedCategory),
+                selectedTabIndex = categories.value.indexOf(selectedCategory).coerceAtLeast(0),
                 edgePadding = 16.dp,
                 divider = {},
                 indicator = {},
@@ -178,6 +187,16 @@ fun HomeScreen(
                         )
                     }
                 }
+
+                if (filteredTools.value.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(Icons.Default.SearchOff, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text("No tools found", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
             }
         }
     }
@@ -209,7 +228,7 @@ fun ToolCard(
         interactionSource = interactionSource,
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .height(115.dp)
             .graphicsLayer(scaleX = scale, scaleY = scale),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = elevation),
@@ -248,9 +267,9 @@ fun ToolCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Surface(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(42.dp),
                     shape = CircleShape,
-                    color = tool.color.copy(alpha = 0.2f)
+                    color = tool.color.copy(alpha = 0.15f)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
@@ -264,13 +283,20 @@ fun ToolCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     tool.name,
-                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp),
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.5.sp),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
-                    lineHeight = 12.sp,
+                    lineHeight = 13.sp,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Bold
                 )
+                if (tool.subToolRoutes != null) {
+                    Text(
+                        "${tool.subToolRoutes!!.size} tools",
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                    )
+                }
             }
         }
     }

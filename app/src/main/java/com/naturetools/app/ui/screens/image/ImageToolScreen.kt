@@ -47,7 +47,7 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp),
+                        .height(350.dp),
                     contentScale = ContentScale.Fit
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -60,85 +60,88 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Image Adjustments",
+                            text = "Processing Controls",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.height(16.dp))
 
                         when (title) {
-                            "Smart Tools", "Offline Tools" -> {
-                                Text("Offline AI enhancement selected. Using local model for optimization.")
-                                AdjustmentSlider("Model Strength")
-                                AdjustmentSlider("Denoise")
+                            "Smart Tools", "Image AI Tools" -> {
+                                AdjustmentSlider("AI Upscale (x)", valueRange = 1f..4f, initialValue = 2f)
+                                AdjustmentSlider("Denoise Strength")
+                                AdjustmentSlider("Detail Enhancement")
+                                AdjustmentSlider("Color Correction")
                             }
-                            "Crop" -> Text("Select aspect ratio and drag to crop.")
-                            "Filter" -> Text("Select a filter to apply.")
-                            "Resize" -> Text("Enter new dimensions or percentage.")
-                            "Compress PDFs/Document", "Compress Image", "Compress PDF" -> {
-                                AdjustmentSlider("Quality", initialValue = 0.8f)
-                                AdjustmentSlider("Target Size (KB)", valueRange = 10f..5000f, initialValue = 500f)
-                            }
-                            "Merge PDFs/Document", "Merge PDF" -> {
-                                Text("Select multiple files to merge.")
-                                AdjustmentSlider("Overlap/Spacing")
-                            }
-                            "Split PDFs/Document", "Remove/Delete Pages", "Split PDF", "Delete Pages", "Extract Pages" -> {
-                                Text("Select pages to extract or remove.")
-                                AdjustmentSlider("Page Range Start")
-                                AdjustmentSlider("Page Range End")
-                            }
-                            "Rotate Pages/PDF", "Rotate & Flip", "Rotate Pages" -> {
-                                AdjustmentSlider("Rotation Angle", valueRange = 0f..360f, initialValue = 0f)
-                                Text("Choose Flip orientation below.")
-                            }
-                            "Crop Pages", "Crop Image" -> {
-                                AdjustmentSlider("Top Margin", initialValue = 0f)
-                                AdjustmentSlider("Bottom Margin", initialValue = 0f)
-                                AdjustmentSlider("Left Margin", initialValue = 0f)
-                                AdjustmentSlider("Right Margin", initialValue = 0f)
-                            }
-                            "Image → PDF", "Images to PDF" -> {
-                                Text("Converting selected images to a PDF document.")
-                                AdjustmentSlider("Page Margin", initialValue = 20f, valueRange = 0f..100f)
-                            }
-                            "Extract Images" -> {
-                                Text("Extracting embedded images from the document.")
-                                AdjustmentSlider("Detection Sensitivity")
-                            }
-                            "Document Info", "View Metadata", "Metadata / Edit Props", "Strip Metadata" -> {
-                                Text("Metadata and technical details of the file.")
-                            }
-                            "ICO Converter", "SVG Converter", "AVIF Converter", "WEBP Converter", "GIF Converter", "HEIC Converter", "Convert Format", "Resize Image" -> {
-                                Text("Select target format and quality.")
+                            "Resize and Convert", "Format Conversion", "Resize Image" -> {
                                 AdjustmentSlider("Quality", initialValue = 0.9f)
+                                AdjustmentSlider("Scale Factor", valueRange = 0.1f..2.0f, initialValue = 1.0f)
+                                Text("Output Format: JPEG/PNG/WEBP/AVIF")
                             }
-                            "Lock PDF", "Unlock PDF" -> {
-                                Text("Enter password in the dialog after clicking apply.")
-                                AdjustmentSlider("Security Level", valueRange = 1f..5f, initialValue = 3f)
+                            "Compress Image", "Compress PDF" -> {
+                                AdjustmentSlider("Target Compression Ratio")
+                                AdjustmentSlider("Max Dimension (px)", valueRange = 100f..4000f, initialValue = 1920f)
+                                AdjustmentSlider("Chroma Subsampling", initialValue = 0.5f)
                             }
-                            "Add Watermark" -> {
-                                AdjustmentSlider("Opacity", initialValue = 0.5f)
-                                AdjustmentSlider("Watermark Scale", initialValue = 1.0f, valueRange = 0.1f..3.0f)
+                            "Crop", "Multi Crop" -> {
+                                AdjustmentSlider("Aspect Ratio (X)", valueRange = 1f..16f, initialValue = 1f)
+                                AdjustmentSlider("Aspect Ratio (Y)", valueRange = 1f..16f, initialValue = 1f)
+                                AdjustmentSlider("Rotation Offset", valueRange = -45f..45f, initialValue = 0f)
                             }
-                            "Add Text", "Add Images" -> {
-                                AdjustmentSlider("Position X", valueRange = 0f..1000f)
-                                AdjustmentSlider("Position Y", valueRange = 0f..1000f)
+                            "Filter", "Photo Filters" -> {
+                                AdjustmentSlider("Filter Intensity")
+                                AdjustmentSlider("Vignette")
+                                AdjustmentSlider("Grain")
+                                AdjustmentSlider("Temperature")
                             }
-                            "Page Numbers" -> {
-                                AdjustmentSlider("Font Size", valueRange = 6f..72f, initialValue = 12f)
-                                AdjustmentSlider("Vertical Offset", valueRange = 0f..100f, initialValue = 20f)
+                            "Background Remover" -> {
+                                AdjustmentSlider("Edge Smoothing")
+                                AdjustmentSlider("Sensitivity")
+                                AdjustmentSlider("Background Feather")
                             }
-                            "HTML → PDF", "Excel to PDF", "Text to PDF" -> {
-                                Text("Select the source file to start conversion.")
+                            "Watermarking" -> {
+                                AdjustmentSlider("Watermark Opacity")
+                                AdjustmentSlider("Watermark Scale", valueRange = 0.1f..1.0f, initialValue = 0.3f)
+                                AdjustmentSlider("Position X")
+                                AdjustmentSlider("Position Y")
                             }
-                            else -> Text("Processing options for $title. Tap the button below to process your document.")
+                            "Exif Viewer", "Metadata", "Edit EXIF" -> {
+                                Text("ISO: 100 | Shutter: 1/500s | Aperture: f/2.8")
+                                Text("Camera: Pixel 8 Pro | Location: San Francisco")
+                                AdjustmentSlider("Strip Private Data (0:No, 1:Yes)", initialValue = 0f)
+                            }
+                            "PDF Tools", "Preview PDF", "Split PDF", "Merge PDF" -> {
+                                AdjustmentSlider("DPI for Rendering", valueRange = 72f..600f, initialValue = 150f)
+                                AdjustmentSlider("PDF Quality", initialValue = 0.8f)
+                                AdjustmentSlider("Password Complexity", valueRange = 1f..5f, initialValue = 3f)
+                            }
+                            "OCR", "PDF to Text (OCR)" -> {
+                                AdjustmentSlider("Recognition Confidence")
+                                AdjustmentSlider("Binarization Threshold")
+                                Text("Language: English (US)")
+                            }
+                            "Pixel Art Maker" -> {
+                                AdjustmentSlider("Pixel Size", valueRange = 1f..50f, initialValue = 10f)
+                                AdjustmentSlider("Color Palette Size", valueRange = 2f..256f, initialValue = 16f)
+                                AdjustmentSlider("Dithering")
+                            }
+                            "ASCII Art" -> {
+                                AdjustmentSlider("Character Density", valueRange = 10f..200f, initialValue = 80f)
+                                AdjustmentSlider("Contrast Boost")
+                                Text("Style: Braille / Standard")
+                            }
+                            else -> {
+                                AdjustmentSlider("Intensity")
+                                AdjustmentSlider("Sensitivity")
+                                AdjustmentSlider("Threshold")
+                            }
                         }
 
-                        if (title == "Single Edit" || title == "Painter") {
-                            AdjustmentSlider("Brightness")
-                            AdjustmentSlider("Contrast")
-                            AdjustmentSlider("Saturation")
+                        if (title == "Single Edit" || title == "Draw") {
+                            AdjustmentSlider("Brightness", valueRange = -1f..1f, initialValue = 0f)
+                            AdjustmentSlider("Contrast", valueRange = 0.5f..2.0f, initialValue = 1.0f)
+                            AdjustmentSlider("Saturation", valueRange = 0f..2.0f, initialValue = 1.0f)
+                            AdjustmentSlider("Exposure", valueRange = -2f..2f, initialValue = 0f)
                         }
                     }
                 }
@@ -147,16 +150,20 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
 
                 Button(
                     onClick = { /* Simulated Save */ },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
-                    Text("Apply and Save")
+                    Icon(Icons.Default.PhotoLibrary, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Apply & Save Result")
                 }
 
                 OutlinedButton(
                     onClick = { selectedImageUri = null },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
-                    Text("Choose Different Image")
+                    Text("Change Input Image")
                 }
             } else {
                 Box(
@@ -164,16 +171,31 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            Icons.Default.PhotoLibrary,
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text("Select an image to start $title")
+                        Surface(
+                            modifier = Modifier.size(120.dp),
+                            shape = androidx.compose.foundation.shape.CircleShape,
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Default.PhotoLibrary,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(48.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
                         Spacer(modifier = Modifier.height(24.dp))
-                        Button(onClick = { launcher.launch("image/*") }) {
+                        Text(
+                            "Select an image to start $title",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Button(
+                            onClick = { launcher.launch("image/*") },
+                            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 12.dp)
+                        ) {
                             Text("Pick Image")
                         }
                     }
