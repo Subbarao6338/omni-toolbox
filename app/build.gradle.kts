@@ -18,6 +18,9 @@ val minor = versionProps.getProperty("minor", "0").toInt()
 val patch = versionProps.getProperty("patch", "0").toInt()
 val build = versionProps.getProperty("build", "1").toInt()
 
+val appVersionCode = System.getenv("APP_VERSION_CODE")?.toInt() ?: build
+val appVersionName = System.getenv("APP_VERSION_NAME") ?: "$major.$minor.$patch"
+
 android {
     namespace = "com.naturetools.app"
     compileSdk = 35
@@ -26,8 +29,8 @@ android {
         applicationId = "com.naturetools.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = build
-        versionName = "$major.$minor.$patch"
+        versionCode = appVersionCode
+        versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
