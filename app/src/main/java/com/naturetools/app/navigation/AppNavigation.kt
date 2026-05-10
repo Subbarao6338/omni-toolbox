@@ -191,6 +191,8 @@ fun NatureToolsApp(
                             ImageGeneratorScreen(navController, aiApiKey)
                         } else if (tool.route == "regex_tester") {
                             RegexTesterScreen(navController)
+                        } else if (tool.route == "meta_anal") {
+                            MetaTagScreen(navController)
                         } else {
                             AudioToolScreen(navController, tool.name)
                         }
@@ -231,6 +233,7 @@ fun NatureToolsApp(
                     "Finance & Crypto" -> {
                         if (tool.route == "compound_interest") CompoundInterestScreen(navController)
                         else if (tool.route == "crypto_conv") CurrencyConverterScreen(navController)
+                        else if (tool.route == "travel_budget") TravelBudgetScreen(navController)
                         else FinanceToolScreen(navController, tool.name)
                     }
                     "Health & Lifestyle" -> {
@@ -285,6 +288,8 @@ fun NatureToolsApp(
                         else if (tool.route == "task_board" || tool.route == "kanban") TaskBoardScreen(navController)
                         else if (tool.route == "time_logger") TimeLoggerScreen(navController)
                         else if (tool.route == "password_manager") PasswordManagerScreen(navController)
+                        else if (tool.route == "password_gen") PasswordGenScreen(navController)
+                        else if (tool.route == "travel_budget") TravelBudgetScreen(navController)
                         else NotePadScreen(navController)
                     }
                     "Developer" -> {
@@ -308,7 +313,7 @@ fun NatureToolsApp(
                     "Calculation" -> {
                         if (tool.route == "date_calc") DateCalculatorScreen(navController)
                         else if (tool.route == "fuel") FuelCostCalculatorScreen(navController)
-                        else if (tool.route == "unit_price") UnitPriceCalculatorScreen(navController)
+                        else if (tool.route == "unit_price" || tool.route == "unit_compare") UnitPriceCalculatorScreen(navController)
                         else if (tool.route == "calculator") CalculatorScreen(navController)
                         else MathToolScreen(navController, tool.name)
                     }
@@ -336,7 +341,31 @@ fun NatureToolsApp(
                         else if (tool.route == "social_preview" || tool.route == "bio_linker") SocialToolScreen(navController, tool.name)
                         else if (tool.route == "tiles_widgets") TilesAndWidgetsScreen(navController)
                         else if (tool.route == "unit_price") UnitPriceCalculatorScreen(navController)
+                        else if (tool.route == "wifi_qr") WifiQrScreen(navController)
+                        else if (tool.route == "meta_anal") MetaTagScreen(navController)
                         else AudioToolScreen(navController, tool.name)
+                    }
+                    "Social & Media" -> {
+                        if (tool.route == "profile_photo_maker") ProfilePhotoMakerScreen(navController)
+                        else if (tool.route == "media_grabber") MediaGrabberScreen(navController)
+                        else SocialToolScreen(navController, tool.name)
+                    }
+                    "Privacy & Security" -> {
+                        if (tool.route == "password_gen") PasswordGenScreen(navController)
+                        else if (tool.route == "password_manager") PasswordManagerScreen(navController)
+                        else FileToolScreen(navController, tool.name)
+                    }
+                    "DIY & Home" -> {
+                        if (tool.route == "unit_compare") UnitPriceCalculatorScreen(navController)
+                        else if (listOf("level", "ruler", "protractor", "metal", "light").contains(tool.route)) AltimeterScreen(navController)
+                        else EngineeringToolScreen(navController, tool.name)
+                    }
+                    "Travel & Maps" -> {
+                        if (tool.route == "travel_budget") TravelBudgetScreen(navController)
+                        else if (tool.route == "currency") CurrencyConverterScreen(navController)
+                        else if (tool.route == "world_map") WorldMapScreen(navController)
+                        else if (tool.route == "world_clock") WorldClockScreen(navController)
+                        else OutdoorToolScreen(navController, tool.name)
                     }
                     else -> AudioToolScreen(navController, tool.name)
                 }

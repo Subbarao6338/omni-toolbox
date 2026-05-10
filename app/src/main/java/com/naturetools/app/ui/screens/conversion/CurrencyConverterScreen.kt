@@ -4,21 +4,27 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.*
+import android.content.Context
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import org.json.JSONObject
 
 @Composable
 fun CurrencyConverterScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("currency_rates", Context.MODE_PRIVATE) }
+
     var amount by remember { mutableStateOf("") }
     var fromCurrency by remember { mutableStateOf("USD") }
     var toCurrency by remember { mutableStateOf("EUR") }
 
-    // Mock rates
-    val rates = mapOf(
+    // Initial rates
+    val initialRates = mapOf(
         "USD" to 1.0,
         "EUR" to 0.92,
         "GBP" to 0.79,
@@ -31,6 +37,19 @@ fun CurrencyConverterScreen(navController: NavHostController) {
         "BRL" to 5.05
     )
 
+    var rates by remember {
+        mutableStateOf(
+            prefs.getString("latest", null)?.let { json ->
+                try {
+                    val obj = JSONObject(json)
+                    val map = mutableMapOf<String, Double>()
+                    obj.keys().forEach { map[it] = obj.getDouble(it) }
+                    map
+                } catch(e: Exception) { initialRates }
+            } ?: initialRates
+        )
+    }
+
     val currencies = rates.keys.toList()
 
     val result = try {
@@ -39,6 +58,13 @@ fun CurrencyConverterScreen(navController: NavHostController) {
         base * (rates[toCurrency] ?: 1.0)
     } catch (e: Exception) {
         0.0
+    }
+
+    // Perspective: Simulation of rate fetching and caching
+    LaunchedEffect(Unit) {
+        // In a real app, fetch from API here. For now, we "cache" the initial/stored rates.
+        val json = JSONObject(rates as Map<*, *>).toString()
+        prefs.edit().putString("latest", json).apply()
     }
 
     ToolScreen(title = "Currency Converter", onBack = { navController.popBackStack() }) { padding ->
@@ -77,7 +103,7 @@ fun CurrencyConverterScreen(navController: NavHostController) {
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Rates are mocked for offline use.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+            Text("Rates are cached for offline use.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
         }
     }
 }

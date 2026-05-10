@@ -1,58 +1,164 @@
 package com.naturetools.app.ui.screens.calculation
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
-import java.util.*
+
+data class Product(val name: String, val price: Double, val quantity: Double) {
+    val unitPrice: Double get() = if (quantity > 0) price / quantity else 0.0
+}
 
 @Composable
 fun UnitPriceCalculatorScreen(navController: NavHostController) {
-    var price1 by remember { mutableStateOf("") }
-    var quantity1 by remember { mutableStateOf("") }
-    var price2 by remember { mutableStateOf("") }
-    var quantity2 by remember { mutableStateOf("") }
+    var nameA by remember { mutableStateOf("Product A") }
+    var priceA by remember { mutableStateOf("") }
+    var quantityA by remember { mutableStateOf("") }
 
-    val unitPrice1 = (price1.toDoubleOrNull() ?: 0.0) / (quantity1.toDoubleOrNull() ?: 1.0)
-    val unitPrice2 = (price2.toDoubleOrNull() ?: 0.0) / (quantity2.toDoubleOrNull() ?: 1.0)
+    var nameB by remember { mutableStateOf("Product B") }
+    var priceB by remember { mutableStateOf("") }
+    var quantityB by remember { mutableStateOf("") }
+
+    val productA = Product(nameA, priceA.toDoubleOrNull() ?: 0.0, quantityA.toDoubleOrNull() ?: 0.0)
+    val productB = Product(nameB, priceB.toDoubleOrNull() ?: 0.0, quantityB.toDoubleOrNull() ?: 0.0)
+
+    val bestValue = when {
+        productA.unitPrice == 0.0 && productB.unitPrice == 0.0 -> null
+        productA.unitPrice == 0.0 -> productB
+        productB.unitPrice == 0.0 -> productA
+        productA.unitPrice < productB.unitPrice -> productA
+        productA.unitPrice > productB.unitPrice -> productB
+        else -> null
+    }
 
     ToolScreen(
-        title = "Unit Price Calc",
+        title = "Unit Price Comparison",
         onBack = { navController.popBackStack() }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Text("Compare two items to find the better deal.")
+            ProductInputCard(
+                title = "Item 1",
+                name = nameA,
+                onNameChange = { nameA = it },
+                price = priceA,
+                onPriceChange = { priceA = it },
+                quantity = quantityA,
+                onQuantityChange = { quantityA = it },
+                unitPrice = productA.unitPrice,
+                isBest = bestValue == productA && productA.unitPrice != productB.unitPrice
+            )
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Item 1", style = MaterialTheme.typography.titleSmall)
-                    OutlinedTextField(value = price1, onValueChange = { price1 = it }, label = { Text("Price") })
-                    OutlinedTextField(value = quantity1, onValueChange = { quantity1 = it }, label = { Text("Quantity") })
-                    Text(String.format(Locale.US, "Unit Price: %.4f", unitPrice1))
-                }
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Item 2", style = MaterialTheme.typography.titleSmall)
-                    OutlinedTextField(value = price2, onValueChange = { price2 = it }, label = { Text("Price") })
-                    OutlinedTextField(value = quantity2, onValueChange = { quantity2 = it }, label = { Text("Quantity") })
-                    Text(String.format(Locale.US, "Unit Price: %.4f", unitPrice2))
-                }
-            }
+            Spacer(modifier = Modifier.height(16.dp))
 
-            if (price1.isNotEmpty() && price2.isNotEmpty()) {
-                val betterDeal = if (unitPrice1 < unitPrice2) "Item 1 is cheaper!" else if (unitPrice2 < unitPrice1) "Item 2 is cheaper!" else "Both items are the same price."
+            ProductInputCard(
+                title = "Item 2",
+                name = nameB,
+                onNameChange = { nameB = it },
+                price = priceB,
+                onPriceChange = { priceB = it },
+                quantity = quantityB,
+                onQuantityChange = { quantityB = it },
+                unitPrice = productB.unitPrice,
+                isBest = bestValue == productB && productA.unitPrice != productB.unitPrice
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            if (bestValue != null && productA.unitPrice != productB.unitPrice) {
+                val savings = (kotlin.math.abs(productA.unitPrice - productB.unitPrice) / kotlin.math.max(productA.unitPrice, productB.unitPrice)) * 100
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                 ) {
-                    Text(betterDeal, modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.Savings, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "${bestValue.name} is ${java.lang.String.format("%.1f", savings)}% cheaper per unit!",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ProductInputCard(
+    title: String,
+    name: String,
+    onNameChange: (String) -> Unit,
+    price: String,
+    onPriceChange: (String) -> Unit,
+    quantity: String,
+    onQuantityChange: (String) -> Unit,
+    unitPrice: Double,
+    isBest: Boolean
+) {
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        colors = if (isBest) CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)) else CardDefaults.elevatedCardColors()
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Text(title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                if (isBest) {
+                    SuggestionChip(
+                        onClick = {},
+                        label = { Text("Best Value") },
+                        icon = { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp)) }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                label = { Text("Product Name") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = price,
+                    onValueChange = onPriceChange,
+                    label = { Text("Price") },
+                    modifier = Modifier.weight(1f),
+                    prefix = { Text("$") }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                OutlinedTextField(
+                    value = quantity,
+                    onValueChange = onQuantityChange,
+                    label = { Text("Quantity") },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                "Unit Price: $${java.lang.String.format("%.4f", unitPrice)}",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

@@ -197,20 +197,27 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                             for (var i = 0; i < imgs.length; i++) {
                                                 addUrl(imgs[i].src);
                                                 addUrl(imgs[i].dataset.src);
+                                                addUrl(imgs[i].getAttribute('srcset')?.split(' ')[0]);
                                             }
                                             var videos = root.getElementsByTagName('video');
                                             for (var i = 0; i < videos.length; i++) {
                                                 addUrl(videos[i].src);
                                                 addUrl(videos[i].poster);
+                                                var sources = videos[i].getElementsByTagName('source');
+                                                for(var j=0; j<sources.length; j++) addUrl(sources[j].src);
                                             }
-                                            // Instagram / TikTok / Pinterest / Twitter specific
+                                            // Instagram / TikTok / Pinterest / Twitter / Reddit specific
                                             if (location.href.includes('instagram.com') || location.href.includes('tiktok.com') ||
                                                 location.href.includes('pinterest.com') || location.href.includes('reddit.com') ||
                                                 location.href.includes('twitter.com') || location.href.includes('x.com')) {
 
-                                                var all = root.querySelectorAll('img, video, img.H_j, source, a[href$=".jpg"], a[href$=".png"], a[href$=".mp4"]');
+                                                var all = root.querySelectorAll('img, video, img.H_j, source, a[href$=".jpg"], a[href$=".png"], a[href$=".mp4"], div[style*="background-image"]');
                                                 all.forEach(el => {
                                                     addUrl(el.src || el.poster || el.currentSrc || el.href);
+                                                    if(el.style.backgroundImage) {
+                                                        var url = el.style.backgroundImage.slice(4, -1).replace(/"/g, "");
+                                                        addUrl(url);
+                                                    }
                                                 });
 
                                                 // Regex based extraction for embedded media

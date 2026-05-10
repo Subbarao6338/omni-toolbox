@@ -520,6 +520,34 @@ object ToolProvider {
         Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
         Tool("Web Search", Icons.Default.Search, "web", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
-        Tool("QR Scanner", Icons.Default.QrCodeScanner, "qr_scanner", "Utility & Misc", isVisibleOnHome = false, isSubTool = true)
+        Tool("QR Scanner", Icons.Default.QrCodeScanner, "qr_scanner", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
+
+        // Social & Media
+        Tool("Social & Media", Icons.Default.Share, "social_media_group", "Social & Media", Color(0xFFE91E63),
+            description = "Tools for social media and media management.",
+            subToolRoutes = listOf("social_preview", "bio_linker", "profile_photo_maker", "media_grabber")),
+        Tool("Profile Photo Maker", Icons.Default.AccountCircle, "profile_photo_maker", "Social & Media", isVisibleOnHome = false, isSubTool = true, description = "Create perfect profile pictures."),
+
+        // Privacy & Security
+        Tool("Privacy & Security", Icons.Default.Security, "security_group", "Privacy & Security", Color(0xFF607D8B),
+            description = "Protect your digital life.",
+            subToolRoutes = listOf("password_manager", "password_gen", "app_locker", "cipher_tools", "file_shredder")),
+        Tool("Strong Password Gen", Icons.Default.VpnKey, "password_gen", "Privacy & Security", isVisibleOnHome = false, isSubTool = true, description = "Generate unhackable passwords."),
+
+        // DIY & Home
+        Tool("DIY & Home", Icons.Default.Home, "diy_home_group", "DIY & Home", Color(0xFF795548),
+            description = "Handy tools for home projects and maintenance.",
+            subToolRoutes = listOf("level", "ruler", "protractor", "metal", "light", "unit_compare")),
+        Tool("Unit Price Comparison", Icons.Default.CompareArrows, "unit_compare", "DIY & Home", isVisibleOnHome = false, isSubTool = true, description = "Compare prices for the best value."),
+
+        // Travel & Maps
+        Tool("Travel & Maps", Icons.Default.Flight, "travel_maps_group", "Travel & Maps", Color(0xFF03A9F4),
+            description = "Essential tools for your next adventure.",
+            subToolRoutes = listOf("world_clock", "currency", "travel_budget", "route_planner", "world_map")),
+        Tool("Travel Budgeter", Icons.Default.AttachMoney, "travel_budget", "Travel & Maps", isVisibleOnHome = false, isSubTool = true, description = "Plan and track your travel expenses."),
+
+        // Additional Tools in Utility & Misc
+        Tool("Wifi QR Generator", Icons.Default.Wifi, "wifi_qr", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Generate QR codes for your Wifi network."),
+        Tool("Metatag Analyzer", Icons.Default.Search, "meta_anal", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Analyze website metatags for SEO.")
     )
 }

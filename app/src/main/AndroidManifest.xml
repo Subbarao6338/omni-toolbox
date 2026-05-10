@@ -244,6 +244,17 @@
                 android:resource="@xml/recent_tools_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.SystemMonitorWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/system_monitor_widget_info" />
+        </receiver>
+
         <service
             android:name=".service.FlashlightTileService"
             android:exported="true"
@@ -418,6 +429,16 @@
             android:name=".service.LightMeterTileService"
             android:exported="true"
             android:label="Light Meter"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.WifiQrTileService"
+            android:exported="true"
+            android:label="Wifi QR"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
