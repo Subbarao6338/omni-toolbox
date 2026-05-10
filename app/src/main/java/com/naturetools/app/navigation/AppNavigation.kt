@@ -121,7 +121,7 @@ fun NatureToolsApp(
         composable(
             route = "hub",
             deepLinks = listOf(navDeepLink { uriPattern = "naturetools://hub" })
-        ) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "Hub") }
+        ) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "nHub") }
 
         composable("web?url={url}&showBar={showBar}&title={title}", arguments = listOf(
             navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null },
@@ -177,7 +177,9 @@ fun NatureToolsApp(
             composable(tool.route) {
                 when (tool.category) {
                     "Smart Utilities" -> {
-                        if (listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate", "csv_to_json").contains(tool.route)) {
+                        if (tool.route == "csv_to_json") {
+                            CsvToJsonScreen(navController)
+                        } else if (listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate").contains(tool.route)) {
                             ChatToolScreen(navController, tool.name)
                         } else if (tool.route == "data_viz") {
                             DataVisualizerScreen(navController)
@@ -204,6 +206,10 @@ fun NatureToolsApp(
                                 "per_image" -> "https://perchance.org/ai-image-generator"
                                 "per_story" -> "https://perchance.org/ai-story-generator"
                                 "per_character" -> "https://perchance.org/ai-character-generator"
+                                "per_image_pro" -> "https://perchance.org/image-generator-professional"
+                                "per_text_gen" -> "https://perchance.org/ai-text-generator"
+                                "per_text_rewrite" -> "https://perchance.org/ai-text-rewriter"
+                                "per_necs_story" -> "https://perchance.org/necs-story"
                                 else -> "https://perchance.org"
                             }, showUrlBar = false, title = tool.name)
                         } else if (tool.route == "media_grabber" || tool.route == "media_grab_pro") {
@@ -221,8 +227,7 @@ fun NatureToolsApp(
                         FileToolScreen(navController, tool.name)
                     }
                     "Finance & Crypto" -> {
-                        if (listOf("compound_interest", "compound_pro").contains(tool.route)) CompoundInterestScreen(navController)
-                        else if (listOf("loan_calc", "dividend_calc", "inflation_calc", "roi_calc", "salary_calc", "stock_profit", "expense_tracker").contains(tool.route)) LoanCalculatorScreen(navController)
+                        if (tool.route == "compound_interest") CompoundInterestScreen(navController)
                         else if (tool.route == "crypto_conv") CurrencyConverterScreen(navController)
                         else FinanceToolScreen(navController, tool.name)
                     }
@@ -246,7 +251,7 @@ fun NatureToolsApp(
                         else if (tool.route == "physics_formulas") PhysicsFormulasScreen(navController)
                         else if (tool.route == "star_map") StarMapScreen(navController)
                         else if (tool.route == "prime") PrimeCheckerScreen(navController)
-                        else if (listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "stats_pro").contains(tool.route)) MathToolScreen(navController, tool.name)
+                        else if (listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "stats").contains(tool.route)) MathToolScreen(navController, tool.name)
                         else EngineeringToolScreen(navController, tool.name)
                     }
                     "Engineering" -> {
@@ -257,6 +262,7 @@ fun NatureToolsApp(
                         if (tool.route == "signal_mirror") SignalMirrorScreen(navController)
                         else if (tool.route == "altitude_graph") SensorDataScreen(navController)
                         else if (listOf("air_quality", "uv_index", "light_pollution", "moon_phase", "rain_radar").contains(tool.route)) EnvironmentToolScreen(navController, tool.name)
+                        else if (tool.route == "area_calc") MathToolScreen(navController, tool.name)
                         else OutdoorToolScreen(navController, tool.name)
                     }
                     "System & Sensors" -> {
@@ -284,14 +290,16 @@ fun NatureToolsApp(
                         else if (tool.route == "url_encoder") UrlEncoderScreen(navController)
                         else if (tool.route == "base64") Base64Screen(navController)
                         else if (tool.route == "jwt_tool") JwtToolScreen(navController)
+                        else if (tool.route == "regex_tester") RegexTesterScreen(navController)
                         else DeveloperExpertScreen(navController, tool.name)
                     }
                     "Text" -> {
                         if (tool.route == "word_counter") WordCounterScreen(navController)
-                        else if (tool.route == "case_converter") CaseConverterScreen(navController)
+                        else if (tool.route == "case_converter") TextToolScreen(navController, "Case Converter")
                         else if (tool.route == "morse") MorseCodeScreen(navController)
                         else if (tool.route == "morse_decoder") MorseDecoderScreen(navController)
-                        else if (tool.route == "lorem") LoremIpsumScreen(navController)
+                        else if (tool.route == "lorem") TextToolScreen(navController, "Lorem Ipsum")
+                        else if (tool.route == "anagram") TextToolScreen(navController, "Anagram Finder")
                         else if (tool.route == "text_diff") TextDiffScreen(navController)
                         else WordCounterScreen(navController, tool.name)
                     }
@@ -299,6 +307,7 @@ fun NatureToolsApp(
                         if (tool.route == "date_calc") DateCalculatorScreen(navController)
                         else if (tool.route == "fuel") FuelCostCalculatorScreen(navController)
                         else if (tool.route == "unit_price") UnitPriceCalculatorScreen(navController)
+                        else if (tool.route == "calculator") CalculatorScreen(navController)
                         else MathToolScreen(navController, tool.name)
                     }
                     "Conversion" -> {
@@ -324,6 +333,7 @@ fun NatureToolsApp(
                         else if (tool.route == "speedometer" || tool.route == "fuel_consumption" || tool.route == "car_maintenance") AutomotiveToolScreen(navController, tool.name)
                         else if (tool.route == "social_preview" || tool.route == "bio_linker") SocialToolScreen(navController, tool.name)
                         else if (tool.route == "tiles_widgets") TilesAndWidgetsScreen(navController)
+                        else if (tool.route == "unit_price") UnitPriceCalculatorScreen(navController)
                         else AudioToolScreen(navController, tool.name)
                     }
                     else -> AudioToolScreen(navController, tool.name)

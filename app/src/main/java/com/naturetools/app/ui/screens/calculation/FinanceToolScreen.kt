@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,73 @@ fun FinanceToolScreen(navController: NavHostController, title: String) {
                 "SIP Calculator" -> SipCalculator()
                 "GST Calculator" -> GstCalculator()
                 "Retirement Planner" -> RetirementPlanner()
+                "Dividend Calc" -> DividendCalculator()
+                "Inflation Calc" -> InflationCalculator()
+                "ROI Calculator" -> RoiCalculator()
+                "Loan Calculator" -> LoanCalculator()
+                "Salary Calc" -> SalaryCalculator()
+                "Stock Profit" -> StockProfitCalculator()
+                "Unit Price", "Unit Price Calc" -> UnitPriceCalculator()
+                "Expense Tracker" -> ExpenseTracker()
+                "Tax Calculator" -> TaxCalculator()
                 else -> Text("Finance Utility for $title")
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpenseTracker() {
+    var amount by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("Food") }
+    val expenses = remember { mutableStateListOf<Pair<String, Double>>() }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Expense Tracker", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text("Amount") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text("Category") }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
+
+        Button(onClick = {
+            val amt = amount.toDoubleOrNull() ?: 0.0
+            if (amt > 0) {
+                expenses.add(category to amt)
+                amount = ""
+            }
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text("Add Expense")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Total: ${expenses.sumOf { it.second }}", style = MaterialTheme.typography.headlineSmall)
+
+        expenses.forEach { (cat, amt) ->
+            ListItem(headlineContent = { Text(cat) }, trailingContent = { Text("%.2f".format(amt)) })
+        }
+    }
+}
+
+@Composable
+fun TaxCalculator() {
+    var income by remember { mutableStateOf("50000") }
+    var taxRate by remember { mutableStateOf("20") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Tax Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = income, onValueChange = { income = it }, label = { Text("Annual Income") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = taxRate, onValueChange = { taxRate = it }, label = { Text("Tax Rate (%)") }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
+
+        val inc = income.toDoubleOrNull() ?: 0.0
+        val rate = (taxRate.toDoubleOrNull() ?: 0.0) / 100
+        val tax = inc * rate
+
+        Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Estimated Tax: ${"%.2f".format(tax)}")
+                Text("Net Income: ${"%.2f".format(inc - tax)}")
             }
         }
     }
@@ -153,6 +220,209 @@ fun GstCalculator() {
                     Text("Net Amount: ₹${"%.2f".format(netAmount)}")
                     Text("GST Amount: ₹${"%.2f".format(gstAmount)}")
                     Text("Total Amount: ₹${"%.2f".format(totalAmount)}", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DividendCalculator() {
+    var stockPrice by remember { mutableStateOf("100") }
+    var dividendYield by remember { mutableStateOf("4") }
+    var sharesOwned by remember { mutableStateOf("10") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Dividend Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = stockPrice, onValueChange = { stockPrice = it }, label = { Text("Stock Price") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = dividendYield, onValueChange = { dividendYield = it }, label = { Text("Dividend Yield (%)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = sharesOwned, onValueChange = { sharesOwned = it }, label = { Text("Shares Owned") }, modifier = Modifier.fillMaxWidth())
+
+        val price = stockPrice.toDoubleOrNull() ?: 0.0
+        val yield = (dividendYield.toDoubleOrNull() ?: 0.0) / 100
+        val shares = sharesOwned.toDoubleOrNull() ?: 0.0
+
+        if (price > 0 && shares > 0) {
+            val annualDividend = price * yield * shares
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Annual Dividend: $${"%.2f".format(annualDividend)}")
+                    Text("Monthly Dividend: $${"%.2f".format(annualDividend / 12)}")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun InflationCalculator() {
+    var amount by remember { mutableStateOf("1000") }
+    var inflationRate by remember { mutableStateOf("3") }
+    var years by remember { mutableStateOf("10") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Inflation Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text("Amount") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = inflationRate, onValueChange = { inflationRate = it }, label = { Text("Inflation Rate (%)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = years, onValueChange = { years = it }, label = { Text("Years") }, modifier = Modifier.fillMaxWidth())
+
+        val amt = amount.toDoubleOrNull() ?: 0.0
+        val rate = (inflationRate.toDoubleOrNull() ?: 0.0) / 100
+        val yr = years.toDoubleOrNull() ?: 0.0
+
+        if (amt > 0 && yr > 0) {
+            val futureValue = amt * (1 + rate).pow(yr)
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Future Value: ${"%.2f".format(futureValue)}")
+                    Text("Purchasing Power Loss: ${"%.2f".format(futureValue - amt)}")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RoiCalculator() {
+    var initialValue by remember { mutableStateOf("1000") }
+    var finalValue by remember { mutableStateOf("1500") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("ROI Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = initialValue, onValueChange = { initialValue = it }, label = { Text("Initial Investment") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = finalValue, onValueChange = { finalValue = it }, label = { Text("Final Value") }, modifier = Modifier.fillMaxWidth())
+
+        val initial = initialValue.toDoubleOrNull() ?: 0.0
+        val final = finalValue.toDoubleOrNull() ?: 0.0
+
+        if (initial > 0) {
+            val roi = ((final - initial) / initial) * 100
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Return on Investment (ROI): ${"%.2f".format(roi)}%")
+                    Text("Net Profit: ${"%.2f".format(final - initial)}")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LoanCalculator() {
+    var amount by remember { mutableStateOf("10000") }
+    var interest by remember { mutableStateOf("7") }
+    var years by remember { mutableStateOf("5") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Loan EMI Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text("Loan Amount") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = interest, onValueChange = { interest = it }, label = { Text("Interest Rate (%)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = years, onValueChange = { years = it }, label = { Text("Years") }, modifier = Modifier.fillMaxWidth())
+
+        val p = amount.toDoubleOrNull() ?: 0.0
+        val r = (interest.toDoubleOrNull() ?: 0.0) / 12 / 100
+        val n = (years.toDoubleOrNull() ?: 0.0) * 12
+
+        if (p > 0 && r > 0 && n > 0) {
+            val emi = (p * r * (1 + r).pow(n)) / ((1 + r).pow(n) - 1)
+            val totalPayment = emi * n
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Monthly EMI: ${"%.2f".format(emi)}")
+                    Text("Total Payment: ${"%.2f".format(totalPayment)}")
+                    Text("Total Interest: ${"%.2f".format(totalPayment - p)}")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SalaryCalculator() {
+    var hourlyRate by remember { mutableStateOf("25") }
+    var hoursPerWeek by remember { mutableStateOf("40") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Salary Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = hourlyRate, onValueChange = { hourlyRate = it }, label = { Text("Hourly Rate") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = hoursPerWeek, onValueChange = { hoursPerWeek = it }, label = { Text("Hours Per Week") }, modifier = Modifier.fillMaxWidth())
+
+        val rate = hourlyRate.toDoubleOrNull() ?: 0.0
+        val hours = hoursPerWeek.toDoubleOrNull() ?: 0.0
+
+        if (rate > 0 && hours > 0) {
+            val weekly = rate * hours
+            val yearly = weekly * 52
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Weekly Salary: ${"%.2f".format(weekly)}")
+                    Text("Monthly Salary: ${"%.2f".format(yearly / 12)}")
+                    Text("Yearly Salary: ${"%.2f".format(yearly)}")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun StockProfitCalculator() {
+    var buyPrice by remember { mutableStateOf("100") }
+    var sellPrice by remember { mutableStateOf("120") }
+    var shares by remember { mutableStateOf("10") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Stock Profit Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = buyPrice, onValueChange = { buyPrice = it }, label = { Text("Buy Price") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = sellPrice, onValueChange = { sellPrice = it }, label = { Text("Sell Price") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = shares, onValueChange = { shares = it }, label = { Text("Shares") }, modifier = Modifier.fillMaxWidth())
+
+        val buy = buyPrice.toDoubleOrNull() ?: 0.0
+        val sell = sellPrice.toDoubleOrNull() ?: 0.0
+        val sh = shares.toDoubleOrNull() ?: 0.0
+
+        if (sh > 0) {
+            val profit = (sell - buy) * sh
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Total Profit: ${"%.2f".format(profit)}", color = if (profit >= 0) Color(0xFF4CAF50) else Color.Red)
+                    Text("Profit Percentage: ${"%.2f".format(((sell - buy) / buy) * 100)}%")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun UnitPriceCalculator() {
+    var totalPrice by remember { mutableStateOf("10") }
+    var quantity by remember { mutableStateOf("2") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Unit Price Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = totalPrice, onValueChange = { totalPrice = it }, label = { Text("Total Price") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = quantity, onValueChange = { quantity = it }, label = { Text("Quantity") }, modifier = Modifier.fillMaxWidth())
+
+        val price = totalPrice.toDoubleOrNull() ?: 0.0
+        val qty = quantity.toDoubleOrNull() ?: 0.0
+
+        if (qty > 0) {
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Price per Unit: ${"%.2f".format(price / qty)}")
                 }
             }
         }

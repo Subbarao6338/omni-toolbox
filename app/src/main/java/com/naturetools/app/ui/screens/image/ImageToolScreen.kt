@@ -10,10 +10,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,10 +27,44 @@ import com.naturetools.app.ui.components.ToolScreen
 @Composable
 fun ImageToolScreen(navController: NavHostController, title: String) {
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var brightness by remember { mutableFloatStateOf(0f) }
+    var contrast by remember { mutableFloatStateOf(1f) }
+    var saturation by remember { mutableFloatStateOf(1f) }
+    var rotation by remember { mutableFloatStateOf(0f) }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
+    }
+
+    val colorMatrix = remember(brightness, contrast, saturation) {
+        ColorMatrix().apply {
+            reset()
+            // Contrast & Brightness
+            val t = (1.0f - contrast) / 2.0f * 255.0f
+            val contrastMatrix = ColorMatrix(floatArrayOf(
+                contrast, 0f, 0f, 0f, t + brightness * 255f,
+                0f, contrast, 0f, 0f, t + brightness * 255f,
+                0f, 0f, contrast, 0f, t + brightness * 255f,
+                0f, 0f, 0f, 1f, 0f
+            ))
+            set(contrastMatrix)
+
+            // Saturation
+            val invSat = 1 - saturation
+            val R = 0.213f * invSat
+            val G = 0.715f * invSat
+            val B = 0.072f * invSat
+
+            val satMatrix = ColorMatrix(floatArrayOf(
+                R + saturation, G, B, 0f, 0f,
+                R, G + saturation, B, 0f, 0f,
+                R, G, B + saturation, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            ))
+            timesAssign(satMatrix)
+        }
     }
 
     ToolScreen(
@@ -47,8 +85,10 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(350.dp),
-                    contentScale = ContentScale.Fit
+                        .height(350.dp)
+                        .rotate(rotation),
+                    contentScale = ContentScale.Fit,
+                    colorFilter = ColorFilter.colorMatrix(colorMatrix)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -60,89 +100,16 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Processing Controls",
+                            text = "Adjustments",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        when (title) {
-                            "Smart Tools", "Image AI Tools" -> {
-                                AdjustmentSlider("AI Upscale (x)", valueRange = 1f..4f, initialValue = 2f)
-                                AdjustmentSlider("Denoise Strength")
-                                AdjustmentSlider("Detail Enhancement")
-                                AdjustmentSlider("Color Correction")
-                            }
-                            "Resize and Convert", "Format Conversion", "Resize Image" -> {
-                                AdjustmentSlider("Quality", initialValue = 0.9f)
-                                AdjustmentSlider("Scale Factor", valueRange = 0.1f..2.0f, initialValue = 1.0f)
-                                Text("Output Format: JPEG/PNG/WEBP/AVIF")
-                            }
-                            "Compress Image", "Compress PDF" -> {
-                                AdjustmentSlider("Target Compression Ratio")
-                                AdjustmentSlider("Max Dimension (px)", valueRange = 100f..4000f, initialValue = 1920f)
-                                AdjustmentSlider("Chroma Subsampling", initialValue = 0.5f)
-                            }
-                            "Crop", "Multi Crop" -> {
-                                AdjustmentSlider("Aspect Ratio (X)", valueRange = 1f..16f, initialValue = 1f)
-                                AdjustmentSlider("Aspect Ratio (Y)", valueRange = 1f..16f, initialValue = 1f)
-                                AdjustmentSlider("Rotation Offset", valueRange = -45f..45f, initialValue = 0f)
-                            }
-                            "Filter", "Photo Filters" -> {
-                                AdjustmentSlider("Filter Intensity")
-                                AdjustmentSlider("Vignette")
-                                AdjustmentSlider("Grain")
-                                AdjustmentSlider("Temperature")
-                            }
-                            "Background Remover" -> {
-                                AdjustmentSlider("Edge Smoothing")
-                                AdjustmentSlider("Sensitivity")
-                                AdjustmentSlider("Background Feather")
-                            }
-                            "Watermarking" -> {
-                                AdjustmentSlider("Watermark Opacity")
-                                AdjustmentSlider("Watermark Scale", valueRange = 0.1f..1.0f, initialValue = 0.3f)
-                                AdjustmentSlider("Position X")
-                                AdjustmentSlider("Position Y")
-                            }
-                            "Exif Viewer", "Metadata", "Edit EXIF" -> {
-                                Text("ISO: 100 | Shutter: 1/500s | Aperture: f/2.8")
-                                Text("Camera: Pixel 8 Pro | Location: San Francisco")
-                                AdjustmentSlider("Strip Private Data (0:No, 1:Yes)", initialValue = 0f)
-                            }
-                            "PDF Tools", "Preview PDF", "Split PDF", "Merge PDF" -> {
-                                AdjustmentSlider("DPI for Rendering", valueRange = 72f..600f, initialValue = 150f)
-                                AdjustmentSlider("PDF Quality", initialValue = 0.8f)
-                                AdjustmentSlider("Password Complexity", valueRange = 1f..5f, initialValue = 3f)
-                            }
-                            "OCR", "PDF to Text (OCR)" -> {
-                                AdjustmentSlider("Recognition Confidence")
-                                AdjustmentSlider("Binarization Threshold")
-                                Text("Language: English (US)")
-                            }
-                            "Pixel Art Maker" -> {
-                                AdjustmentSlider("Pixel Size", valueRange = 1f..50f, initialValue = 10f)
-                                AdjustmentSlider("Color Palette Size", valueRange = 2f..256f, initialValue = 16f)
-                                AdjustmentSlider("Dithering")
-                            }
-                            "ASCII Art" -> {
-                                AdjustmentSlider("Character Density", valueRange = 10f..200f, initialValue = 80f)
-                                AdjustmentSlider("Contrast Boost")
-                                Text("Style: Braille / Standard")
-                            }
-                            else -> {
-                                AdjustmentSlider("Intensity")
-                                AdjustmentSlider("Sensitivity")
-                                AdjustmentSlider("Threshold")
-                            }
-                        }
-
-                        if (title == "Single Edit" || title == "Draw") {
-                            AdjustmentSlider("Brightness", valueRange = -1f..1f, initialValue = 0f)
-                            AdjustmentSlider("Contrast", valueRange = 0.5f..2.0f, initialValue = 1.0f)
-                            AdjustmentSlider("Saturation", valueRange = 0f..2.0f, initialValue = 1.0f)
-                            AdjustmentSlider("Exposure", valueRange = -2f..2f, initialValue = 0f)
-                        }
+                        AdjustmentSlider("Brightness", valueRange = -1f..1f, initialValue = brightness, onValueChange = { brightness = it })
+                        AdjustmentSlider("Contrast", valueRange = 0f..2f, initialValue = contrast, onValueChange = { contrast = it })
+                        AdjustmentSlider("Saturation", valueRange = 0f..2f, initialValue = saturation, onValueChange = { saturation = it })
+                        AdjustmentSlider("Rotation", valueRange = 0f..360f, initialValue = rotation, onValueChange = { rotation = it })
                     }
                 }
 
@@ -153,7 +120,7 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                     modifier = Modifier.fillMaxWidth(),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {
-                    Icon(Icons.Default.PhotoLibrary, contentDescription = null)
+                    Icon(Icons.Default.Save, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Apply & Save Result")
                 }
