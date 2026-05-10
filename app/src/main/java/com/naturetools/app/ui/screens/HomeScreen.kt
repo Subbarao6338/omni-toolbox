@@ -161,13 +161,7 @@ fun HomeScreen(
                 }
             }
 
-            AnimatedContent(
-                targetState = filteredTools.value,
-                label = "tools_grid",
-                transitionSpec = {
-                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
-                }
-            ) { tools ->
+            Box(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 100.dp),
                     contentPadding = PaddingValues(16.dp),
@@ -175,7 +169,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(tools, key = { it.route }) { tool ->
+                    items(filteredTools.value, key = { it.route }) { tool ->
                         ToolCard(
                             tool = tool,
                             isFavorite = favorites.contains(tool.route),
