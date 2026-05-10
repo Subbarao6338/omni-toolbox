@@ -368,6 +368,51 @@ fun NatureToolsApp(
         composable("image_layers_bg") { ImageToolScreen(navController, "Layers on background") }
         composable("image_open_project") { ImageToolScreen(navController, "Open project") }
 
+        composable("image_to_webp") { ImageToolScreen(navController, "Images to WEBP") }
+        composable("webp_to_images") { ImageToolScreen(navController, "WEBP to images") }
+        composable("image_to_apng") { ImageToolScreen(navController, "Images to APNG") }
+        composable("apng_to_images") { ImageToolScreen(navController, "APNG to images") }
+        composable("apng_to_jxl") { ImageToolScreen(navController, "APNG to JXL") }
+        composable("pdf_preview") { ImageToolScreen(navController, "Preview PDF") }
+        composable("images_to_pdf") { ImageToolScreen(navController, "Images to PDF") }
+        composable("pdf_to_images") { ImageToolScreen(navController, "PDF to Images") }
+        composable("pdf_merge") { ImageToolScreen(navController, "Merge PDF") }
+        composable("pdf_split") { ImageToolScreen(navController, "Split PDF") }
+        composable("pdf_remove_pages") { ImageToolScreen(navController, "Remove PDF pages") }
+        composable("pdf_rotate") { ImageToolScreen(navController, "Rotate PDF") }
+        composable("pdf_rearrange") { ImageToolScreen(navController, "Rearrange PDF") }
+        composable("pdf_crop") { ImageToolScreen(navController, "Crop PDF") }
+        composable("pdf_page_numbers") { ImageToolScreen(navController, "Page Numbers") }
+        composable("pdf_watermark") { ImageToolScreen(navController, "Watermarking") }
+        composable("pdf_signature") { ImageToolScreen(navController, "Signature") }
+        composable("pdf_compress") { ImageToolScreen(navController, "Compress PDF") }
+        composable("pdf_flatten") { ImageToolScreen(navController, "Flatten PDF") }
+        composable("pdf_print") { ImageToolScreen(navController, "Print PDF") }
+        composable("pdf_grayscale") { ImageToolScreen(navController, "Grayscale") }
+        composable("pdf_repair") { ImageToolScreen(navController, "Repair PDF") }
+        composable("pdf_protect") { ImageToolScreen(navController, "Protect PDF") }
+        composable("pdf_unlock") { ImageToolScreen(navController, "Unlock PDF") }
+        composable("pdf_metadata") { ImageToolScreen(navController, "Metadata") }
+        composable("pdf_extract_images") { ImageToolScreen(navController, "Extract Images") }
+        composable("pdf_ocr") { ImageToolScreen(navController, "PDF to Text (OCR)") }
+        composable("pdf_zip") { ImageToolScreen(navController, "Zip PDF") }
+        composable("jpeg_to_jxl") { ImageToolScreen(navController, "JPEG to JXL") }
+        composable("jxl_to_jpeg") { ImageToolScreen(navController, "JXL to JPEG") }
+        composable("jxl_to_images") { ImageToolScreen(navController, "JXL to Images") }
+        composable("images_to_jxl") { ImageToolScreen(navController, "Images to JXL") }
+        composable("images_to_gif") { ImageToolScreen(navController, "Images to GIF") }
+        composable("gif_to_images") { ImageToolScreen(navController, "GIF to images") }
+        composable("gif_to_jxl") { ImageToolScreen(navController, "GIF to JXL") }
+        composable("gif_to_webp") { ImageToolScreen(navController, "GIF to WEBP") }
+        composable("color_info") { ImageToolScreen(navController, "Color Info") }
+        composable("color_mixing") { ImageToolScreen(navController, "Color Mixing") }
+        composable("color_harmonies") { ImageToolScreen(navController, "Color Harmonies") }
+        composable("color_shading") { ImageToolScreen(navController, "Color Shading") }
+        composable("image_histogram") { ImageToolScreen(navController, "Histogram") }
+        composable("generate_palette") { ImageToolScreen(navController, "Generate Palette") }
+        composable("material_you_palette") { ImageToolScreen(navController, "Material You") }
+        composable("edit_palette") { ImageToolScreen(navController, "Edit Palette") }
+
         composable("webp_tools") {
             AnimatedImageToolGroupScreen(
                 navController = navController,
