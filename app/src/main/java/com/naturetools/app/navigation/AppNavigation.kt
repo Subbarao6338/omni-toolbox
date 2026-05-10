@@ -162,7 +162,6 @@ fun NatureToolsApp(
         composable("json") { JsonFormatterScreen(navController) }
         composable("url_encoder") { UrlEncoderScreen(navController) }
         composable("sensor_data") { SensorDataScreen(navController) }
-        composable("color_picker") { ColorPickerScreen(navController) }
         composable("date_calc") { DateCalculatorScreen(navController) }
         composable("bpm") { BpmCounterScreen(navController) }
         composable("fuel") { FuelCostCalculatorScreen(navController) }
@@ -197,16 +196,10 @@ fun NatureToolsApp(
         composable("ruler") { RulerScreen(navController) }
         composable("altimeter") { AltimeterScreen(navController) }
         composable("barometer") { BarometerScreen(navController) }
-        composable("binaural") { BinauralBeatsScreen(navController) }
-        composable("area_calc") { AreaCalcScreen(navController) }
-        composable("volume_calc") { VolumeCalcScreen(navController) }
-        composable("ram_info") { RamInfoScreen(navController) }
         composable(
             route = "qr_scanner",
             deepLinks = listOf(navDeepLink { uriPattern = "naturetools://qr_scanner" })
         ) { QrScannerScreen(navController) }
-        composable("zodiac") { ZodiacFinderScreen(navController) }
-        composable("white_noise") { AudioToolScreen(navController, "White Noise") }
 
         composable("sci_calc") { ScientificCalculatorScreen(navController) }
         composable("device_id") { AudioToolScreen(navController, "Hardware ID") }
@@ -266,7 +259,6 @@ fun NatureToolsApp(
         composable("dof_calc") { PhotographyToolScreen(navController, "Depth of Field") }
         composable("guitar_tuner") { MusicToolScreen(navController, "Guitar Tuner") }
         composable("unit_price") { UnitPriceCalculatorScreen(navController) }
-        composable("unit_price_compare") { UnitPriceCalculatorScreen(navController) }
         composable("freq_gen") { AudioToolScreen(navController, "Freq Generator") }
         composable("stereo_widener") { AudioToolScreen(navController, "Stereo Widener") }
         composable("subnet_calc") { NetworkToolScreen(navController, "Subnet Calc") }
@@ -331,8 +323,6 @@ fun NatureToolsApp(
         composable("video_noise_remover") { AudioToolScreen(navController, "Video Noise Remover", "video/*") }
 
         composable("record_audio") { AudioToolScreen(navController, "Record Audio") }
-        composable("fun_record") { AudioToolScreen(navController, "Fun Recording") }
-        composable("karaoke_effect") { AudioToolScreen(navController, "Karaoke Effect") }
 
         composable("multi_mix") { AudioToolScreen(navController, "Multi Mix Audio") }
         composable("multi_convert") { AudioToolScreen(navController, "Multi Convert") }
@@ -343,9 +333,6 @@ fun NatureToolsApp(
             route = "metronome",
             deepLinks = listOf(navDeepLink { uriPattern = "naturetools://metronome" })
         ) { MetronomeScreen(navController) }
-        composable("audio_info") { AudioToolScreen(navController, "Audio Info") }
-        composable("video_info") { AudioToolScreen(navController, "Video Info") }
-        composable("device_codec") { AudioToolScreen(navController, "Device Codec") }
 
         composable("image_single_edit") { ImageToolScreen(navController, "Single Edit") }
         composable("image_resize_conv") { ImageToolScreen(navController, "Resize and Convert") }
@@ -403,11 +390,6 @@ fun NatureToolsApp(
             )
         }
 
-        composable("image_to_webp") { ImageToolScreen(navController, "Images to WEBP") }
-        composable("webp_to_images") { ImageToolScreen(navController, "WEBP to images") }
-        composable("image_to_apng") { ImageToolScreen(navController, "Images to APNG") }
-        composable("apng_to_images") { ImageToolScreen(navController, "APNG to images") }
-        composable("apng_to_jxl") { ImageToolScreen(navController, "APNG to JXL") }
 
         composable("pdf_tools") {
             AnimatedImageToolGroupScreen(
@@ -484,57 +466,18 @@ fun NatureToolsApp(
             )
         }
 
-        composable("pdf_preview") { ImageToolScreen(navController, "Preview PDF") }
-        composable("images_to_pdf") { ImageToolScreen(navController, "Images to PDF") }
-        composable("pdf_to_images") { ImageToolScreen(navController, "PDF to Images") }
-        composable("pdf_merge") { ImageToolScreen(navController, "Merge PDF") }
-        composable("pdf_split") { ImageToolScreen(navController, "Split PDF") }
-        composable("pdf_remove_pages") { ImageToolScreen(navController, "Remove PDF pages") }
-        composable("pdf_rotate") { ImageToolScreen(navController, "Rotate PDF") }
-        composable("pdf_rearrange") { ImageToolScreen(navController, "Rearrange PDF") }
-        composable("pdf_crop") { ImageToolScreen(navController, "Crop PDF") }
-        composable("pdf_page_numbers") { ImageToolScreen(navController, "Page Numbers") }
-        composable("pdf_watermark") { ImageToolScreen(navController, "Watermarking") }
-        composable("pdf_signature") { ImageToolScreen(navController, "Signature") }
-        composable("pdf_compress") { ImageToolScreen(navController, "Compress PDF") }
-        composable("pdf_flatten") { ImageToolScreen(navController, "Flatten PDF") }
-        composable("pdf_print") { ImageToolScreen(navController, "Print PDF") }
-        composable("pdf_grayscale") { ImageToolScreen(navController, "Grayscale") }
-        composable("pdf_repair") { ImageToolScreen(navController, "Repair PDF") }
-        composable("pdf_protect") { ImageToolScreen(navController, "Protect PDF") }
-        composable("pdf_unlock") { ImageToolScreen(navController, "Unlock PDF") }
-        composable("pdf_metadata") { ImageToolScreen(navController, "Metadata") }
-        composable("pdf_extract_images") { ImageToolScreen(navController, "Extract Images") }
-        composable("pdf_ocr") { ImageToolScreen(navController, "PDF to Text (OCR)") }
-        composable("pdf_zip") { ImageToolScreen(navController, "Zip PDF") }
+        composable("pdf_view_v2") { ImageToolScreen(navController, "Preview PDF") }
+        composable("pdf_split_v2") { ImageToolScreen(navController, "Split PDF") }
+        composable("pdf_security") { ImageToolScreen(navController, "Protect PDF") }
+        composable("pdf_extract_v2") { ImageToolScreen(navController, "Extract Images") }
 
-        composable("jpeg_to_jxl") { ImageToolScreen(navController, "JPEG to JXL") }
-        composable("jxl_to_jpeg") { ImageToolScreen(navController, "JXL to JPEG") }
-        composable("jxl_to_images") { ImageToolScreen(navController, "JXL to Images") }
-        composable("images_to_jxl") { ImageToolScreen(navController, "Images to JXL") }
 
-        composable("images_to_gif") { ImageToolScreen(navController, "Images to GIF") }
-        composable("gif_to_images") { ImageToolScreen(navController, "GIF to images") }
-        composable("gif_to_jxl") { ImageToolScreen(navController, "GIF to JXL") }
-        composable("gif_to_webp") { ImageToolScreen(navController, "GIF to WEBP") }
 
-        composable("color_info") { ColorPickerScreen(navController) }
-        composable("color_mixing") { ColorPickerScreen(navController) }
-        composable("color_harmonies") { ColorPickerScreen(navController) }
-        composable("color_shading") { ColorPickerScreen(navController) }
-        composable("image_histogram") { ImageToolScreen(navController, "Histogram") }
-        composable("generate_palette") { ColorPickerScreen(navController) }
-        composable("material_you_palette") { ColorPickerScreen(navController) }
-        composable("edit_palette") { ColorPickerScreen(navController) }
 
-        composable("zip_tools") { FileToolScreen(navController, "Zip") }
         composable("doc_scanner") { ImageToolScreen(navController, "Document Scanner") }
-        composable("audio_covers") { AudioToolScreen(navController, "Audio Covers") }
         composable("cipher_tools") { FileToolScreen(navController, "Cipher") }
         composable("ascii_art") { ImageToolScreen(navController, "ASCII Art") }
 
-        composable("audio_output") { AudioToolScreen(navController, "Audio Output") }
-        composable("video_output") { AudioToolScreen(navController, "Video Output") }
 
         // New tools from ToolProvider
         composable("ai_code") { AIToolScreen(navController, "AI Code Assistant") }
@@ -564,10 +507,7 @@ fun NatureToolsApp(
         composable("pixel_art") { ImageToolScreen(navController, "Pixel Art Maker") }
         composable("frame_grabber") { AudioToolScreen(navController, "Video Frame Grabber", "video/*") }
         composable("speed_test") { NetworkToolScreen(navController, "Speed Test") }
-        composable("dog_whistle") { AudioToolScreen(navController, "Dog Whistle") }
-        composable("log_viewer") { FileToolScreen(navController, "Log Viewer") }
         composable("kanban") { TaskBoardScreen(navController) }
-        composable("nature_sounds") { AudioToolScreen(navController, "Nature Sounds") }
         composable("gforce_meter") { SensorDataScreen(navController) }
         composable("thermal_info") { DeviceScreen(navController) }
         composable("perm_manager") { SystemLabScreen(navController, "Permission Manager") }
@@ -576,7 +516,6 @@ fun NatureToolsApp(
         composable("force_calc") { ScientificCalculatorScreen(navController) }
         composable("app_locker") { SystemLabScreen(navController, "App Locker") }
         composable("process_manager") { SystemLabScreen(navController, "Process Manager") }
-        composable("text_art") { CaseConverterScreen(navController) }
         composable("protractor") { RulerScreen(navController) }
         composable("video_flip") { AudioToolScreen(navController, "Video Flip", "video/*") }
         composable("vid_to_aud_pro") { AudioToolScreen(navController, "Video To Audio Pro", "video/*") }
@@ -601,114 +540,34 @@ fun NatureToolsApp(
         composable("system_lab") { SystemLabScreen(navController, "System Lab") }
 
         // Science
-        composable("pendulum_calc") { ScientificCalculatorScreen(navController) }
 
         // Kitchen
         composable("egg_timer") { StopwatchScreen(navController) }
         composable("recipe_scaler") { UnitPriceCalculatorScreen(navController) }
 
         // Document Creation & Conversion
-        composable("img_to_pdf_v3") { ImageToolScreen(navController, "Images to PDF") }
-        composable("text_to_pdf_v3") { ImageToolScreen(navController, "Text to PDF") }
-        composable("html_to_pdf_v3") { ImageToolScreen(navController, "HTML → PDF") }
-        composable("excel_to_pdf_v3") { ImageToolScreen(navController, "Excel to PDF") }
-        composable("scan_to_pdf_v3") { ImageToolScreen(navController, "Scan to PDF") }
-        composable("qr_barcode_to_pdf_v3") { ImageToolScreen(navController, "QR & Barcodes") }
-        composable("zip_to_pdf_v3") { ImageToolScreen(navController, "ZIP to PDF") }
-        composable("pdf_to_img_v3") { ImageToolScreen(navController, "PDF to Image") }
-        composable("pdf_to_zip_v3") { ImageToolScreen(navController, "PDF to ZIP") }
-        composable("ocr_v3") { WordCounterScreen(navController, title = "OCR") }
-        composable("extract_text_v3") { WordCounterScreen(navController, title = "Extract Text") }
-        composable("pdf_to_txt_v3") { WordCounterScreen(navController, title = "PDF to Text") }
 
         // Document Organization & Editing
-        composable("merge_pdf_v3") { ImageToolScreen(navController, "Merge PDF") }
-        composable("split_pdf_v3") { ImageToolScreen(navController, "Split PDF") }
-        composable("reorder_pages_v3") { ImageToolScreen(navController, "Reorder Pages") }
-        composable("rotate_pages_v3") { ImageToolScreen(navController, "Rotate Pages") }
-        composable("delete_pages_v3") { ImageToolScreen(navController, "Delete Pages") }
-        composable("extract_pages_v3") { ImageToolScreen(navController, "Extract Pages") }
-        composable("add_page_gallery_v3") { ImageToolScreen(navController, "Add Page from Gallery") }
-        composable("page_size_v3") { ImageToolScreen(navController, "Page Size") }
-        composable("page_adjust_v3") { ImageToolScreen(navController, "Page Adjust/Rotate/Delete") }
-        composable("remove_duplicate_pages_v3") { ImageToolScreen(navController, "Remove Duplicate Pages") }
-        composable("bookmarks_v3") { ImageToolScreen(navController, "Bookmarks") }
 
         // Optimization & Enhancement
-        composable("compress_pdf_v3") { ImageToolScreen(navController, "Compress PDF") }
-        composable("add_watermark_v3") { ImageToolScreen(navController, "Add Watermark") }
-        composable("add_text_v3") { ImageToolScreen(navController, "Add Text") }
-        composable("add_images_v3") { ImageToolScreen(navController, "Add Images") }
-        composable("grayscale_v3") { ImageToolScreen(navController, "Grayscale") }
-        composable("repair_v3") { ImageToolScreen(navController, "Repair") }
-        composable("invert_pdf_v3") { ImageToolScreen(navController, "Invert PDF") }
-        composable("flatten_pdf_v3") { ImageToolScreen(navController, "Flatten PDF") }
-        composable("page_numbers_v3") { ImageToolScreen(navController, "Page Numbers") }
 
         // Security & Metadata
-        composable("lock_pdf_v3") { ImageToolScreen(navController, "Lock PDF") }
-        composable("unlock_pdf_v3") { ImageToolScreen(navController, "Unlock PDF") }
-        composable("sign_pdf_v3") { ImageToolScreen(navController, "Sign PDF") }
-        composable("view_metadata_v3") { ImageToolScreen(navController, "View Metadata") }
-        composable("edit_metadata_v3") { ImageToolScreen(navController, "Metadata / Edit Props") }
-        composable("strip_metadata_v3") { ImageToolScreen(navController, "Strip Metadata") }
 
         // Specialized & View Tools
-        composable("compare_pdf_v3") { ImageToolScreen(navController, "Compare") }
-        composable("view_pdf_v3") { ImageToolScreen(navController, "View PDF") }
-        composable("pdf_history_v3") { FileToolScreen(navController, "History") }
-        composable("long_image_v3") { ImageToolScreen(navController, "Share as Long Image") }
-        composable("pdf_link_v3") { ImageToolScreen(navController, "Link") }
-        composable("extract_images_v3") { ImageToolScreen(navController, "Extract Images") }
-        composable("resize_image_v3") { ImageToolScreen(navController, "Resize Image") }
-        composable("convert_format_v3") { ImageToolScreen(navController, "Convert Format") }
 
         // 2. Image Tools
-        composable("img_jpg_png") { ImageToolScreen(navController, "JPG → PNG") }
-        composable("img_png_jpg") { ImageToolScreen(navController, "PNG → JPG") }
-        composable("img_webp_conv") { ImageToolScreen(navController, "WEBP Converter") }
-        composable("img_gif_conv") { ImageToolScreen(navController, "GIF Converter") }
-        composable("img_heic_conv") { ImageToolScreen(navController, "HEIC Converter") }
-        composable("img_resize_v2") { ImageToolScreen(navController, "Resize Image") }
-        composable("img_compress_v2") { ImageToolScreen(navController, "Compress Image") }
-        composable("img_rotate_flip") { ImageToolScreen(navController, "Rotate & Flip") }
-        composable("img_crop_v3") { ImageToolScreen(navController, "Crop Image") }
-        composable("img_collage_v2") { ImageToolScreen(navController, "Collage Maker") }
-        composable("img_to_pdf_v2") { ImageToolScreen(navController, "Image → PDF") }
-        composable("img_meta_v2") { ExifViewerScreen(navController) }
-        composable("img_painter") { ImageToolScreen(navController, "Painter") }
 
         // 3. Video Tools
         composable("vid_annotator") { AudioToolScreen(navController, "Video Frame Annotator", "video/*") }
-        composable("vid_trim_v2") { AudioToolScreen(navController, "Trim/Split Video", "video/*") }
-        composable("vid_merge") { AudioToolScreen(navController, "Merge Videos", "video/*") }
-        composable("vid_to_mp4") { AudioToolScreen(navController, "Convert to MP4", "video/*") }
-        composable("vid_to_pdf") { AudioToolScreen(navController, "Video to PDF", "video/*") }
-        composable("vid_to_img") { AudioToolScreen(navController, "Video to Images", "video/*") }
-        composable("vid_speed_v2") { AudioToolScreen(navController, "Change Video Speed", "video/*") }
-        composable("vid_rotate_crop") { AudioToolScreen(navController, "Rotate/Crop Video", "video/*") }
-        composable("vid_mute_extract") { AudioToolScreen(navController, "Mute/Extract Audio", "video/*") }
-        composable("vid_compress_v2") { AudioToolScreen(navController, "Compress Video", "video/*") }
-        composable("vid_info_v2") { AudioToolScreen(navController, "Video Info", "video/*") }
         composable("vid_thumb") { AudioToolScreen(navController, "Thumbnail Extractor", "video/*") }
 
         // 4. Audio Tools
         composable("aud_conv") { AudioToolScreen(navController, "Audio Converter") }
         composable("aud_info_v2") { AudioToolScreen(navController, "Audio Info") }
-        composable("aud_edit_v2") { AudioToolScreen(navController, "Merge/Split/Trim Audio") }
-        composable("aud_speed_v2") { AudioToolScreen(navController, "Change Speed") }
-        composable("aud_mute_v2") { AudioToolScreen(navController, "Mute Audio") }
         composable("aud_eq_v2") { AudioToolScreen(navController, "Audio Equalizer") }
-        composable("aud_bass_v2") { AudioToolScreen(navController, "Bass Booster") }
-        composable("aud_noise_v2") { AudioToolScreen(navController, "Noise Remover") }
-        composable("aud_comp_v2") { AudioToolScreen(navController, "Audio Compressor") }
         composable("aud_to_vid") { AudioToolScreen(navController, "Add Audio to Video") }
 
         // 5. Text Tools
-        composable("txt_count") { WordCounterScreen(navController) }
-        composable("txt_case") { CaseConverterScreen(navController) }
-        composable("txt_to_pdf") { WordCounterScreen(navController) } // Reuse WordCounter for input
-        composable("txt_copy_clear") { CaseConverterScreen(navController) }
             composable("ai_grammar") { AIToolScreen(navController, "AI Grammar") }
         composable("ai_obj_detect") { AIToolScreen(navController, "AI Object Detect") }
         composable("ai_sentiment") { AIToolScreen(navController, "AI Sentiment") }
@@ -729,7 +588,6 @@ fun NatureToolsApp(
         composable("eye_exercise") { HealthScreen(navController, "Eye Exercise") }
         composable("posture_check") { HealthScreen(navController, "Posture Checker") }
         composable("stretch_guide") { HealthScreen(navController, "Stretching Guide") }
-        composable("smart_scan") { NetworkToolScreen(navController, "Device Scanner") }
         composable("wifi_anal") { NetworkToolScreen(navController, "WIFI Analyzer") }
         composable("wake_on_lan") { NetworkToolScreen(navController, "Wake On LAN") }
 
@@ -760,5 +618,6 @@ fun NatureToolsApp(
 
         // Health Plus
         composable("period_tracker") { HealthScreen(navController, "Period Tracker") }
-    }
+            composable("tiles_widgets") { TilesAndWidgetsScreen(navController) }
+}
 }
