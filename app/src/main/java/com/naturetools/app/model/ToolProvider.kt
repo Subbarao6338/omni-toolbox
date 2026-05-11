@@ -26,39 +26,154 @@ object ToolProvider {
         // Smart Utilities
         Tool("AI Expert", Icons.Default.AutoAwesome, "ai_group", "Smart Utilities", Color(0xFF673AB7),
             description = "AI-powered tools for chat, image generation, audio processing and more.",
-            subToolRoutes = listOf("ai_chat", "ai_summarizer", "ai_image", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate", "ai_noise_remover", "ai_voice_mimic", "ai_stems_splitter", "audio_noise_remover", "echo_remover", "reverb_remover", "video_noise_remover", "vocal_autotuner", "vocal_remover", "image_ai_tools")),
-        Tool("Audio Noise Remover", Icons.Default.MicOff, "audio_noise_remover", "Smart Utilities", Color(0xFF2196F3), isVisibleOnHome = false, isSubTool = true, description = "Remove unwanted noise from your audio recordings."),
-        Tool("CSV to JSON", Icons.Default.Transform, "csv_to_json", "Smart Utilities", Color(0xFF009688),  description = "Convert CSV data to JSON format easily."),
-        Tool("Code Helper", Icons.Default.Code, "ai_code", "Smart Utilities", Color(0xFF673AB7), isVisibleOnHome = false, isSubTool = true,  description = "Get AI-powered help with your coding tasks."),
+            subToolRoutes = listOf("aud_master_pro", "audio_noise_remover", "ai_code", "echo_remover", "ai_grammar", "ai_image", "ai_noise_remover", "ai_obj_detect", "reverb_remover", "ai_sentiment", "ai_chat", "image_ai_tools", "ai_stems_splitter", "ai_text_ext", "ai_summarizer", "ai_translate", "video_noise_remover", "vocal_autotuner", "vocal_remover", "ai_voice_mimic")),
         Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "Smart Utilities", Color(0xFF4CAF50), description = "Visualize your data with interactive charts."),
-        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "Smart Utilities", Color(0xFF009688), isVisibleOnHome = false, isSubTool = true, description = "Remove echo from your audio files."),
-        Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "Smart Utilities", Color(0xFF4CAF50), isVisibleOnHome = false, isSubTool = true,  description = "Check and correct grammar in your text using AI."),
-        Tool("Image Generator", Icons.Default.Image, "ai_image", "Smart Utilities", Color(0xFFFFC107), isVisibleOnHome = false, isSubTool = true,  description = "Generate stunning images from text prompts using AI."),
         Tool("Key BPM Finder", Icons.Default.MusicNote, "key_bpm_finder", "Smart Utilities", Color(0xFFF44336), description = "Find the key and BPM of any song."),
-        Tool("Markdown Preview", Icons.Default.Description, "markdown_preview", "Smart Utilities", Color(0xFF3F51B5), description = "Preview your Markdown files in real-time."),
-        Tool("Noise Remover", Icons.Default.Hearing, "ai_noise_remover", "Smart Utilities", Color(0xFF4CAF50), isVisibleOnHome = false, isSubTool = true, description = "AI-powered noise reduction for audio."),
-        Tool("Object Detector", Icons.Default.CenterFocusStrong, "ai_obj_detect", "Smart Utilities", Color(0xFF673AB7), isVisibleOnHome = false, isSubTool = true,  description = "Detect objects in images using AI."),
-        Tool("Regex Tester", Icons.Default.Code, "regex_tester", "Smart Utilities", Color(0xFF673AB7), description = "Test and debug your regular expressions."),
-        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "Smart Utilities", Color(0xFF607D8B), isVisibleOnHome = false, isSubTool = true, description = "Remove reverb from your audio recordings."),
-        Tool("Sentiment Analysis", Icons.Default.Mood, "ai_sentiment", "Smart Utilities", Color(0xFFFFC107), isVisibleOnHome = false, isSubTool = true,  description = "Analyze the sentiment of text using AI."),
-        Tool("Smart Chat", Icons.AutoMirrored.Filled.Chat, "ai_chat", "Smart Utilities", Color(0xFF2196F3), isVisibleOnHome = false, isSubTool = true,  description = "Chat with an intelligent AI assistant."),
-        Tool("Stems Splitter", Icons.AutoMirrored.Filled.AltRoute, "ai_stems_splitter", "Smart Utilities", Color(0xFF00BCD4), isVisibleOnHome = false, isSubTool = true, description = "Split songs into separate tracks (vocals, drums, etc.)."),
-        Tool("Text Extractor", Icons.Default.Scanner, "ai_text_ext", "Smart Utilities", Color(0xFFE91E63), isVisibleOnHome = false, isSubTool = true,  description = "Extract text from images using AI OCR."),
-        Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "Smart Utilities", Color(0xFF4CAF50), isVisibleOnHome = false, isSubTool = true,  description = "Summarize long texts using AI."),
-        Tool("Translator", Icons.Default.Translate, "ai_translate", "Smart Utilities", Color(0xFF2196F3), isVisibleOnHome = false, isSubTool = true,  description = "Translate text between languages using AI."),
-        Tool("Video Noise Remover", Icons.Default.MovieFilter, "video_noise_remover", "Smart Utilities", Color(0xFF9C27B0), isVisibleOnHome = false, isSubTool = true, description = "Remove noise from your videos."),
-        Tool("Vocal AutoTuner", Icons.Default.SettingsVoice, "vocal_autotuner", "Smart Utilities", Color(0xFFE91E63), isVisibleOnHome = false, isSubTool = true, description = "Apply auto-tune effects to vocals."),
-        Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "Smart Utilities", Color(0xFFFF9800), isVisibleOnHome = false, isSubTool = true, description = "Remove vocals from songs."),
-        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "Smart Utilities", Color(0xFF3F51B5), isVisibleOnHome = false, isSubTool = true,  description = "Mimic voices using AI."),
 
         // Audio & Music
         Tool("Audio Tools", Icons.Default.LibraryMusic, "audio_tools_group", "Audio & Music", Color(0xFF673AB7),
             description = "Comprehensive collection of audio editing and processing tools.",
-            subToolRoutes = listOf("m_audio_editor", "m_audio_cutter", "m_audio_joiner", "m_audio_mixer", "m_audio_tag_editor", "m_audio_compressor", "m_audio_splitter", "m_audio_normalizer", "m_volume_booster", "m_speed_changer", "m_audio_pitch", "m_reverse_audio", "m_bass_booster", "m_echo_effect", "m_3d_audio", "m_audio_pan", "m_equalizer", "m_mute_audio", "m_silence_remover", "m_voice_changer", "m_karaoke_maker", "m_ringtone_maker", "m_text_to_speech", "m_speech_to_text", "noise_generator", "wave_generator", "silence_generator", "audio_loop", "sound_mastering", "add_sfx", "aud_conv", "aud_info_v2", "aud_eq_v2", "record_audio")),
-        Tool("Metronome", Icons.Default.AvTimer, "metronome", "Audio & Music", Color(0xFF00BCD4), description = "A simple and precise metronome for musicians."),
-        Tool("Guitar Tuner", Icons.Default.MusicNote, "guitar_tuner", "Audio & Music", Color(0xFFE91E63),  description = "Tune your guitar with high precision."),
-        Tool("Chord Library", Icons.Default.LibraryMusic, "chord_lib", "Audio & Music", Color(0xFF673AB7),  description = "A comprehensive library of guitar chords."),
+            subToolRoutes = listOf("m_3d_audio", "add_sfx", "m_audio_compressor", "aud_conv", "m_audio_cutter", "m_audio_editor", "aud_eq_v2", "aud_info_v2", "m_audio_joiner", "audio_loop", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "chord_lib", "m_echo_effect", "m_equalizer", "guitar_tuner", "m_karaoke_maker", "metronome", "m_mute_audio", "noise_generator", "m_audio_pitch", "record_audio", "m_reverse_audio", "m_ringtone_maker", "silence_generator", "m_silence_remover", "sound_mastering", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "wave_generator")),
         Tool("Voice Memo", Icons.Default.SettingsVoice, "voice_memo", "Audio & Music", Color(0xFF2196F3),  description = "Record and organize your voice memos."),
+
+        // Video & Media
+        Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Video & Media", Color(0xFFF44336),
+            description = "Professional video editing and processing tools.",
+            subToolRoutes = listOf("video_delete", "video_loop", "mix_video_audio", "video_reverse", "video_silence", "vid_thumb", "video_compress", "video_trim", "vid_edit_pro", "video_flip", "vid_annotator", "frame_grabber", "video_sfx", "video_speed_changer", "video_splitter", "video_stabilizer", "m_video_to_audio", "video_to_gif", "video_volume_booster")),
+        Tool("Batch Image", Icons.Default.Collections, "batch_img_pro", "Video & Media", Color(0xFF4CAF50),  description = "Process multiple images at once."),
+        Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Video & Media", Color(0xFFFFC107), description = "Download media from various sources."),
+        Tool("Perchance Tools", Icons.Default.AutoAwesome, "perchance_tools", "Video & Media", Color(0xFFE91E63),  description = "Access AI creative tools from Perchance.",
+            subToolRoutes = listOf("per_image_pro", "per_text_gen", "per_text_rewrite", "per_necs_story", "per_character", "per_hub", "per_image", "per_story")),
+
+        // Image Tools
+        Tool("Image Edit & Convert", Icons.Default.PhotoLibrary, "image_tools_group", "Image Tools", Color(0xFF2196F3),
+            description = "Essential image editing, conversion, and optimization tools.",
+            subToolRoutes = listOf("ascii_art", "image_bg_remover", "image_base64", "image_collage", "image_color_picker", "image_compare", "image_crop", "image_delete_exif", "image_draw", "image_draw_bg", "image_edit_exif", "exif_viewer", "image_filter", "image_format_conv", "gradient_gen", "image_cutting", "image_preview", "image_stacking", "image_stitching", "image_to_svg", "image_layers_bg", "image_layers_img", "image_markup", "image_mask_filter", "multi_crop", "multi_image_resize", "image_noise_gen", "image_ocr", "image_open_project", "image_palette", "pixel_art", "image_resize_conv", "image_resize_limits", "image_resize_weight", "image_single_edit", "image_ai_tools", "image_wallpapers", "image_watermark", "image_web_load")),
+        Tool("APNG Tools", Icons.Default.Animation, "apng_tools", "Image Tools", Color(0xFF4CAF50),  description = "Tools for creating and managing APNG files.",
+            subToolRoutes = listOf("apng_to_images", "apng_to_jxl", "image_to_apng")),
+        Tool("Color & Palette Tools", Icons.Default.Palette, "color_palette_tools", "Image Tools", Color(0xFF00BCD4),  description = "Explore and manage colors and palettes.",
+            subToolRoutes = listOf("color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "image_histogram", "material_you_palette")),
+        Tool("GIF Tools", Icons.Default.Animation, "gif_tools", "Image Tools", Color(0xFF9C27B0),  description = "Create and edit animated GIF files.",
+            subToolRoutes = listOf("gif_to_images", "gif_to_jxl", "gif_to_webp", "images_to_gif")),
+        Tool("JXL Tools", Icons.Default.Animation, "jxl_tools", "Image Tools", Color(0xFFFF9800),  description = "Tools for the modern JPEG XL format.",
+            subToolRoutes = listOf("images_to_jxl", "jpeg_to_jxl", "jxl_to_images", "jxl_to_jpeg")),
+        Tool("PDF Tools", Icons.Default.PictureAsPdf, "pdf_tools", "Image Tools", Color(0xFFF44336),  description = "The complete PDF toolkit.",
+            subToolRoutes = listOf("pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "images_to_pdf", "pdf_merge", "pdf_page_numbers", "pdf_metadata", "pdf_to_images", "pdf_ocr", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip")),
+        Tool("WEBP Tools", Icons.Default.Animation, "webp_tools", "Image Tools", Color(0xFF2196F3),  description = "Efficient WEBP image management tools.",
+            subToolRoutes = listOf("image_to_webp", "webp_to_images")),
+
+        // Files & Documents
+        Tool("Document Pro", Icons.Default.Description, "docs_group", "Files & Documents", Color(0xFF607D8B),
+            description = "Advanced file and document management tools.",
+            subToolRoutes = listOf("cipher_tools", "color_conv_pro", "crontab_gen", "doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "port_checker", "sql_format", "storage_cleaner", "zip_unzip")),
+
+        // Finance & Crypto
+        Tool("Finance Tools", Icons.Default.MonetizationOn, "finance_group", "Finance & Crypto", Color(0xFFFF9800),
+            description = "Complete set of financial calculators and trackers.",
+            subToolRoutes = listOf("coin_tracker", "compound_interest", "crypto_conv", "currency_trends", "dividend_calc", "expense_tracker", "gst_calc", "inflation_calc", "loan_calc", "nft_viewer", "retirement_planner", "roi_calc", "salary_calc", "sip_calc", "stock_profit", "tax_calc", "wallet_explorer")),
+
+        // Health & Lifestyle
+        Tool("Health & Lifestyle", Icons.Default.Favorite, "health_group", "Health & Lifestyle", Color(0xFFE91E63),
+            description = "Track and improve your health and daily habits.",
+            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "daily_journal", "daily_quotes", "egg_timer", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "plant_care", "posture_check", "recipe_scaler", "sleep_tracker", "step_counter", "stretch_guide", "water_reminder", "water", "yoga_guide")),
+
+        // Science & Education
+        Tool("Science Lab", Icons.Default.Science, "science_group", "Science & Education", Color(0xFF4CAF50),
+            description = "Explore the world through science and maps.",
+            subToolRoutes = listOf("constants", "constellations", "dna_viz", "eq_solver", "force_calc", "physics_formulas", "fraction_calc", "matrix_calc", "periodic_table", "planet_finder", "pokedex", "prime", "solar_system", "star_map", "stats", "truth_table", "world_map")),
+
+        // Engineering
+        Tool("Engineering Hub", Icons.Default.Architecture, "engineering_group", "Engineering", Color(0xFF607D8B),
+            description = "Calculators and tools for engineers and makers.",
+            subToolRoutes = listOf("antenna_calc", "circuit_calc", "device_discovery", "filter_design", "logic_gates", "mqtt_tester", "ohms_law", "pcb_trace", "resistor_code", "signal_gen_pro", "smart_hub", "wake_on_lan", "wifi_anal")),
+
+        // Outdoor & Nature
+        Tool("Outdoor Tools", Icons.Default.Landscape, "outdoor_group", "Outdoor & Nature", Color(0xFF8BC34A),
+            description = "Essential tools for outdoor enthusiasts.",
+            subToolRoutes = listOf("air_quality", "altimeter", "altitude_graph", "area_calc", "campfire_guide", "compass", "sos", "gps_status", "hiking_trails", "knots_guide", "light_pollution", "moon_phase", "rain_radar", "route_planner", "signal_mirror", "uv_index", "weather_forecast")),
+
+        // System & Sensors
+        Tool("System Lab", Icons.Default.Dns, "system_group", "System & Sensors", Color(0xFF673AB7),
+            description = "Monitor system health and sensor data.",
+            subToolRoutes = listOf("altimeter", "app_info", "app_locker", "app_permissions", "barometer", "battery", "compass", "cpu_info", "device", "gforce_meter", "device_id", "level", "light", "metal", "perm_manager", "privacy_check", "process_manager", "sensor_data", "sensors_list", "spl_meter", "storage", "system_lab", "thermal_info", "update_check")),
+
+        // Productivity
+        Tool("Task Center", Icons.Default.Task, "prod_group", "Productivity", Color(0xFF4CAF50),
+            description = "Stay organized and productive.",
+            subToolRoutes = listOf("checklist", "daily_journal", "kanban", "note", "password_manager", "pomodoro", "task_board", "time_logger")),
+
+        // Developer
+        Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
+            description = "Advanced tools for developers.",
+            subToolRoutes = listOf("ascii_table", "base64", "csv_to_json", "hex_viewer", "json", "jwt_tool", "markdown_preview", "regex_tester", "subnet_calc", "url_encoder", "yaml_to_json")),
+
+        // Text
+        Tool("Text Mastery", Icons.Default.TextFields, "text_group", "Text", Color(0xFF9C27B0),
+            description = "Powerful tools for text processing.",
+            subToolRoutes = listOf("anagram", "ascii_art", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter")),
+
+        // Calculation
+        Tool("Advanced Math", Icons.Default.Functions, "math_group", "Calculation", Color(0xFF607D8B),
+            description = "Calculators for every scenario.",
+            subToolRoutes = listOf("area_calc", "calculator", "binary_calc", "date_calc", "discount", "eq_solver", "fraction_calc", "fuel", "matrix_calc", "mortgage_calc", "sci_calc", "stats", "tip", "truth_table")),
+
+        // Conversion
+        Tool("Ultimate Converter", Icons.Default.SwapHoriz, "conv_group", "Conversion", Color(0xFF2196F3),
+            description = "Convert anything to anything.",
+            subToolRoutes = listOf("base_conv", "crypto_conv", "currency", "torque_conv", "converter")),
+
+        // Network
+        Tool("Network Lab", Icons.Default.NetworkCheck, "net_group", "Network", Color(0xFF00BCD4),
+            description = "Network diagnostic and info tools.",
+            subToolRoutes = listOf("device_discovery", "dns_lookup", "mqtt_tester", "my_ip", "network_info", "ping", "port_checker", "port_scanner", "route_planner", "speed_test", "subnet_calc", "whois")),
+
+        // Utility & Misc
+        Tool("Daily Helpers", Icons.Default.Build, "util_group", "Utility & Misc", Color(0xFF4CAF50),
+            description = "Handy tools for everyday tasks.",
+            subToolRoutes = listOf("bio_linker", "bpm", "car_maintenance", "clock", "coin_flip", "dice_roller", "flashlight", "fuel_consumption", "memory_game", "meta_anal", "tiles_widgets", "hub", "number_guessing", "protractor", "qr_gen", "qr_scanner", "random", "ruler", "social_preview", "speedometer", "stopwatch", "tic_tac_toe", "unit_price", "vibration", "web", "wifi_qr", "world_clock")),
+
+        // Social & Media
+        Tool("Social & Media", Icons.Default.Share, "social_media_group", "Social & Media", Color(0xFFE91E63),
+            description = "Tools for social media and media management.",
+            subToolRoutes = listOf("bio_linker", "media_grabber", "profile_photo_maker", "social_preview")),
+
+        // Privacy & Security
+        Tool("Privacy & Security", Icons.Default.Security, "security_group", "Privacy & Security", Color(0xFF607D8B),
+            description = "Protect your digital life.",
+            subToolRoutes = listOf("app_locker", "cipher_tools", "file_shredder", "password_manager", "password_gen")),
+
+        // DIY & Home
+        Tool("DIY & Home", Icons.Default.Home, "diy_home_group", "DIY & Home", Color(0xFF795548),
+            description = "Handy tools for home projects and maintenance.",
+            subToolRoutes = listOf("level", "light", "metal", "protractor", "ruler", "unit_compare")),
+
+        // Travel & Maps
+        Tool("Travel & Maps", Icons.Default.Flight, "travel_maps_group", "Travel & Maps", Color(0xFF03A9F4),
+            description = "Essential tools for your next adventure.",
+            subToolRoutes = listOf("currency", "route_planner", "travel_budget", "world_clock", "world_map")),
+
+        // --- Sub-Tools Definitions (isVisibleOnHome = false, isSubTool = true) ---
+
+        // AI Sub-Tools
+        Tool("Smart Chat", Icons.AutoMirrored.Filled.Chat, "ai_chat", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Chat with an intelligent AI assistant."),
+        Tool("Code Helper", Icons.Default.Code, "ai_code", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Get AI-powered help with your coding tasks."),
+        Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Check and correct grammar in your text using AI."),
+        Tool("Image Generator", Icons.Default.Image, "ai_image", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Generate stunning images from text prompts using AI."),
+        Tool("Noise Remover", Icons.Default.Hearing, "ai_noise_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "AI-powered noise reduction for audio."),
+        Tool("Object Detector", Icons.Default.CenterFocusStrong, "ai_obj_detect", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Detect objects in images using AI."),
+        Tool("Sentiment Analysis", Icons.Default.Mood, "ai_sentiment", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Analyze the sentiment of text using AI."),
+        Tool("Stems Splitter", Icons.AutoMirrored.Filled.AltRoute, "ai_stems_splitter", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Split songs into separate tracks (vocals, drums, etc.)."),
+        Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Summarize long texts using AI."),
+        Tool("Text Extractor", Icons.Default.Scanner, "ai_text_ext", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Extract text from images using AI OCR."),
+        Tool("Translator", Icons.Default.Translate, "ai_translate", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Translate text between languages using AI."),
+        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Mimic voices using AI."),
+        Tool("Audio Mastering Pro", Icons.Default.GraphicEq, "aud_master_pro", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Advanced AI audio mastering suite."),
+        Tool("Audio Noise Remover", Icons.Default.MicOff, "audio_noise_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Remove unwanted noise from your audio recordings."),
+        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Remove echo from your audio files."),
+        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Remove reverb from your audio recordings."),
+        Tool("Video Noise Remover", Icons.Default.MovieFilter, "video_noise_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Remove noise from your videos."),
+        Tool("Vocal AutoTuner", Icons.Default.SettingsVoice, "vocal_autotuner", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Apply auto-tune effects to vocals."),
+        Tool("Vocal Remover", Icons.Default.PersonOff, "vocal_remover", "Smart Utilities", isVisibleOnHome = false, isSubTool = true, description = "Remove vocals from songs."),
 
         // Audio Sub-Tools
         Tool("Audio Editor", Icons.Default.Edit, "m_audio_editor", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "Edit your audio files with ease."),
@@ -95,17 +210,9 @@ object ToolProvider {
         Tool("Audio Info", Icons.Default.Info, "aud_info_v2", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "View detailed technical info of audio files."),
         Tool("Audio Equalizer", Icons.Default.Equalizer, "aud_eq_v2", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "Advanced multi-band equalizer."),
         Tool("Record Audio", Icons.Default.Mic, "record_audio", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "Record high-quality audio."),
-
-        // Video & Media
-        Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Video & Media", Color(0xFFF44336),
-            description = "Professional video editing and processing tools.",
-            subToolRoutes = listOf("video_trim", "video_compress", "video_reverse", "video_splitter", "mix_video_audio", "video_speed_changer", "video_sfx", "video_to_gif", "video_volume_booster", "video_delete", "video_silence", "video_loop", "video_flip", "video_stabilizer", "vid_annotator", "vid_thumb", "m_video_to_audio", "frame_grabber", "vid_edit_pro")),
-        Tool("Audio Mastering", Icons.Default.GraphicEq, "aud_master_pro", "Video & Media", Color(0xFF673AB7),  description = "Advanced AI audio mastering suite."),
-        Tool("Batch Image", Icons.Default.Collections, "batch_img_pro", "Video & Media", Color(0xFF4CAF50),  description = "Process multiple images at once."),
-        Tool("Document Scanner", Icons.Default.Scanner, "doc_scanner", "Video & Media", Color(0xFF3F51B5),  description = "Scan documents and save as PDF."),
-        Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Video & Media", Color(0xFFFFC107), description = "Download media from various sources."),
-        Tool("Perchance Tools", Icons.Default.AutoAwesome, "perchance_tools", "Video & Media", Color(0xFFE91E63),  description = "Access AI creative tools from Perchance.",
-            subToolRoutes = listOf("per_image", "per_story", "per_character", "per_hub", "per_image_pro", "per_text_gen", "per_text_rewrite", "per_necs_story")),
+        Tool("Metronome", Icons.Default.AvTimer, "metronome", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "A simple and precise metronome for musicians."),
+        Tool("Guitar Tuner", Icons.Default.MusicNote, "guitar_tuner", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "Tune your guitar with high precision."),
+        Tool("Chord Library", Icons.Default.LibraryMusic, "chord_lib", "Audio & Music", isVisibleOnHome = false, isSubTool = true, description = "A comprehensive library of guitar chords."),
 
         // Video Sub-Tools
         Tool("Video Editor", Icons.Default.Edit, "video_trim", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Trim and edit your videos."),
@@ -126,6 +233,7 @@ object ToolProvider {
         Tool("Thumbnail Extractor", Icons.Default.Image, "vid_thumb", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Extract high-quality thumbnails from video."),
         Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Extract audio from video files."),
         Tool("Video Frame Grabber", Icons.Default.CropOriginal, "frame_grabber", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Save individual frames as images."),
+        Tool("Video Editor Pro", Icons.Default.Movie, "vid_edit_pro", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Professional multi-track video editor."),
 
         // Perchance Sub-Tools
         Tool("Perchance Image Generator", Icons.Default.Image, "per_image", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Create stunning AI images with Perchance."),
@@ -136,25 +244,6 @@ object ToolProvider {
         Tool("AI Text Gen", Icons.Default.TextFields, "per_text_gen", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "AI text generator by Perchance."),
         Tool("AI Text Rewriter", Icons.Default.Edit, "per_text_rewrite", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "AI text rewriter by Perchance."),
         Tool("NECS Story", Icons.Default.AutoAwesome, "per_necs_story", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "NECS story generator by Perchance."),
-
-        // Image Tools
-        Tool("Image Edit & Convert", Icons.Default.PhotoLibrary, "image_tools_group", "Image Tools", Color(0xFF2196F3),
-            description = "Essential image editing, conversion, and optimization tools.",
-            subToolRoutes = listOf("image_single_edit", "image_resize_conv", "image_format_conv", "image_crop", "image_cutting", "image_resize_weight", "image_resize_limits", "image_edit_exif", "image_delete_exif", "image_ai_tools", "image_bg_remover", "image_collage", "image_draw", "image_filter", "image_stacking", "image_stitching", "image_markup", "image_noise_gen", "image_watermark", "image_compare", "image_wallpapers", "image_to_svg", "image_web_load", "image_ocr", "image_preview", "image_base64", "image_palette", "image_color_picker", "image_mask_filter", "image_draw_bg", "image_layers_img", "image_layers_bg", "image_open_project", "multi_image_resize", "multi_crop", "pixel_art", "ascii_art")),
-        Tool("APNG Tools", Icons.Default.Animation, "apng_tools", "Image Tools", Color(0xFF4CAF50),  description = "Tools for creating and managing APNG files.",
-            subToolRoutes = listOf("image_to_apng", "apng_to_images", "apng_to_jxl")),
-        Tool("Color & Palette Tools", Icons.Default.Palette, "color_palette_tools", "Image Tools", Color(0xFF00BCD4),  description = "Explore and manage colors and palettes.",
-            subToolRoutes = listOf("color_info", "color_mixing", "color_harmonies", "color_shading", "image_histogram", "generate_palette", "material_you_palette", "edit_palette")),
-        Tool("GIF Tools", Icons.Default.Animation, "gif_tools", "Image Tools", Color(0xFF9C27B0),  description = "Create and edit animated GIF files.",
-            subToolRoutes = listOf("images_to_gif", "gif_to_images", "gif_to_jxl", "gif_to_webp")),
-        Tool("JXL Tools", Icons.Default.Animation, "jxl_tools", "Image Tools", Color(0xFFFF9800),  description = "Tools for the modern JPEG XL format.",
-            subToolRoutes = listOf("jpeg_to_jxl", "jxl_to_jpeg", "jxl_to_images", "images_to_jxl")),
-        Tool("PDF Tools", Icons.Default.PictureAsPdf, "pdf_tools", "Image Tools", Color(0xFFF44336),  description = "The complete PDF toolkit.",
-            subToolRoutes = listOf("pdf_preview", "images_to_pdf", "pdf_to_images", "pdf_merge", "pdf_split", "pdf_remove_pages", "pdf_rotate", "pdf_rearrange", "pdf_crop", "pdf_page_numbers", "pdf_watermark", "pdf_signature", "pdf_compress", "pdf_flatten", "pdf_print", "pdf_grayscale", "pdf_repair", "pdf_protect", "pdf_unlock", "pdf_metadata", "pdf_extract_images", "pdf_ocr", "pdf_zip")),
-        Tool("WEBP Tools", Icons.Default.Animation, "webp_tools", "Image Tools", Color(0xFF2196F3),  description = "Efficient WEBP image management tools.",
-            subToolRoutes = listOf("image_to_webp", "webp_to_images")),
-        Tool("Exif Viewer", Icons.Default.CameraAlt, "exif_viewer", "Image Tools", Color(0xFF607D8B), description = "View and analyze image metadata."),
-        Tool("Gradient Gen", Icons.Default.Gradient, "gradient_gen", "Image Tools", Color(0xFFFFEB3B), description = "Create beautiful gradients for your designs."),
 
         // Image Sub-Tools
         Tool("Single Edit", Icons.Default.Edit, "image_single_edit", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Basic image editing controls."),
@@ -194,9 +283,39 @@ object ToolProvider {
         Tool("Multi Crop", Icons.Default.Crop, "multi_crop", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Crop multiple images together."),
         Tool("Pixel Art Maker", Icons.Default.Grid4x4, "pixel_art", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Turn your photos into pixel art."),
         Tool("ASCII Art", Icons.Default.Texture, "ascii_art", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Convert images to ASCII character art."),
+        Tool("Exif Viewer", Icons.Default.CameraAlt, "exif_viewer", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "View and analyze image metadata."),
+        Tool("Gradient Gen", Icons.Default.Gradient, "gradient_gen", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Create beautiful gradients for your designs."),
+
+        // APNG Sub-Tools
+        Tool("Images to APNG", Icons.Default.Transform, "image_to_apng", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("APNG to images", Icons.Default.Collections, "apng_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("APNG to JXL", Icons.Default.Animation, "apng_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+
+        // Color & Palette Sub-Tools
+        Tool("Color Info", Icons.Default.Info, "color_info", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Color Mixing", Icons.Default.InvertColors, "color_mixing", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Color Harmonies", Icons.Default.Palette, "color_harmonies", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Color Shading", Icons.Default.Gradient, "color_shading", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Histogram", Icons.Default.BarChart, "image_histogram", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Generate Palette", Icons.Default.ColorLens, "generate_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Material You", Icons.Default.AutoAwesome, "material_you_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Edit Palette", Icons.Default.Edit, "edit_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+
+        // GIF Sub-Tools
+        Tool("Images to GIF", Icons.Default.Animation, "images_to_gif", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("GIF to images", Icons.Default.Collections, "gif_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("GIF to JXL", Icons.Default.Transform, "gif_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("GIF to WEBP", Icons.Default.Transform, "gif_to_webp", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+
+        // JXL Sub-Tools
+        Tool("JPEG to JXL", Icons.Default.Transform, "jpeg_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("JXL to JPEG", Icons.Default.Transform, "jxl_to_jpeg", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("JXL to Images", Icons.Default.Collections, "jxl_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Images to JXL", Icons.Default.Animation, "images_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
 
         // PDF Sub-Tools
         Tool("Preview PDF", Icons.Default.Preview, "pdf_preview", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "High-quality PDF viewer."),
+        Tool("Images to PDF", Icons.Default.Collections, "images_to_pdf", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Convert images to PDF documents."),
         Tool("PDF to Images", Icons.Default.Collections, "pdf_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Convert PDF pages to image files."),
         Tool("Merge PDF", Icons.Default.Merge, "pdf_merge", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Join multiple PDFs into one."),
         Tool("Split PDF", Icons.AutoMirrored.Filled.CallSplit, "pdf_split", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Extract pages from your PDF."),
@@ -219,33 +338,9 @@ object ToolProvider {
         Tool("PDF to Text (OCR)", Icons.Default.TextFields, "pdf_ocr", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Extract searchable text from PDF."),
         Tool("Zip PDF", Icons.Default.FolderZip, "pdf_zip", "Image Tools", isVisibleOnHome = false, isSubTool = true, description = "Split PDF and pack into ZIP."),
 
-        // Other Sub-Tools
+        // WEBP Sub-Tools
         Tool("Images to WEBP", Icons.Default.Transform, "image_to_webp", "Image Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("WEBP to images", Icons.Default.Collections, "webp_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Images to APNG", Icons.Default.Transform, "image_to_apng", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("APNG to images", Icons.Default.Collections, "apng_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("APNG to JXL", Icons.Default.Animation, "apng_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("JPEG to JXL", Icons.Default.Transform, "jpeg_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("JXL to JPEG", Icons.Default.Transform, "jxl_to_jpeg", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("JXL to Images", Icons.Default.Collections, "jxl_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Images to JXL", Icons.Default.Animation, "images_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Images to GIF", Icons.Default.Animation, "images_to_gif", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("GIF to images", Icons.Default.Collections, "gif_to_images", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("GIF to JXL", Icons.Default.Transform, "gif_to_jxl", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("GIF to WEBP", Icons.Default.Transform, "gif_to_webp", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Color Info", Icons.Default.Info, "color_info", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Color Mixing", Icons.Default.InvertColors, "color_mixing", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Color Harmonies", Icons.Default.Palette, "color_harmonies", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Color Shading", Icons.Default.Gradient, "color_shading", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Histogram", Icons.Default.BarChart, "image_histogram", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Generate Palette", Icons.Default.ColorLens, "generate_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Material You", Icons.Default.AutoAwesome, "material_you_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Edit Palette", Icons.Default.Edit, "edit_palette", "Image Tools", isVisibleOnHome = false, isSubTool = true),
-
-        // Files & Documents
-        Tool("Document Pro", Icons.Default.Description, "docs_group", "Files & Documents", Color(0xFF607D8B),
-            description = "Advanced file and document management tools.",
-            subToolRoutes = listOf("duplicate_finder", "file_explorer", "file_shredder", "storage_cleaner", "zip_unzip", "cipher_tools", "color_conv_pro", "crontab_gen", "port_checker", "sql_format")),
 
         // Files Sub-Tools
         Tool("Duplicate Finder", Icons.Default.ContentCopy, "duplicate_finder", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Find and remove duplicate files."),
@@ -256,13 +351,8 @@ object ToolProvider {
         Tool("Cipher", Icons.Default.Security, "cipher_tools", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Encrypt and decrypt your files."),
         Tool("Color Converter", Icons.Default.Palette, "color_conv_pro", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Convert between color spaces and formats."),
         Tool("Crontab Gen", Icons.Default.Schedule, "crontab_gen", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Generate cron expressions for scheduling."),
-        Tool("Port Checker", Icons.Default.Dns, "port_checker", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Check status of specific network ports."),
         Tool("SQL Formatter", Icons.Default.Storage, "sql_format", "Files & Documents", isVisibleOnHome = false, isSubTool = true, description = "Beautify and format your SQL queries."),
-
-        // Finance & Crypto
-        Tool("Finance Tools", Icons.Default.MonetizationOn, "finance_group", "Finance & Crypto", Color(0xFFFF9800),
-            description = "Complete set of financial calculators and trackers.",
-            subToolRoutes = listOf("coin_tracker", "compound_interest", "crypto_conv", "currency_trends", "dividend_calc", "expense_tracker", "gst_calc", "inflation_calc", "loan_calc", "nft_viewer", "roi_calc", "retirement_planner", "sip_calc", "salary_calc", "stock_profit", "tax_calc", "wallet_explorer")),
+        Tool("Document Scanner", Icons.Default.Scanner, "doc_scanner", "Video & Media", isVisibleOnHome = false, isSubTool = true, description = "Scan documents and save as PDF."),
 
         // Finance Sub-Tools
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Finance & Crypto", isVisibleOnHome = false, isSubTool = true),
@@ -283,12 +373,7 @@ object ToolProvider {
         Tool("Tax Calculator", Icons.Default.MoneyOff, "tax_calc", "Finance & Crypto", isVisibleOnHome = false, isSubTool = true),
         Tool("Wallet Explorer", Icons.Default.AccountBalanceWallet, "wallet_explorer", "Finance & Crypto", isVisibleOnHome = false, isSubTool = true),
 
-        // Health & Lifestyle
-        Tool("Health & Lifestyle", Icons.Default.Favorite, "health_group", "Health & Lifestyle", Color(0xFFE91E63),
-            description = "Track and improve your health and daily habits.",
-            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "daily_journal", "daily_quotes", "egg_timer", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "plant_care", "posture_check", "recipe_scaler", "sleep_tracker", "step_counter", "stretch_guide", "water_reminder", "water", "yoga_guide")),
-
-        // Health Sub-Tools
+        // Health & Lifestyle Sub-Tools
         Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health & Lifestyle", isVisibleOnHome = false, isSubTool = true),
         Tool("BMR Calculator", Icons.Default.Calculate, "bmr", "Health & Lifestyle", isVisibleOnHome = false, isSubTool = true),
         Tool("Calorie Calc", Icons.Default.Restaurant, "calorie_calc", "Health & Lifestyle", isVisibleOnHome = false, isSubTool = true),
@@ -310,11 +395,6 @@ object ToolProvider {
         Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health & Lifestyle", isVisibleOnHome = false, isSubTool = true),
         Tool("Yoga Guide", Icons.Default.SelfImprovement, "yoga_guide", "Health & Lifestyle", isVisibleOnHome = false, isSubTool = true),
 
-        // Science & Education
-        Tool("Science Lab", Icons.Default.Science, "science_group", "Science & Education", Color(0xFF4CAF50),
-            description = "Explore the world through science and maps.",
-            subToolRoutes = listOf("constants", "constellations", "dna_viz", "eq_solver", "force_calc", "physics_formulas", "fraction_calc", "matrix_calc", "periodic_table", "planet_finder", "pokedex", "prime", "solar_system", "star_map", "stats", "truth_table", "world_map")),
-
         // Science Sub-Tools
         Tool("Constants Table", Icons.Default.Functions, "constants", "Science & Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Constellations", Icons.Default.Stars, "constellations", "Science & Education", isVisibleOnHome = false, isSubTool = true),
@@ -328,11 +408,6 @@ object ToolProvider {
         Tool("Solar System", Icons.Default.Public, "solar_system", "Science & Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Star Map", Icons.Default.AutoAwesome, "star_map", "Science & Education", isVisibleOnHome = false, isSubTool = true),
         Tool("World Map", Icons.Default.Map, "world_map", "Science & Education", isVisibleOnHome = false, isSubTool = true),
-
-        // Engineering
-        Tool("Engineering Hub", Icons.Default.Architecture, "engineering_group", "Engineering", Color(0xFF607D8B),
-            description = "Calculators and tools for engineers and makers.",
-            subToolRoutes = listOf("antenna_calc", "circuit_calc", "device_discovery", "filter_design", "logic_gates", "mqtt_tester", "ohms_law", "pcb_trace", "resistor_code", "signal_gen_pro", "smart_hub", "wifi_anal", "wake_on_lan")),
 
         // Engineering Sub-Tools
         Tool("Antenna Calc", Icons.Default.SettingsInputAntenna, "antenna_calc", "Engineering", isVisibleOnHome = false, isSubTool = true),
@@ -348,11 +423,6 @@ object ToolProvider {
         Tool("Smart Hub", Icons.Default.Hub, "smart_hub", "Engineering", isVisibleOnHome = false, isSubTool = true),
         Tool("WIFI Analyzer", Icons.Default.Wifi, "wifi_anal", "Engineering", isVisibleOnHome = false, isSubTool = true),
         Tool("Wake On LAN", Icons.Default.SettingsPower, "wake_on_lan", "Engineering", isVisibleOnHome = false, isSubTool = true),
-
-        // Outdoor & Nature
-        Tool("Outdoor Tools", Icons.Default.Landscape, "outdoor_group", "Outdoor & Nature", Color(0xFF8BC34A),
-            description = "Essential tools for outdoor enthusiasts.",
-            subToolRoutes = listOf("air_quality", "altimeter", "altitude_graph", "area_calc", "campfire_guide", "compass", "sos", "gps_status", "hiking_trails", "knots_guide", "light_pollution", "moon_phase", "rain_radar", "route_planner", "signal_mirror", "uv_index", "weather_forecast")),
 
         // Outdoor Sub-Tools
         Tool("Air Quality", Icons.Default.Air, "air_quality", "Outdoor & Nature", isVisibleOnHome = false, isSubTool = true),
@@ -370,11 +440,6 @@ object ToolProvider {
         Tool("Signal Mirror", Icons.Default.FlashlightOn, "signal_mirror", "Outdoor & Nature", isVisibleOnHome = false, isSubTool = true),
         Tool("UV Index", Icons.Default.WbSunny, "uv_index", "Outdoor & Nature", isVisibleOnHome = false, isSubTool = true),
         Tool("Weather Forecast", Icons.Default.WbCloudy, "weather_forecast", "Outdoor & Nature", isVisibleOnHome = false, isSubTool = true),
-
-        // System & Sensors
-        Tool("System Lab", Icons.Default.Dns, "system_group", "System & Sensors", Color(0xFF673AB7),
-            description = "Monitor system health and sensor data.",
-            subToolRoutes = listOf("altimeter", "app_info", "barometer", "battery", "cpu_info", "compass", "device", "gforce_meter", "device_id", "level", "light", "metal", "process_manager", "spl_meter", "sensor_data", "sensors_list", "storage", "system_lab", "thermal_info", "update_check", "app_locker", "app_permissions", "perm_manager", "privacy_check")),
 
         // System Sub-Tools
         Tool("Altimeter", Icons.Default.Landscape, "altimeter", "System & Sensors", isVisibleOnHome = false, isSubTool = true),
@@ -402,11 +467,6 @@ object ToolProvider {
         Tool("Permission Manager", Icons.Default.ManageAccounts, "perm_manager", "System & Sensors", isVisibleOnHome = false, isSubTool = true),
         Tool("Privacy Check", Icons.Default.PrivacyTip, "privacy_check", "System & Sensors", isVisibleOnHome = false, isSubTool = true),
 
-        // Productivity
-        Tool("Task Center", Icons.Default.Task, "prod_group", "Productivity", Color(0xFF4CAF50),
-            description = "Stay organized and productive.",
-            subToolRoutes = listOf("checklist", "kanban", "note", "pomodoro", "task_board", "time_logger", "daily_journal", "password_manager")),
-
         // Productivity Sub-Tools
         Tool("Checklist", Icons.Default.Checklist, "checklist", "Productivity", isVisibleOnHome = false, isSubTool = true),
         Tool("Kanban Board", Icons.Default.ViewWeek, "kanban", "Productivity", isVisibleOnHome = false, isSubTool = true),
@@ -415,11 +475,6 @@ object ToolProvider {
         Tool("Task Board", Icons.Default.Dashboard, "task_board", "Productivity", isVisibleOnHome = false, isSubTool = true),
         Tool("Time Logger", Icons.Default.HistoryToggleOff, "time_logger", "Productivity", isVisibleOnHome = false, isSubTool = true),
         Tool("Password Manager", Icons.Default.Password, "password_manager", "Productivity", isVisibleOnHome = false, isSubTool = true),
-
-        // Developer
-        Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
-            description = "Advanced tools for developers.",
-            subToolRoutes = listOf("ascii_table", "base64", "hex_viewer", "json", "jwt_tool", "subnet_calc", "url_encoder", "yaml_to_json")),
 
         // Developer Sub-Tools
         Tool("ASCII Table", Icons.Default.Notes, "ascii_table", "Developer", isVisibleOnHome = false, isSubTool = true),
@@ -430,11 +485,9 @@ object ToolProvider {
         Tool("Subnet Calc", Icons.Default.SettingsEthernet, "subnet_calc", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("YAML to JSON", Icons.Default.Transform, "yaml_to_json", "Developer", isVisibleOnHome = false, isSubTool = true),
-
-        // Text
-        Tool("Text Mastery", Icons.Default.TextFields, "text_group", "Text", Color(0xFF9C27B0),
-            description = "Powerful tools for text processing.",
-            subToolRoutes = listOf("ascii_art", "anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter")),
+        Tool("CSV to JSON", Icons.Default.Transform, "csv_to_json", "Developer", isVisibleOnHome = false, isSubTool = true, description = "Convert CSV data to JSON format easily."),
+        Tool("Regex Tester", Icons.Default.Code, "regex_tester", "Developer", isVisibleOnHome = false, isSubTool = true, description = "Test and debug your regular expressions."),
+        Tool("Markdown Preview", Icons.Default.Description, "markdown_preview", "Developer", isVisibleOnHome = false, isSubTool = true, description = "Preview your Markdown files in real-time."),
 
         // Text Sub-Tools
         Tool("Anagram Finder", Icons.Default.SortByAlpha, "anagram", "Text", isVisibleOnHome = false, isSubTool = true),
@@ -444,11 +497,6 @@ object ToolProvider {
         Tool("Morse Decoder", Icons.Default.Language, "morse_decoder", "Text", isVisibleOnHome = false, isSubTool = true),
         Tool("Text Diff", Icons.Default.Difference, "text_diff", "Text", isVisibleOnHome = false, isSubTool = true),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Text", isVisibleOnHome = false, isSubTool = true),
-
-        // Calculation
-        Tool("Advanced Math", Icons.Default.Functions, "math_group", "Calculation", Color(0xFF607D8B),
-            description = "Calculators for every scenario.",
-            subToolRoutes = listOf("binary_calc", "calculator", "date_calc", "discount", "fuel", "mortgage_calc", "sci_calc", "tip", "matrix_calc", "eq_solver", "fraction_calc", "truth_table", "stats")),
 
         // Calculation Sub-Tools
         Tool("Binary Calc", Icons.Default.Numbers, "binary_calc", "Calculation", isVisibleOnHome = false, isSubTool = true),
@@ -465,21 +513,11 @@ object ToolProvider {
         Tool("Truth Table Gen", Icons.Default.ListAlt, "truth_table", "Calculation", isVisibleOnHome = false, isSubTool = true),
         Tool("Statistics", Icons.Default.BarChart, "stats", "Calculation", isVisibleOnHome = false, isSubTool = true),
 
-        // Conversion
-        Tool("Ultimate Converter", Icons.Default.SwapHoriz, "conv_group", "Conversion", Color(0xFF2196F3),
-            description = "Convert anything to anything.",
-            subToolRoutes = listOf("base_conv", "currency", "torque_conv", "converter", "crypto_conv")),
-
         // Conversion Sub-Tools
         Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Conversion", isVisibleOnHome = false, isSubTool = true),
         Tool("Currency Converter", Icons.Default.CurrencyExchange, "currency", "Conversion", isVisibleOnHome = false, isSubTool = true),
         Tool("Torque Converter", Icons.Default.SyncAlt, "torque_conv", "Conversion", isVisibleOnHome = false, isSubTool = true),
         Tool("Unit Converter", Icons.Default.SwapHoriz, "converter", "Conversion", isVisibleOnHome = false, isSubTool = true),
-
-        // Network
-        Tool("Network Lab", Icons.Default.NetworkCheck, "net_group", "Network", Color(0xFF00BCD4),
-            description = "Network diagnostic and info tools.",
-            subToolRoutes = listOf("dns_lookup", "my_ip", "network_info", "ping", "port_scanner", "speed_test", "whois", "subnet_calc", "route_planner", "device_discovery", "mqtt_tester")),
 
         // Network Sub-Tools
         Tool("DNS Lookup", Icons.Default.Dns, "dns_lookup", "Network", isVisibleOnHome = false, isSubTool = true),
@@ -489,11 +527,7 @@ object ToolProvider {
         Tool("Port Scanner", Icons.Default.Search, "port_scanner", "Network", isVisibleOnHome = false, isSubTool = true),
         Tool("Speed Test", Icons.Default.Speed, "speed_test", "Network", isVisibleOnHome = false, isSubTool = true),
         Tool("Whois", Icons.Default.QuestionMark, "whois", "Network", isVisibleOnHome = false, isSubTool = true),
-
-        // Utility & Misc
-        Tool("Daily Helpers", Icons.Default.Build, "util_group", "Utility & Misc", Color(0xFF4CAF50),
-            description = "Handy tools for everyday tasks.",
-            subToolRoutes = listOf("bpm", "bio_linker", "car_maintenance", "clock", "coin_flip", "dice_roller", "flashlight", "fuel_consumption", "hub", "memory_game", "number_guessing", "protractor", "qr_gen", "random", "ruler", "social_preview", "speedometer", "stopwatch", "tic_tac_toe", "tiles_widgets", "unit_price", "vibration", "web", "world_clock", "qr_scanner")),
+        Tool("Port Checker", Icons.Default.Dns, "port_checker", "Network", isVisibleOnHome = false, isSubTool = true, description = "Check status of specific network ports."),
 
         // Utility Sub-Tools
         Tool("BPM Counter", Icons.Default.Favorite, "bpm", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
@@ -521,33 +555,19 @@ object ToolProvider {
         Tool("Web Search", Icons.Default.Search, "web", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
         Tool("World Clock", Icons.Default.Public, "world_clock", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
         Tool("QR Scanner", Icons.Default.QrCodeScanner, "qr_scanner", "Utility & Misc", isVisibleOnHome = false, isSubTool = true),
+        Tool("Wifi QR Generator", Icons.Default.Wifi, "wifi_qr", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Generate QR codes for your Wifi network."),
+        Tool("Metatag Analyzer", Icons.Default.Search, "meta_anal", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Analyze website metatags for SEO."),
 
-        // Social & Media
-        Tool("Social & Media", Icons.Default.Share, "social_media_group", "Social & Media", Color(0xFFE91E63),
-            description = "Tools for social media and media management.",
-            subToolRoutes = listOf("social_preview", "bio_linker", "profile_photo_maker", "media_grabber")),
+        // Social Sub-Tools
         Tool("Profile Photo Maker", Icons.Default.AccountCircle, "profile_photo_maker", "Social & Media", isVisibleOnHome = false, isSubTool = true, description = "Create perfect profile pictures."),
 
-        // Privacy & Security
-        Tool("Privacy & Security", Icons.Default.Security, "security_group", "Privacy & Security", Color(0xFF607D8B),
-            description = "Protect your digital life.",
-            subToolRoutes = listOf("password_manager", "password_gen", "app_locker", "cipher_tools", "file_shredder")),
+        // Security Sub-Tools
         Tool("Strong Password Gen", Icons.Default.VpnKey, "password_gen", "Privacy & Security", isVisibleOnHome = false, isSubTool = true, description = "Generate unhackable passwords."),
 
-        // DIY & Home
-        Tool("DIY & Home", Icons.Default.Home, "diy_home_group", "DIY & Home", Color(0xFF795548),
-            description = "Handy tools for home projects and maintenance.",
-            subToolRoutes = listOf("level", "ruler", "protractor", "metal", "light", "unit_compare")),
+        // DIY Sub-Tools
         Tool("Unit Price Comparison", Icons.Default.CompareArrows, "unit_compare", "DIY & Home", isVisibleOnHome = false, isSubTool = true, description = "Compare prices for the best value."),
 
-        // Travel & Maps
-        Tool("Travel & Maps", Icons.Default.Flight, "travel_maps_group", "Travel & Maps", Color(0xFF03A9F4),
-            description = "Essential tools for your next adventure.",
-            subToolRoutes = listOf("world_clock", "currency", "travel_budget", "route_planner", "world_map")),
-        Tool("Travel Budgeter", Icons.Default.AttachMoney, "travel_budget", "Travel & Maps", isVisibleOnHome = false, isSubTool = true, description = "Plan and track your travel expenses."),
-
-        // Additional Tools in Utility & Misc
-        Tool("Wifi QR Generator", Icons.Default.Wifi, "wifi_qr", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Generate QR codes for your Wifi network."),
-        Tool("Metatag Analyzer", Icons.Default.Search, "meta_anal", "Utility & Misc", isVisibleOnHome = false, isSubTool = true, description = "Analyze website metatags for SEO.")
+        // Travel Sub-Tools
+        Tool("Travel Budgeter", Icons.Default.AttachMoney, "travel_budget", "Travel & Maps", isVisibleOnHome = false, isSubTool = true, description = "Plan and track your travel expenses.")
     )
 }
