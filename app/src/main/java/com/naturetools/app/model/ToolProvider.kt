@@ -83,7 +83,7 @@ object ToolProvider {
             subToolRoutes = listOf("images_to_pdf", "pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "pdf_merge", "pdf_metadata", "pdf_ocr", "pdf_page_numbers", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip")),
         Tool("Office & Files", Icons.Default.Description, "docs_group", "Documents", Color(0xFF607D8B),
             description = "Manage documents and files.",
-            subToolRoutes = listOf("csv_to_json", "doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "storage_cleaner", "zip_unzip", "docs_online")),
+            subToolRoutes = listOf("ai_doc_translator", "csv_to_json", "doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "storage_cleaner", "zip_unzip", "docs_online")),
 
         // SECURITY
         Tool("Privacy & Security", Icons.Default.Security, "security_group", "Security", Color(0xFF607D8B),
@@ -111,7 +111,7 @@ object ToolProvider {
         // AI TOOLS
         Tool("AI Expert", Icons.Default.AutoAwesome, "ai_group", "AI Tools", Color(0xFF673AB7),
             description = "Intelligent AI assistant tools.",
-            subToolRoutes = listOf("ai_chat", "ai_code", "ai_grammar", "ai_image", "ai_noise_remover", "ai_obj_detect", "ai_sentiment", "ai_stems_splitter", "ai_summarizer", "ai_text_ext", "ai_translate", "ai_voice_mimic", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "video_noise_remover", "vocal_autotuner", "vocal_remover")),
+            subToolRoutes = listOf("ai_chat", "ai_code", "ai_doc_translator", "ai_grammar", "ai_image", "ai_noise_remover", "ai_obj_detect", "ai_sentiment", "ai_stems_splitter", "ai_summarizer", "ai_text_ext", "ai_translate", "ai_voice_mimic", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "video_noise_remover", "vocal_autotuner", "vocal_remover")),
 
         // FINANCE
         Tool("Finance Hub", Icons.Default.MonetizationOn, "finance_group", "Finance", Color(0xFFFF9800),
@@ -453,7 +453,7 @@ object ToolProvider {
         Tool("YAML to JSON", Icons.Default.Transform, "yaml_to_json", "Data", isVisibleOnHome = false, isSubTool = true),
 
         // AI TOOLS
-        // (Most defined as subtools in their own sections above)
+        Tool("Document Translator", Icons.Default.Translate, "ai_doc_translator", "Documents", isVisibleOnHome = false, isSubTool = true),
 
         // FINANCE
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Finance", isVisibleOnHome = false, isSubTool = true),
