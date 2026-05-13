@@ -13,7 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.Color
 import com.naturetools.app.navigation.NatureToolsApp
 import com.naturetools.app.ui.theme.NatureToolsTheme
 
@@ -29,13 +31,21 @@ class MainActivity : ComponentActivity() {
             var dynamicColor by rememberSaveable { mutableStateOf(prefs.getBoolean("dynamic_color", true)) }
             var showCategoryCounts by rememberSaveable { mutableStateOf(prefs.getBoolean("show_category_counts", true)) }
             var aiApiKey by rememberSaveable { mutableStateOf(prefs.getString("ai_api_key", "") ?: "") }
+            var accentColorHex by rememberSaveable { mutableStateOf(prefs.getString("accent_color", "") ?: "") }
+            var auroraBackground by rememberSaveable { mutableStateOf(prefs.getBoolean("aurora_background", false)) }
+            var glassEffect by rememberSaveable { mutableStateOf(prefs.getBoolean("glass_effect", false)) }
+
+            val accentColor = remember(accentColorHex) {
+                if (accentColorHex.isEmpty()) null else Color(accentColorHex.toLong(16))
+            }
+
             val darkTheme = when (themeMode) {
                 "light" -> false
                 "dark" -> true
                 else -> isSystemInDarkTheme()
             }
 
-            NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
+            NatureToolsTheme(darkTheme = darkTheme, dynamicColor = dynamicColor, accentColor = accentColor) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     NatureToolsApp(
                         intent = intentState.value,
@@ -58,6 +68,22 @@ class MainActivity : ComponentActivity() {
                         onAiApiKeyChange = {
                             aiApiKey = it
                             prefs.edit().putString("ai_api_key", it).apply()
+                        },
+                        accentColor = accentColor,
+                        onAccentColorChange = { color ->
+                            val hex = if (color == null) "" else color.value.toString(16)
+                            accentColorHex = hex
+                            prefs.edit().putString("accent_color", hex).apply()
+                        },
+                        auroraBackground = auroraBackground,
+                        onAuroraBackgroundChange = {
+                            auroraBackground = it
+                            prefs.edit().putBoolean("aurora_background", it).apply()
+                        },
+                        glassEffect = glassEffect,
+                        onGlassEffectChange = {
+                            glassEffect = it
+                            prefs.edit().putBoolean("glass_effect", it).apply()
                         }
                     )
                 }
@@ -70,5 +96,3 @@ class MainActivity : ComponentActivity() {
         intentState.value = intent
     }
 }
-
-

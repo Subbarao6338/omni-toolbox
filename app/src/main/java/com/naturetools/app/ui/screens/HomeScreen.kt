@@ -45,6 +45,10 @@ fun HomeScreen(
     var debouncedSearchQuery by remember { mutableStateOf("") }
     var selectedCategory by rememberSaveable { mutableStateOf("All") }
 
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
+    val glassEffect = remember { prefs.getBoolean("glass_effect", false) }
+
     LaunchedEffect(searchQuery) {
         delay(300)
         debouncedSearchQuery = searchQuery
@@ -71,17 +75,16 @@ fun HomeScreen(
                         (tool.description?.contains(debouncedSearchQuery, ignoreCase = true) ?: false)
 
                 val matchesCategory = when (selectedCategory) {
-                    "All" -> tool.isVisibleOnHome
+                    "All" -> tool.isVisibleOnHome || debouncedSearchQuery.isNotEmpty()
                     "Favorites" -> favorites.contains(tool.route)
                     else -> tool.category == selectedCategory && tool.isVisibleOnHome
                 }
 
                 matchesSearch && matchesCategory
-            }.sortedBy { it.name }
+            }.sortedByDescending { it.isVisibleOnHome }.thenBy { it.name }
         }
     }
 
-    val context = LocalContext.current
     val recentPrefs = remember { context.getSharedPreferences("recent_tools", Context.MODE_PRIVATE) }
     var recentRoutes by remember {
         mutableStateOf(recentPrefs.getString("routes", "")?.split(",")?.filter { it.isNotEmpty() } ?: emptyList())
@@ -113,12 +116,12 @@ fun HomeScreen(
                 onSearch = { },
                 active = false,
                 onActiveChange = { },
-                placeholder = { Text("Search tools & sub-tools...") },
+                placeholder = { Text("Search 300+ tools...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             ) {}
 
-            if (recentRoutes.isNotEmpty()) {
+            if (recentRoutes.isNotEmpty() && searchQuery.isEmpty()) {
                 Text(
                     "Recent Tools",
                     style = MaterialTheme.typography.titleSmall,
@@ -172,7 +175,7 @@ fun HomeScreen(
 
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 100.dp),
+                    columns = GridCells.Adaptive(100.dp),
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -183,7 +186,8 @@ fun HomeScreen(
                             tool = tool,
                             isFavorite = favorites.contains(tool.route),
                             onToggleFavorite = { onToggleFavorite(tool.route) },
-                            onClick = { onToolClick(tool.route) }
+                            onClick = { onToolClick(tool.route) },
+                            glassEffect = glassEffect
                         )
                     }
                 }
@@ -207,7 +211,8 @@ fun ToolCard(
     tool: Tool,
     isFavorite: Boolean,
     onToggleFavorite: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    glassEffect: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -233,7 +238,9 @@ fun ToolCard(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = elevation),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if (isPressed) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface
+            containerColor = if (glassEffect) Color.White.copy(alpha = 0.1f)
+                             else if (isPressed) MaterialTheme.colorScheme.surfaceVariant
+                             else MaterialTheme.colorScheme.surface
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -287,4 +294,8 @@ fun ToolCard(
             }
         }
     }
+}
+
+fun <T> List<T>.thenBy(selector: (T) -> Comparable<*>?): List<T> {
+    return this.sortedWith(compareBy({ 0 }, selector)) // This is a bit hacky but we need a stable sort
 }

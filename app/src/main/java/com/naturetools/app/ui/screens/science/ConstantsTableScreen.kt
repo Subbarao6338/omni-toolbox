@@ -20,11 +20,17 @@ fun ConstantsTableScreen(navController: NavHostController) {
         Constant("Planck Constant", "h", "6.626 × 10⁻³⁴ J·s"),
         Constant("Elementary Charge", "e", "1.602 × 10⁻¹⁹ C"),
         Constant("Avogadro Constant", "Nₐ", "6.022 × 10²³ mol⁻¹"),
-        Constant("Boltzmann Constant", "k", "1.381 × 10⁻²³ J/K")
+        Constant("Boltzmann Constant", "k", "1.381 × 10⁻²³ J/K"),
+        Constant("Gas Constant", "R", "8.314 J/mol·K"),
+        Constant("Stefan-Boltzmann Constant", "σ", "5.670 × 10⁻⁸ W/m²·K⁴"),
+        Constant("Proton Mass", "mₚ", "1.672 × 10⁻²⁷ kg"),
+        Constant("Electron Mass", "mₑ", "9.109 × 10⁻³¹ kg"),
+        Constant("Permittivity of Free Space", "ε₀", "8.854 × 10⁻¹² F/m"),
+        Constant("Permeability of Free Space", "μ₀", "1.256 × 10⁻⁶ H/m")
     )
 
     ToolScreen(
-        title = "Scientific Constants",
+        title = "Physics Constants",
         onBack = { navController.popBackStack() }
     ) { padding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {

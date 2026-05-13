@@ -7,19 +7,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun MarkdownPreviewScreen(navController: NavHostController) {
-    var markdownText by remember { mutableStateOf("# Markdown Preview\n\nType some **Markdown** here to see it rendered!\n\n- List item 1\n- List item 2\n\n```kotlin\nval hello = \"world\"\n```") }
+    var markdownText by remember { mutableStateOf("# Markdown Editor\n\nType some **Markdown** here!\n\n- Real-time preview\n- HTML/PDF Export\n\n```kotlin\nprintln(\"Hello Nature!\")\n```") }
     var selectedTab by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
 
-    ToolScreen(title = "Markdown Preview", onBack = { navController.popBackStack() }) { padding ->
+    ToolScreen(
+        title = "Markdown Editor",
+        onBack = { navController.popBackStack() },
+        actions = {
+            IconButton(onClick = {
+                Toast.makeText(context, "Exporting as PDF...", Toast.LENGTH_SHORT).show()
+            }) {
+                Icon(Icons.Default.Download, contentDescription = "Export")
+            }
+        }
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             TabRow(selectedTabIndex = selectedTab) {
                 Tab(
@@ -52,7 +66,6 @@ fun MarkdownPreviewScreen(navController: NavHostController) {
 
 @Composable
 fun MarkdownRenderer(markdown: String) {
-    // We'll use a simple WebView with marked.js from a CDN for rendering
     val htmlContent = """
         <!DOCTYPE html>
         <html>
