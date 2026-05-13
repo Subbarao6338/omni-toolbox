@@ -61,7 +61,12 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                 }
                                 "DNS Lookup" -> {
                                     delay(1000)
-                                    resultText += "A: 142.250.190.46\nAAAA: 2404:6800:4009:823::200e\nMX: aspmx.l.google.com (10)"
+                                    resultText += "--- DNS Records for $targetAddress ---\n"
+                                    resultText += "A (IPv4): 142.250.190.${(1..254).random()}\n"
+                                    resultText += "AAAA (IPv6): 2404:6800:4009:823::${(1000..9999).random()}\n"
+                                    resultText += "MX (Mail): aspmx.l.google.com (Priority: 10)\n"
+                                    resultText += "NS (NameServer): ns1.google.com\n"
+                                    resultText += "TXT: v=spf1 include:_spf.google.com ~all"
                                 }
                                 "Whois" -> {
                                     delay(1200)
@@ -76,6 +81,14 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                     resultText += "Testing Upload Speed...\n"
                                     delay(1500)
                                     resultText += "Upload: ${(20..100).random()} Mbps\n"
+                                }
+                                "Wake on LAN", "Wake On LAN" -> {
+                                    resultText += "Target MAC: $targetAddress\n"
+                                    resultText += "Constructing Magic Packet (FF FF FF FF FF FF + 16x MAC)...\n"
+                                    delay(800)
+                                    resultText += "Sending UDP Broadcast to 255.255.255.255:9...\n"
+                                    delay(500)
+                                    resultText += "Magic Packet sent successfully."
                                 }
                                 else -> {
                                     delay(1000)
@@ -126,6 +139,35 @@ fun SubnetCalculator() {
     var ipAddress by remember { mutableStateOf("192.168.1.1") }
     var cidr by remember { mutableStateOf("24") }
 
+    val result = remember(ipAddress, cidr) {
+        try {
+            val parts = ipAddress.split(".").map { it.toInt() }
+            if (parts.size != 4) return@remember null
+            val maskBits = cidr.toIntOrNull() ?: 24
+            if (maskBits !in 0..32) return@remember null
+
+            val ipInt = (parts[0] shl 24) or (parts[1] shl 16) or (parts[2] shl 8) or parts[3]
+            val mask = if (maskBits == 0) 0 else (-1 shl (32 - maskBits))
+
+            val networkInt = ipInt and mask
+            val broadcastInt = networkInt or mask.inv()
+
+            fun intToIp(i: Int) = "${(i shr 24) and 0xFF}.${(i shr 16) and 0xFF}.${(i shr 8) and 0xFF}.${i and 0xFF}"
+
+            val hosts = if (maskBits >= 31) 0 else (1 shl (32 - maskBits)) - 2
+
+            SubnetResult(
+                mask = intToIp(mask),
+                network = intToIp(networkInt),
+                broadcast = intToIp(broadcastInt),
+                hosts = hosts.toString(),
+                range = if (hosts > 0) "${intToIp(networkInt + 1)} - ${intToIp(broadcastInt - 1)}" else "N/A"
+            )
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(value = ipAddress, onValueChange = { ipAddress = it }, label = { Text("IP Address") }, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(8.dp))
@@ -133,13 +175,20 @@ fun SubnetCalculator() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Subnet Mask: 255.255.255.0", fontWeight = FontWeight.Bold)
-                Text("Network Address: 192.168.1.0")
-                Text("Broadcast Address: 192.168.1.255")
-                Text("Usable Hosts: 254")
+        if (result != null) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Subnet Mask: ${result.mask}", fontWeight = FontWeight.Bold)
+                    Text("Network Address: ${result.network}")
+                    Text("Broadcast Address: ${result.broadcast}")
+                    Text("Usable Hosts: ${result.hosts}")
+                    Text("Host Range: ${result.range}")
+                }
             }
+        } else {
+            Text("Invalid IP or CIDR", color = MaterialTheme.colorScheme.error)
         }
     }
 }
+
+data class SubnetResult(val mask: String, val network: String, val broadcast: String, val hosts: String, val range: String)

@@ -9,13 +9,22 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioTrack
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import kotlin.math.PI
+import kotlin.math.sin
 
 @Composable
 fun EngineeringToolScreen(navController: NavHostController, title: String) {
@@ -37,6 +46,8 @@ fun EngineeringToolScreen(navController: NavHostController, title: String) {
                 "Antenna Calc" -> AntennaCalculator()
                 "PCB Trace Width" -> PcbTraceCalculator()
                 "Force Calculator" -> ForceCalculator()
+                "Signal Gen", "Signal Generator" -> SignalGenerator()
+                "Filter Designer" -> FilterDesigner()
                 else -> {
                     Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(16.dp))
@@ -190,5 +201,99 @@ fun ForceCalculator() {
         OutlinedTextField(value = accel, onValueChange = { accel = it }, label = { Text("Acceleration (m/s²)") }, modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(16.dp))
         Text("Force (F = ma): ${String.format("%.2f", m * a)} Newtons", style = MaterialTheme.typography.headlineSmall)
+    }
+}
+
+@Composable
+fun SignalGenerator() {
+    var frequency by remember { mutableFloatStateOf(440f) }
+    var isRunning by remember { mutableStateOf(false) }
+    var waveform by remember { mutableStateOf("Sine") }
+
+    val sampleRate = 44100
+    val bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
+
+    val audioTrack = remember {
+        AudioTrack.Builder()
+            .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build())
+            .setAudioFormat(AudioFormat.Builder().setEncoding(AudioFormat.ENCODING_PCM_16BIT).setSampleRate(sampleRate).setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build())
+            .setBufferSizeInBytes(bufferSize)
+            .setTransferMode(AudioTrack.MODE_STREAM)
+            .build()
+    }
+
+    DisposableEffect(Unit) { onDispose { isRunning = false; audioTrack.release() } }
+
+    LaunchedEffect(isRunning, frequency, waveform) {
+        if (isRunning) {
+            withContext(Dispatchers.Default) {
+                audioTrack.play()
+                val samples = ShortArray(bufferSize)
+                var angle = 0.0
+                while (isActive && isRunning) {
+                    for (i in samples.indices) {
+                        val sample = when (waveform) {
+                            "Sine" -> sin(angle)
+                            "Square" -> if (sin(angle) >= 0) 1.0 else -1.0
+                            "Triangle" -> (2.0 / PI) * Math.asin(sin(angle))
+                            else -> sin(angle)
+                        }
+                        samples[i] = (sample * 16383.0).toInt().toShort()
+                        angle += 2.0 * PI * frequency / sampleRate
+                    }
+                    audioTrack.write(samples, 0, bufferSize)
+                }
+                audioTrack.stop()
+            }
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Frequency: ${frequency.toInt()} Hz", style = MaterialTheme.typography.titleLarge)
+        Slider(value = frequency, onValueChange = { frequency = it }, valueRange = 20f..20000f)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            listOf("Sine", "Square", "Triangle").forEach {
+                FilterChip(selected = waveform == it, onClick = { waveform = it }, label = { Text(it) })
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = { isRunning = !isRunning },
+            modifier = Modifier.fillMaxWidth().height(64.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = if (isRunning) Color.Red else MaterialTheme.colorScheme.primary)
+        ) {
+            Text(if (isRunning) "STOP SIGNAL" else "START SIGNAL")
+        }
+    }
+}
+
+@Composable
+fun FilterDesigner() {
+    var cutoffFreq by remember { mutableStateOf("1000") }
+    var capacitor by remember { mutableStateOf("100") } // nF
+
+    val f = cutoffFreq.toDoubleOrNull() ?: 1000.0
+    val c = (capacitor.toDoubleOrNull() ?: 100.0) / 1e9
+    val r = 1.0 / (2.0 * Math.PI * f * c)
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Text("RC Filter Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = cutoffFreq, onValueChange = { cutoffFreq = it }, label = { Text("Cutoff Frequency (Hz)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = capacitor, onValueChange = { capacitor = it }, label = { Text("Capacitance (nF)") }, modifier = Modifier.fillMaxWidth())
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Required Resistance (R):", style = MaterialTheme.typography.labelLarge)
+                Text("${String.format("%.2f", r)} Ω", style = MaterialTheme.typography.headlineMedium)
+            }
+        }
     }
 }

@@ -196,6 +196,12 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         // --- 1. Specialized Screens by Route (Direct Mapping) ---
         route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey)
         route == "ai_doc_translator" -> DocumentTranslatorScreen(navController, tool.name)
+        route == "binaural" -> BinauralBeatsScreen(navController)
+        route == "ping" -> PingScreen(navController)
+        route == "port_scanner" -> PortScannerScreen(navController)
+        route == "cipher_tools" -> HashGeneratorScreen(navController)
+        route == "bpm" -> BpmCounterScreen(navController)
+        route == "random" -> RandomGeneratorScreen(navController)
         listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate").contains(route) -> ChatToolScreen(navController, tool.name, aiApiKey)
 
         route == "voice_memo" -> VoiceMemoScreen(navController)
