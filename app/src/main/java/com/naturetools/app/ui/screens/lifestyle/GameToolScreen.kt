@@ -49,9 +49,9 @@ fun GameToolScreen(navController: NavHostController, title: String) {
                 "Dino Jump" -> DinoJumpGame()
                 "2048" -> Game2048()
                 "Sudoku" -> SudokuGame()
-                "Ludo", "ludo" -> BoardGamePlaceholder("Ludo")
-                "Carroms", "carroms" -> BoardGamePlaceholder("Carroms")
-                "Chess", "chess" -> BoardGamePlaceholder("Chess")
+                "Ludo", "ludo" -> LudoGame()
+                "Carroms", "carroms" -> CarromsGame()
+                "Chess", "chess" -> ChessGame()
                 else -> {
                     Icon(Icons.Default.Casino, contentDescription = null, modifier = Modifier.size(64.dp))
                     Text("Game implementation for $title")
@@ -62,17 +62,109 @@ fun GameToolScreen(navController: NavHostController, title: String) {
 }
 
 @Composable
-fun BoardGamePlaceholder(name: String) {
+fun ChessGame() {
+    val board = remember {
+        listOf(
+            "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜",
+            "♟", " pawn ", "♟", "♟", "♟", "♟", "♟", "♟",
+            "", "", "", "", "", "", "", "",
+            "", "", "", "", "", "", "", "",
+            "", "", "", "", "", "", "", "",
+            "", "", "", "", "", "", "", "",
+            "♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙",
+            "♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"
+        )
+    }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(Icons.Default.Gamepad, contentDescription = null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.secondary)
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text("Chess", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Multiplayer $name experience with local and AI modes.", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = {}) {
-            Text("Start Match")
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(8),
+            modifier = Modifier.size(320.dp).border(2.dp, Color.Black)
+        ) {
+            items(64) { i ->
+                val row = i / 8
+                val col = i % 8
+                val isDark = (row + col) % 2 != 0
+                Box(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .background(if (isDark) Color(0xFF769656) else Color(0xFFEEEED2)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val piece = if (i < 16 || i >= 48) {
+                        val p = board[i]
+                        if (p == " pawn ") "♟" else p
+                    } else ""
+                    Text(piece, fontSize = 20.sp, color = if (i < 16) Color.Black else Color.White)
+                }
+            }
         }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text("Touch a piece to move (Logic coming soon)")
+    }
+}
+
+@Composable
+fun LudoGame() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Ludo", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(modifier = Modifier.size(300.dp).border(2.dp, Color.Black)) {
+            // Simplified Ludo Board Visualization
+            Column(modifier = Modifier.fillMaxSize()) {
+                Row(modifier = Modifier.weight(6f).fillMaxWidth()) {
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Red).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Green).border(1.dp, Color.Black))
+                }
+                Row(modifier = Modifier.weight(3f).fillMaxWidth()) {
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.Yellow).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
+                }
+                Row(modifier = Modifier.weight(6f).fillMaxWidth()) {
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Blue).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Yellow).border(1.dp, Color.Black))
+                }
+            }
+            Text("🎲", modifier = Modifier.align(Alignment.Center), fontSize = 40.sp)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = {}) { Text("Roll Dice") }
+    }
+}
+
+@Composable
+fun CarromsGame() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Carroms", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            modifier = Modifier
+                .size(300.dp)
+                .background(Color(0xFFDEB887))
+                .border(8.dp, Color(0xFF5D4037)),
+            contentAlignment = Alignment.Center
+        ) {
+            // Pockets
+            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.TopStart).offset(x = (-5).dp, y = (-5).dp))
+            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.TopEnd).offset(x = (5).dp, y = (-5).dp))
+            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.BottomStart).offset(x = (-5).dp, y = (5).dp))
+            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.BottomEnd).offset(x = (5).dp, y = (5).dp))
+
+            // Center
+            Box(modifier = Modifier.size(80.dp).border(1.dp, Color.Black, CircleShape))
+            repeat(9) { i ->
+                Box(modifier = Modifier.size(15.dp).background(if (i == 0) Color.Red else if (i % 2 == 0) Color.Black else Color.White, CircleShape).offset(x = (Math.cos(i * 0.7) * 20).dp, y = (Math.sin(i * 0.7) * 20).dp))
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text("Flick the striker to play")
     }
 }
 

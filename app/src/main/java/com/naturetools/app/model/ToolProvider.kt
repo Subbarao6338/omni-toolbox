@@ -56,7 +56,7 @@ object ToolProvider {
             subToolRoutes = listOf("checklist", "daily_journal", "daily_quotes", "kanban", "note", "pomodoro", "task_board", "time_logger")),
         Tool("Calculators", Icons.Default.Calculate, "calc_group", "Utilities", Color(0xFFFF9800),
             description = "Practical calculators for daily use.",
-            subToolRoutes = listOf("calculator", "discount", "mortgage_calc", "tip", "unit_compare", "unit_price")),
+            subToolRoutes = listOf("calculator", "discount", "mortgage_calc", "tip", "unit_compare", "unit_price", "volume_calc")),
         Tool("Unit Converters", Icons.Default.SwapHoriz, "conv_group", "Utilities", Color(0xFF2196F3),
             description = "Convert between various units.",
             subToolRoutes = listOf("base_conv", "converter", "crypto_conv", "currency", "torque_conv")),
@@ -336,6 +336,7 @@ object ToolProvider {
         Tool("Unit Price Calc", Icons.Default.PriceCheck, "unit_price", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Unit Price Comparison", Icons.AutoMirrored.Filled.CompareArrows, "unit_compare", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utilities", isVisibleOnHome = false, isSubTool = true),
+        Tool("Volume Calc", Icons.Default.VerticalAlignBottom, "volume_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Wifi QR Generator", Icons.Default.Wifi, "wifi_qr", "Utilities", isVisibleOnHome = false, isSubTool = true),
 
         // GAMES

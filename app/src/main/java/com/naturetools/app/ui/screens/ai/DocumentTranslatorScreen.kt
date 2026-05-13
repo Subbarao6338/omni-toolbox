@@ -264,16 +264,33 @@ private fun performRobustOfflineTranslation(source: String, targetLang: String):
         "good" to "Good (మంచిది)",
         "morning" to "Morning (శుభోదయం)",
         "night" to "Night (రాత్రి)",
-        "day" to "Day (పగలు)"
+        "day" to "Day (పగలు)",
+        "illu" to "House (ఇల్లు)",
+        "velli" to "Go (వెళ్లి)",
+        "ra" to "Come (రా)",
+        "tinu" to "Eat (తిను)",
+        "taagu" to "Drink (త్రాగు)",
+        "ninnu" to "You (నిన్ను)",
+        "naaku" to "To me (నాకు)",
+        "eppudu" to "When (ఎప్పుడు)",
+        "ekkada" to "Where (ఎక్కడ)",
+        "enduku" to "Why (ఎందుకు)",
+        "evadu" to "Who (ఎవడు)",
+        "avunu" to "Yes (అవును)",
+        "kaadu" to "No (కాదు)",
+        "telusu" to "Know (తెలుసు)",
+        "theliyadu" to "Don't know (తెలియదు)"
     )
 
-    val rules = listOf(
-        Regex("(\\w+)lu") to "$1 (plural)",
-        Regex("(\\w+)ni") to "$1 (object)",
-        Regex("(\\w+)to") to "with $1"
+    val wordRules = listOf(
+        Regex("(\\w+)lu$") to "$1 (plural)",
+        Regex("(\\w+)ni$") to "$1 (object)",
+        Regex("(\\w+)to$") to "with $1",
+        Regex("(\\w+)ka$") to "only $1",
+        Regex("(\\w+)ne$") to "it is $1"
     )
 
-    val words = source.lowercase(Locale.getDefault()).split(Regex("\\W+")).filter { it.length > 1 }
+    val words = source.lowercase(Locale.getDefault()).split(Regex("\\W+")).filter { it.length > 0 }
     val result = StringBuilder()
 
     if (targetLang == "Telugu") {
@@ -283,7 +300,19 @@ private fun performRobustOfflineTranslation(source: String, targetLang: String):
             if (match != null) {
                 result.append(match.substringAfterLast("(").replace(")", "") + " ")
             } else {
-                result.append("$word ")
+                var appliedRule = false
+                for ((regex, _) in wordRules) {
+                    if (regex.containsMatchIn(word)) {
+                        val base = word.replace(regex, "$1")
+                        val baseMatch = dictionary[base]
+                        if (baseMatch != null) {
+                            result.append(baseMatch.substringAfterLast("(").replace(")", "") + " (modified) ")
+                            appliedRule = true
+                            break
+                        }
+                    }
+                }
+                if (!appliedRule) result.append("$word ")
             }
         }
     } else {
@@ -293,11 +322,26 @@ private fun performRobustOfflineTranslation(source: String, targetLang: String):
             if (match != null) {
                 result.append(match.substringBefore(" (") + " ")
             } else {
-                // Check if transliterated pattern
-                if (word.any { it in "aeiou" } && word.length > 3) {
-                    result.append("[Detected Script: $word] ")
-                } else {
-                    result.append("$word ")
+                var appliedRule = false
+                for ((regex, replacement) in wordRules) {
+                    if (regex.containsMatchIn(word)) {
+                        val base = word.replace(regex, "$1")
+                        val baseMatch = dictionary[base]
+                        if (baseMatch != null) {
+                            result.append(baseMatch.substringBefore(" (") + " (" + replacement.substringAfter(" ") + ") ")
+                            appliedRule = true
+                            break
+                        }
+                    }
+                }
+
+                if (!appliedRule) {
+                    // Check if transliterated pattern
+                    if (word.any { it in "aeiou" } && word.length > 3) {
+                        result.append("[Possible Telugu: $word] ")
+                    } else {
+                        result.append("$word ")
+                    }
                 }
             }
         }

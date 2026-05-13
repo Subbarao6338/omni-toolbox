@@ -3,7 +3,9 @@ package com.naturetools.app.ui.screens.media
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -240,12 +242,29 @@ private suspend fun performActualConversion(
 
         when (targetFormat) {
             "JPG", "PNG", "WEBP" -> {
-                val bitmap = BitmapFactory.decodeStream(inputStream) ?: return@withContext false
+                val bitmap = if (originalName.lowercase().endsWith(".pdf")) {
+                    val parcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return@withContext false
+                    val renderer = PdfRenderer(parcelFileDescriptor)
+                    val page = renderer.openPage(0)
+                    val bmp = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+                    page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    page.close()
+                    renderer.close()
+                    bmp
+                } else {
+                    BitmapFactory.decodeStream(inputStream)
+                } ?: return@withContext false
+
                 onProgress(0.6f)
                 val format = when(targetFormat) {
                     "JPG" -> Bitmap.CompressFormat.JPEG
                     "PNG" -> Bitmap.CompressFormat.PNG
-                    else -> Bitmap.CompressFormat.WEBP
+                    else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        Bitmap.CompressFormat.WEBP_LOSSY
+                    } else {
+                        @Suppress("DEPRECATION")
+                        Bitmap.CompressFormat.WEBP
+                    }
                 }
                 outputStream.use { out ->
                     bitmap.compress(format, 90, out)

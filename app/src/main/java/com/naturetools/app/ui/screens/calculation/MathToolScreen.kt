@@ -79,13 +79,9 @@ fun MathToolScreen(navController: NavHostController, title: String) {
                         "Statistics" -> solveStats(input1)
                         "Fraction Calc" -> solveFraction(input1, input2)
                         "Truth Table Gen" -> solveTruthTable(input1)
-                        "Area Calculator", "Area Calc" -> solveArea(input1)
                         "Matrix Calc" -> solveMatrix(input1)
                         "Equation Solver" -> solveEquation(input1)
                         "Prime Checker" -> solvePrime(input1)
-                        "Discount Calc" -> solveDiscount(input1, input2)
-                        "Tip Calc" -> solveTip(input1, input2)
-                        "Mortgage Calc" -> solveMortgage(input1, input2)
                         else -> "Processing logic for $title coming soon. Your input: $input1"
                     }
                 },
@@ -243,15 +239,6 @@ fun solveTruthTable(expr: String): String {
     }
 }
 
-fun solveArea(input: String): String {
-    return try {
-        val r = input.toDouble()
-        "Circle Area: ${String.format("%.4f", Math.PI * r * r)}\nSquare Area: ${String.format("%.4f", r * r)}\nSphere Volume: ${String.format("%.4f", (4.0/3.0) * Math.PI * r * r * r)}"
-    } catch (e: Exception) {
-        "Invalid Input. Enter a number (radius/side)."
-    }
-}
-
 fun solveMatrix(input: String): String {
     return try {
         val nums = input.split(",").map { it.trim().toDouble() }
@@ -289,41 +276,5 @@ fun solvePrime(input: String): String {
         "$n is a prime number!"
     } catch (e: Exception) {
         "Invalid Input. Enter a whole number."
-    }
-}
-
-fun solveDiscount(price: String, discount: String): String {
-    return try {
-        val p = price.toDouble()
-        val d = discount.toDouble()
-        val saved = p * (d / 100)
-        val final = p - saved
-        "Original Price: $p\nDiscount: $d%\nAmount Saved: ${String.format("%.2f", saved)}\nFinal Price: ${String.format("%.2f", final)}"
-    } catch (e: Exception) {
-        "Invalid Input. Enter price and discount percentage."
-    }
-}
-
-fun solveTip(bill: String, tipPercent: String): String {
-    return try {
-        val b = bill.toDouble()
-        val t = tipPercent.toDouble()
-        val tipAmount = b * (t / 100)
-        val total = b + tipAmount
-        "Bill: $b\nTip: $t%\nTip Amount: ${String.format("%.2f", tipAmount)}\nTotal Bill: ${String.format("%.2f", total)}"
-    } catch (e: Exception) {
-        "Invalid Input. Enter bill amount and tip percentage."
-    }
-}
-
-fun solveMortgage(amount: String, rate: String): String {
-    return try {
-        val p = amount.toDouble()
-        val r = rate.toDouble() / 100 / 12
-        val n = 30 * 12 // Assume 30 years
-        val monthly = p * (r * Math.pow(1 + r, n.toDouble())) / (Math.pow(1 + r, n.toDouble()) - 1)
-        "Loan Amount: $p\nAnnual Rate: $rate%\nTerm: 30 Years\nMonthly Payment: ${String.format("%.2f", monthly)}\nTotal Payment: ${String.format("%.2f", monthly * n)}"
-    } catch (e: Exception) {
-        "Invalid Input. Enter loan amount and annual interest rate."
     }
 }

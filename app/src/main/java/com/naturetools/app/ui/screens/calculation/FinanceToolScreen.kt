@@ -37,12 +37,9 @@ fun FinanceToolScreen(navController: NavHostController, title: String) {
                 "Dividend Calc" -> DividendCalculator()
                 "Inflation Calc" -> InflationCalculator()
                 "ROI Calculator" -> RoiCalculator()
-                "Loan Calculator" -> LoanCalculator()
                 "Salary Calc" -> SalaryCalculator()
                 "Stock Profit" -> StockProfitCalculator()
-                "Unit Price", "Unit Price Calc" -> UnitPriceCalculator()
                 "Expense Tracker" -> ExpenseTracker()
-                "Tax Calculator" -> TaxCalculator()
                 "CAGR Calculator" -> CagrCalculator()
                 "DCF Calculator" -> DcfCalculator()
                 else -> Text("Finance Utility for $title")
@@ -136,30 +133,6 @@ fun ExpenseTracker() {
     }
 }
 
-@Composable
-fun TaxCalculator() {
-    var income by remember { mutableStateOf("50000") }
-    var taxRate by remember { mutableStateOf("20") }
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Tax Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(value = income, onValueChange = { income = it }, label = { Text("Annual Income") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = taxRate, onValueChange = { taxRate = it }, label = { Text("Tax Rate (%)") }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
-
-        val inc = income.toDoubleOrNull() ?: 0.0
-        val rate = (taxRate.toDoubleOrNull() ?: 0.0) / 100
-        val tax = inc * rate
-
-        Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Estimated Tax: ${"%.2f".format(tax)}")
-                Text("Net Income: ${"%.2f".format(inc - tax)}")
-            }
-        }
-    }
-}
 
 @Composable
 fun SipCalculator() {
@@ -368,37 +341,6 @@ fun RoiCalculator() {
     }
 }
 
-@Composable
-fun LoanCalculator() {
-    var amount by remember { mutableStateOf("10000") }
-    var interest by remember { mutableStateOf("7") }
-    var years by remember { mutableStateOf("5") }
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Loan EMI Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text("Loan Amount") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = interest, onValueChange = { interest = it }, label = { Text("Interest Rate (%)") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = years, onValueChange = { years = it }, label = { Text("Years") }, modifier = Modifier.fillMaxWidth())
-
-        val p = amount.toDoubleOrNull() ?: 0.0
-        val r = (interest.toDoubleOrNull() ?: 0.0) / 12 / 100
-        val n = (years.toDoubleOrNull() ?: 0.0) * 12
-
-        if (p > 0 && r > 0 && n > 0) {
-            val emi = (p * r * (1 + r).pow(n)) / ((1 + r).pow(n) - 1)
-            val totalPayment = emi * n
-            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Monthly EMI: ${"%.2f".format(emi)}")
-                    Text("Total Payment: ${"%.2f".format(totalPayment)}")
-                    Text("Total Interest: ${"%.2f".format(totalPayment - p)}")
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun SalaryCalculator() {
