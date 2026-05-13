@@ -227,6 +227,12 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "clock" -> ClockScreen(navController)
         route == "stopwatch" -> StopwatchScreen(navController)
         route == "date_calc" -> DateCalculatorScreen(navController)
+        route == "area_calc" -> AreaCalcScreen(navController)
+        route == "volume_calc" -> VolumeCalcScreen(navController)
+        route == "discount" -> DiscountCalculatorScreen(navController)
+        route == "tip" -> TipCalculatorScreen(navController)
+        route == "mortgage_calc" -> MortgageCalculatorScreen(navController)
+        route == "sci_calc" -> ScientificCalculatorScreen(navController)
         route == "tiles_widgets" -> TilesAndWidgetsScreen(navController)
         route == "panchangam" -> HealthScreen(navController, "Panchangam")
 
@@ -256,12 +262,15 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "my_ip" -> MyIPScreen(navController)
 
         route == "compound_interest" -> CompoundInterestScreen(navController)
+        route == "tax_calc" -> TaxCalculatorScreen(navController)
+        route == "loan_calc" -> LoanCalculatorScreen(navController)
         listOf("crypto_conv", "currency").contains(route) -> CurrencyConverterScreen(navController)
 
         route == "water" -> WaterTrackerScreen(navController)
         route == "step_counter" -> StepCounterScreen(navController)
         route == "bmi" -> BMICalculatorScreen(navController)
         route == "bmr" -> BmrCalculatorScreen(navController)
+        route == "calorie_calc" -> CalorieCalculatorScreen(navController)
         route == "habit_tracker" -> HabitTrackerScreen(navController)
         route == "meditation" -> MeditationTimerScreen(navController)
 
@@ -289,7 +298,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         listOf("image_color_picker", "image_palette", "color_palette_group").contains(route) -> ColorToolsScreen(navController)
 
         // --- 2. Shared Multi-Category Screens ---
-        listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "sci_calc", "binary_calc", "discount", "mortgage_calc", "tip", "area_calc", "stats").contains(route) -> MathToolScreen(navController, tool.name)
+        listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "binary_calc", "stats").contains(route) -> MathToolScreen(navController, tool.name)
         listOf("antenna_calc", "filter_design", "logic_gates", "pcb_trace", "resistor_code", "signal_gen_pro", "force_calc").contains(route) -> EngineeringToolScreen(navController, tool.name)
         listOf("ohms_law", "circuit_calc").contains(route) -> ElectronicsToolScreen(navController, tool.name)
 
@@ -324,7 +333,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         category == "Media" -> {
             if (tool.route == "guitar_tuner" || tool.route == "chord_lib") MusicToolScreen(navController, tool.name)
             else if (tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster").contains(route)) AudioToolScreen(navController, tool.name)
-            else if (tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool").contains(route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
+            else if (tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
             else ImageToolScreen(navController, tool.name)
         }
         category == "Device" -> if (route == "smart_hub") SystemLabScreen(navController, tool.name) else SystemLabScreen(navController, tool.name)
