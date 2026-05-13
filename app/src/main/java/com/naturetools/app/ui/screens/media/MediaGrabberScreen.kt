@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -34,6 +36,7 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
     var mediaLinks by remember { mutableStateOf(setOf<String>()) }
     var selectedLinks by remember { mutableStateOf(setOf<String>()) }
     var isLoading by remember { mutableStateOf(false) }
+    var useExternalDownloader by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     val clipboardManager = LocalClipboardManager.current
 
@@ -46,17 +49,31 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
         }
     }
 
+    fun downloadLink(link: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        if (useExternalDownloader) {
+            // Try to force external downloader if possible, or just use general VIEW
+            // Some managers catch specific intent extras
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        navController.context.startActivity(intent)
+    }
+
     ToolScreen(
         title = "Media Grabber",
         onBack = { navController.popBackStack() },
         actions = {
+            IconButton(onClick = { useExternalDownloader = !useExternalDownloader }) {
+                Icon(
+                    if (useExternalDownloader) Icons.Default.DownloadDone else Icons.Default.SystemUpdateAlt,
+                    contentDescription = "Toggle External Downloader",
+                    tint = if (useExternalDownloader) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                )
+            }
             if (mediaLinks.isNotEmpty()) {
                 IconButton(onClick = {
                     val linksToDownload = if (selectedLinks.isNotEmpty()) selectedLinks else mediaLinks
-                    linksToDownload.forEach { link ->
-                        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
-                        navController.context.startActivity(intent)
-                    }
+                    linksToDownload.forEach { downloadLink(it) }
                 }) {
                     Icon(Icons.Default.DownloadForOffline, contentDescription = "Download All")
                 }
@@ -162,10 +179,7 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                                         modifier = Modifier
                                             .size(24.dp)
                                             .padding(4.dp)
-                                            .clickable {
-                                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
-                                                webView?.context?.startActivity(intent)
-                                            },
+                                            .clickable { downloadLink(link) },
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }

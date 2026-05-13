@@ -15,8 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.naturetools.app.model.ToolProvider
 import com.naturetools.app.ui.components.ToolScreen
 import com.naturetools.app.ui.theme.AccentColors
 import kotlinx.coroutines.launch
@@ -73,6 +73,19 @@ fun SettingsScreen(
                 onClick = { onThemeChange("dark") },
                 icon = Icons.Default.DarkMode
             )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            Text("Quick Tiles", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Assign tools to Custom Tiles in Quick Settings", style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            val tilePrefs = context.getSharedPreferences("dynamic_tiles", Context.MODE_PRIVATE)
+            (1..3).forEach { i ->
+                QuickTileSetting(i, tilePrefs)
+            }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
@@ -234,6 +247,28 @@ fun SettingsScreen(
             }
         }
     }
+}
+
+@Composable
+fun QuickTileSetting(i: Int, tilePrefs: android.content.SharedPreferences) {
+    var tileRoute by remember { mutableStateOf(tilePrefs.getString("tile_$i", "home") ?: "home") }
+
+    OutlinedTextField(
+        value = tileRoute,
+        onValueChange = { newValue ->
+            tileRoute = newValue
+            tilePrefs.edit().putString("tile_$i", newValue).apply()
+            val toolName = ToolProvider.tools.find { it.route == newValue }?.name ?: "Nature Tool"
+            tilePrefs.edit().putString("tile_name_$i", toolName).apply()
+        },
+        label = { Text("Custom Tile $i Route") },
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        trailingIcon = {
+            IconButton(onClick = { /* Could show tool picker dialog */ }) {
+                Icon(Icons.Default.Link, contentDescription = null)
+            }
+        }
+    )
 }
 
 @Composable

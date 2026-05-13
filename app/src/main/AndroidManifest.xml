@@ -266,6 +266,36 @@
         </service>
 
         <service
+            android:name=".service.DynamicTileService1"
+            android:exported="true"
+            android:label="Custom Tile 1"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.DynamicTileService2"
+            android:exported="true"
+            android:label="Custom Tile 2"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.DynamicTileService3"
+            android:exported="true"
+            android:label="Custom Tile 3"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name=".service.SosTileService"
             android:exported="true"
             android:label="Emergency SOS"

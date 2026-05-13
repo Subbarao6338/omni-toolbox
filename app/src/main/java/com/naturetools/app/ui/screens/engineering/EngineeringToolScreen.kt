@@ -34,6 +34,9 @@ fun EngineeringToolScreen(navController: NavHostController, title: String) {
             when (title) {
                 "Resistor Color Code" -> ResistorCalculator()
                 "Logic Gates" -> LogicGateSim()
+                "Antenna Calc" -> AntennaCalculator()
+                "PCB Trace Width" -> PcbTraceCalculator()
+                "Force Calculator" -> ForceCalculator()
                 else -> {
                     Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(16.dp))
@@ -131,5 +134,61 @@ fun LogicResult(name: String, result: Boolean) {
     Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(name)
         Text(if (result) "HIGH (1)" else "LOW (0)", color = if (result) Color.Green else Color.Red)
+    }
+}
+
+@Composable
+fun AntennaCalculator() {
+    var freq by remember { mutableStateOf("2400") }
+    val f = freq.toDoubleOrNull() ?: 2400.0
+    val waveLength = 299.79 / f // meters
+    val halfWave = waveLength / 2 * 1000 // mm
+    val quarterWave = waveLength / 4 * 1000 // mm
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        OutlinedTextField(
+            value = freq,
+            onValueChange = { freq = it },
+            label = { Text("Frequency (MHz)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(16.dp))
+        Text("Wavelength: ${String.format("%.4f", waveLength)} m")
+        Text("Half-wave Dipole: ${String.format("%.2f", halfWave)} mm")
+        Text("Quarter-wave Monopole: ${String.format("%.2f", quarterWave)} mm")
+    }
+}
+
+@Composable
+fun PcbTraceCalculator() {
+    var current by remember { mutableStateOf("1.0") }
+    var tempRise by remember { mutableStateOf("10") }
+    val i = current.toDoubleOrNull() ?: 1.0
+    val dt = tempRise.toDoubleOrNull() ?: 10.0
+    // Simplified IPC-2221 internal trace
+    val area = Math.pow(i / (0.024 * Math.pow(dt, 0.44)), 1.0/0.725)
+    val width = area / 1.37 // for 1oz copper (35um)
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        OutlinedTextField(value = current, onValueChange = { current = it }, label = { Text("Current (Amps)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = tempRise, onValueChange = { tempRise = it }, label = { Text("Temp Rise (°C)") }, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+        Text("Required Trace Area: ${String.format("%.4f", area)} mil²")
+        Text("Trace Width (1oz Cu): ${String.format("%.2f", width)} mils")
+    }
+}
+
+@Composable
+fun ForceCalculator() {
+    var mass by remember { mutableStateOf("") }
+    var accel by remember { mutableStateOf("") }
+    val m = mass.toDoubleOrNull() ?: 0.0
+    val a = accel.toDoubleOrNull() ?: 0.0
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        OutlinedTextField(value = mass, onValueChange = { mass = it }, label = { Text("Mass (kg)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = accel, onValueChange = { accel = it }, label = { Text("Acceleration (m/s²)") }, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+        Text("Force (F = ma): ${String.format("%.2f", m * a)} Newtons", style = MaterialTheme.typography.headlineSmall)
     }
 }
