@@ -28,7 +28,7 @@ object ToolProvider {
         // MEDIA
         Tool("Audio Tools", Icons.Default.LibraryMusic, "audio_tools_group", "Media", Color(0xFFE91E63),
             description = "Audio editing and processing tools.",
-            subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator")),
+            subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "binaural", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator")),
         Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Media", Color(0xFFF44336),
             description = "Professional video processing tools.",
             subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool")),
@@ -161,6 +161,7 @@ object ToolProvider {
 
         // MEDIA
         Tool("3D Audio", Icons.Default.Headset, "m_3d_audio", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Binaural Beats", Icons.Default.Headset, "binaural", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Add SFX", Icons.Default.AutoAwesome, "add_sfx", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("APNG to images", Icons.Default.Collections, "apng_to_images", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("APNG to JXL", Icons.Default.Animation, "apng_to_jxl", "Media", isVisibleOnHome = false, isSubTool = true),

@@ -83,6 +83,25 @@ fun SqlFormatter() {
 @Composable
 fun CronHelper() {
     var cronExpr by remember { mutableStateOf("0 0 * * *") }
+
+    val explanation = remember(cronExpr) {
+        try {
+            val parts = cronExpr.trim().split(Regex("\\s+"))
+            if (parts.size < 5) "Invalid cron expression (needs 5 parts)"
+            else {
+                val (min, hour, dom, mon, dow) = parts
+                val m = if (min == "*") "every minute" else "at minute $min"
+                val h = if (hour == "*") "every hour" else "at hour $hour"
+                val d = if (dom == "*") "every day" else "on day $dom of the month"
+                val mo = if (mon == "*") "every month" else "in month $mon"
+                val w = if (dow == "*") "every day of the week" else "on day $dow of the week"
+                "Execution: $m, $h, $d, $mo, $w."
+            }
+        } catch (e: Exception) {
+            "Error parsing expression"
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text("Cron Helper", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
@@ -90,7 +109,7 @@ fun CronHelper() {
         Spacer(modifier = Modifier.height(16.dp))
         Card(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = "Next Run: Simulated calculation for $cronExpr",
+                text = explanation,
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -132,11 +151,22 @@ fun DataConverter(type: String) {
         Button(onClick = {
             output = when {
                 type.contains("YAML") -> {
-                    val lines = input.lines().filter { it.contains(":") }
-                    lines.joinToString(",\n  ", "{\n  ", "\n}") { line ->
-                        val parts = line.split(":", limit = 2)
-                        "\"${parts[0].trim()}\": \"${parts[1].trim()}\""
+                    val lines = input.lines().filter { it.isNotBlank() }
+                    val result = mutableListOf<String>()
+                    lines.forEach { line ->
+                        val trimmed = line.trim()
+                        if (trimmed.contains(":")) {
+                            val parts = trimmed.split(":", limit = 2)
+                            val key = parts[0].trim().removeSurrounding("\"")
+                            val value = parts[1].trim().removeSurrounding("\"")
+                            if (value.isNotEmpty()) {
+                                result.add("\"$key\": \"$value\"")
+                            } else {
+                                result.add("\"$key\": null")
+                            }
+                        }
                     }
+                    result.joinToString(",\n  ", "{\n  ", "\n}")
                 }
                 type.contains("XML") -> {
                     val tagRegex = Regex("<(\\w+)>([^<]+)</\\1>")

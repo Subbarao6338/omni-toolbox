@@ -64,9 +64,9 @@ fun GameToolScreen(navController: NavHostController, title: String) {
 @Composable
 fun ChessGame() {
     val board = remember {
-        listOf(
+        mutableStateListOf(
             "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜",
-            "♟", " pawn ", "♟", "♟", "♟", "♟", "♟", "♟",
+            "♟", "♟", "♟", "♟", "♟", "♟", "♟", "♟",
             "", "", "", "", "", "", "", "",
             "", "", "", "", "", "", "", "",
             "", "", "", "", "", "", "", "",
@@ -75,6 +75,7 @@ fun ChessGame() {
             "♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"
         )
     }
+    var selectedIndex by remember { mutableIntStateOf(-1) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Chess", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
@@ -87,22 +88,33 @@ fun ChessGame() {
                 val row = i / 8
                 val col = i % 8
                 val isDark = (row + col) % 2 != 0
+                val isSelected = selectedIndex == i
+
                 Box(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .background(if (isDark) Color(0xFF769656) else Color(0xFFEEEED2)),
+                        .background(if (isSelected) Color.Yellow else if (isDark) Color(0xFF769656) else Color(0xFFEEEED2))
+                        .clickable {
+                            if (selectedIndex == -1) {
+                                if (board[i].isNotEmpty()) selectedIndex = i
+                            } else {
+                                if (i != selectedIndex) {
+                                    board[i] = board[selectedIndex]
+                                    board[selectedIndex] = ""
+                                }
+                                selectedIndex = -1
+                            }
+                        },
                     contentAlignment = Alignment.Center
                 ) {
-                    val piece = if (i < 16 || i >= 48) {
-                        val p = board[i]
-                        if (p == " pawn ") "♟" else p
-                    } else ""
-                    Text(piece, fontSize = 20.sp, color = if (i < 16) Color.Black else Color.White)
+                    val piece = board[i]
+                    val isBlackPiece = piece.isNotEmpty() && "♜♞♝♛♚♟".contains(piece)
+                    Text(piece, fontSize = 24.sp, color = if (isBlackPiece) Color.Black else Color.White)
                 }
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Text("Touch a piece to move (Logic coming soon)")
+        Text(if (selectedIndex == -1) "Select a piece" else "Select destination")
     }
 }
 
@@ -269,28 +281,44 @@ fun checkWinner(board: List<String>): String? {
 fun SnakeGame() {
     var score by remember { mutableIntStateOf(0) }
     var gameStarted by remember { mutableStateOf(false) }
+    var direction by remember { mutableStateOf("RIGHT") }
+    var headPos by remember { mutableStateOf(0 to 0) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Snake", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.size(300.dp).background(Color.Black), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.size(200.dp).background(Color.Black)) {
             if (!gameStarted) {
-                Button(onClick = { gameStarted = true; score = 0 }) { Text("Start Game") }
+                Button(onClick = { gameStarted = true; score = 0; headPos = 5 to 5 }, modifier = Modifier.align(Alignment.Center)) { Text("Start") }
             } else {
-                Text("Score: $score", color = Color.White, modifier = Modifier.align(Alignment.TopStart).padding(8.dp))
-                // Simulated game movement
-                LaunchedEffect(Unit) {
+                Text("Score: $score", color = Color.White, modifier = Modifier.align(Alignment.TopStart).padding(4.dp))
+                LaunchedEffect(gameStarted) {
                     while(gameStarted) {
-                        delay(500)
-                        score += 1
+                        delay(300)
+                        headPos = when(direction) {
+                            "UP" -> headPos.first to (headPos.second - 1 + 10) % 10
+                            "DOWN" -> headPos.first to (headPos.second + 1) % 10
+                            "LEFT" -> (headPos.first - 1 + 10) % 10 to headPos.second
+                            else -> (headPos.first + 1) % 10 to headPos.second
+                        }
+                        score++
                     }
                 }
-                Text("🐍", fontSize = 24.sp, modifier = Modifier.offset(x = (score % 10 * 20).dp))
+                Text("🐍", fontSize = 20.sp, modifier = Modifier.offset(x = (headPos.first * 20).dp, y = (headPos.second * 20).dp))
             }
         }
-        if (gameStarted) {
-            Spacer(modifier = Modifier.height(24.dp))
-            Button(onClick = { gameStarted = false }) { Text("Game Over") }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            Column {
+                Spacer(modifier = Modifier.width(40.dp))
+                Button(onClick = { direction = "UP" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("↑") }
+            }
+        }
+        Row {
+            Button(onClick = { direction = "LEFT" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("←") }
+            Button(onClick = { direction = "DOWN" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("↓") }
+            Button(onClick = { direction = "RIGHT" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("→") }
         }
     }
 }
@@ -331,20 +359,36 @@ fun Game2048() {
 
 @Composable
 fun SudokuGame() {
-    val puzzle = remember { List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" } }
+    val puzzle = remember {
+        mutableStateListOf<String>().apply {
+            addAll(List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" })
+        }
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Sudoku", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        LazyVerticalGrid(columns = GridCells.Fixed(9), modifier = Modifier.size(300.dp)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(9), modifier = Modifier.size(300.dp).border(1.dp, Color.Black)) {
             items(81) { i ->
-                Box(modifier = Modifier.border(0.5.dp, Color.Black).aspectRatio(1f), contentAlignment = Alignment.Center) {
-                    Text(puzzle[i])
+                Box(
+                    modifier = Modifier
+                        .border(0.5.dp, Color.LightGray)
+                        .aspectRatio(1f)
+                        .clickable {
+                            val current = puzzle[i].toIntOrNull() ?: 0
+                            puzzle[i] = if (current == 9) "" else (current + 1).toString()
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(puzzle[i], fontWeight = FontWeight.Bold)
                 }
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { /* Refresh handled by keying if needed, but remember is fine for stub */ }) { Text("New Puzzle") }
+        Button(onClick = {
+            puzzle.clear()
+            puzzle.addAll(List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" })
+        }) { Text("New Puzzle") }
     }
 }
 
