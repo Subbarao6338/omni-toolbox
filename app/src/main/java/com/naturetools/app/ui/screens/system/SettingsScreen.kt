@@ -41,11 +41,7 @@ fun SettingsScreen(
     aiApiKey: String,
     onAiApiKeyChange: (String) -> Unit,
     accentColor: Color?,
-    onAccentColorChange: (Color?) -> Unit,
-    auroraBackground: Boolean,
-    onAuroraBackgroundChange: (Boolean) -> Unit,
-    glassEffect: Boolean,
-    onGlassEffectChange: (Boolean) -> Unit
+    onAccentColorChange: (Color?) -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -134,22 +130,6 @@ fun SettingsScreen(
                 checked = dynamicColor,
                 onCheckedChange = onDynamicColorChange,
                 icon = Icons.Default.Palette
-            )
-
-            SettingsSwitch(
-                title = "Aurora Background",
-                subtitle = "Animated gradient background",
-                checked = auroraBackground,
-                onCheckedChange = onAuroraBackgroundChange,
-                icon = Icons.Default.AutoAwesome
-            )
-
-            SettingsSwitch(
-                title = "Glass Effect",
-                subtitle = "Frosted glass visual style",
-                checked = glassEffect,
-                onCheckedChange = onGlassEffectChange,
-                icon = Icons.Default.BlurOn
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))

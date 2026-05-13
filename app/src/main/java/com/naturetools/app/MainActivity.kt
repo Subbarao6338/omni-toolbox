@@ -32,11 +32,9 @@ class MainActivity : ComponentActivity() {
             var showCategoryCounts by rememberSaveable { mutableStateOf(prefs.getBoolean("show_category_counts", true)) }
             var aiApiKey by rememberSaveable { mutableStateOf(prefs.getString("ai_api_key", "") ?: "") }
             var accentColorHex by rememberSaveable { mutableStateOf(prefs.getString("accent_color", "") ?: "") }
-            var auroraBackground by rememberSaveable { mutableStateOf(prefs.getBoolean("aurora_background", false)) }
-            var glassEffect by rememberSaveable { mutableStateOf(prefs.getBoolean("glass_effect", false)) }
 
             val accentColor = remember(accentColorHex) {
-                if (accentColorHex.isEmpty()) null else Color(accentColorHex.toLong(16))
+                if (accentColorHex.isEmpty()) null else Color(accentColorHex.toULong(16))
             }
 
             val darkTheme = when (themeMode) {
@@ -74,16 +72,6 @@ class MainActivity : ComponentActivity() {
                             val hex = if (color == null) "" else color.value.toString(16)
                             accentColorHex = hex
                             prefs.edit().putString("accent_color", hex).apply()
-                        },
-                        auroraBackground = auroraBackground,
-                        onAuroraBackgroundChange = {
-                            auroraBackground = it
-                            prefs.edit().putBoolean("aurora_background", it).apply()
-                        },
-                        glassEffect = glassEffect,
-                        onGlassEffectChange = {
-                            glassEffect = it
-                            prefs.edit().putBoolean("glass_effect", it).apply()
                         }
                     )
                 }
