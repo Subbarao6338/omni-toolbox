@@ -455,7 +455,26 @@ object ToolProvider {
         Tool("YAML to JSON", Icons.Default.Transform, "yaml_to_json", "Data", isVisibleOnHome = false, isSubTool = true),
 
         // AI TOOLS
-        Tool("Document Translator", Icons.Default.Translate, "ai_doc_translator", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Chat Assistant", Icons.Default.Chat, "ai_chat", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Code Helper", Icons.Default.Code, "ai_code", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Document Translator", Icons.Default.Translate, "ai_doc_translator", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Image Generator", Icons.Default.Image, "ai_image", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Noise Remover", Icons.Default.BlurOff, "ai_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Object Detector", Icons.Default.CenterFocusStrong, "ai_obj_detect", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Sentiment Analysis", Icons.Default.Mood, "ai_sentiment", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Stems Splitter", Icons.Default.MusicNote, "ai_stems_splitter", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Text Extractor", Icons.Default.TextFields, "ai_text_ext", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Translator", Icons.Default.Translate, "ai_translate", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Audio Master Pro", Icons.Default.SettingsVoice, "aud_master_pro", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Audio Noise Remover", Icons.Default.GraphicEq, "audio_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Video Noise Remover", Icons.Default.VideoSettings, "video_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Vocal Autotuner", Icons.Default.MusicNote, "vocal_autotuner", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Vocal Remover", Icons.Default.MicOff, "vocal_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
 
         // FINANCE
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Finance", isVisibleOnHome = false, isSubTool = true),

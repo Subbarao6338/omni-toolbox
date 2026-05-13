@@ -9,10 +9,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 import com.naturetools.app.ui.screens.audio.AdjustmentSlider
+import com.naturetools.app.utils.PanchangamLogic
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -108,13 +112,169 @@ fun SleepCycleCalculator() {
 
 @Composable
 fun PanchangamTool() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Traditional Panchangam", style = MaterialTheme.typography.titleMedium)
-        Spacer(modifier = Modifier.height(16.dp))
-        val data = listOf("Tithi: Shukla Paksha", "Nakshatra: Rohini", "Yoga: Vyatipata", "Karana: Vanija", "Rasi: Vrishabha")
-        data.forEach { item ->
-            ListItem(headlineContent = { Text(item) })
+    var selectedTab by remember { mutableIntStateOf(0) }
+    var dateStr by remember { mutableStateOf(LocalDate.now().toString()) }
+    var timeStr by remember { mutableStateOf("10:30 AM") }
+    var location by remember { mutableStateOf("Hyderabad, India") }
+
+    var selectedRaashi by remember { mutableStateOf("Mesha") }
+    var selectedNakshatra by remember { mutableStateOf("Ashwini") }
+
+    val panchangamData = remember(dateStr, timeStr, selectedTab, selectedRaashi, selectedNakshatra) {
+        if (selectedTab == 0) {
+            try {
+                val date = LocalDate.parse(dateStr)
+                PanchangamLogic.getPanchangam(LocalDateTime.of(date, LocalTime.of(10, 30)))
+            } catch (e: Exception) {
+                PanchangamLogic.getPanchangam(LocalDateTime.now())
+            }
+        } else {
+            // Simplified fallback for "By Name"
+            PanchangamLogic.getPanchangam(LocalDateTime.now()).copy(
+                raashi = "$selectedRaashi (రాశి)",
+                nakshatram = "$selectedNakshatra (నక్షత్రం)",
+                luckyNumber = when(selectedRaashi) {
+                    "Mesha" -> "9, 1, 8"
+                    "Vrushabha" -> "6, 2, 7"
+                    "Midhuna" -> "5, 3, 6"
+                    "Karka" -> "2, 7, 9"
+                    "Simha" -> "1, 4, 9"
+                    "Kanya" -> "5, 3, 6"
+                    "Thula" -> "6, 2, 7"
+                    "Vrushchika" -> "9, 1, 8"
+                    "Dhanussu" -> "3, 5, 8"
+                    "Makara" -> "8, 6, 7"
+                    "Kumbha" -> "8, 4, 5"
+                    "Meena" -> "3, 7, 9"
+                    else -> "1, 5, 9"
+                }
+            )
         }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TabRow(selectedTabIndex = selectedTab) {
+            Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 }, text = { Text("By DateTime") })
+            Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 }, text = { Text("By Name") })
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (selectedTab == 0) {
+            OutlinedTextField(value = dateStr, onValueChange = { dateStr = it }, label = { Text("Date (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = timeStr, onValueChange = { timeStr = it }, label = { Text("Time (HH:MM AM/PM)") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = location, onValueChange = { location = it }, label = { Text("Location") }, modifier = Modifier.fillMaxWidth())
+
+            Spacer(modifier = Modifier.height(24.dp))
+            PanchangamResult(
+                samvatsaram = panchangamData.samvatsaram,
+                ayana = panchangamData.ayana,
+                rutu = panchangamData.rutu,
+                maasam = panchangamData.maasam,
+                paksha = panchangamData.paksha,
+                tithi = panchangamData.tithi,
+                nakshatram = panchangamData.nakshatram,
+                raashi = panchangamData.raashi,
+                luckyNumber = panchangamData.luckyNumber,
+                luckyColor = panchangamData.luckyColor,
+                luckyDay = panchangamData.luckyDay
+            )
+        } else {
+            val raashis = listOf("Mesha", "Vrushabha", "Midhuna", "Karka", "Simha", "Kanya", "Thula", "Vrushchika", "Dhanussu", "Makara", "Kumbha", "Meena")
+            val nakshatras = listOf("Ashwini", "Bharani", "Kruthika", "Rohini", "Mrigashira", "Arudra", "Punarvasu", "Pushyami", "Aslesha", "Makha", "Pubba", "Uttara", "Hastha", "Chitra", "Swathi", "Vishakha", "Anuradha", "Jyeshta", "Moola", "Poorvashada", "Uttarashada", "Shravanam", "Dhanishta", "Shathabhisham", "Poorvabhadra", "Uttarabhadra", "Revathi")
+
+            var raashiExpanded by remember { mutableStateOf(false) }
+            var nakshatraExpanded by remember { mutableStateOf(false) }
+
+            Box {
+                OutlinedButton(onClick = { raashiExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Selected Raashi: $selectedRaashi")
+                }
+                DropdownMenu(expanded = raashiExpanded, onDismissRequest = { raashiExpanded = false }) {
+                    raashis.forEach { r ->
+                        DropdownMenuItem(text = { Text(r) }, onClick = { selectedRaashi = r; raashiExpanded = false })
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Box {
+                OutlinedButton(onClick = { nakshatraExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Selected Nakshatram: $selectedNakshatra")
+                }
+                DropdownMenu(expanded = nakshatraExpanded, onDismissRequest = { nakshatraExpanded = false }) {
+                    nakshatras.forEach { n ->
+                        DropdownMenuItem(text = { Text(n) }, onClick = { selectedNakshatra = n; nakshatraExpanded = false })
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            PanchangamResult(
+                samvatsaram = "Krodhi (క్రోధి)",
+                ayana = "Based on selection",
+                rutu = "Based on selection",
+                maasam = "Based on selection",
+                paksha = "Shukla/Krishna",
+                tithi = "Variable",
+                nakshatram = "$selectedNakshatra (నక్షత్రం)",
+                raashi = "$selectedRaashi (రాశి)",
+                luckyNumber = when(selectedRaashi) {
+                    "Mesha" -> "9, 1, 8"; "Vrushabha" -> "6, 2, 7"; "Midhuna" -> "5, 3, 6"; "Karka" -> "2, 7, 9"
+                    "Simha" -> "1, 4, 9"; "Kanya" -> "5, 3, 6"; "Thula" -> "6, 2, 7"; "Vrushchika" -> "9, 1, 8"
+                    "Dhanussu" -> "3, 5, 8"; "Makara" -> "8, 6, 7"; "Kumbha" -> "8, 4, 5"; "Meena" -> "3, 7, 9"
+                    else -> "1, 5, 9"
+                },
+                luckyColor = "Themed to $selectedRaashi",
+                luckyDay = "Auspicious for $selectedRaashi"
+            )
+        }
+    }
+}
+
+@Composable
+fun PanchangamResult(
+    samvatsaram: String,
+    ayana: String,
+    rutu: String,
+    maasam: String,
+    paksha: String,
+    tithi: String,
+    nakshatram: String,
+    raashi: String,
+    luckyNumber: String,
+    luckyColor: String,
+    luckyDay: String
+) {
+    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text("Detailed Panchangam Info", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            PanchangamRow("Samvatsaram", samvatsaram)
+            PanchangamRow("Ayana", ayana)
+            PanchangamRow("Rutu", rutu)
+            PanchangamRow("Maasam", maasam)
+            PanchangamRow("Paksham", paksha)
+            PanchangamRow("Tidhi", tithi)
+            PanchangamRow("Nakshatram", nakshatram)
+            PanchangamRow("Raashi", raashi)
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Lucky Factors", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            PanchangamRow("Lucky Numbers", luckyNumber)
+            PanchangamRow("Lucky Colors", luckyColor)
+            PanchangamRow("Lucky Days", luckyDay)
+        }
+    }
+}
+
+@Composable
+fun PanchangamRow(label: String, value: String) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(label, style = MaterialTheme.typography.bodyMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+        Text(value, style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.End)
     }
 }
 

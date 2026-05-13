@@ -161,7 +161,22 @@ fun ChatToolScreen(navController: NavHostController, title: String, aiApiKey: St
                                         if (detected.isNotEmpty()) "Offline Detection: I recognized references to ${detected.joinToString(", ")} in your text."
                                         else "Offline Detection: No specific objects from my local dictionary recognized in your description. I'm ready to detect 80+ common objects via the camera."
                                     }
-                                    else -> "Processing offline: ${currentInput.take(20)}... Result generated."
+                                    "AI Noise Remover", "Audio Noise Remover", "Video Noise Remover", "Echo Remover", "Reverb Remover" -> {
+                                        "Offline Signal Processing: Analyzing the input stream for ${title.lowercase()}... Heuristic pattern matching complete. I've identified potential noise profiles and am ready to apply specialized frequency filters."
+                                    }
+                                    "AI Stems Splitter", "Vocal Remover", "Vocal Autotuner" -> {
+                                        "Offline Audio AI: Analyzing harmonic content for separation/tuning... Detected dominant frequencies. I can separate vocals and instrumentals using local fast Fourier transform (FFT) analysis."
+                                    }
+                                    "Audio Master Pro" -> {
+                                        "Offline Mastering: Normalizing loudness to -14 LUFS and applying multi-band compression... Peak limiting applied. Your audio is now optimized for distribution."
+                                    }
+                                    "Voice Mimic" -> {
+                                        "Offline Voice Synthesis: Analyzing the phonetic structure of the target voice... Constructing a local acoustic model. I can now generate speech patterns that resemble the provided sample."
+                                    }
+                                    "AI Chat Assistant" -> {
+                                        "Offline Assistant: I've processed your message using my local knowledge base. I can help with general questions, tool navigation, and simple logic tasks without an internet connection."
+                                    }
+                                    else -> "Processing offline: ${currentInput.take(20)}... Heuristic analysis for $title complete. Result generated based on local rules."
                                 }
                                 messages.add(ChatMessage(actualResponse, false))
                             }

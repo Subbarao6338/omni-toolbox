@@ -7,17 +7,24 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun CompassScreen(navController: NavHostController) {
@@ -59,24 +66,69 @@ fun CompassScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Canvas(modifier = Modifier.size(240.dp)) {
-                    val center = this.center
-                    // Circle
-                    drawCircle(Color.Gray, radius = size.minDimension / 2, style = androidx.compose.ui.graphics.drawscope.Stroke(width = 4.dp.toPx()))
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(320.dp)) {
+                // Fixed Heading Indicator
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .size(4.dp, 20.dp)
+                        .background(MaterialTheme.colorScheme.primary, CircleShape)
+                )
 
-                    rotate(rotation) {
-                        // North
-                        drawLine(Color.Red, center, center.copy(y = center.y - 100.dp.toPx()), strokeWidth = 8.dp.toPx())
-                        // South
-                        drawLine(Color.Black, center, center.copy(y = center.y + 100.dp.toPx()), strokeWidth = 8.dp.toPx())
+                // Rotating Dial
+                Box(
+                    modifier = Modifier
+                        .size(280.dp)
+                        .graphicsLayer { rotationZ = rotation }
+                ) {
+                    val labels = listOf(
+                        "N\nఉత్తరం" to 0f,
+                        "NE\nఈశాన్యం" to 45f,
+                        "E\nతూర్పు" to 90f,
+                        "SE\nఆగ్నేయం" to 135f,
+                        "S\nదక్షిణం" to 180f,
+                        "SW\nనైరుతి" to 225f,
+                        "W\nపడమర" to 270f,
+                        "NW\nవాయవ్యం" to 315f
+                    )
+
+                    labels.forEach { (text, angle) ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer { rotationZ = angle },
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 10.sp,
+                                    lineHeight = 12.sp,
+                                    fontWeight = if (angle % 90f == 0f) FontWeight.Bold else FontWeight.Normal
+                                ),
+                                color = if (angle == 0f) Color.Red else MaterialTheme.colorScheme.onSurface,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                    }
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawCircle(
+                            color = Color.Gray.copy(alpha = 0.3f),
+                            radius = size.minDimension / 2,
+                            style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2.dp.toPx())
+                        )
                     }
                 }
-                Text("N", modifier = Modifier.align(Alignment.TopCenter).padding(top = 20.dp), style = MaterialTheme.typography.titleLarge, color = Color.Red)
+
+                // Center Point
+                Box(modifier = Modifier.size(8.dp).background(MaterialTheme.colorScheme.primary, CircleShape))
             }
+
             Spacer(modifier = Modifier.height(32.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("${azimuth.toInt()}°", style = MaterialTheme.typography.displayMedium)
+                Text("${((azimuth % 360 + 360) % 360).toInt()}°", style = MaterialTheme.typography.displayMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(directions.first, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
                 Text(directions.second, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.secondary)
@@ -92,9 +144,9 @@ fun getDirections(azimuth: Double): Pair<String, String> {
         in 67.5..112.5 -> "East" to "తూర్పు (Toorpu)"
         in 112.5..157.5 -> "South-East" to "ఆగ్నేయం (Agneyam)"
         in 157.5..202.5 -> "South" to "దక్షిణం (Dakshinam)"
-        in 202.5..247.5 -> "South-West" to "నైరుతి (Nairutiyam)"
+        in 202.5..247.5 -> "South-West" to "నైరుతి (Nairuthi)"
         in 247.5..292.5 -> "West" to "పడమర (Padamara)"
         in 292.5..337.5 -> "North-West" to "వాయవ్యం (Vayuvyam)"
-        else -> "North" to "ఉత్తరం"
+        else -> "North" to "ఉత్తరం (Uttaram)"
     }
 }
