@@ -28,7 +28,7 @@ object ToolProvider {
         // MEDIA
         Tool("Audio Tools", Icons.Default.LibraryMusic, "audio_tools_group", "Media", Color(0xFFE91E63),
             description = "Audio editing and processing tools.",
-            subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "binaural", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator")),
+            subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "binaural", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator", "ai_noise_remover", "ai_stems_splitter", "ai_voice_mimic", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover")),
         Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Media", Color(0xFFF44336),
             description = "Professional video processing tools.",
             subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool")),
@@ -106,12 +106,12 @@ object ToolProvider {
         // DATA
         Tool("Data Tools", Icons.Default.Storage, "data_tools_group", "Data", Color(0xFF009688),
             description = "Process and visualize data.",
-            subToolRoutes = listOf("data_viz", "json", "yaml_to_json")),
+            subToolRoutes = listOf("data_viz", "json", "yaml_to_json", "anomaly_detection", "data_profiling", "data_statistics", "data_visualisations", "synthetic_data_gen", "data_quality", "data_cleaning", "data_transformation")),
 
         // AI TOOLS
         Tool("AI Expert", Icons.Default.AutoAwesome, "ai_group", "AI Tools", Color(0xFF673AB7),
             description = "Intelligent AI assistant tools.",
-            subToolRoutes = listOf("ai_chat", "ai_code", "ai_doc_translator", "ai_grammar", "ai_image", "ai_noise_remover", "ai_obj_detect", "ai_sentiment", "ai_stems_splitter", "ai_summarizer", "ai_text_ext", "ai_translate", "ai_voice_mimic", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "video_noise_remover", "vocal_autotuner", "vocal_remover")),
+            subToolRoutes = listOf("ai_chat", "ai_code", "ai_doc_translator", "ai_grammar", "ai_image", "ai_obj_detect", "ai_sentiment", "ai_summarizer", "ai_text_ext", "ai_translate", "video_noise_remover")),
 
         // FINANCE
         Tool("Finance Hub", Icons.Default.MonetizationOn, "finance_group", "Finance", Color(0xFFFF9800),
@@ -453,6 +453,14 @@ object ToolProvider {
         Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("JSON Format", Icons.Default.DataObject, "json", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("YAML to JSON", Icons.Default.Transform, "yaml_to_json", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Anomaly Detection", Icons.Default.Warning, "anomaly_detection", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Data Profiling", Icons.Default.AccountBox, "data_profiling", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Statistics", Icons.Default.ShowChart, "data_statistics", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Visualisations", Icons.Default.PieChart, "data_visualisations", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Synthetic Data Gen", Icons.Default.Science, "synthetic_data_gen", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Data Quality", Icons.Default.CheckCircle, "data_quality", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Data Cleaning", Icons.Default.CleaningServices, "data_cleaning", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Data Transformation", Icons.Default.Transform, "data_transformation", "Data", isVisibleOnHome = false, isSubTool = true),
 
         // AI TOOLS
         Tool("AI Chat Assistant", Icons.Default.Chat, "ai_chat", "AI Tools", isVisibleOnHome = false, isSubTool = true),
@@ -460,21 +468,21 @@ object ToolProvider {
         Tool("Document Translator", Icons.Default.Translate, "ai_doc_translator", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Image Generator", Icons.Default.Image, "ai_image", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("AI Noise Remover", Icons.Default.BlurOff, "ai_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Noise Remover", Icons.Default.BlurOff, "ai_noise_remover", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Object Detector", Icons.Default.CenterFocusStrong, "ai_obj_detect", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Sentiment Analysis", Icons.Default.Mood, "ai_sentiment", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("AI Stems Splitter", Icons.Default.MusicNote, "ai_stems_splitter", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Stems Splitter", Icons.Default.MusicNote, "ai_stems_splitter", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Text Extractor", Icons.Default.TextFields, "ai_text_ext", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Translator", Icons.Default.Translate, "ai_translate", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Audio Master Pro", Icons.Default.SettingsVoice, "aud_master_pro", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Audio Noise Remover", Icons.Default.GraphicEq, "audio_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Audio Master Pro", Icons.Default.SettingsVoice, "aud_master_pro", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Audio Noise Remover", Icons.Default.GraphicEq, "audio_noise_remover", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Echo Remover", Icons.Default.SettingsBackupRestore, "echo_remover", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Reverb Remover", Icons.Default.Waves, "reverb_remover", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Video Noise Remover", Icons.Default.VideoSettings, "video_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Vocal Autotuner", Icons.Default.MusicNote, "vocal_autotuner", "AI Tools", isVisibleOnHome = false, isSubTool = true),
-        Tool("Vocal Remover", Icons.Default.MicOff, "vocal_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Vocal Autotuner", Icons.Default.MusicNote, "vocal_autotuner", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Vocal Remover", Icons.Default.MicOff, "vocal_remover", "Media", isVisibleOnHome = false, isSubTool = true),
 
         // FINANCE
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Finance", isVisibleOnHome = false, isSubTool = true),
