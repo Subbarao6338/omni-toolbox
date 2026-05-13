@@ -17,6 +17,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import java.net.URL
 
 @Composable
 fun WebToolScreen(
@@ -43,6 +46,7 @@ fun WebToolScreen(
     var isOffline by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     var isDesktopMode by remember { mutableStateOf(false) }
+    var showAnalysis by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     var canGoBack by remember { mutableStateOf(false) }
 
@@ -85,6 +89,9 @@ fun WebToolScreen(
             }
         },
         actions = {
+            IconButton(onClick = { showAnalysis = !showAnalysis }) {
+                Icon(Icons.Default.Info, contentDescription = "Web Analysis")
+            }
             IconButton(onClick = {
                 isDesktopMode = !isDesktopMode
                 webView?.settings?.userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
@@ -138,7 +145,9 @@ fun WebToolScreen(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
 
-            if (isOffline) {
+            if (showAnalysis) {
+                WebAnalysisView(webView?.url ?: urlToLoad)
+            } else if (isOffline) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
@@ -257,5 +266,50 @@ fun WebToolScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun WebAnalysisView(url: String) {
+    val parsedUrl = remember(url) {
+        try {
+            URL(url)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp).verticalScroll(rememberScrollState())) {
+        Text("URL Analysis", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        AnalysisItem("Protocol", parsedUrl?.protocol ?: "N/A")
+        AnalysisItem("Host", parsedUrl?.host ?: "N/A")
+        AnalysisItem("Path", parsedUrl?.path ?: "N/A")
+        AnalysisItem("Query", parsedUrl?.query ?: "N/A")
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text("Metadata Generation", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+        AnalysisItem("Suggested Title", parsedUrl?.host?.substringBefore(".")?.replaceFirstChar { it.uppercase() } ?: "Nature Tools Web View")
+        AnalysisItem("Description", "Exploration utility for $url")
+        AnalysisItem("Keywords", "${parsedUrl?.host?.replace(".", ", ")}, nature, tools")
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.Code, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Copy Markdown Summary")
+        }
+    }
+}
+
+@Composable
+fun AnalysisItem(label: String, value: String) {
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+        Text(value, style = MaterialTheme.typography.bodyLarge)
+        HorizontalDivider(modifier = Modifier.padding(top = 4.dp))
     }
 }

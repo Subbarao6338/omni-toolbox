@@ -43,8 +43,63 @@ fun FinanceToolScreen(navController: NavHostController, title: String) {
                 "Unit Price", "Unit Price Calc" -> UnitPriceCalculator()
                 "Expense Tracker" -> ExpenseTracker()
                 "Tax Calculator" -> TaxCalculator()
+                "CAGR Calculator" -> CagrCalculator()
+                "DCF Calculator" -> DcfCalculator()
                 else -> Text("Finance Utility for $title")
             }
+        }
+    }
+}
+
+@Composable
+fun CagrCalculator() {
+    var startValue by remember { mutableStateOf("1000") }
+    var endValue by remember { mutableStateOf("2000") }
+    var periods by remember { mutableStateOf("5") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("CAGR Calculator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = startValue, onValueChange = { startValue = it }, label = { Text("Initial Value") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = endValue, onValueChange = { endValue = it }, label = { Text("Final Value") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = periods, onValueChange = { periods = it }, label = { Text("Years") }, modifier = Modifier.fillMaxWidth())
+
+        val start = startValue.toDoubleOrNull() ?: 1.0
+        val end = endValue.toDoubleOrNull() ?: 1.0
+        val years = periods.toDoubleOrNull() ?: 1.0
+
+        if (years > 0 && start > 0) {
+            val cagr = ((end / start).pow(1 / years) - 1) * 100
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Text("CAGR: %.2f%%".format(cagr), modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
+            }
+        }
+    }
+}
+
+@Composable
+fun DcfCalculator() {
+    var cashFlow by remember { mutableStateOf("1000") }
+    var rate by remember { mutableStateOf("10") }
+    var years by remember { mutableStateOf("5") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("DCF Calculator (NPV)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = cashFlow, onValueChange = { cashFlow = it }, label = { Text("Annual Cash Flow") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = rate, onValueChange = { rate = it }, label = { Text("Discount Rate (%)") }, modifier = Modifier.fillMaxWidth())
+
+        val cf = cashFlow.toDoubleOrNull() ?: 0.0
+        val r = (rate.toDoubleOrNull() ?: 10.0) / 100
+        val y = years.toIntOrNull() ?: 5
+
+        var npv = 0.0
+        for (i in 1..y) {
+            npv += cf / (1 + r).pow(i)
+        }
+
+        Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+            Text("Present Value (NPV): %.2f".format(npv), modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
         }
     }
 }

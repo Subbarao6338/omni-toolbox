@@ -40,7 +40,7 @@ object ToolProvider {
         // --- EDUCATION ---
         Tool("Science Lab", Icons.Default.Science, "science_group", "Education", Color(0xFF4CAF50),
             description = "Science and physics exploration tools.",
-            subToolRoutes = listOf("constants", "constellations", "dna_viz", "eq_solver", "force_calc", "physics_formulas", "periodic_table", "planet_finder", "pokedex", "prime", "solar_system", "star_map")),
+            subToolRoutes = listOf("constants", "constellations", "dna_viz", "eq_solver", "force_calc", "physics_formulas", "periodic_table", "planet_finder", "pokedex", "prime", "solar_system", "star_map", "unit_circle")),
         Tool("Math Tools", Icons.Default.Functions, "math_group", "Education", Color(0xFF607D8B),
             description = "Advanced mathematical calculators.",
             subToolRoutes = listOf("binary_calc", "fraction_calc", "matrix_calc", "sci_calc", "stats", "truth_table")),
@@ -129,15 +129,15 @@ object ToolProvider {
         // --- TRAVEL ---
         Tool("Travel & Adventure", Icons.Default.Landscape, "outdoor_group", "Travel", Color(0xFF8BC34A),
             description = "Essential tools for explorers.",
-            subToolRoutes = listOf("altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
+            subToolRoutes = listOf("altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "packing_list", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
 
         // --- DEVELOPER ---
         Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
             description = "Advanced developer utilities.",
-            subToolRoutes = listOf("ascii_table", "base64", "crontab_gen", "hex_viewer", "jwt_tool", "markdown_preview", "regex_tester", "url_encoder")),
+            subToolRoutes = listOf("ascii_table", "base_conv", "base64", "crontab_gen", "hex_viewer", "jwt_tool", "markdown_preview", "regex_tester", "url_encoder")),
         Tool("Text Mastery", Icons.Default.TextFields, "text_group", "Developer", Color(0xFF9C27B0),
             description = "Powerful text processing tools.",
-            subToolRoutes = listOf("anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter")),
+            subToolRoutes = listOf("anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter", "word_rank_calc")),
 
         // --- DESIGN ---
         Tool("Color & Design", Icons.Default.Palette, "color_palette_group", "Design", Color(0xFF00BCD4),
@@ -285,6 +285,7 @@ object ToolProvider {
         Tool("Star Map", Icons.Default.AutoAwesome, "star_map", "Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Truth Table Gen", Icons.Default.ListAlt, "truth_table", "Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Statistics", Icons.Default.BarChart, "stats", "Education", isVisibleOnHome = false, isSubTool = true),
+        Tool("Unit Circle", Icons.Default.InvertColors, "unit_circle", "Education", isVisibleOnHome = false, isSubTool = true),
 
         // UTILITIES
         Tool("Flashlight", Icons.Default.FlashlightOn, "flashlight", "Utilities", isVisibleOnHome = false, isSubTool = true),
@@ -489,6 +490,7 @@ object ToolProvider {
         Tool("GPS Status", Icons.Default.GpsFixed, "gps_status", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Hiking Trails", Icons.AutoMirrored.Filled.DirectionsRun, "hiking_trails", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Knots Guide", Icons.Default.InvertColors, "knots_guide", "Travel", isVisibleOnHome = false, isSubTool = true),
+        Tool("Packing List", Icons.Default.Checklist, "packing_list", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Route Planner", Icons.Default.Directions, "route_planner", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Signal Mirror", Icons.Default.FlashlightOn, "signal_mirror", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Emergency SOS", Icons.Default.Sos, "sos", "Travel", isVisibleOnHome = false, isSubTool = true),
@@ -512,6 +514,7 @@ object ToolProvider {
         Tool("Morse Decoder", Icons.Default.Language, "morse_decoder", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Text Diff", Icons.Default.Difference, "text_diff", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Developer", isVisibleOnHome = false, isSubTool = true),
+        Tool("Word Rank", Icons.Default.Calculate, "word_rank_calc", "Developer", isVisibleOnHome = false, isSubTool = true),
 
         // DESIGN
         Tool("Color Converter", Icons.Default.Palette, "color_conv_pro", "Design", isVisibleOnHome = false, isSubTool = true),

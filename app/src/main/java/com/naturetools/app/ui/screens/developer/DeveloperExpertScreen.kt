@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
+import java.util.UUID
 
 @Composable
 fun DeveloperExpertScreen(navController: NavHostController, title: String) {
@@ -31,8 +32,137 @@ fun DeveloperExpertScreen(navController: NavHostController, title: String) {
             when (title) {
                 "Hex Viewer" -> HexViewer()
                 "ASCII Table" -> AsciiTable()
+                "Crontab Gen" -> CronHelper()
+                "UUID Generator" -> UuidGenerator()
+                "SQL Formatter" -> SqlFormatter()
+                "Minifier" -> Minifier()
+                "YAML to JSON" -> DataConverter("YAML to JSON")
+                "XML to JSON" -> DataConverter("XML to JSON")
+                "JSON to TypeScript" -> DataConverter("JSON to TS")
+                "YAML ↔ JSON" -> DataConverter("YAML ↔ JSON")
+                "XML ↔ JSON" -> DataConverter("XML ↔ JSON")
                 else -> Text("Developer Utility for $title")
             }
+        }
+    }
+}
+
+@Composable
+fun UuidGenerator() {
+    var uuid by remember { mutableStateOf(UUID.randomUUID().toString()) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("UUID v4 Generator", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = uuid, onValueChange = {}, readOnly = true, modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { uuid = UUID.randomUUID().toString() }, modifier = Modifier.fillMaxWidth()) {
+            Text("Generate New UUID")
+        }
+    }
+}
+
+@Composable
+fun SqlFormatter() {
+    var sqlInput by remember { mutableStateOf("SELECT * FROM users WHERE id = 1") }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("SQL Formatter", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = sqlInput, onValueChange = { sqlInput = it }, modifier = Modifier.fillMaxWidth(), minLines = 5)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            sqlInput = sqlInput.replace(Regex("(?i)SELECT"), "SELECT")
+                .replace(Regex("(?i)FROM"), "\nFROM")
+                .replace(Regex("(?i)WHERE"), "\nWHERE")
+                .replace(Regex("(?i)AND"), "\n  AND")
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text("Format SQL")
+        }
+    }
+}
+
+@Composable
+fun CronHelper() {
+    var cronExpr by remember { mutableStateOf("0 0 * * *") }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Cron Helper", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = cronExpr, onValueChange = { cronExpr = it }, label = { Text("Cron Expression") }, modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(16.dp))
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Next Run: Simulated calculation for $cronExpr",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun Minifier() {
+    var codeInput by remember { mutableStateOf("function hello() {\n  console.log('world');\n}") }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("JS/CSS Minifier", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = codeInput, onValueChange = { codeInput = it }, modifier = Modifier.fillMaxWidth(), minLines = 5)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            codeInput = codeInput.replace(Regex("\\s+"), " ").trim()
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text("Minify Code")
+        }
+    }
+}
+
+@Composable
+fun DataConverter(type: String) {
+    var input by remember { mutableStateOf(when(type) {
+        "YAML to JSON", "YAML ↔ JSON" -> "name: Nature Tools\nversion: 1.0"
+        "XML to JSON", "XML ↔ JSON" -> "<tool><name>Nature Tools</name></tool>"
+        "JSON to TS" -> "{\n  \"name\": \"Nature Tools\",\n  \"active\": true\n}"
+        else -> ""
+    }) }
+    var output by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(type, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = input, onValueChange = { input = it }, label = { Text("Input") }, modifier = Modifier.fillMaxWidth(), minLines = 5)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            output = when {
+                type.contains("YAML") -> {
+                    val lines = input.lines().filter { it.contains(":") }
+                    lines.joinToString(",\n  ", "{\n  ", "\n}") { line ->
+                        val parts = line.split(":", limit = 2)
+                        "\"${parts[0].trim()}\": \"${parts[1].trim()}\""
+                    }
+                }
+                type.contains("XML") -> {
+                    val tagRegex = Regex("<(\\w+)>([^<]+)</\\1>")
+                    val matches = tagRegex.findAll(input)
+                    matches.map { it.groupValues }.joinToString(",\n  ", "{\n  ", "\n}") { g ->
+                        "\"${g[1]}\": \"${g[2]}\""
+                    }
+                }
+                type.contains("TS") -> {
+                    "interface Generated {\n" +
+                    input.lines().filter { it.contains(":") }.joinToString("\n") { line ->
+                        val parts = line.split(":", limit = 2)
+                        val key = parts[0].trim().removeSurrounding("\"")
+                        val value = parts[1].trim().removeSurrounding(",")
+                        "  $key: ${if (value.startsWith("\"")) "string" else if (value == "true" || value == "false") "boolean" else "number"};"
+                    } + "\n}"
+                }
+                else -> "Conversion logic for $type"
+            }
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text("Convert")
+        }
+
+        if (output.isNotBlank()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(value = output, onValueChange = {}, label = { Text("Output") }, modifier = Modifier.fillMaxWidth(), minLines = 5, readOnly = true)
         }
     }
 }

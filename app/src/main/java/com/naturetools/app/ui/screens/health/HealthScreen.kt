@@ -46,7 +46,14 @@ fun HealthScreen(navController: NavHostController, title: String) {
                     Text("Sleep Quality: 85%", style = MaterialTheme.typography.titleMedium)
                     Text("Last night: 7h 45m", style = MaterialTheme.typography.bodyLarge)
                     Spacer(modifier = Modifier.height(24.dp))
-                    AdjustmentSlider("Goal (Hours)", valueRange = 4f..12f, initialValue = 8f)
+                    Text("Optimal Cycle: 11:00 PM to 7:00 AM")
+                }
+                "Macro Splitter" -> {
+                    Text("Target: 2000 kcal", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Protein: 150g (30%)")
+                    Text("Carbs: 200g (40%)")
+                    Text("Fats: 67g (30%)")
                 }
                 "Yoga Guide" -> {
                     Text("Current Pose: Mountain Pose", style = MaterialTheme.typography.titleMedium)

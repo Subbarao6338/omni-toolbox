@@ -48,19 +48,9 @@ fun CompassScreen(navController: NavHostController) {
 
     val rotation by animateFloatAsState(targetValue = -azimuth)
 
-    val cardinalDirection = remember(azimuth) {
+    val directions = remember(azimuth) {
         val normalized = (azimuth % 360 + 360) % 360
-        when (normalized) {
-            in 337.5..360.0, in 0.0..22.5 -> "N"
-            in 22.5..67.5 -> "NE"
-            in 67.5..112.5 -> "E"
-            in 112.5..157.5 -> "SE"
-            in 157.5..202.5 -> "S"
-            in 202.5..247.5 -> "SW"
-            in 247.5..292.5 -> "W"
-            in 292.5..337.5 -> "NW"
-            else -> "N"
-        }
+        getDirections(normalized.toDouble())
     }
 
     ToolScreen(title = "Compass", onBack = { navController.popBackStack() }) { padding ->
@@ -85,11 +75,26 @@ fun CompassScreen(navController: NavHostController) {
                 Text("N", modifier = Modifier.align(Alignment.TopCenter).padding(top = 20.dp), style = MaterialTheme.typography.titleLarge, color = Color.Red)
             }
             Spacer(modifier = Modifier.height(32.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("${azimuth.toInt()}°", style = MaterialTheme.typography.displayMedium)
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(cardinalDirection, style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.primary)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(directions.first, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
+                Text(directions.second, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.secondary)
             }
         }
+    }
+}
+
+fun getDirections(azimuth: Double): Pair<String, String> {
+    return when (azimuth) {
+        in 337.5..360.0, in 0.0..22.5 -> "North" to "ఉత్తరం (Uttaram)"
+        in 22.5..67.5 -> "North-East" to "ఈశాన్యం (Ishanyam)"
+        in 67.5..112.5 -> "East" to "తూర్పు (Toorpu)"
+        in 112.5..157.5 -> "South-East" to "ఆగ్నేయం (Agneyam)"
+        in 157.5..202.5 -> "South" to "దక్షిణం (Dakshinam)"
+        in 202.5..247.5 -> "South-West" to "నైరుతి (Nairutiyam)"
+        in 247.5..292.5 -> "West" to "పడమర (Padamara)"
+        in 292.5..337.5 -> "North-West" to "వాయవ్యం (Vayuvyam)"
+        else -> "North" to "ఉత్తరం"
     }
 }
