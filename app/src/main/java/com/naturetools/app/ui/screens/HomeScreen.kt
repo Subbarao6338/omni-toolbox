@@ -46,8 +46,6 @@ fun HomeScreen(
     var selectedCategory by rememberSaveable { mutableStateOf("All") }
 
     val context = LocalContext.current
-    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
-    val glassEffect = remember { prefs.getBoolean("glass_effect", false) }
 
     LaunchedEffect(searchQuery) {
         delay(300)
@@ -186,8 +184,7 @@ fun HomeScreen(
                             tool = tool,
                             isFavorite = favorites.contains(tool.route),
                             onToggleFavorite = { onToggleFavorite(tool.route) },
-                            onClick = { onToolClick(tool.route) },
-                            glassEffect = glassEffect
+                            onClick = { onToolClick(tool.route) }
                         )
                     }
                 }
@@ -211,8 +208,7 @@ fun ToolCard(
     tool: Tool,
     isFavorite: Boolean,
     onToggleFavorite: () -> Unit,
-    onClick: () -> Unit,
-    glassEffect: Boolean = false
+    onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -238,8 +234,7 @@ fun ToolCard(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = elevation),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if (glassEffect) Color.White.copy(alpha = 0.1f)
-                             else if (isPressed) MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (isPressed) MaterialTheme.colorScheme.surfaceVariant
                              else MaterialTheme.colorScheme.surface
         )
     ) {

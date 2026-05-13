@@ -21,7 +21,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.naturetools.app.model.Tool
 import com.naturetools.app.model.ToolProvider
-import com.naturetools.app.ui.components.AuroraBackground
 import com.naturetools.app.ui.screens.HomeScreen
 import com.naturetools.app.ui.screens.ai.*
 import com.naturetools.app.ui.screens.astronomy.*
@@ -64,10 +63,6 @@ fun NatureToolsApp(
     onAiApiKeyChange: (String) -> Unit,
     accentColor: Color?,
     onAccentColorChange: (Color?) -> Unit,
-    auroraBackground: Boolean,
-    onAuroraBackgroundChange: (Boolean) -> Unit,
-    glassEffect: Boolean,
-    onGlassEffectChange: (Boolean) -> Unit,
     intent: Intent? = null
 ) {
     val navController = rememberNavController()
@@ -107,28 +102,25 @@ fun NatureToolsApp(
         prefs.edit().putStringSet("favorites", newFavorites).apply()
     }
 
-    AuroraBackground(enabled = auroraBackground) {
-        NavHost(navController = navController, startDestination = "home", modifier = Modifier.fillMaxSize()) {
-            composable("home") {
-                HomeScreen(
-                    navController,
-                    showCategoryCounts,
-                    favorites,
-                    onToggleFavorite = toggleFavorite
-                )
-            }
-            composable("settings") {
-                SettingsScreen(
-                    navController,
-                    themeMode, onThemeChange,
-                    dynamicColor, onDynamicColorChange,
-                    showCategoryCounts, onShowCategoryCountsChange,
-                    aiApiKey, onAiApiKeyChange,
-                    accentColor, onAccentColorChange,
-                    auroraBackground, onAuroraBackgroundChange,
-                    glassEffect, onGlassEffectChange
-                )
-            }
+    NavHost(navController = navController, startDestination = "home", modifier = Modifier.fillMaxSize()) {
+        composable("home") {
+            HomeScreen(
+                navController,
+                showCategoryCounts,
+                favorites,
+                onToggleFavorite = toggleFavorite
+            )
+        }
+        composable("settings") {
+            SettingsScreen(
+                navController,
+                themeMode, onThemeChange,
+                dynamicColor, onDynamicColorChange,
+                showCategoryCounts, onShowCategoryCountsChange,
+                aiApiKey, onAiApiKeyChange,
+                accentColor, onAccentColorChange
+            )
+        }
 
             addSpecialRoutes(navController)
 
@@ -151,7 +143,6 @@ fun NatureToolsApp(
                 }
             }
         }
-    }
 }
 
 fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
