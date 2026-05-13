@@ -63,6 +63,24 @@ fun GameToolScreen(navController: NavHostController, title: String) {
 
 @Composable
 fun ChessGame() {
+    var isPvP by remember { mutableStateOf(true) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    if (!gameStarted) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Chess", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(onClick = { isPvP = true; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs Player") }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { isPvP = false; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs AI") }
+        }
+    } else {
+        ChessBoard(isPvP) { gameStarted = false }
+    }
+}
+
+@Composable
+fun ChessBoard(isPvP: Boolean, onReset: () -> Unit) {
     val board = remember {
         mutableStateListOf(
             "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜",
@@ -76,9 +94,11 @@ fun ChessGame() {
         )
     }
     var selectedIndex by remember { mutableIntStateOf(-1) }
+    var isWhiteTurn by remember { mutableStateOf(true) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Chess", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(if (isPvP) "Chess (PvP)" else "Chess (vs AI)", style = MaterialTheme.typography.titleMedium)
+        Text("Turn: ${if (isWhiteTurn) "White" else "Black"}")
         Spacer(modifier = Modifier.height(16.dp))
         LazyVerticalGrid(
             columns = GridCells.Fixed(8),
@@ -94,13 +114,18 @@ fun ChessGame() {
                     modifier = Modifier
                         .aspectRatio(1f)
                         .background(if (isSelected) Color.Yellow else if (isDark) Color(0xFF769656) else Color(0xFFEEEED2))
-                        .clickable {
+                        .clickable(enabled = isPvP || isWhiteTurn) {
                             if (selectedIndex == -1) {
-                                if (board[i].isNotEmpty()) selectedIndex = i
+                                if (board[i].isNotEmpty()) {
+                                    val isBlack = "♜♞♝♛♚♟".contains(board[i])
+                                    if (isWhiteTurn && !isBlack) selectedIndex = i
+                                    else if (!isWhiteTurn && isBlack && isPvP) selectedIndex = i
+                                }
                             } else {
                                 if (i != selectedIndex) {
                                     board[i] = board[selectedIndex]
                                     board[selectedIndex] = ""
+                                    isWhiteTurn = !isWhiteTurn
                                 }
                                 selectedIndex = -1
                             }
@@ -114,28 +139,86 @@ fun ChessGame() {
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Text(if (selectedIndex == -1) "Select a piece" else "Select destination")
+        Row {
+            Button(onClick = { onReset() }) { Text("Quit") }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(onClick = {
+                board.clear()
+                board.addAll(listOf(
+                    "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜", "♟", "♟", "♟", "♟", "♟", "♟", "♟", "♟",
+                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                    "♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙", "♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"
+                ))
+                isWhiteTurn = true
+            }) { Text("Restart") }
+        }
+
+        if (!isWhiteTurn && !isPvP) {
+            LaunchedEffect(isWhiteTurn) {
+                delay(1000)
+                val blackPieces = board.indices.filter { board[it].isNotEmpty() && "♜♞♝♛♚♟".contains(board[it]) }
+                if (blackPieces.isNotEmpty()) {
+                    val from = blackPieces.random()
+                    val possibleTo = board.indices.filter { it != from }.random()
+                    board[possibleTo] = board[from]
+                    board[from] = ""
+                    isWhiteTurn = true
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun LudoGame() {
+    var isPvP by remember { mutableStateOf(true) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    if (!gameStarted) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Ludo", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(onClick = { isPvP = true; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs Player") }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { isPvP = false; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs AI") }
+        }
+    } else {
+        LudoBoard(isPvP) { gameStarted = false }
+    }
+}
+
+@Composable
+fun LudoBoard(isPvP: Boolean, onReset: () -> Unit) {
+    var diceValue by remember { mutableIntStateOf(1) }
+    var turn by remember { mutableIntStateOf(1) } // 1: Red, 2: Green
+    var redPos by remember { mutableIntStateOf(0) }
+    var greenPos by remember { mutableIntStateOf(0) }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Ludo", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Ludo - ${if (turn == 1) "Red's Turn" else "Green's Turn"}", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(modifier = Modifier.size(300.dp).border(2.dp, Color.Black)) {
             // Simplified Ludo Board Visualization
             Column(modifier = Modifier.fillMaxSize()) {
                 Row(modifier = Modifier.weight(6f).fillMaxWidth()) {
-                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Red).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Red).border(1.dp, Color.Black)) {
+                        if (redPos == 0) Text("🔴", modifier = Modifier.align(Alignment.Center), fontSize = 30.sp)
+                    }
                     Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
-                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Green).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Green).border(1.dp, Color.Black)) {
+                        if (greenPos == 0) Text("🟢", modifier = Modifier.align(Alignment.Center), fontSize = 30.sp)
+                    }
                 }
                 Row(modifier = Modifier.weight(3f).fillMaxWidth()) {
-                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
-                    Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.Yellow).border(1.dp, Color.Black))
-                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black)) {
+                         if (redPos > 0) Text("🔴", modifier = Modifier.align(Alignment.Center).offset(x = (redPos * 5).dp), fontSize = 20.sp)
+                    }
+                    Box(modifier = Modifier.weight(3f).fillMaxHeight().background(Color.Gray).border(1.dp, Color.Black))
+                    Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.White).border(1.dp, Color.Black)) {
+                         if (greenPos > 0) Text("🟢", modifier = Modifier.align(Alignment.Center).offset(x = (greenPos * -5).dp), fontSize = 20.sp)
+                    }
                 }
                 Row(modifier = Modifier.weight(6f).fillMaxWidth()) {
                     Box(modifier = Modifier.weight(6f).fillMaxHeight().background(Color.Blue).border(1.dp, Color.Black))
@@ -147,7 +230,35 @@ fun LudoGame() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {}) { Text("Roll Dice") }
+        Row {
+            Button(
+                onClick = {
+                    diceValue = (1..6).random()
+                    if (turn == 1) {
+                        redPos += diceValue
+                        if (redPos > 15) redPos = 15
+                        turn = 2
+                    } else {
+                        greenPos += diceValue
+                        if (greenPos > 15) greenPos = 15
+                        turn = 1
+                    }
+                },
+                enabled = isPvP || turn == 1
+            ) { Text("Roll Dice ($diceValue)") }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(onClick = onReset) { Text("Quit") }
+        }
+
+        if (!isPvP && turn == 2) {
+            LaunchedEffect(turn) {
+                delay(1500)
+                diceValue = (1..6).random()
+                greenPos += diceValue
+                if (greenPos > 15) greenPos = 15
+                turn = 1
+            }
+        }
     }
 }
 
@@ -197,12 +308,30 @@ fun ArcadeGamePlaceholder(name: String) {
 
 @Composable
 fun TicTacToeGame() {
+    var isPvP by remember { mutableStateOf(true) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    if (!gameStarted) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Tic-Tac-Toe", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(onClick = { isPvP = true; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs Player") }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { isPvP = false; gameStarted = true }, modifier = Modifier.fillMaxWidth()) { Text("Player vs AI") }
+        }
+    } else {
+        TicTacToeBoard(isPvP) { gameStarted = false }
+    }
+}
+
+@Composable
+fun TicTacToeBoard(isPvP: Boolean, onReset: () -> Unit) {
     var board by remember { mutableStateOf(List(9) { "" }) }
-    var isPlayerTurn by remember { mutableStateOf(true) }
+    var turnX by remember { mutableStateOf(true) }
     var winner by remember { mutableStateOf<String?>(null) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Tic-Tac-Toe", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(if (isPvP) "Tic-Tac-Toe (PvP)" else "Tic-Tac-Toe (vs AI)", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
         for (i in 0 until 3) {
@@ -213,12 +342,12 @@ fun TicTacToeGame() {
                         modifier = Modifier
                             .size(80.dp)
                             .border(1.dp, MaterialTheme.colorScheme.outline)
-                            .clickable(enabled = board[index] == "" && winner == null) {
-                                if (isPlayerTurn) {
+                            .clickable(enabled = board[index] == "" && winner == null && (isPvP || turnX)) {
+                                if (isPvP || turnX) {
                                     val newBoard = board.toMutableList()
-                                    newBoard[index] = "X"
+                                    newBoard[index] = if (turnX) "X" else "O"
                                     board = newBoard
-                                    isPlayerTurn = false
+                                    turnX = !turnX
                                     checkWinner(newBoard)?.let { winner = it }
                                 }
                             },
@@ -238,14 +367,16 @@ fun TicTacToeGame() {
 
         if (winner != null) {
             Text("Winner: $winner", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
-            Button(onClick = { board = List(9) { "" }; winner = null; isPlayerTurn = true }) {
-                Text("Play Again")
+            Row {
+                Button(onClick = { board = List(9) { "" }; winner = null; turnX = true }) { Text("Restart") }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(onClick = onReset) { Text("Quit") }
             }
         } else {
-            Text(if (isPlayerTurn) "Your Turn (X)" else "AI is thinking...")
+            Text(if (turnX) "Turn: X" else "Turn: O")
 
-            LaunchedEffect(isPlayerTurn) {
-                if (!isPlayerTurn && winner == null) {
+            if (!isPvP && !turnX) {
+                LaunchedEffect(turnX) {
                     delay(1000)
                     val emptyIndices = board.indices.filter { board[it] == "" }
                     if (emptyIndices.isNotEmpty()) {
@@ -253,7 +384,7 @@ fun TicTacToeGame() {
                         val newBoard = board.toMutableList()
                         newBoard[move] = "O"
                         board = newBoard
-                        isPlayerTurn = true
+                        turnX = true
                         checkWinner(newBoard)?.let { winner = it }
                     } else {
                         winner = "Draw"

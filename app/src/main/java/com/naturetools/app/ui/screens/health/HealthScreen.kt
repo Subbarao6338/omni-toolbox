@@ -121,35 +121,19 @@ fun PanchangamTool() {
     var selectedNakshatra by remember { mutableStateOf("Ashwini") }
 
     val panchangamData = remember(dateStr, timeStr, selectedTab, selectedRaashi, selectedNakshatra) {
-        if (selectedTab == 0) {
-            try {
-                val date = LocalDate.parse(dateStr)
-                PanchangamLogic.getPanchangam(LocalDateTime.of(date, LocalTime.of(10, 30)))
-            } catch (e: Exception) {
-                PanchangamLogic.getPanchangam(LocalDateTime.now())
-            }
-        } else {
-            // Simplified fallback for "By Name"
-            PanchangamLogic.getPanchangam(LocalDateTime.now()).copy(
-                raashi = "$selectedRaashi (రాశి)",
-                nakshatram = "$selectedNakshatra (నక్షత్రం)",
-                luckyNumber = when(selectedRaashi) {
-                    "Mesha" -> "9, 1, 8"
-                    "Vrushabha" -> "6, 2, 7"
-                    "Midhuna" -> "5, 3, 6"
-                    "Karka" -> "2, 7, 9"
-                    "Simha" -> "1, 4, 9"
-                    "Kanya" -> "5, 3, 6"
-                    "Thula" -> "6, 2, 7"
-                    "Vrushchika" -> "9, 1, 8"
-                    "Dhanussu" -> "3, 5, 8"
-                    "Makara" -> "8, 6, 7"
-                    "Kumbha" -> "8, 4, 5"
-                    "Meena" -> "3, 7, 9"
-                    else -> "1, 5, 9"
-                }
-            )
-        }
+        com.naturetools.app.utils.PanchangamDetails(
+            samvatsaram = "Placeholder Year (సంవత్సరం)",
+            ayana = "Placeholder Ayana",
+            rutu = "Placeholder Rutu",
+            maasam = "Placeholder Maasam (మాసం)",
+            paksha = "Placeholder Paksham",
+            tithi = "Placeholder Tithi (తిథి)",
+            nakshatram = "Placeholder Nakshatram (నక్షత్రం)",
+            raashi = if (selectedTab == 0) "Placeholder Raashi (రాశి)" else "$selectedRaashi (రాశి)",
+            luckyNumber = "1, 5, 9",
+            luckyColor = "Placeholder Color",
+            luckyDay = "Placeholder Day"
+        )
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -210,22 +194,17 @@ fun PanchangamTool() {
 
             Spacer(modifier = Modifier.height(24.dp))
             PanchangamResult(
-                samvatsaram = "Krodhi (క్రోధి)",
-                ayana = "Based on selection",
-                rutu = "Based on selection",
-                maasam = "Based on selection",
-                paksha = "Shukla/Krishna",
-                tithi = "Variable",
+                samvatsaram = "Placeholder Year",
+                ayana = "Placeholder Ayana",
+                rutu = "Placeholder Rutu",
+                maasam = "Placeholder Maasam",
+                paksha = "Placeholder Paksham",
+                tithi = "Placeholder Tithi",
                 nakshatram = "$selectedNakshatra (నక్షత్రం)",
                 raashi = "$selectedRaashi (రాశి)",
-                luckyNumber = when(selectedRaashi) {
-                    "Mesha" -> "9, 1, 8"; "Vrushabha" -> "6, 2, 7"; "Midhuna" -> "5, 3, 6"; "Karka" -> "2, 7, 9"
-                    "Simha" -> "1, 4, 9"; "Kanya" -> "5, 3, 6"; "Thula" -> "6, 2, 7"; "Vrushchika" -> "9, 1, 8"
-                    "Dhanussu" -> "3, 5, 8"; "Makara" -> "8, 6, 7"; "Kumbha" -> "8, 4, 5"; "Meena" -> "3, 7, 9"
-                    else -> "1, 5, 9"
-                },
-                luckyColor = "Themed to $selectedRaashi",
-                luckyDay = "Auspicious for $selectedRaashi"
+                luckyNumber = "1, 5, 9",
+                luckyColor = "Placeholder Color",
+                luckyDay = "Placeholder Day"
             )
         }
     }

@@ -50,6 +50,7 @@ import com.naturetools.app.ui.screens.environment.*
 import com.naturetools.app.ui.screens.automotive.*
 import com.naturetools.app.ui.screens.social.*
 import com.naturetools.app.ui.screens.electronics.*
+import com.naturetools.app.ui.screens.data.*
 
 @Composable
 fun NatureToolsApp(
@@ -184,7 +185,7 @@ fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
 }
 
 fun isSpecialRoute(route: String): Boolean {
-    return listOf("calculator", "compass", "note", "hub", "qr_scanner", "sos", "metronome").contains(route)
+    return listOf("calculator", "compass", "note", "hub", "qr_scanner", "sos", "metronome", "web").contains(route)
 }
 
 @Composable
@@ -263,8 +264,10 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
 
         route == "csv_to_json" -> CsvToJsonScreen(navController)
         route == "json" -> JsonFormatterScreen(navController)
+        listOf("anomaly_detection", "data_profiling", "data_statistics", "data_visualisations", "synthetic_data_gen", "data_quality", "data_cleaning", "data_transformation").contains(route) -> DataToolScreen(navController, route, tool.name)
         route.startsWith("pdf_") || route == "images_to_pdf" -> PdfToolScreen(navController, tool.name)
 
+        route == "docs_online" -> OnlineDocsScreen(navController)
         route == "password_gen" -> PasswordGenScreen(navController)
         route == "password_manager" -> PasswordManagerScreen(navController)
 
@@ -315,7 +318,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         listOf("ohms_law", "circuit_calc").contains(route) -> ElectronicsToolScreen(navController, tool.name)
 
         // --- 3. Web Tools (Dynamic URL mapping) ---
-        route.startsWith("per_") || listOf("sec_adguard", "sec_nextdns", "sec_bitwarden", "sec_ente", "docs_online", "hub", "web").contains(route) -> {
+        route.startsWith("per_") || listOf("sec_adguard", "sec_nextdns", "sec_bitwarden", "sec_ente", "hub", "web").contains(route) -> {
              val url = when(route) {
                 "per_hub" -> "https://perchance.org/welcome"
                 "per_image" -> "https://perchance.org/ai-image-generator"
@@ -329,11 +332,12 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
                 "sec_nextdns" -> "https://my.nextdns.io"
                 "sec_bitwarden" -> "https://vault.bitwarden.com/"
                 "sec_ente" -> "https://auth.ente.com/"
-                "docs_online" -> "https://tinywow.com"
                 "hub" -> "https://nhub-pi.vercel.app"
                 "web" -> "https://www.google.com"
                 else -> "https://perchance.org"
             }
+            // If the route is 'web' without query params, use Google.
+            // The NavHost handles routes with query params separately in addSpecialRoutes.
             WebToolScreen(navController, initialUrl = url, showUrlBar = (route == "web"), title = tool.name)
         }
 
