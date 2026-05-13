@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -47,6 +48,9 @@ fun WebToolScreen(
     var isLoading by remember { mutableStateOf(false) }
     var isDesktopMode by remember { mutableStateOf(false) }
     var showAnalysis by remember { mutableStateOf(false) }
+    val prefs = remember { context.getSharedPreferences("web_profiles", Context.MODE_PRIVATE) }
+    var currentProfile by remember { mutableStateOf(prefs.getString("web_profile_$title", "Default") ?: "Default") }
+    var showProfileSwitcher by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     var canGoBack by remember { mutableStateOf(false) }
 
@@ -89,6 +93,9 @@ fun WebToolScreen(
             }
         },
         actions = {
+            IconButton(onClick = { showProfileSwitcher = true }) {
+                Icon(Icons.Default.AccountCircle, contentDescription = "Switch Profile", tint = if (currentProfile == "Default") LocalContentColor.current else MaterialTheme.colorScheme.primary)
+            }
             IconButton(onClick = { showAnalysis = !showAnalysis }) {
                 Icon(Icons.Default.Info, contentDescription = "Web Analysis")
             }
@@ -143,6 +150,36 @@ fun WebToolScreen(
 
             if (isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+
+            if (showProfileSwitcher) {
+                AlertDialog(
+                    onDismissRequest = { showProfileSwitcher = false },
+                    title = { Text("Switch Profile") },
+                    text = {
+                        Column {
+                            listOf("Default", "Profile 2", "Profile 3", "Work", "Private").forEach { profile ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().clickable {
+                                        currentProfile = profile
+                                        prefs.edit().putString("web_profile_$title", profile).apply()
+                                        // Profile switching in WebView typically requires reloading with different cookie partition
+                                        // On mobile, separate partitions aren't natively as easy as desktop but we can clear/reload
+                                        CookieManager.getInstance().removeAllCookies(null)
+                                        webView?.reload()
+                                        showProfileSwitcher = false
+                                    }.padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    RadioButton(selected = currentProfile == profile, onClick = null)
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(profile)
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = { TextButton(onClick = { showProfileSwitcher = false }) { Text("Close") } }
+                )
             }
 
             if (showAnalysis) {
@@ -240,7 +277,10 @@ fun WebToolScreen(
                                     userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
                                     mediaPlaybackRequiresUserGesture = false
                                 }
-                                CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+                                CookieManager.getInstance().let { cm ->
+                                    cm.setAcceptCookie(true)
+                                    cm.setAcceptThirdPartyCookies(this, true)
+                                }
                                 webView = this
                             }
                         },
