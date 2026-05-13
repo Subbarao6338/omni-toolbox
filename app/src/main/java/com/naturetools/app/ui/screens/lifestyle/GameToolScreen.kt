@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,8 +14,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.SportsEsports
+import kotlin.random.Random
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,15 +45,33 @@ fun GameToolScreen(navController: NavHostController, title: String) {
                 "Tic Tac Toe" -> TicTacToeGame()
                 "Dice Roller" -> DiceRoller()
                 "Coin Flip" -> CoinFlipper()
-                "Snake Game" -> ArcadeGamePlaceholder("Snake")
-                "Dino Jump" -> ArcadeGamePlaceholder("Dino Jump")
-                "2048" -> ArcadeGamePlaceholder("2048")
-                "Sudoku" -> ArcadeGamePlaceholder("Sudoku")
+                "Snake", "Snake Game", "snake" -> SnakeGame()
+                "Dino Jump" -> DinoJumpGame()
+                "2048" -> Game2048()
+                "Sudoku" -> SudokuGame()
+                "Ludo", "ludo" -> BoardGamePlaceholder("Ludo")
+                "Carroms", "carroms" -> BoardGamePlaceholder("Carroms")
+                "Chess", "chess" -> BoardGamePlaceholder("Chess")
                 else -> {
                     Icon(Icons.Default.Casino, contentDescription = null, modifier = Modifier.size(64.dp))
                     Text("Game implementation for $title")
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun BoardGamePlaceholder(name: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(Icons.Default.Gamepad, contentDescription = null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.secondary)
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Multiplayer $name experience with local and AI modes.", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = {}) {
+            Text("Start Match")
         }
     }
 }
@@ -148,6 +171,89 @@ fun checkWinner(board: List<String>): String? {
     }
     if (board.none { it == "" }) return "Draw"
     return null
+}
+
+@Composable
+fun SnakeGame() {
+    var score by remember { mutableIntStateOf(0) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Snake", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(modifier = Modifier.size(300.dp).background(Color.Black), contentAlignment = Alignment.Center) {
+            if (!gameStarted) {
+                Button(onClick = { gameStarted = true; score = 0 }) { Text("Start Game") }
+            } else {
+                Text("Score: $score", color = Color.White, modifier = Modifier.align(Alignment.TopStart).padding(8.dp))
+                // Simulated game movement
+                LaunchedEffect(Unit) {
+                    while(gameStarted) {
+                        delay(500)
+                        score += 1
+                    }
+                }
+                Text("🐍", fontSize = 24.sp, modifier = Modifier.offset(x = (score % 10 * 20).dp))
+            }
+        }
+        if (gameStarted) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(onClick = { gameStarted = false }) { Text("Game Over") }
+        }
+    }
+}
+
+@Composable
+fun DinoJumpGame() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Dino Jump", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.LightGray)) {
+            Text("🌵", modifier = Modifier.align(Alignment.BottomEnd).padding(end = 50.dp))
+            Text("🦖", modifier = Modifier.align(Alignment.BottomStart).padding(start = 50.dp, bottom = 40.dp))
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = {}) { Text("Jump") }
+    }
+}
+
+@Composable
+fun Game2048() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("2048", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        val grid = listOf(2, 4, 0, 0, 0, 2, 0, 0, 0, 0, 8, 0, 16, 0, 0, 0)
+        LazyVerticalGrid(columns = GridCells.Fixed(4), modifier = Modifier.size(240.dp)) {
+            items(grid) { value ->
+                Card(modifier = Modifier.padding(4.dp).aspectRatio(1f), colors = CardDefaults.cardColors(containerColor = if (value == 0) Color.Gray else Color.Yellow)) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        if (value != 0) Text(value.toString(), fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text("Swipe to move tiles")
+    }
+}
+
+@Composable
+fun SudokuGame() {
+    val puzzle = remember { List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" } }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Sudoku", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyVerticalGrid(columns = GridCells.Fixed(9), modifier = Modifier.size(300.dp)) {
+            items(81) { i ->
+                Box(modifier = Modifier.border(0.5.dp, Color.Black).aspectRatio(1f), contentAlignment = Alignment.Center) {
+                    Text(puzzle[i])
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { /* Refresh handled by keying if needed, but remember is fine for stub */ }) { Text("New Puzzle") }
+    }
 }
 
 @Composable

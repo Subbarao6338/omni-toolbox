@@ -208,6 +208,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
             else if (tool.route == "profile_photo_maker") ProfilePhotoMakerScreen(navController)
             else if (listOf("m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster").contains(tool.route)) AudioToolScreen(navController, tool.name)
             else if (listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster").contains(tool.route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
+            else if (tool.route == "digital_magnifier" || tool.route == "mirror_tool") AudioToolScreen(navController, tool.name, mimeType = "video/*")
             else ImageToolScreen(navController, tool.name)
         }
         "Education" -> {
@@ -247,6 +248,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
             else if (listOf("antenna_calc", "filter_design", "logic_gates", "pcb_trace", "resistor_code", "signal_gen_pro").contains(tool.route)) EngineeringToolScreen(navController, tool.name)
             else if (tool.route == "smart_hub") SystemLabScreen(navController, tool.name)
             else if (tool.route == "tiles_widgets") TilesAndWidgetsScreen(navController)
+            else if (tool.route == "panchangam") HealthScreen(navController, "Panchangam")
             else AudioToolScreen(navController, tool.name)
         }
         "Games" -> {

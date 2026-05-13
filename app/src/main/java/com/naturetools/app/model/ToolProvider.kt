@@ -29,7 +29,7 @@ object ToolProvider {
             subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator")),
         Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Media", Color(0xFFF44336),
             description = "Professional video processing tools.",
-            subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster")),
+            subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool")),
         Tool("Image Tools", Icons.Default.PhotoLibrary, "image_tools_group", "Media", Color(0xFF2196F3),
             description = "Image editing and optimization tools.",
             subToolRoutes = listOf("batch_img_pro", "exif_viewer", "image_ai_tools", "image_base64", "image_bg_remover", "image_collage", "image_color_picker", "image_compare", "image_crop", "image_cutting", "image_delete_exif", "image_draw", "image_draw_bg", "image_edit_exif", "image_filter", "image_format_conv", "image_layers_bg", "image_layers_img", "image_mask_filter", "image_noise_gen", "image_ocr", "image_open_project", "image_palette", "image_preview", "image_resize_conv", "image_resize_limits", "image_resize_weight", "image_single_edit", "image_stacking", "image_stitching", "image_to_svg", "image_to_webp", "image_wallpapers", "image_watermark", "image_web_load", "multi_crop", "multi_image_resize", "pixel_art", "profile_photo_maker", "webp_to_images")),
@@ -48,7 +48,7 @@ object ToolProvider {
         // --- UTILITIES ---
         Tool("Daily Helpers", Icons.Default.Build, "util_group", "Utilities", Color(0xFF4CAF50),
             description = "Everyday utility tools.",
-            subToolRoutes = listOf("clock", "date_calc", "flashlight", "protractor", "qr_gen", "qr_scanner", "ruler", "stopwatch", "tiles_widgets", "vibration", "wifi_qr")),
+            subToolRoutes = listOf("clock", "date_calc", "flashlight", "protractor", "qr_gen", "qr_scanner", "ruler", "stopwatch", "tiles_widgets", "vibration", "wifi_qr", "panchangam")),
         Tool("Productivity", Icons.Default.Task, "prod_group", "Utilities", Color(0xFF3F51B5),
             description = "Stay organized and focused.",
             subToolRoutes = listOf("checklist", "daily_journal", "daily_quotes", "kanban", "note", "pomodoro", "task_board", "time_logger")),
@@ -65,7 +65,7 @@ object ToolProvider {
         // --- GAMES ---
         Tool("Game Collection", Icons.Default.Gamepad, "game_group", "Games", Color(0xFFFF9800),
             description = "Simple offline games.",
-            subToolRoutes = listOf("coin_flip", "dice_roller", "memory_game", "number_guessing", "random", "tic_tac_toe")),
+            subToolRoutes = listOf("coin_flip", "dice_roller", "memory_game", "number_guessing", "random", "tic_tac_toe", "snake", "ludo", "carroms", "chess")),
 
         // --- DEVICE ---
         Tool("System Monitor", Icons.Default.Dns, "system_group", "Device", Color(0xFF607D8B),
@@ -267,6 +267,8 @@ object ToolProvider {
         Tool("JPEG to JXL", Icons.Default.Transform, "jpeg_to_jxl", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("JXL to images", Icons.Default.Collections, "jxl_to_images", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("JXL to JPEG", Icons.Default.Transform, "jxl_to_jpeg", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Digital Magnifier", Icons.Default.ZoomIn, "digital_magnifier", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Mirror Tool", Icons.Default.CameraFront, "mirror_tool", "Media", isVisibleOnHome = false, isSubTool = true),
 
         // EDUCATION
         Tool("Constants Table", Icons.Default.Functions, "constants", "Education", isVisibleOnHome = false, isSubTool = true),
@@ -331,6 +333,7 @@ object ToolProvider {
         Tool("Area Calculator", Icons.Default.SquareFoot, "area_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Binary Calc", Icons.Default.Numbers, "binary_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Scientific Calc", Icons.Default.Functions, "sci_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
+        Tool("Panchangam", Icons.Default.CalendarMonth, "panchangam", "Utilities", isVisibleOnHome = false, isSubTool = true),
 
         // GAMES
         Tool("Coin Flip", Icons.Default.Paid, "coin_flip", "Games", isVisibleOnHome = false, isSubTool = true),
@@ -339,6 +342,10 @@ object ToolProvider {
         Tool("Number Guessing", Icons.Default.QuestionMark, "number_guessing", "Games", isVisibleOnHome = false, isSubTool = true),
         Tool("Tic Tac Toe", Icons.Default.Close, "tic_tac_toe", "Games", isVisibleOnHome = false, isSubTool = true),
         Tool("Random Gen", Icons.Default.Casino, "random", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Snake", Icons.Default.Gamepad, "snake", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Ludo", Icons.Default.Gamepad, "ludo", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Carroms", Icons.Default.Gamepad, "carroms", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Chess", Icons.Default.Gamepad, "chess", "Games", isVisibleOnHome = false, isSubTool = true),
 
         // DEVICE
         Tool("CPU Info", Icons.Default.Memory, "cpu_info", "Device", isVisibleOnHome = false, isSubTool = true),

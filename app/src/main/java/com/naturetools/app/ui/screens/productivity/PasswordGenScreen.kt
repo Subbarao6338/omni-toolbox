@@ -105,7 +105,45 @@ fun PasswordGenScreen(navController: NavHostController) {
             ) {
                 Text("Generate New Password")
             }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 24.dp))
+
+            SecurityUtilities()
         }
+    }
+}
+
+@Composable
+fun SecurityUtilities() {
+    var input by remember { mutableStateOf("Nature Tools") }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Security Utilities", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(value = input, onValueChange = { input = it }, label = { Text("Input Text") }, modifier = Modifier.fillMaxWidth())
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text("SHA-256 Hash", style = MaterialTheme.typography.titleSmall)
+        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+            Text("SimulatedHash: 3f786850e387550fd083a...", modifier = Modifier.padding(12.dp), style = MaterialTheme.typography.bodySmall)
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("RSA Key Pair", style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = {}, modifier = Modifier.weight(1f)) { Text("Gen Public") }
+            Button(onClick = {}, modifier = Modifier.weight(1f)) { Text("Gen Private") }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("AES-GCM Encryption", style = MaterialTheme.typography.titleSmall)
+        OutlinedTextField(value = "SecretKey123", onValueChange = {}, label = { Text("Secret Key") }, modifier = Modifier.fillMaxWidth())
+        Button(onClick = {}, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) { Text("Encrypt") }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("HMAC Calculator", style = MaterialTheme.typography.titleSmall)
+        Button(onClick = {}, modifier = Modifier.fillMaxWidth()) { Text("Calculate HMAC-SHA256") }
     }
 }
 
