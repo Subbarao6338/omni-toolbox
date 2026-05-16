@@ -79,7 +79,7 @@ fun HomeScreen(
                 }
 
                 matchesSearch && matchesCategory
-            }.sortedByDescending { it.isVisibleOnHome }.thenBy { it.name }
+            }.sortedWith(compareByDescending<Tool> { it.isVisibleOnHome }.thenBy { it.name })
         }
     }
 
@@ -281,7 +281,7 @@ fun ToolCard(
                 )
                 if (tool.subToolRoutes != null) {
                     Text(
-                        "${tool.subToolRoutes!!.size} tools",
+                        "${tool.subToolRoutes.size} tools",
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                     )
@@ -291,6 +291,3 @@ fun ToolCard(
     }
 }
 
-fun <T> List<T>.thenBy(selector: (T) -> Comparable<*>?): List<T> {
-    return this.sortedWith(compareBy({ 0 }, selector)) // This is a bit hacky but we need a stable sort
-}

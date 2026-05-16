@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -44,7 +46,7 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
                 title = { Text(toolName) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -276,7 +278,7 @@ private fun getToolIcon(route: String): ImageVector {
     return when (route) {
         "anomaly_detection" -> Icons.Default.Warning
         "data_profiling" -> Icons.Default.AccountBox
-        "data_statistics" -> Icons.Default.ShowChart
+        "data_statistics" -> Icons.AutoMirrored.Filled.ShowChart
         "data_visualisations" -> Icons.Default.PieChart
         "synthetic_data_gen" -> Icons.Default.Science
         "data_quality" -> Icons.Default.CheckCircle

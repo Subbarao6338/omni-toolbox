@@ -103,7 +103,7 @@ fun ColorBox(label: String, color: Color, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ContrastItem(label: String, background: Color, foreground: Color) {
+fun ContrastItem(label: String, background: Color, @Suppress("UNUSED_PARAMETER") foreground: Color) {
     Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {

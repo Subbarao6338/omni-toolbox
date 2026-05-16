@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -101,7 +102,7 @@ fun TravelBudgetScreen(navController: NavHostController) {
                     ListItem(
                         headlineContent = { Text(expense.description) },
                         trailingContent = { Text("$${java.lang.String.format("%.2f", expense.amount)}") },
-                        leadingContent = { Icon(Icons.Default.ReceiptLong, contentDescription = null) }
+                        leadingContent = { Icon(Icons.AutoMirrored.Filled.ReceiptLong, contentDescription = null) }
                     )
                     HorizontalDivider()
                 }

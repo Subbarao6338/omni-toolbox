@@ -16,8 +16,6 @@ fun PrimeCheckerScreen(navController: NavHostController) {
     var result by remember { mutableStateOf<String?>(null) }
     var isCalculating by remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
-
     suspend fun isPrime(n: Long): Boolean = withContext(Dispatchers.Default) {
         if (n <= 1) return@withContext false
         if (n <= 3) return@withContext true

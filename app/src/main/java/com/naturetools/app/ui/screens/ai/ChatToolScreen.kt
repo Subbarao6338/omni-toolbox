@@ -123,7 +123,8 @@ fun ChatToolScreen(navController: NavHostController, title: String, aiApiKey: St
                                         val positiveWords = listOf("good", "great", "excellent", "happy", "love", "amazing", "best")
                                         val negativeWords = listOf("bad", "terrible", "worst", "hate", "sad", "awful", "poor")
                                         val score = currentInput.lowercase().split(Regex("\\W+")).sumOf { word ->
-                                            if (positiveWords.contains(word)) 1 else if (negativeWords.contains(word)) -1 else 0 as Int
+                                            val s: Int = if (positiveWords.contains(word)) 1 else if (negativeWords.contains(word)) -1 else 0
+                                            s
                                         }
                                         "Offline Sentiment Result: ${when {
                                             score > 0 -> "POSITIVE (Score: $score)"
