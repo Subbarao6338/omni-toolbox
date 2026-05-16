@@ -1,6 +1,5 @@
 package com.naturetools.app.ui.screens.utility
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,17 +32,40 @@ fun OnlineDocsScreen(navController: NavHostController) {
         title = "Online Document Tools",
         onBack = { navController.popBackStack() }
     ) { padding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(padding),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             items(tools) { tool ->
-                ListItem(
-                    headlineContent = { Text(tool.name) },
-                    supportingContent = { Text(tool.description) },
-                    leadingContent = { Icon(Icons.Default.Language, contentDescription = null) },
-                    trailingContent = { Icon(Icons.Default.Description, contentDescription = null) },
-                    modifier = Modifier.clickable {
-                        navController.navigate("web?url=${tool.url}&showBar=true&title=${tool.name}")
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("web?url=${tool.url}&showBar=false&title=${tool.name}")
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    Icon(Icons.Default.Language, contentDescription = null)
+                    Spacer(Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            tool.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            tool.description,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
-                )
+                    Icon(
+                        Icons.Default.Description,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
