@@ -31,7 +31,7 @@ class CurrencyConverterWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun CurrencyWidgetContent(context: Context) {
+    private fun CurrencyWidgetContent(@Suppress("UNUSED_PARAMETER") context: Context) {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()

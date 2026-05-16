@@ -291,7 +291,7 @@ object ToolProvider {
         Tool("Solar System", Icons.Default.Public, "solar_system", "Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Star Map", Icons.Default.AutoAwesome, "star_map", "Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Statistics", Icons.Default.BarChart, "stats", "Education", isVisibleOnHome = false, isSubTool = true),
-        Tool("Truth Table Gen", Icons.Default.ListAlt, "truth_table", "Education", isVisibleOnHome = false, isSubTool = true),
+        Tool("Truth Table Gen", Icons.AutoMirrored.Filled.ListAlt, "truth_table", "Education", isVisibleOnHome = false, isSubTool = true),
         Tool("Unit Circle", Icons.Default.InvertColors, "unit_circle", "Education", isVisibleOnHome = false, isSubTool = true),
 
         // UTILITIES
@@ -455,7 +455,7 @@ object ToolProvider {
         Tool("YAML to JSON", Icons.Default.Transform, "yaml_to_json", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("Anomaly Detection", Icons.Default.Warning, "anomaly_detection", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("Data Profiling", Icons.Default.AccountBox, "data_profiling", "Data", isVisibleOnHome = false, isSubTool = true),
-        Tool("Statistics", Icons.Default.ShowChart, "data_statistics", "Data", isVisibleOnHome = false, isSubTool = true),
+        Tool("Statistics", Icons.AutoMirrored.Filled.ShowChart, "data_statistics", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("Visualisations", Icons.Default.PieChart, "data_visualisations", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("Synthetic Data Gen", Icons.Default.Science, "synthetic_data_gen", "Data", isVisibleOnHome = false, isSubTool = true),
         Tool("Data Quality", Icons.Default.CheckCircle, "data_quality", "Data", isVisibleOnHome = false, isSubTool = true),
@@ -463,7 +463,7 @@ object ToolProvider {
         Tool("Data Transformation", Icons.Default.Transform, "data_transformation", "Data", isVisibleOnHome = false, isSubTool = true),
 
         // AI TOOLS
-        Tool("AI Chat Assistant", Icons.Default.Chat, "ai_chat", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("AI Chat Assistant", Icons.AutoMirrored.Filled.Chat, "ai_chat", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Code Helper", Icons.Default.Code, "ai_code", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Document Translator", Icons.Default.Translate, "ai_doc_translator", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Grammar Checker", Icons.Default.Spellcheck, "ai_grammar", "AI Tools", isVisibleOnHome = false, isSubTool = true),

@@ -26,13 +26,13 @@ class SystemMonitorWidget : GlanceAppWidget() {
         val memInfo = ActivityManager.MemoryInfo()
         am.getMemoryInfo(memInfo)
 
-        val totalMem = memInfo.totalMem / (1024 * 1024 * 1024.0)
-        val availMem = memInfo.availMem / (1024 * 1024 * 1024.0)
+        @Suppress("UNUSED_VARIABLE") val totalMem = memInfo.totalMem / (1024 * 1024 * 1024.0)
+        @Suppress("UNUSED_VARIABLE") val availMem = memInfo.availMem / (1024 * 1024 * 1024.0)
         val memUsage = ((memInfo.totalMem - memInfo.availMem).toDouble() / memInfo.totalMem * 100).toInt()
 
         val stat = StatFs(Environment.getDataDirectory().path)
-        val totalStorage = (stat.blockCountLong * stat.blockSizeLong) / (1024 * 1024 * 1024.0)
-        val availStorage = (stat.availableBlocksLong * stat.blockSizeLong) / (1024 * 1024 * 1024.0)
+        @Suppress("UNUSED_VARIABLE") val totalStorage = (stat.blockCountLong * stat.blockSizeLong) / (1024 * 1024 * 1024.0)
+        @Suppress("UNUSED_VARIABLE") val availStorage = (stat.availableBlocksLong * stat.blockSizeLong) / (1024 * 1024 * 1024.0)
         val storageUsage = (((stat.blockCountLong - stat.availableBlocksLong).toDouble() / stat.blockCountLong) * 100).toInt()
 
         provideContent {

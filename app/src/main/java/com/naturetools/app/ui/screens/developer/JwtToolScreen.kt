@@ -16,7 +16,6 @@ import java.util.Base64
 @Composable
 fun JwtToolScreen(navController: NavHostController) {
     var jwtInput by remember { mutableStateOf("") }
-    val clipboardManager = LocalClipboardManager.current
 
     val parts = jwtInput.split(".")
     val header = remember(jwtInput) {

@@ -174,6 +174,7 @@ fun PerchanceToolCard(
     onClick: () -> Unit
 ) {
     var isPressed by remember { mutableStateOf(false) }
+    @Suppress("UNUSED_VARIABLE")
     val scale by animateFloatAsState(if (isPressed) 0.97f else 1f, label = "scale")
 
     OutlinedCard(
