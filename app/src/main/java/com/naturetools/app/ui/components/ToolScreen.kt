@@ -15,24 +15,29 @@ fun ToolScreen(
     onBack: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
     containerColor: Color = Color.Transparent,
+    showTopBar: Boolean = true,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         containerColor = containerColor,
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = actions,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = containerColor
+            if (showTopBar) {
+                CenterAlignedTopAppBar(
+                    title = { Text(title) },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    actions = actions,
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = containerColor
+                    )
                 )
-            )
-        }
+            }
+        },
+        floatingActionButton = floatingActionButton
     ) { padding ->
         content(padding)
     }

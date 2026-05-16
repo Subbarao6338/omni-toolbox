@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,6 +34,7 @@ import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 import java.net.URL
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebToolScreen(
     navController: NavHostController,
@@ -53,6 +55,8 @@ fun WebToolScreen(
     var showProfileSwitcher by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     var canGoBack by remember { mutableStateOf(false) }
+    var showMenuSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
     val desktopUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     val mobileUserAgent = remember {
@@ -83,6 +87,40 @@ fun WebToolScreen(
         webView?.goBack()
     }
 
+    val actions: @Composable RowScope.() -> Unit = {
+        IconButton(onClick = { showProfileSwitcher = true }) {
+            Icon(Icons.Default.AccountCircle, contentDescription = "Switch Profile", tint = if (currentProfile == "Default") LocalContentColor.current else MaterialTheme.colorScheme.primary)
+        }
+        IconButton(onClick = { showAnalysis = !showAnalysis }) {
+            Icon(Icons.Default.Info, contentDescription = "Web Analysis")
+        }
+        IconButton(onClick = {
+            isDesktopMode = !isDesktopMode
+            webView?.settings?.userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
+            webView?.reload()
+        }) {
+            Icon(
+                if (isDesktopMode) Icons.Default.Smartphone else Icons.Default.DesktopWindows,
+                contentDescription = if (isDesktopMode) "Mobile Site" else "Desktop Site"
+            )
+        }
+        IconButton(onClick = {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webView?.url ?: urlToLoad))
+            context.startActivity(intent)
+        }) {
+            Icon(Icons.Default.OpenInBrowser, contentDescription = "Open in Browser")
+        }
+        IconButton(onClick = { webView?.reload() }) {
+            Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+        }
+        IconButton(onClick = {
+            val currentUrl = webView?.url ?: urlToLoad
+            navController.navigate("media_grabber?url=$currentUrl")
+        }) {
+            Icon(Icons.Default.Download, contentDescription = "Grab Media")
+        }
+    }
+
     ToolScreen(
         title = title,
         onBack = {
@@ -92,37 +130,13 @@ fun WebToolScreen(
                 navController.popBackStack()
             }
         },
-        actions = {
-            IconButton(onClick = { showProfileSwitcher = true }) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Switch Profile", tint = if (currentProfile == "Default") LocalContentColor.current else MaterialTheme.colorScheme.primary)
-            }
-            IconButton(onClick = { showAnalysis = !showAnalysis }) {
-                Icon(Icons.Default.Info, contentDescription = "Web Analysis")
-            }
-            IconButton(onClick = {
-                isDesktopMode = !isDesktopMode
-                webView?.settings?.userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
-                webView?.reload()
-            }) {
-                Icon(
-                    if (isDesktopMode) Icons.Default.Smartphone else Icons.Default.DesktopWindows,
-                    contentDescription = if (isDesktopMode) "Mobile Site" else "Desktop Site"
-                )
-            }
-            IconButton(onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webView?.url ?: urlToLoad))
-                context.startActivity(intent)
-            }) {
-                Icon(Icons.Default.OpenInBrowser, contentDescription = "Open in Browser")
-            }
-            IconButton(onClick = { webView?.reload() }) {
-                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-            }
-            IconButton(onClick = {
-                val currentUrl = webView?.url ?: urlToLoad
-                navController.navigate("media_grabber?url=$currentUrl")
-            }) {
-                Icon(Icons.Default.Download, contentDescription = "Grab Media")
+        actions = actions,
+        showTopBar = showUrlBar,
+        floatingActionButton = {
+            if (!showUrlBar) {
+                FloatingActionButton(onClick = { showMenuSheet = true }) {
+                    Icon(Icons.Default.Menu, contentDescription = "Menu")
+                }
             }
         }
     ) { padding ->
@@ -163,8 +177,6 @@ fun WebToolScreen(
                                     modifier = Modifier.fillMaxWidth().clickable {
                                         currentProfile = profile
                                         prefs.edit().putString("web_profile_$title", profile).apply()
-                                        // Profile switching in WebView typically requires reloading with different cookie partition
-                                        // On mobile, separate partitions aren't natively as easy as desktop but we can clear/reload
                                         CookieManager.getInstance().removeAllCookies(null)
                                         webView?.reload()
                                         showProfileSwitcher = false
@@ -180,6 +192,98 @@ fun WebToolScreen(
                     },
                     confirmButton = { TextButton(onClick = { showProfileSwitcher = false }) { Text("Close") } }
                 )
+            }
+
+            if (showMenuSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = { showMenuSheet = false },
+                    sheetState = sheetState
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 32.dp)
+                    ) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                        HorizontalDivider()
+
+                        ListItem(
+                            headlineContent = { Text("Go Back") },
+                            leadingContent = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                if (canGoBack) {
+                                    webView?.goBack()
+                                } else {
+                                    navController.popBackStack()
+                                }
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text("Switch Profile") },
+                            supportingContent = { Text("Current: $currentProfile") },
+                            leadingContent = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                showProfileSwitcher = true
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text("Web Analysis") },
+                            leadingContent = { Icon(Icons.Default.Info, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                showAnalysis = !showAnalysis
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text(if (isDesktopMode) "Mobile Site" else "Desktop Site") },
+                            leadingContent = { Icon(if (isDesktopMode) Icons.Default.Smartphone else Icons.Default.DesktopWindows, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                isDesktopMode = !isDesktopMode
+                                webView?.settings?.userAgentString = if (isDesktopMode) desktopUserAgent else mobileUserAgent
+                                webView?.reload()
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text("Open in Browser") },
+                            leadingContent = { Icon(Icons.Default.OpenInBrowser, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webView?.url ?: urlToLoad))
+                                context.startActivity(intent)
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text("Refresh") },
+                            leadingContent = { Icon(Icons.Default.Refresh, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                webView?.reload()
+                            }
+                        )
+
+                        ListItem(
+                            headlineContent = { Text("Grab Media") },
+                            leadingContent = { Icon(Icons.Default.Download, contentDescription = null) },
+                            modifier = Modifier.clickable {
+                                showMenuSheet = false
+                                val currentUrl = webView?.url ?: urlToLoad
+                                navController.navigate("media_grabber?url=$currentUrl")
+                            }
+                        )
+                    }
+                }
             }
 
             if (showAnalysis) {
@@ -285,7 +389,6 @@ fun WebToolScreen(
                             }
                         },
                         update = {
-                             // Correct implementation for Perchance improvements
                              if (title.contains("Perchance", ignoreCase = true)) {
                                  val improveJS = """
                                     (function() {
