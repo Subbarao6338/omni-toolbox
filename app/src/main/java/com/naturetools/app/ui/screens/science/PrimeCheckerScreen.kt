@@ -1,4 +1,4 @@
-package com.naturetools.app.ui.screens.utility
+package com.naturetools.app.ui.screens.science
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

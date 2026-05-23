@@ -368,7 +368,6 @@ fun WebToolScreen(
                                 settings.apply {
                                     javaScriptEnabled = true
                                     domStorageEnabled = true
-                                    databaseEnabled = true
                                     useWideViewPort = true
                                     loadWithOverviewMode = true
                                     mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW

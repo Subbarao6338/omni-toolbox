@@ -68,14 +68,30 @@ object PanchangamLogic {
             tithi = "$tithi (తిథి)",
             nakshatram = "$nakshatram (నక్షత్రం) - Padam ${(day % 4) + 1}",
             raashi = "$raashi (రాశి)",
-            luckyNumber = when(raashi) {
-                "Mesha" -> "9, 1, 8"; "Vrushabha" -> "6, 2, 7"; "Midhuna" -> "5, 3, 6"; "Karka" -> "2, 7, 9"
-                "Simha" -> "1, 4, 9"; "Kanya" -> "5, 3, 6"; "Thula" -> "6, 2, 7"; "Vrushchika" -> "9, 1, 8"
-                "Dhanussu" -> "3, 5, 8"; "Makara" -> "8, 6, 7"; "Kumbha" -> "8, 4, 5"; "Meena" -> "3, 7, 9"
-                else -> "1, 5, 9"
-            },
-            luckyColor = "Vibrant themed",
-            luckyDay = "Auspicious Day"
+            luckyNumber = getLuckyNumber(raashi),
+            luckyColor = getLuckyColor(raashi),
+            luckyDay = getLuckyDay(raashi)
         )
+    }
+
+    fun getLuckyNumber(raashi: String): String = when (raashi) {
+        "Mesha" -> "9, 1, 8"; "Vrushabha" -> "6, 2, 7"; "Midhuna" -> "5, 3, 6"; "Karka" -> "2, 7, 9"
+        "Simha" -> "1, 4, 9"; "Kanya" -> "5, 3, 6"; "Thula" -> "6, 2, 7"; "Vrushchika" -> "9, 1, 8"
+        "Dhanussu" -> "3, 5, 8"; "Makara" -> "8, 6, 7"; "Kumbha" -> "8, 4, 5"; "Meena" -> "3, 7, 9"
+        else -> "1, 5, 9"
+    }
+
+    fun getLuckyColor(raashi: String): String = when (raashi) {
+        "Mesha" -> "Red"; "Vrushabha" -> "White"; "Midhuna" -> "Green"; "Karka" -> "Silver"
+        "Simha" -> "Gold"; "Kanya" -> "Dark Green"; "Thula" -> "White"; "Vrushchika" -> "Red"
+        "Dhanussu" -> "Yellow"; "Makara" -> "Black"; "Kumbha" -> "Blue"; "Meena" -> "Yellow"
+        else -> "Vibrant themed"
+    }
+
+    fun getLuckyDay(raashi: String): String = when (raashi) {
+        "Mesha" -> "Tuesday"; "Vrushabha" -> "Friday"; "Midhuna" -> "Wednesday"; "Karka" -> "Monday"
+        "Simha" -> "Sunday"; "Kanya" -> "Wednesday"; "Thula" -> "Friday"; "Vrushchika" -> "Tuesday"
+        "Dhanussu" -> "Thursday"; "Makara" -> "Saturday"; "Kumbha" -> "Saturday"; "Meena" -> "Thursday"
+        else -> "Auspicious Day"
     }
 }
