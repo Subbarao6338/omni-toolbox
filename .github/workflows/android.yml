@@ -3,6 +3,8 @@ name: Android CI/CD
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build-and-release:
@@ -43,6 +45,12 @@ jobs:
         echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
         echo "APK_NAME=NatureTools-${TAG_NAME}.apk" >> $GITHUB_OUTPUT
 
+    - name: Run Tests
+      run: ./gradlew test
+
+    - name: Run Lint
+      run: ./gradlew lintDebug
+
     - name: Build with Gradle
       run: ./gradlew :app:assembleDebug
       env:
@@ -51,6 +59,12 @@ jobs:
 
     - name: Rename APK
       run: mv app/build/outputs/apk/debug/app-debug.apk ${{ steps.get_version.outputs.APK_NAME }}
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.get_version.outputs.TAG_NAME }}
+        path: ${{ steps.get_version.outputs.APK_NAME }}
 
     - name: Create Release
       if: github.event_name == 'push'
