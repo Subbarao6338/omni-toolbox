@@ -29,7 +29,7 @@ jobs:
         MINOR=$(grep 'minor=' version.properties | cut -d'=' -f2)
         PATCH=$(grep 'patch=' version.properties | cut -d'=' -f2)
         BUILD=$(grep 'build=' version.properties | cut -d'=' -f2)
-        VERSION="$MAJOR.$MINOR.$PATCH"
+        VERSION="$MAJOR.$MINOR.$PATCH.$BUILD"
         SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
 
         if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
