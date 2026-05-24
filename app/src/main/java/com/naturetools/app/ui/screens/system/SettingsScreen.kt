@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.naturetools.app.BuildConfig
 import com.naturetools.app.model.ToolProvider
 import com.naturetools.app.ui.components.ToolScreen
 import com.naturetools.app.ui.theme.AccentColors
@@ -222,7 +223,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text("Nature Tools", style = MaterialTheme.typography.bodyLarge)
-                    Text("Version 1.0.0 (Build 1)", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                    Text("Version ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
                 }
             }
         }
