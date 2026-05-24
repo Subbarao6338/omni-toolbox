@@ -20,60 +20,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-@Composable
-fun BmrCalculator() {
-    var weight by remember { mutableStateOf("70") }
-    var height by remember { mutableStateOf("175") }
-    var age by remember { mutableStateOf("25") }
-    var isMale by remember { mutableStateOf(true) }
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text("BMR Calculator (Mifflin-St Jeor)", style = MaterialTheme.typography.titleMedium)
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(value = weight, onValueChange = { weight = it }, label = { Text("Weight (kg)") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = height, onValueChange = { height = it }, label = { Text("Height (cm)") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = age, onValueChange = { age = it }, label = { Text("Age") }, modifier = Modifier.fillMaxWidth())
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            RadioButton(selected = isMale, onClick = { isMale = true })
-            Text("Male")
-            Spacer(modifier = Modifier.width(16.dp))
-            RadioButton(selected = !isMale, onClick = { isMale = false })
-            Text("Female")
-        }
-        val w = weight.toDoubleOrNull() ?: 0.0
-        val h = height.toDoubleOrNull() ?: 0.0
-        val a = age.toIntOrNull() ?: 0
-        val bmr = if (isMale) 10 * w + 6.25 * h - 5 * a + 5 else 10 * w + 6.25 * h - 5 * a - 161
-        Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
-            Text("BMR: ${bmr.toInt()} kcal/day", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
-        }
-    }
-}
-
-@Composable
-fun CalorieNeedsCalc() {
-    var bmrInput by remember { mutableStateOf("1600") }
-    val bmr = bmrInput.toDoubleOrNull() ?: 0.0
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Calorie Needs Estimation", style = MaterialTheme.typography.titleMedium)
-        OutlinedTextField(value = bmrInput, onValueChange = { bmrInput = it }, label = { Text("BMR (kcal)") }, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(8.dp))
-        val levels = listOf(
-            "Sedentary" to 1.2,
-            "Lightly Active" to 1.375,
-            "Moderately Active" to 1.55,
-            "Very Active" to 1.725,
-            "Extra Active" to 1.9
-        )
-        levels.forEach { (label, multiplier) ->
-            ListItem(
-                headlineContent = { Text(label) },
-                trailingContent = { Text("${(bmr * multiplier).toInt()} kcal") },
-                supportingContent = { Text("Multiplier: $multiplier") }
-            )
-        }
-    }
-}
 
 @Composable
 fun SleepCycleCalculator() {
@@ -121,19 +67,36 @@ fun PanchangamTool() {
     var selectedNakshatra by remember { mutableStateOf("Ashwini") }
 
     val panchangamData = remember(dateStr, timeStr, selectedTab, selectedRaashi, selectedNakshatra) {
-        com.naturetools.app.utils.PanchangamDetails(
-            samvatsaram = "Placeholder Year (సంవత్సరం)",
-            ayana = "Placeholder Ayana",
-            rutu = "Placeholder Rutu",
-            maasam = "Placeholder Maasam (మాసం)",
-            paksha = "Placeholder Paksham",
-            tithi = "Placeholder Tithi (తిథి)",
-            nakshatram = "Placeholder Nakshatram (నక్షత్రం)",
-            raashi = if (selectedTab == 0) "Placeholder Raashi (రాశి)" else "$selectedRaashi (రాశి)",
-            luckyNumber = "1, 5, 9",
-            luckyColor = "Placeholder Color",
-            luckyDay = "Placeholder Day"
-        )
+        if (selectedTab == 0) {
+            try {
+                val date = LocalDate.parse(dateStr)
+                // Basic time parsing: assume HH:MM AM/PM
+                val timeParts = timeStr.split(" ")
+                val hms = timeParts[0].split(":")
+                var hour = hms[0].toInt()
+                val minute = hms[1].toInt()
+                if (timeParts.size > 1 && timeParts[1].equals("PM", ignoreCase = true) && hour < 12) hour += 12
+                if (timeParts.size > 1 && timeParts[1].equals("AM", ignoreCase = true) && hour == 12) hour = 0
+
+                PanchangamLogic.getPanchangam(LocalDateTime.of(date, LocalTime.of(hour, minute)))
+            } catch (e: Exception) {
+                PanchangamLogic.getPanchangam(LocalDateTime.now())
+            }
+        } else {
+            com.naturetools.app.utils.PanchangamDetails(
+                samvatsaram = "Krodhi (తెలుగు సంవత్సరం)",
+                ayana = "Uttarayana",
+                rutu = "Vasanta",
+                maasam = "Chaitra (మాసం)",
+                paksha = "Shukla Paksha",
+                tithi = "Padyami (తిథి)",
+                nakshatram = "$selectedNakshatra (నక్షత్రం)",
+                raashi = "$selectedRaashi (రాశి)",
+                luckyNumber = PanchangamLogic.getLuckyNumber(selectedRaashi),
+                luckyColor = PanchangamLogic.getLuckyColor(selectedRaashi),
+                luckyDay = PanchangamLogic.getLuckyDay(selectedRaashi)
+            )
+        }
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -321,8 +284,6 @@ fun HealthScreen(navController: NavHostController, title: String) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Text("Focus on your breath and stand tall.", style = MaterialTheme.typography.bodyMedium)
                 }
-                "BMR Calculator" -> BmrCalculator()
-                "Calorie needs", "Calorie Calc" -> CalorieNeedsCalc()
                 "Sleep Cycle", "Sleep Cycle calculator" -> SleepCycleCalculator()
                 "Panchangam" -> PanchangamTool()
                 else -> {

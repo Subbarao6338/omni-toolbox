@@ -1,6 +1,8 @@
 package com.naturetools.app.ui.screens.calculation
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,7 +28,7 @@ fun CalorieCalculatorScreen(navController: NavHostController) {
         onBack = { navController.popBackStack() }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -80,6 +82,22 @@ fun CalorieCalculatorScreen(navController: NavHostController) {
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
+            }
+
+            Text("Calorie Needs Estimation", style = MaterialTheme.typography.titleMedium)
+            val levels = listOf(
+                "Sedentary" to 1.2,
+                "Lightly Active" to 1.375,
+                "Moderately Active" to 1.55,
+                "Very Active" to 1.725,
+                "Extra Active" to 1.9
+            )
+            levels.forEach { (label, multiplier) ->
+                ListItem(
+                    headlineContent = { Text(label) },
+                    trailingContent = { Text("${(bmr * multiplier).toInt()} kcal") },
+                    supportingContent = { Text("Multiplier: $multiplier") }
+                )
             }
         }
     }
