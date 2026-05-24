@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
 import android.os.Build
+import com.naturetools.app.BuildConfig
 
 @Composable
 fun AppInfoScreen(navController: NavHostController) {
@@ -20,6 +21,8 @@ fun AppInfoScreen(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp).verticalScroll(rememberScrollState())
         ) {
+            InfoRow("App Version", BuildConfig.VERSION_NAME)
+            InfoRow("Build Number", BuildConfig.VERSION_CODE.toString())
             InfoRow("OS Version", Build.VERSION.RELEASE)
             InfoRow("SDK Int", Build.VERSION.SDK_INT.toString())
             InfoRow("Manufacturer", Build.MANUFACTURER)
