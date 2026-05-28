@@ -19,7 +19,7 @@ fun TileService.startActivityAndCollapseCompat(intent: Intent) {
         )
         startActivityAndCollapse(pendingIntent)
     } else {
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION", "StartActivityAndCollapseDeprecated")
         startActivityAndCollapse(intent)
     }
 }
