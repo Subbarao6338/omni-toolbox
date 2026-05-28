@@ -4,6 +4,7 @@ import android.content.Intent
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class BatteryTileService : TileService() {
     override fun onStartListening() {
@@ -25,6 +26,6 @@ class BatteryTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra("route", "battery")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

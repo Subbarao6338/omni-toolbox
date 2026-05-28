@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class MetronomeTileService : TileService() {
     override fun onClick() {
@@ -10,6 +11,6 @@ class MetronomeTileService : TileService() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             data = android.net.Uri.parse("naturetools://metronome")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

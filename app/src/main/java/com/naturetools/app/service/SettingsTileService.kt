@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class SettingsTileService : TileService() {
     override fun onClick() {
@@ -11,6 +12,6 @@ class SettingsTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra("route", "settings")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

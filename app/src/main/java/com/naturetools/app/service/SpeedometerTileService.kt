@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class SpeedometerTileService : TileService() {
     override fun onClick() {
@@ -10,6 +11,6 @@ class SpeedometerTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra("route", "speedometer")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

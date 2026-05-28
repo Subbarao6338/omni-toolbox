@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class AltimeterTileService : TileService() {
     override fun onClick() {
@@ -10,6 +11,6 @@ class AltimeterTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra("route", "altimeter")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

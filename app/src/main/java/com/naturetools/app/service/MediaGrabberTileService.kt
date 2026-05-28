@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.net.Uri
 import android.service.quicksettings.TileService
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class MediaGrabberTileService : TileService() {
     override fun onClick() {
@@ -11,6 +12,6 @@ class MediaGrabberTileService : TileService() {
             data = Uri.parse("naturetools://media_grabber")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

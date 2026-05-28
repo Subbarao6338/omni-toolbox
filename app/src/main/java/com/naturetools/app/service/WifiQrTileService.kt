@@ -3,6 +3,7 @@ package com.naturetools.app.service
 import android.content.Intent
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class WifiQrTileService : TileService() {
     override fun onClick() {
@@ -12,14 +13,6 @@ class WifiQrTileService : TileService() {
             putExtra("route", "wifi_qr")
         }
 
-        // Use standard approach for newer Android versions
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            // Activity launching from tiles is restricted in A14+ without specific handling
-            // but for a simple tool, standard startActivity normally works if called correctly
-            startActivityAndCollapse(intent)
-        } else {
-            @Suppress("DEPRECATION")
-            startActivityAndCollapse(intent)
-        }
+        startActivityAndCollapseCompat(intent)
     }
 }
