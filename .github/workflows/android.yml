@@ -1,80 +1,172 @@
-name: Android CI/CD
+name: Android CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+      pull-requests: read
+
+    env:
+      RETENTION_DAYS: 5
+
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-    - name: set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Setup JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Get Version Information
+        id: get_version
+        shell: bash
+        run: |
+          VERSION_CODE=${GITHUB_RUN_NUMBER}
 
-    - name: Get Version
-      id: get_version
-      run: |
-        MAJOR=$(grep 'major=' version.properties | cut -d'=' -f2)
-        MINOR=$(grep 'minor=' version.properties | cut -d'=' -f2)
-        PATCH=$(grep 'patch=' version.properties | cut -d'=' -f2)
-        BUILD=$(grep 'build=' version.properties | cut -d'=' -f2)
-        VERSION="$MAJOR.$MINOR.$PATCH.$BUILD"
-        SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          MAJOR=1
+          MINOR=$(( VERSION_CODE / 10 ))
+          PATCH=$(( VERSION_CODE % 10 ))
 
-        if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-        else
-          TAG_NAME="v${VERSION}-b${{ github.run_number }}-${SHORT_SHA}"
-        fi
+          VERSION_NAME="${MAJOR}.${MINOR}.${PATCH}"
 
-        echo "VERSION_NAME=$VERSION" >> $GITHUB_OUTPUT
-        echo "VERSION_CODE=$BUILD" >> $GITHUB_OUTPUT
-        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
-        echo "APK_NAME=NatureTools-${TAG_NAME}.apk" >> $GITHUB_OUTPUT
+          TAG_NAME="v${VERSION_NAME}"
 
-    - name: Run Tests
-      run: ./gradlew test
+          BUILD_TYPE="debug"
 
-    - name: Run Lint
-      run: ./gradlew lintDebug
+          APK_PATH="app/build/outputs/apk/${BUILD_TYPE}/app-${BUILD_TYPE}.apk"
+          APK_NAME="NatureTools-${TAG_NAME}.apk"
 
-    - name: Build with Gradle
-      run: ./gradlew :app:assembleDebug
-      env:
-        APP_VERSION_NAME: ${{ steps.get_version.outputs.VERSION_NAME }}
-        APP_VERSION_CODE: ${{ steps.get_version.outputs.VERSION_CODE }}
+          echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_OUTPUT
+          echo "VERSION_CODE=${VERSION_CODE}" >> $GITHUB_OUTPUT
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
+          echo "BUILD_TYPE=${BUILD_TYPE}" >> $GITHUB_OUTPUT
+          echo "APK_PATH=${APK_PATH}" >> $GITHUB_OUTPUT
+          echo "APK_NAME=${APK_NAME}" >> $GITHUB_OUTPUT
 
-    - name: Rename APK
-      run: mv app/build/outputs/apk/debug/app-debug.apk ${{ steps.get_version.outputs.APK_NAME }}
+          echo "VERSION_NAME=${VERSION_NAME}"
+          echo "VERSION_CODE=${VERSION_CODE}"
+          echo "TAG_NAME=${TAG_NAME}"
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ steps.get_version.outputs.TAG_NAME }}
-        path: ${{ steps.get_version.outputs.APK_NAME }}
+      - name: Setup Debug Keystore
+        shell: bash
+        run: |
+          KEYSTORE_PATH="app/debug.keystore"
 
-    - name: Create Release
-      if: github.event_name == 'push'
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ steps.get_version.outputs.TAG_NAME }}
-        name: Release ${{ steps.get_version.outputs.TAG_NAME }}
-        files: ${{ steps.get_version.outputs.APK_NAME }}
-        prerelease: false
-        make_latest: true
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          if [ -n "${{ secrets.ANDROID_DEBUG_KEYSTORE_B64 }}" ]; then
+            echo "Using keystore from GitHub Secrets"
+            echo "${{ secrets.ANDROID_DEBUG_KEYSTORE_B64 }}" | base64 -d > ${KEYSTORE_PATH}
+          else
+            echo "Generating temporary debug keystore"
+
+            keytool -genkey -v \
+              -keystore ${KEYSTORE_PATH} \
+              -alias androiddebugkey \
+              -keypass android \
+              -storepass android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US"
+          fi
+
+      - name: Grant Execute Permission
+        run: chmod +x gradlew
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-reports-${{ steps.get_version.outputs.TAG_NAME }}
+          path: app/build/reports/tests/
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Upload Lint Reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: lint-reports-${{ steps.get_version.outputs.TAG_NAME }}
+          path: app/build/reports/lint-results-debug.html
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Build APK
+        env:
+          APP_VERSION_NAME: ${{ steps.get_version.outputs.VERSION_NAME }}
+          APP_VERSION_CODE: ${{ steps.get_version.outputs.VERSION_CODE }}
+        run: |
+          ./gradlew assembleDebug
+
+      - name: Prepare APK
+        run: |
+          cp "${{ steps.get_version.outputs.APK_PATH }}" \
+             "${{ steps.get_version.outputs.APK_NAME }}"
+
+      - name: Verify APK Exists
+        run: |
+          test -f "${{ steps.get_version.outputs.APK_NAME }}"
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ steps.get_version.outputs.APK_NAME }}
+          path: ${{ steps.get_version.outputs.APK_NAME }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create Git Tag
+        run: |
+          git tag ${{ steps.get_version.outputs.TAG_NAME }}
+          git push origin ${{ steps.get_version.outputs.TAG_NAME }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.get_version.outputs.TAG_NAME }}
+          name: Nature Tools ${{ steps.get_version.outputs.TAG_NAME }}
+
+          body: |
+            🚀 Automated Android Build
+
+            Version Name: ${{ steps.get_version.outputs.VERSION_NAME }}
+            Version Code: ${{ steps.get_version.outputs.VERSION_CODE }}
+
+            Release Tag:
+            ${{ steps.get_version.outputs.TAG_NAME }}
+
+          files: |
+            ${{ steps.get_version.outputs.APK_NAME }}
+
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          overwrite_files: true
+          target_commitish: ${{ github.sha }}
+          fail_on_unmatched_files: true
