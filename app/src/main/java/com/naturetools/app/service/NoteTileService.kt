@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class NoteTileService : TileService() {
     override fun onClick() {
@@ -11,6 +12,6 @@ class NoteTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             data = Uri.parse("naturetools://note")
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 }

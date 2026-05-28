@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.service.quicksettings.TileService
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 open class DynamicTileService(private val tileIndex: Int) : TileService() {
     override fun onClick() {
@@ -16,7 +17,7 @@ open class DynamicTileService(private val tileIndex: Int) : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         unlockAndRun {
-            startActivityAndCollapse(intent)
+            startActivityAndCollapseCompat(intent)
         }
     }
 

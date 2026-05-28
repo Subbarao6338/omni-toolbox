@@ -22,7 +22,7 @@ jobs:
       pull-requests: read
 
     env:
-      RETENTION_DAYS: 5
+      RETENTION_DAYS: 1
 
     steps:
       - name: Checkout Repository
@@ -95,22 +95,6 @@ jobs:
 
       - name: Run Lint
         run: ./gradlew lintDebug
-
-      - name: Upload Test Reports
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: test-reports-${{ steps.get_version.outputs.TAG_NAME }}
-          path: app/build/reports/tests/
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-      - name: Upload Lint Reports
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: lint-reports-${{ steps.get_version.outputs.TAG_NAME }}
-          path: app/build/reports/lint-results-debug.html
-          retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Build APK
         env:

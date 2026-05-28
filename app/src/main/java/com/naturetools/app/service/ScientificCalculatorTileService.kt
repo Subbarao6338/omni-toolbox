@@ -4,6 +4,7 @@ import android.content.Intent
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.naturetools.app.MainActivity
+import com.naturetools.app.utils.startActivityAndCollapseCompat
 
 class ScientificCalculatorTileService : TileService() {
     override fun onClick() {
@@ -12,7 +13,7 @@ class ScientificCalculatorTileService : TileService() {
             putExtra("route", "sci_calc")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        startActivityAndCollapse(intent)
+        startActivityAndCollapseCompat(intent)
     }
 
     override fun onStartListening() {
