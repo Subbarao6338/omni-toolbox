@@ -29,6 +29,7 @@ import com.naturetools.app.ui.screens.calculation.*
 import com.naturetools.app.ui.screens.conversion.*
 import com.naturetools.app.ui.screens.developer.*
 import com.naturetools.app.ui.screens.health.*
+import com.naturetools.app.ui.screens.utility.PanchangamScreen
 import com.naturetools.app.ui.screens.image.*
 import com.naturetools.app.ui.screens.lifestyle.*
 import com.naturetools.app.ui.screens.media.*
@@ -232,7 +233,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "mortgage_calc" -> MortgageCalculatorScreen(navController)
         route == "sci_calc" -> ScientificCalculatorScreen(navController)
         route == "tiles_widgets" -> TilesAndWidgetsScreen(navController)
-        route == "panchangam" -> HealthScreen(navController, "Panchangam")
+        route == "panchangam" -> PanchangamScreen(navController)
+        route == "macro_splitter" -> MacroSplitterScreen(navController)
 
         listOf("unit_price", "unit_compare").contains(route) -> UnitPriceCalculatorScreen(navController)
         route == "base_conv" -> BaseConverterScreen(navController)
@@ -343,6 +345,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
             else if (tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
             else ImageToolScreen(navController, tool.name)
         }
+        category == "Health" -> HealthScreen(navController, tool.name)
         category == "Device" -> if (route == "smart_hub") SystemLabScreen(navController, tool.name) else SystemLabScreen(navController, tool.name)
         category == "Security" -> SystemLabScreen(navController, tool.name)
         category == "Weather" -> EnvironmentToolScreen(navController, tool.name)

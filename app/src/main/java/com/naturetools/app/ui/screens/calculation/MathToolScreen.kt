@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
-import com.naturetools.app.ui.screens.audio.AdjustmentSlider
+import com.naturetools.app.ui.components.AdjustmentSlider
 import java.util.*
 import kotlin.math.sqrt
 

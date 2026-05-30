@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.naturetools.app.ui.components.ToolScreen
-import com.naturetools.app.ui.screens.audio.AdjustmentSlider
+import com.naturetools.app.ui.components.AdjustmentSlider
 
 @Composable
 fun EnvironmentToolScreen(navController: NavHostController, title: String) {

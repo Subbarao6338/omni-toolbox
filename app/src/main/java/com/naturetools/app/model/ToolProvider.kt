@@ -121,7 +121,7 @@ object ToolProvider {
         // HEALTH
         Tool("Health & Vitality", Icons.Default.Favorite, "health_group", "Health", Color(0xFFE91E63),
             description = "Track your health and habits.",
-            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "posture_check", "sleep_tracker", "step_counter", "stretch_guide", "water", "water_reminder", "yoga_guide")),
+            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "macro_splitter", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "posture_check", "sleep_tracker", "step_counter", "stretch_guide", "water", "water_reminder", "yoga_guide")),
 
         // WEATHER
         Tool("Weather Center", Icons.Default.Cloud, "weather_group", "Weather", Color(0xFF03A9F4),
@@ -506,6 +506,7 @@ object ToolProvider {
         Tool("BMI Calc", Icons.Default.AccessibilityNew, "bmi", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("BMR Calculator", Icons.Default.Calculate, "bmr", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Calorie Calc", Icons.Default.Restaurant, "calorie_calc", "Health", isVisibleOnHome = false, isSubTool = true),
+        Tool("Macro Splitter", Icons.Default.Restaurant, "macro_splitter", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Eye Exercise", Icons.Default.Visibility, "eye_exercise", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Habit Tracker", Icons.Default.EventRepeat, "habit_tracker", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Medication Tracker", Icons.Default.MedicalServices, "medication_tracker", "Health", isVisibleOnHome = false, isSubTool = true),
