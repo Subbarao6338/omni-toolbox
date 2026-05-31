@@ -1,6 +1,6 @@
 package com.naturetools.app.ui.screens.image
 
-import com.naturetools.app.ui.screens.audio.AdjustmentSlider
+import com.naturetools.app.ui.components.AdjustmentSlider
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.naturetools.app.ui.components.AdjustmentSlider
 import kotlin.random.Random
 
 @Composable
@@ -268,30 +269,3 @@ fun WaveformVisualizer(isPlaying: Boolean) {
     }
 }
 
-@Composable
-fun AdjustmentSlider(
-    label: String,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    initialValue: Float = 0.5f,
-    onValueChange: (Float) -> Unit = {}
-) {
-    var value by remember { mutableFloatStateOf(initialValue) }
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(java.lang.String.format(java.util.Locale.US, "%.2f", value), style = MaterialTheme.typography.bodySmall)
-        }
-        Slider(
-            value = value,
-            onValueChange = {
-                value = it
-                onValueChange(it)
-            },
-            valueRange = valueRange
-        )
-        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-    }
-}
