@@ -50,7 +50,7 @@ object ToolProvider {
         // UTILITIES
         Tool("Daily Helpers", Icons.Default.Build, "util_group", "Utilities", Color(0xFF4CAF50),
             description = "Everyday utility tools.",
-            subToolRoutes = listOf("clock", "date_calc", "flashlight", "protractor", "qr_gen", "qr_scanner", "ruler", "stopwatch", "tiles_widgets", "vibration", "wifi_qr", "panchangam")),
+            subToolRoutes = listOf("clock", "date_calc", "flashlight", "protractor", "qr_gen", "qr_scanner", "ruler", "stopwatch", "tiles_widgets", "vibration", "wifi_qr", "panchangam", "zodiac")),
         Tool("Productivity", Icons.Default.Task, "prod_group", "Utilities", Color(0xFF3F51B5),
             description = "Stay organized and focused.",
             subToolRoutes = listOf("checklist", "daily_journal", "daily_quotes", "kanban", "note", "pomodoro", "task_board", "time_logger")),
@@ -72,7 +72,7 @@ object ToolProvider {
         // DEVICE
         Tool("System Monitor", Icons.Default.Dns, "system_group", "Device", Color(0xFF607D8B),
             description = "Monitor hardware and system status.",
-            subToolRoutes = listOf("app_info", "battery", "cpu_info", "device", "device_id", "process_manager", "storage", "system_lab", "update_check")),
+            subToolRoutes = listOf("app_info", "battery", "cpu_info", "ram_info", "device", "device_id", "process_manager", "storage", "system_lab", "update_check")),
         Tool("Sensors & Tools", Icons.Default.SettingsInputComponent, "sensor_group", "Device", Color(0xFF673AB7),
             description = "Access and test device sensors.",
             subToolRoutes = listOf("altimeter", "barometer", "compass", "gforce_meter", "level", "light", "metal", "sensor_data", "sensors_list", "spl_meter", "thermal_info")),
@@ -318,6 +318,7 @@ object ToolProvider {
         Tool("Note Pad", Icons.Default.NoteAlt, "note", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Ohm's Law", Icons.Default.ElectricalServices, "ohms_law", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Panchangam", Icons.Default.CalendarMonth, "panchangam", "Utilities", isVisibleOnHome = false, isSubTool = true),
+        Tool("Zodiac Finder", Icons.Default.AutoAwesome, "zodiac", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("PCB Trace Width", Icons.Default.Straighten, "pcb_trace", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Pomodoro", Icons.Default.HourglassEmpty, "pomodoro", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Protractor", Icons.Default.Architecture, "protractor", "Utilities", isVisibleOnHome = false, isSubTool = true),
@@ -366,6 +367,7 @@ object ToolProvider {
         Tool("Light Meter", Icons.Default.LightMode, "light", "Device", isVisibleOnHome = false, isSubTool = true),
         Tool("Metal Detector", Icons.Default.CompassCalibration, "metal", "Device", isVisibleOnHome = false, isSubTool = true),
         Tool("Process Manager", Icons.Default.Dns, "process_manager", "Device", isVisibleOnHome = false, isSubTool = true),
+        Tool("RAM Info", Icons.Default.Memory, "ram_info", "Device", isVisibleOnHome = false, isSubTool = true),
         Tool("Sensor Data", Icons.Default.SettingsInputComponent, "sensor_data", "Device", isVisibleOnHome = false, isSubTool = true),
         Tool("Sensors List", Icons.AutoMirrored.Filled.List, "sensors_list", "Device", isVisibleOnHome = false, isSubTool = true),
         Tool("SPL Meter", Icons.AutoMirrored.Filled.VolumeUp, "spl_meter", "Device", isVisibleOnHome = false, isSubTool = true),

@@ -81,7 +81,6 @@ fun MathToolScreen(navController: NavHostController, title: String) {
                         "Truth Table Gen" -> solveTruthTable(input1)
                         "Matrix Calc" -> solveMatrix(input1)
                         "Equation Solver" -> solveEquation(input1)
-                        "Prime Checker" -> solvePrime(input1)
                         else -> "Processing logic for $title coming soon. Your input: $input1"
                     }
                 },
@@ -263,18 +262,5 @@ fun solveEquation(input: String): String {
         }
     } catch (e: Exception) {
         "Invalid Input. Format: 1, -3, 2 (for x²-3x+2=0)"
-    }
-}
-
-fun solvePrime(input: String): String {
-    return try {
-        val n = input.toLong()
-        if (n < 2) return "$n is not prime."
-        for (i in 2..sqrt(n.toDouble()).toLong()) {
-            if (n % i == 0L) return "$n is not prime (divisible by $i)."
-        }
-        "$n is a prime number!"
-    } catch (e: Exception) {
-        "Invalid Input. Enter a whole number."
     }
 }

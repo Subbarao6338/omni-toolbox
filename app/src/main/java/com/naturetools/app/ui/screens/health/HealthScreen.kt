@@ -90,6 +90,19 @@ fun HealthScreen(navController: NavHostController, title: String) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Text("Focus on your breath and stand tall.", style = MaterialTheme.typography.bodyMedium)
                 }
+                "Period Tracker" -> {
+                    Text("Next period in 12 days", style = MaterialTheme.typography.titleMedium)
+                    Text("Cycle: 28 days (Average)", style = MaterialTheme.typography.bodyLarge)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text("Last period: Oct 1 - Oct 5")
+                }
+                "Medication Tracker" -> {
+                    Text("No medications scheduled for today", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Button(onClick = { /* Add medication */ }) {
+                        Text("Add Medication")
+                    }
+                }
                 "Sleep Cycle", "Sleep Cycle calculator" -> SleepCycleCalculator()
                 else -> {
                     Text("Health monitoring for $title")
