@@ -234,6 +234,9 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "sci_calc" -> ScientificCalculatorScreen(navController)
         route == "tiles_widgets" -> TilesAndWidgetsScreen(navController)
         route == "panchangam" -> PanchangamScreen(navController)
+        route == "ruler" -> RulerScreen(navController)
+        route == "protractor" -> ProtractorScreen(navController)
+        route == "zodiac" -> ZodiacFinderScreen(navController)
         route == "macro_splitter" -> MacroSplitterScreen(navController)
 
         listOf("unit_price", "unit_compare").contains(route) -> UnitPriceCalculatorScreen(navController)
@@ -241,6 +244,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         listOf("converter", "torque_conv").contains(route) -> UnitConverterScreen(navController)
 
         route == "battery" -> BatteryScreen(navController)
+        route == "ram_info" -> RamInfoScreen(navController)
         route == "cpu_info" -> CpuInfoScreen(navController)
         route == "device" -> DeviceScreen(navController)
         route == "storage" -> StorageScreen(navController)
