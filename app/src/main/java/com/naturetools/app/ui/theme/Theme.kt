@@ -17,29 +17,31 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = LeafGreen,
-    secondary = EarthBrown,
-    tertiary = SkyBlue,
-    background = ForestNight,
-    surface = DeepBark,
-    onPrimary = NatureWhite,
-    onSecondary = NatureWhite,
-    onTertiary = NatureWhite,
-    onBackground = NatureWhite,
-    onSurface = NatureWhite
+    primary = NeonMint,
+    secondary = SlateDark,
+    tertiary = CarbonGray,
+    background = SlateDark,
+    surface = CarbonGray,
+    onPrimary = Color.Black,
+    onSecondary = SoftWhite,
+    onTertiary = SoftWhite,
+    onBackground = SoftWhite,
+    onSurface = SoftWhite,
+    outline = NeonMint.copy(alpha = 0.5f)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = LeafGreen,
-    secondary = EarthBrown,
-    tertiary = SkyBlue,
-    background = NatureWhite,
-    surface = NatureWhite,
-    onPrimary = NatureWhite,
-    onSecondary = NatureWhite,
-    onTertiary = NatureWhite,
-    onBackground = EarthBrown,
-    onSurface = EarthBrown
+    primary = NeonMint,
+    secondary = CarbonGray,
+    tertiary = SoftWhite,
+    background = SoftWhite,
+    surface = Color.White,
+    onPrimary = Color.Black,
+    onSecondary = Color.Black,
+    onTertiary = Color.Black,
+    onBackground = CarbonGray,
+    onSurface = CarbonGray,
+    outline = CarbonGray.copy(alpha = 0.5f)
 )
 
 @Composable
