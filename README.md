@@ -1,6 +1,6 @@
-# Nature Tools
+# Omni Toolbox
 
-Nature Tools is a comprehensive, offline-first utility application built with Jetpack Compose and Material 3. It provides a wide range of tools for everyday tasks, calculations, and sensor-based measurements.
+Omni Toolbox is a comprehensive, offline-first utility application built with Jetpack Compose and Material 3. It provides a wide range of tools for everyday tasks, calculations, and sensor-based measurements.
 
 ## Features
 
