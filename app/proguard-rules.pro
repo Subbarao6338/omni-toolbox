@@ -8,5 +8,5 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep rules here:
--keep class com.naturetools.app.model.** { *; }
--keep class com.naturetools.app.data.local.** { *; }
+-keep class omni.toolbox.model.** { *; }
+-keep class omni.toolbox.data.local.** { *; }

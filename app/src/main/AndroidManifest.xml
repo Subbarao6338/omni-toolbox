@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
-            android:name=".MainActivity"
+            android:name="omni.toolbox.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Material.Light.NoActionBar">
@@ -36,7 +36,7 @@
         </activity>
 
         <receiver
-            android:name=".widget.DigitalClockWidgetReceiver"
+            android:name="omni.toolbox.widget.DigitalClockWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -47,7 +47,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.AnalogueClockWidgetReceiver"
+            android:name="omni.toolbox.widget.AnalogueClockWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -58,7 +58,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.DateTimeWidgetReceiver"
+            android:name="omni.toolbox.widget.DateTimeWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -69,7 +69,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.BatteryWidgetReceiver"
+            android:name="omni.toolbox.widget.BatteryWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -80,7 +80,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.FlashlightWidgetReceiver"
+            android:name="omni.toolbox.widget.FlashlightWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -91,7 +91,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.QuickNoteWidgetReceiver"
+            android:name="omni.toolbox.widget.QuickNoteWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -102,7 +102,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.StorageWidgetReceiver"
+            android:name="omni.toolbox.widget.StorageWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -113,7 +113,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.CompassWidgetReceiver"
+            android:name="omni.toolbox.widget.CompassWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -124,7 +124,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.StopwatchWidgetReceiver"
+            android:name="omni.toolbox.widget.StopwatchWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -135,7 +135,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.CalculatorWidgetReceiver"
+            android:name="omni.toolbox.widget.CalculatorWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -146,7 +146,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.UnitConverterWidgetReceiver"
+            android:name="omni.toolbox.widget.UnitConverterWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -157,7 +157,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.BmiWidgetReceiver"
+            android:name="omni.toolbox.widget.BmiWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -168,7 +168,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.PomodoroWidgetReceiver"
+            android:name="omni.toolbox.widget.PomodoroWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -179,7 +179,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.WorldClockWidgetReceiver"
+            android:name="omni.toolbox.widget.WorldClockWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -190,7 +190,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.CurrencyConverterWidgetReceiver"
+            android:name="omni.toolbox.widget.CurrencyConverterWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -201,7 +201,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.TaskWidgetReceiver"
+            android:name="omni.toolbox.widget.TaskWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -212,7 +212,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.AltimeterWidgetReceiver"
+            android:name="omni.toolbox.widget.AltimeterWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -223,7 +223,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.LightMeterWidgetReceiver"
+            android:name="omni.toolbox.widget.LightMeterWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -234,7 +234,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.RecentToolsWidgetReceiver"
+            android:name="omni.toolbox.widget.RecentToolsWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -245,7 +245,7 @@
         </receiver>
 
         <receiver
-            android:name=".widget.SystemMonitorWidgetReceiver"
+            android:name="omni.toolbox.widget.SystemMonitorWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -256,7 +256,7 @@
         </receiver>
 
         <service
-            android:name=".service.FlashlightTileService"
+            android:name="omni.toolbox.service.FlashlightTileService"
             android:exported="true"
             android:label="Flashlight"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -266,7 +266,7 @@
         </service>
 
         <service
-            android:name=".service.DynamicTileService1"
+            android:name="omni.toolbox.service.DynamicTileService1"
             android:exported="true"
             android:label="Custom Tile 1"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -276,7 +276,7 @@
         </service>
 
         <service
-            android:name=".service.DynamicTileService2"
+            android:name="omni.toolbox.service.DynamicTileService2"
             android:exported="true"
             android:label="Custom Tile 2"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -286,7 +286,7 @@
         </service>
 
         <service
-            android:name=".service.DynamicTileService3"
+            android:name="omni.toolbox.service.DynamicTileService3"
             android:exported="true"
             android:label="Custom Tile 3"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -296,7 +296,7 @@
         </service>
 
         <service
-            android:name=".service.SosTileService"
+            android:name="omni.toolbox.service.SosTileService"
             android:exported="true"
             android:label="Emergency SOS"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -306,7 +306,7 @@
         </service>
 
         <service
-            android:name=".service.MediaGrabberTileService"
+            android:name="omni.toolbox.service.MediaGrabberTileService"
             android:exported="true"
             android:label="Media Grabber"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -316,7 +316,7 @@
         </service>
 
         <service
-            android:name=".service.QrScannerTileService"
+            android:name="omni.toolbox.service.QrScannerTileService"
             android:exported="true"
             android:label="QR Scanner"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -326,7 +326,7 @@
         </service>
 
         <service
-            android:name=".service.UnitConverterTileService"
+            android:name="omni.toolbox.service.UnitConverterTileService"
             android:exported="true"
             android:label="Unit Converter"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -336,7 +336,7 @@
         </service>
 
         <service
-            android:name=".service.StopwatchTileService"
+            android:name="omni.toolbox.service.StopwatchTileService"
             android:exported="true"
             android:label="Stopwatch"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -346,7 +346,7 @@
         </service>
 
         <service
-            android:name=".service.MetronomeTileService"
+            android:name="omni.toolbox.service.MetronomeTileService"
             android:exported="true"
             android:label="Metronome"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -356,7 +356,7 @@
         </service>
 
         <service
-            android:name=".service.CompassTileService"
+            android:name="omni.toolbox.service.CompassTileService"
             android:exported="true"
             android:label="Compass"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -366,7 +366,7 @@
         </service>
 
         <service
-            android:name=".service.CalculatorTileService"
+            android:name="omni.toolbox.service.CalculatorTileService"
             android:exported="true"
             android:label="Calculator"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -376,7 +376,7 @@
         </service>
 
         <service
-            android:name=".service.HubTileService"
+            android:name="omni.toolbox.service.HubTileService"
             android:exported="true"
             android:label="Nature Hub"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -386,7 +386,7 @@
         </service>
 
         <service
-            android:name=".service.NoteTileService"
+            android:name="omni.toolbox.service.NoteTileService"
             android:exported="true"
             android:label="Quick Note"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -396,7 +396,7 @@
         </service>
 
         <service
-            android:name=".service.SettingsTileService"
+            android:name="omni.toolbox.service.SettingsTileService"
             android:exported="true"
             android:label="App Settings"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -406,7 +406,7 @@
         </service>
 
         <service
-            android:name=".service.BatteryTileService"
+            android:name="omni.toolbox.service.BatteryTileService"
             android:exported="true"
             android:label="Battery Level"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -416,7 +416,7 @@
         </service>
 
         <service
-            android:name=".service.SpeedometerTileService"
+            android:name="omni.toolbox.service.SpeedometerTileService"
             android:exported="true"
             android:label="Speedometer"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -426,7 +426,7 @@
         </service>
 
         <service
-            android:name=".service.OhmsLawTileService"
+            android:name="omni.toolbox.service.OhmsLawTileService"
             android:exported="true"
             android:label="Ohm's Law"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -436,7 +436,7 @@
         </service>
 
         <service
-            android:name=".service.ScientificCalculatorTileService"
+            android:name="omni.toolbox.service.ScientificCalculatorTileService"
             android:exported="true"
             android:label="Scientific Calc"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -446,7 +446,7 @@
         </service>
 
         <service
-            android:name=".service.AltimeterTileService"
+            android:name="omni.toolbox.service.AltimeterTileService"
             android:exported="true"
             android:label="Altimeter"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -456,7 +456,7 @@
         </service>
 
         <service
-            android:name=".service.LightMeterTileService"
+            android:name="omni.toolbox.service.LightMeterTileService"
             android:exported="true"
             android:label="Light Meter"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -466,7 +466,7 @@
         </service>
 
         <service
-            android:name=".service.WifiQrTileService"
+            android:name="omni.toolbox.service.WifiQrTileService"
             android:exported="true"
             android:label="Wifi QR"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

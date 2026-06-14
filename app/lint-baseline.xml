@@ -7,7 +7,7 @@
         errorLine1="                Text(text = String.format(&quot;%.1f m&quot;, altitude), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.Bold, fontSize = 64.sp), color = MaterialTheme.colorScheme.primary)"
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/sensor/AltimeterScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/sensor/AltimeterScreen.kt"
             line="57"
             column="29"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="                            Text(String.format(&quot;%.2f hPa&quot;, pressure), fontWeight = FontWeight.Bold)"
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/sensor/AltimeterScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/sensor/AltimeterScreen.kt"
             line="64"
             column="34"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="                Column(modifier = Modifier.padding(16.dp)) { Text(&quot;Result: ${String.format(&quot;%.4f&quot;, result)}&quot;, style = MaterialTheme.typography.headlineMedium) }"
         errorLine2="                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/calculation/AreaCalcScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/calculation/AreaCalcScreen.kt"
             line="33"
             column="78"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="                Text(text = String.format(&quot;%.2f&quot;, pressure), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.Bold, fontSize = 80.sp), color = MaterialTheme.colorScheme.primary)"
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/sensor/BarometerScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/sensor/BarometerScreen.kt"
             line="55"
             column="29"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="                            Text(String.format(&quot;%.2f inHg&quot;, pressure * 0.02953f), fontWeight = FontWeight.Bold)"
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/sensor/BarometerScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/sensor/BarometerScreen.kt"
             line="62"
             column="34"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="            Text(&quot;Beat: ${String.format(&quot;%.1f&quot;, beatFreq)} Hz&quot;, fontWeight = FontWeight.Bold)"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/audio/BinauralBeatsScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/audio/BinauralBeatsScreen.kt"
             line="70"
             column="27"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="        r >= 1_000_000 -> String.format(&quot;%.1f M&quot;, r / 1_000_000)"
         errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="102"
             column="27"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="        r >= 1_000 -> String.format(&quot;%.1f k&quot;, r / 1_000)"
         errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="103"
             column="23"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="        Text(&quot;Wavelength: ${String.format(&quot;%.4f&quot;, waveLength)} m&quot;)"
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="167"
             column="29"/>
     </issue>
@@ -106,7 +106,7 @@
         errorLine1="        Text(&quot;Half-wave Dipole: ${String.format(&quot;%.2f&quot;, halfWave)} mm&quot;)"
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="168"
             column="35"/>
     </issue>
@@ -117,7 +117,7 @@
         errorLine1="        Text(&quot;Quarter-wave Monopole: ${String.format(&quot;%.2f&quot;, quarterWave)} mm&quot;)"
         errorLine2="                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="169"
             column="40"/>
     </issue>
@@ -128,7 +128,7 @@
         errorLine1="        Text(&quot;Required Trace Area: ${String.format(&quot;%.4f&quot;, area)} mil²&quot;)"
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="187"
             column="38"/>
     </issue>
@@ -139,7 +139,7 @@
         errorLine1="        Text(&quot;Trace Width (1oz Cu): ${String.format(&quot;%.2f&quot;, width)} mils&quot;)"
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="188"
             column="39"/>
     </issue>
@@ -150,7 +150,7 @@
         errorLine1="        Text(&quot;Force (F = ma): ${String.format(&quot;%.2f&quot;, m * a)} Newtons&quot;, style = MaterialTheme.typography.headlineSmall)"
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="203"
             column="33"/>
     </issue>
@@ -161,7 +161,7 @@
         errorLine1="                Text(&quot;${String.format(&quot;%.2f&quot;, r)} Ω&quot;, style = MaterialTheme.typography.headlineMedium)"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="295"
             column="25"/>
     </issue>
@@ -172,7 +172,7 @@
         errorLine1="        &quot;Count: ${nums.size}\nSum: $sum\nMean: $mean\nMedian: $median\nStdDev: ${String.format(&quot;%.4f&quot;, stdDev)}\nMin: ${sorted.first()}\nMax: ${sorted.last()}&quot;"
         errorLine2="                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/calculation/MathToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/calculation/MathToolScreen.kt"
             line="150"
             column="82"/>
     </issue>
@@ -183,7 +183,7 @@
         errorLine1="                text = String.format(&quot;%02d:%02d&quot;, minutes, seconds),"
         errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/lifestyle/MeditationTimerScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/lifestyle/MeditationTimerScreen.kt"
             line="72"
             column="24"/>
     </issue>
@@ -194,7 +194,7 @@
         errorLine1="    return String.format(&quot;%.1f&quot;, ev)"
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/photography/PhotographyToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/photography/PhotographyToolScreen.kt"
             line="60"
             column="12"/>
     </issue>
@@ -205,7 +205,7 @@
         errorLine1="    val timeDisplay = String.format(&quot;%02d:%02d&quot;, minutes, seconds)"
         errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/productivity/PomodoroScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/productivity/PomodoroScreen.kt"
             line="36"
             column="23"/>
     </issue>
@@ -216,7 +216,7 @@
         errorLine1="                text = String.format(&quot;%.1f&quot;, dbLevel),"
         errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/sensor/SplMeterScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/sensor/SplMeterScreen.kt"
             line="45"
             column="24"/>
     </issue>
@@ -227,7 +227,7 @@
         errorLine1="                        Text(&quot;$${java.lang.String.format(&quot;%.2f&quot;, totalExpenses)}&quot;, style = MaterialTheme.typography.titleLarge)"
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/productivity/TravelBudgetScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/productivity/TravelBudgetScreen.kt"
             line="59"
             column="34"/>
     </issue>
@@ -238,7 +238,7 @@
         errorLine1="                        Text(&quot;$${java.lang.String.format(&quot;%.2f&quot;, remaining)}&quot;, style = MaterialTheme.typography.titleLarge, color = if (remaining &lt; 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)"
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/productivity/TravelBudgetScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/productivity/TravelBudgetScreen.kt"
             line="63"
             column="34"/>
     </issue>
@@ -249,7 +249,7 @@
         errorLine1="                        trailingContent = { Text(&quot;$${java.lang.String.format(&quot;%.2f&quot;, expense.amount)}&quot;) },"
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/productivity/TravelBudgetScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/productivity/TravelBudgetScreen.kt"
             line="104"
             column="54"/>
     </issue>
@@ -260,7 +260,7 @@
         errorLine1="                            text = &quot;${bestValue.name} is ${java.lang.String.format(&quot;%.1f&quot;, savings)}% cheaper per unit!&quot;,"
         errorLine2="                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/calculation/UnitPriceCalculatorScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/calculation/UnitPriceCalculatorScreen.kt"
             line="95"
             column="60"/>
     </issue>
@@ -271,7 +271,7 @@
         errorLine1="                &quot;Unit Price: $${java.lang.String.format(&quot;%.4f&quot;, unitPrice)}&quot;,"
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/calculation/UnitPriceCalculatorScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/calculation/UnitPriceCalculatorScreen.kt"
             line="158"
             column="33"/>
     </issue>
@@ -282,7 +282,7 @@
         errorLine1="                Column(modifier = Modifier.padding(16.dp)) { Text(&quot;Result: ${String.format(&quot;%.4f&quot;, result)}&quot;, style = MaterialTheme.typography.headlineMedium) }"
         errorLine2="                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/calculation/VolumeCalcScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/calculation/VolumeCalcScreen.kt"
             line="33"
             column="78"/>
     </issue>
@@ -293,7 +293,7 @@
         errorLine1="import android.media.ExifInterface"
         errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/image/ExifViewerScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/image/ExifViewerScreen.kt"
             line="3"
             column="8"/>
     </issue>
@@ -546,7 +546,7 @@
         errorLine1="                settings.javaScriptEnabled = true"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/developer/MarkdownPreviewScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/developer/MarkdownPreviewScreen.kt"
             line="96"
             column="17"/>
     </issue>
@@ -557,7 +557,7 @@
         errorLine1="                        settings.javaScriptEnabled = true"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/media/MediaGrabberScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/media/MediaGrabberScreen.kt"
             line="195"
             column="25"/>
     </issue>
@@ -568,7 +568,7 @@
         errorLine1="                        settings.javaScriptEnabled = true"
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/utility/MetaTagScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/utility/MetaTagScreen.kt"
             line="87"
             column="25"/>
     </issue>
@@ -579,7 +579,7 @@
         errorLine1="                                    javaScriptEnabled = true"
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/utility/WebToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/utility/WebToolScreen.kt"
             line="369"
             column="37"/>
     </issue>
@@ -590,7 +590,7 @@
         errorLine1="    var band1 by remember { mutableStateOf(0) }"
         errorLine2="                            ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="63"
             column="29"/>
     </issue>
@@ -601,7 +601,7 @@
         errorLine1="    var band2 by remember { mutableStateOf(0) }"
         errorLine2="                            ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="64"
             column="29"/>
     </issue>
@@ -612,7 +612,7 @@
         errorLine1="    var multiplier by remember { mutableStateOf(1) }"
         errorLine2="                                 ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/engineering/EngineeringToolScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/engineering/EngineeringToolScreen.kt"
             line="65"
             column="34"/>
     </issue>
@@ -623,7 +623,7 @@
         errorLine1="    var seed by remember { mutableStateOf(0L) }"
         errorLine2="                           ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/ai/ImageGeneratorScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/ai/ImageGeneratorScreen.kt"
             line="22"
             column="28"/>
     </issue>
@@ -634,7 +634,7 @@
         errorLine1="    var steps by remember { mutableStateOf(0f) }"
         errorLine2="                            ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/health/StepCounterScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/health/StepCounterScreen.kt"
             line="23"
             column="29"/>
     </issue>
@@ -645,7 +645,7 @@
         errorLine1="    var initialSteps by remember { mutableStateOf(-1f) }"
         errorLine2="                                   ~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/naturetools/app/ui/screens/health/StepCounterScreen.kt"
+            file="src/main/java/omni/toolbox/ui/screens/health/StepCounterScreen.kt"
             line="24"
             column="36"/>
     </issue>

@@ -22,7 +22,7 @@ val appVersionCode = System.getenv("APP_VERSION_CODE")?.toInt() ?: build
 val appVersionName = System.getenv("APP_VERSION_NAME") ?: "$major.$minor.$patch.$build"
 
 android {
-    namespace = "com.naturetools.app"
+    namespace = "omni.toolbox"
     compileSdk = 35
 
     defaultConfig {
@@ -105,6 +105,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.google.zxing:core:3.5.3")
     implementation("net.objecthunter:exp4j:0.4.8")
+    implementation("org.jsoup:jsoup:1.17.2")
 
     val cameraxVersion = "1.3.1"
     implementation("androidx.camera:camera-core:$cameraxVersion")

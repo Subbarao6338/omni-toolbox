@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Nature Tools"
+rootProject.name = "Omni Toolbox"
 include(":app")

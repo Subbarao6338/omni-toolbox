@@ -134,7 +134,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.get_version.outputs.TAG_NAME }}
-          name: Nature Tools ${{ steps.get_version.outputs.TAG_NAME }}
+          name: Omni Toolbox ${{ steps.get_version.outputs.TAG_NAME }}
 
           body: |
             🚀 Automated Android Build

@@ -1,6 +1,6 @@
-package com.naturetools.app
+package omni.toolbox
 
-import com.naturetools.app.viewmodel.CalculatorViewModel
+import omni.toolbox.viewmodel.CalculatorViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
