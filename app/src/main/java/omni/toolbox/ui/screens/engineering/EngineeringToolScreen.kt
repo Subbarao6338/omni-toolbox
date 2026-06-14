@@ -153,10 +153,11 @@ fun AntennaCalculator() {
     var freq by remember { mutableStateOf("2400") }
     val f = freq.toDoubleOrNull() ?: 2400.0
     val waveLength = 299.79 / f // meters
-    val halfWave = waveLength / 2 * 1000 // mm
-    val quarterWave = waveLength / 4 * 1000 // mm
+    val halfWave = (waveLength / 2) * 0.95 * 1000 // mm (with 0.95 velocity factor)
+    val quarterWave = (waveLength / 4) * 0.95 * 1000 // mm
 
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Text("Antenna Length Calculator", style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(
             value = freq,
             onValueChange = { freq = it },
@@ -164,9 +165,14 @@ fun AntennaCalculator() {
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(16.dp))
-        Text("Wavelength: ${String.format("%.4f", waveLength)} m")
-        Text("Half-wave Dipole: ${String.format("%.2f", halfWave)} mm")
-        Text("Quarter-wave Monopole: ${String.format("%.2f", quarterWave)} mm")
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Wavelength (λ): ${String.format("%.4f", waveLength)} m")
+                Text("Half-wave Dipole: ${String.format("%.2f", halfWave)} mm")
+                Text("Quarter-wave Monopole: ${String.format("%.2f", quarterWave)} mm")
+                Text("Velocity Factor: 0.95", style = MaterialTheme.typography.labelSmall)
+            }
+        }
     }
 }
 

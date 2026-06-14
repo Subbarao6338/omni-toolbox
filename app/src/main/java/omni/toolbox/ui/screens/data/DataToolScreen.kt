@@ -231,15 +231,19 @@ fun ActualResultView(route: String, toolName: String, data: List<Map<String, Str
             when (route) {
                 "anomaly_detection" -> {
                     val values = data.mapNotNull { it["value"]?.toDoubleOrNull() }
-                    val mean = values.average()
-                    val stdDev = Math.sqrt(values.map { Math.pow(it - mean, 2.0) }.average())
-                    val anomalies = data.filter {
-                        val v = it["value"]?.toDoubleOrNull() ?: 0.0
-                        Math.abs(v - mean) > 2 * stdDev
-                    }
-                    Text("Detected ${anomalies.size} anomalies.")
-                    anomalies.forEach {
-                        Text("• ID ${it["id"]}: Value ${it["value"]} is an outlier.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                    if (values.isNotEmpty()) {
+                        val mean = values.average()
+                        val stdDev = Math.sqrt(values.map { Math.pow(it - mean, 2.0) }.average())
+                        val anomalies = data.filter {
+                            val v = it["value"]?.toDoubleOrNull() ?: 0.0
+                            Math.abs(v - mean) > 1.5 * stdDev // Using 1.5 for better sensitivity in demo
+                        }
+                        Text("Detected ${anomalies.size} anomalies in dataset.")
+                        anomalies.forEach {
+                            Text("• Row ID ${it["id"]}: Value ${it["value"]} (Z-score: ${"%.2f".format(( (it["value"]?.toDoubleOrNull() ?: 0.0) - mean) / stdDev)})", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                        }
+                    } else {
+                        Text("No numerical data found for anomaly detection.")
                     }
                 }
                 "data_statistics" -> {
@@ -267,10 +271,20 @@ fun ActualResultView(route: String, toolName: String, data: List<Map<String, Str
                     }
                 }
                 "data_quality" -> {
-                    val missing = data.count { it.values.any { v -> v.isEmpty() } }
-                    Text("Missing Values: $missing")
-                    Text("Duplicate Rows: 0")
-                    Text("Quality Score: ${((data.size - missing).toFloat() / data.size * 100).toInt()}%")
+                    val totalCells = data.size * (data.firstOrNull()?.size ?: 1)
+                    val emptyCells = data.sumOf { row -> row.values.count { it.isEmpty() } }
+                    val missingRows = data.count { it.values.any { it.isEmpty() } }
+                    val completeness = if (totalCells > 0) ((totalCells - emptyCells).toFloat() / totalCells * 100).toInt() else 0
+
+                    Text("Completeness: $completeness%")
+                    Text("Empty Cells: $emptyCells / $totalCells")
+                    Text("Rows with missing data: $missingRows")
+                    LinearProgressIndicator(progress = { completeness / 100f }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp))
+                    Text("Quality Rating: ${when {
+                        completeness > 90 -> "Excellent"
+                        completeness > 70 -> "Good"
+                        else -> "Requires Cleaning"
+                    }}")
                 }
                 "data_transformation" -> {
                     Text("Transformed to JSON structure:")

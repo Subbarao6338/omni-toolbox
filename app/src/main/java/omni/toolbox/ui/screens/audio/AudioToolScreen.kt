@@ -219,6 +219,19 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
                             AdjustmentSlider("Seek Position (s)", valueRange = 0f..600f, initialValue = 10f)
                             AdjustmentSlider("Quality (JPEG)", initialValue = 0.9f)
                         }
+                        "Audio Cutter", "Video Trim", "m_audio_cutter", "video_trim" -> {
+                            AdjustmentSlider("Start Time (s)", valueRange = 0f..300f, initialValue = 0f)
+                            AdjustmentSlider("End Time (s)", valueRange = 0f..300f, initialValue = 30f)
+                            AdjustmentSlider("Fade In (ms)", valueRange = 0f..2000f, initialValue = 0f)
+                        }
+                        "m_audio_mixer", "Audio Mixer" -> {
+                            AdjustmentSlider("Master Gain", initialValue = 0.8f)
+                            AdjustmentSlider("Pan (L-R)", valueRange = -1f..1f, initialValue = 0f)
+                        }
+                        "Video Flip", "video_flip" -> {
+                            AdjustmentSlider("Horizontal Flip (0/1)", valueRange = 0f..1f, initialValue = 0f)
+                            AdjustmentSlider("Vertical Flip (0/1)", valueRange = 0f..1f, initialValue = 0f)
+                        }
                         "Audio Converter", "Convert to MP4", "Multi Convert" -> {
                             AdjustmentSlider("Sample Rate (kHz)", valueRange = 8f..192f, initialValue = 44.1f)
                             AdjustmentSlider("Channels (1:Mono, 2:Stereo)", valueRange = 1f..2f, initialValue = 2f)

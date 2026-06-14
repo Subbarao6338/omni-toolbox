@@ -76,7 +76,7 @@ object ToolProvider {
             description = "Hardware inspection and app management suite."),
         Tool("Terminal Emulator", Icons.Default.Terminal, "terminal", "Developer", Color(0xFF212121),
             description = "Local shell terminal emulator."),
-        Tool("Cloud Sync Hub", Icons.Default.CloudSync, "cloud_sync", "Web", Color(0xFF2196F3),
+        Tool("Cloud Sync Hub", Icons.Default.CloudSync, "cloud_sync", "Data", Color(0xFF2196F3),
             description = "Multi-account cross-cloud data synchronization."),
         Tool("Web Crawler Pro", Icons.Default.Search, "web_scraper", "Web", Color(0xFF00BCD4),
             description = "Advanced web scraper with Notion integration."),
@@ -318,7 +318,7 @@ object ToolProvider {
 
         // UTILITIES
         Tool("Antenna Calc", Icons.Default.SettingsInputAntenna, "antenna_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
-        Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Utilities", isVisibleOnHome = false, isSubTool = true),
+        Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Binary Calc", Icons.Default.Numbers, "binary_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Calculator", Icons.Default.Calculate, "calculator", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Checklist", Icons.Default.Checklist, "checklist", "Utilities", isVisibleOnHome = false, isSubTool = true),

@@ -119,6 +119,40 @@ fun MedicationReminderSystem() {
 }
 
 @Composable
+fun BmrCalculator() {
+    var age by remember { mutableStateOf("30") }
+    var weight by remember { mutableStateOf("70") }
+    var height by remember { mutableStateOf("175") }
+    var isMale by remember { mutableStateOf(true) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("BMR Calculator (Mifflin-St Jeor)", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = age, onValueChange = { age = it }, label = { Text("Age") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = weight, onValueChange = { weight = it }, label = { Text("Weight (kg)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = height, onValueChange = { height = it }, label = { Text("Height (cm)") }, modifier = Modifier.fillMaxWidth())
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = isMale, onClick = { isMale = true })
+            Text("Male")
+            Spacer(modifier = Modifier.width(16.dp))
+            RadioButton(selected = !isMale, onClick = { isMale = false })
+            Text("Female")
+        }
+
+        val a = age.toDoubleOrNull() ?: 0.0
+        val w = weight.toDoubleOrNull() ?: 0.0
+        val h = height.toDoubleOrNull() ?: 0.0
+
+        if (a > 0 && w > 0 && h > 0) {
+            val bmr = (10 * w) + (6.25 * h) - (5 * a) + (if (isMale) 5 else -161)
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                Text("BMR: ${bmr.toInt()} kcal/day", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
+            }
+        }
+    }
+}
+
+@Composable
 fun HealthScreen(navController: NavHostController, title: String) {
     ToolScreen(
         title = title,
@@ -163,10 +197,25 @@ fun HealthScreen(navController: NavHostController, title: String) {
                     Spacer(modifier = Modifier.height(24.dp))
                     Text("Last period: Oct 1 - Oct 5")
                 }
-                "Medication Tracker" -> {
+                "Medication Tracker", "Medication reminder" -> {
                     MedicationReminderSystem()
                 }
-                "Sleep Cycle", "Sleep Cycle calculator" -> SleepCycleCalculator()
+                "Sleep Cycle", "Sleep Cycle calculator", "sleep_tracker" -> SleepCycleCalculator()
+                "BMR Calculator", "bmr" -> BmrCalculator()
+                "BMI Calc", "bmi" -> {
+                    var weight by remember { mutableStateOf("70") }
+                    var height by remember { mutableStateOf("175") }
+                    OutlinedTextField(value = weight, onValueChange = { weight = it }, label = { Text("Weight (kg)") }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(value = height, onValueChange = { height = it }, label = { Text("Height (cm)") }, modifier = Modifier.fillMaxWidth())
+                    val w = weight.toDoubleOrNull() ?: 0.0
+                    val h = height.toDoubleOrNull() ?: 0.0
+                    if (w > 0 && h > 0) {
+                        val bmi = w / (h/100 * h/100)
+                        Card(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                            Text("BMI: ${"%.1f".format(bmi)}", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
+                        }
+                    }
+                }
                 else -> {
                     Text("Health monitoring for $title")
                     AdjustmentSlider("Reminder Frequency", initialValue = 0.5f)

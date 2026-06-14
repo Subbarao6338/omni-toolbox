@@ -213,7 +213,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "cipher_tools" -> HashGeneratorScreen(navController)
         route == "bpm" -> BpmCounterScreen(navController)
         route == "random" -> RandomGeneratorScreen(navController)
-        listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate").contains(route) -> ChatToolScreen(navController, tool.name, aiApiKey)
+        listOf("ai_chat", "ai_summarizer", "ai_code", "ai_grammar", "ai_obj_detect", "ai_sentiment", "ai_text_ext", "ai_translate", "video_noise_remover").contains(route) -> ChatToolScreen(navController, tool.name, aiApiKey)
 
         route == "voice_memo" -> VoiceMemoScreen(navController)
         route == "exif_viewer" -> ExifViewerScreen(navController)
@@ -371,7 +371,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         category == "Social" -> SocialToolScreen(navController, tool.name)
         category == "Media" -> {
             if (tool.route == "guitar_tuner" || tool.route == "chord_lib") MusicToolScreen(navController, tool.name)
-            else if (tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster").contains(route)) AudioToolScreen(navController, tool.name)
+            else if (tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || tool.route.startsWith("ai_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover").contains(route)) AudioToolScreen(navController, tool.name)
             else if (tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
             else ImageToolScreen(navController, tool.name)
         }
@@ -385,7 +385,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         category == "Developer" -> DeveloperExpertScreen(navController, tool.name)
         category == "Data" -> if (route == "yaml_to_json") DeveloperExpertScreen(navController, tool.name) else FileToolScreen(navController, tool.name)
         category == "Web" -> WebToolScreen(navController, initialUrl = "https://www.google.com", title = tool.name)
-        category == "Utilities" -> DashboardScreen(navController)
+        category == "Utilities" -> SystemLabScreen(navController, tool.name)
         category == "Design" -> ColorToolsScreen(navController)
         category == "Education" -> EngineeringToolScreen(navController, tool.name)
         category == "AI Tools" -> ChatToolScreen(navController, tool.name, aiApiKey)

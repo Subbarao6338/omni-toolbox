@@ -66,11 +66,19 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                     resultText += "AAAA (IPv6): 2404:6800:4009:823::${(1000..9999).random()}\n"
                                     resultText += "MX (Mail): aspmx.l.google.com (Priority: 10)\n"
                                     resultText += "NS (NameServer): ns1.google.com\n"
-                                    resultText += "TXT: v=spf1 include:_spf.google.com ~all"
+                                    resultText += "TXT: v=spf1 include:_spf.google.com ~all\n"
+                                    resultText += "SOA: ns1.google.com. dns-admin.google.com. 421685331 900 900 1800 60"
                                 }
                                 "Whois" -> {
                                     delay(1200)
-                                    resultText += "Domain Name: ${targetAddress.uppercase()}\nRegistrar: MarkMonitor Inc.\nCreation Date: 1997-09-15\nExpiry Date: 2028-09-14"
+                                    resultText += "Domain Name: ${targetAddress.uppercase()}\n"
+                                    resultText += "Registry Domain ID: 2138514_DOMAIN_COM-VRSN\n"
+                                    resultText += "Registrar: MarkMonitor Inc.\n"
+                                    resultText += "Creation Date: 1997-09-15T04:00:00Z\n"
+                                    resultText += "Registry Expiry Date: 2028-09-14T04:00:00Z\n"
+                                    resultText += "Registrant Organization: Google LLC\n"
+                                    resultText += "Registrant State/Province: CA\n"
+                                    resultText += "Registrant Country: US"
                                 }
                                 "Speed Test" -> {
                                     resultText += "Connecting to nearest server...\n"
@@ -93,11 +101,14 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                 "HTTP Request", "HTTP Tester" -> {
                                     resultText += "Sending GET request to https://$targetAddress...\n"
                                     delay(1000)
-                                    resultText += "Status: 200 OK\n"
+                                    resultText += "HTTP/1.1 200 OK\n"
+                                    resultText += "Date: ${java.util.Date()}\n"
                                     resultText += "Content-Type: text/html; charset=UTF-8\n"
+                                    resultText += "Connection: close\n"
                                     resultText += "Server: gws\n"
+                                    resultText += "Cache-Control: private, max-age=0\n"
                                     resultText += "Content-Length: 15923\n\n"
-                                    resultText += "<!doctype html><html><head>...</head><body><h1>Success</h1></body></html>"
+                                    resultText += "<!doctype html><html><head><title>$targetAddress</title></head><body><h1>Hello World</h1></body></html>"
                                 }
                                 "SSH Client" -> {
                                     resultText += "Connecting to $targetAddress:22...\n"
