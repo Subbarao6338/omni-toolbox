@@ -26,7 +26,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.naturetools.app"
+        applicationId = "omni.toolbox"
         minSdk = 24
         targetSdk = 35
         versionCode = appVersionCode
