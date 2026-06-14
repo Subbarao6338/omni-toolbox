@@ -1,0 +1,2200 @@
+<p align="center">
+  <img src="store_assets/app_icon_512.png" width="120" height="120" alt="PDF Toolkit">
+</p>
+
+<h1 align="center">PDF Toolkit</h1>
+
+<p align="center">
+  <strong>A privacy-first, offline PDF utility for Android</strong>
+</p>
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit">
+    <img src="https://img.shields.io/badge/Play%20Store-Download-green?logo=googleplay" alt="Play Store">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+  </a>
+  <a href="https://github.com/Karna14314/Pdf_Tools/stargazers">
+    <img src="https://img.shields.io/github/stars/Karna14314/Pdf_Tools?style=flat&color=yellow" alt="GitHub Stars">
+  </a>
+  <a href="https://github.com/Karna14314/Pdf_Tools/forks">
+    <img src="https://img.shields.io/github/forks/Karna14314/Pdf_Tools?style=flat&color=blue" alt="GitHub Forks">
+  </a>
+  <a href="https://github.com/Karna14314/Pdf_Tools/watchers">
+    <img src="https://img.shields.io/github/watchers/Karna14314/Pdf_Tools?style=flat&color=green" alt="GitHub Watchers">
+  </a>
+  <a href="https://github.com/Karna14314/Pdf_Tools/issues">
+    <img src="https://img.shields.io/github/issues/Karna14314/Pdf_Tools?style=flat&color=red" alt="GitHub Issues">
+  </a>
+  <a href="https://github.com/Karna14314/Pdf_Tools/releases">
+    <img src="https://img.shields.io/github/v/release/Karna14314/Pdf_Tools?include_prereleases" alt="Latest Release">
+  </a>
+  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android" alt="Platform">
+  <img src="https://img.shields.io/github/last-commit/Karna14314/Pdf_Tools?style=flat&color=orange" alt="Last Commit">
+  <a href="https://oosmetrics.com/repo/Karna14314/Pdf_Tools">
+    <img src="https://api.oosmetrics.com/api/v1/badge/achievement/ae7516ca-85f2-4c6f-a679-149537b637d8.svg" alt="oosmetrics">
+  </a>
+</p>
+
+---
+
+## � Get it on Android
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit">
+    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="80" alt="Get it on Google Play">
+  </a>
+</p>
+
+> Offline · Privacy-first · No account required
+
+---
+## ✨ Features
+
+### 📄 PDF Management
+- **Merge PDFs** — Combine multiple PDF files into a single document
+- **Split PDF** — Split into multiple files or specific page ranges
+- **Compress PDF** — Reduce file size while maintaining quality
+- **Reorder Pages** — Visual drag-and-drop page reordering
+- **Rotate Pages** — Rotate specific pages or entire documents
+- **Extract Pages** — Extract specific pages to create new PDFs
+- **Delete Pages** — Remove unwanted pages
+
+### 🔄 Conversion Tools
+- **Images to PDF** — Create PDFs from gallery images
+- **PDF to Images** — Convert PDF pages to high-quality images (JPG/PNG/WebP)
+- **HTML to PDF** — Direct webpage to PDF conversion
+- **Scan to PDF** — Camera-based document scanning with automatic edge detection
+
+### �️ Editing & Annotation
+- **Annotate** — Highlight, draw, and markup PDFs with AndroidX Ink
+- **Sign PDF** — Add digital signatures to documents
+- **Fill Forms** — Complete PDF forms on the go
+- **Flatten PDF** — Make forms and annotations permanent
+
+### 🔒 Privacy & Security
+- **Lock PDF** — Password-protect your files
+- **Unlock PDF** — Remove passwords (with valid password)
+- **Watermark** — Add text or image watermarks
+- **All processing on-device** — No cloud, no servers
+- **No internet permission** — Completely offline capable
+- **No data collection or tracking**
+
+### � OCR & Text
+- **Extract Text** — Pull text content from PDF pages
+- **Tesseract OCR** — F-Droid and opensource flavors (100% open source)
+- **ML Kit OCR** — Play Store flavor (smaller APK, 40MB runtime download)
+
+### 🖼️ Image Tools
+- **Compress Images** — Optimize file sizes
+- **Resize Images** — Change dimensions
+- **Format Conversion** — JPG, PNG, WebP
+- **Remove Metadata** — Strip EXIF data for privacy
+
+---
+
+## 🏗️ Build Flavors
+
+| Flavor | OCR Engine | Ads | Firebase | Distribution |
+|--------|-----------|-----|----------|--------------|
+| `playstore` | ML Kit | No | No | Google Play |
+| `fdroid` | Tesseract | No | No | F-Droid (pending) |
+| `opensource` | Tesseract | No | No | GitHub Releases |
+
+All flavors are **privacy-first** with no ads, no analytics, and no proprietary dependencies except ML Kit in the Play Store flavor.
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| **Language** | Kotlin 100% |
+| **UI Framework** | Jetpack Compose (Material Design 3) |
+| **Architecture** | MVVM + Clean Architecture |
+| **PDF Processing** | PdfBox-Android, Android PdfRenderer |
+| **Annotations** | AndroidX Ink Library |
+| **OCR (Play Store)** | Google ML Kit |
+| **OCR (F-Droid)** | Tesseract (tess-two) |
+| **Camera** | CameraX |
+| **Images** | Coil, Glide, uCrop |
+| **Database** | Room |
+| **Preferences** | DataStore |
+| **Async** | Coroutines & Flow |
+| **Build** | Gradle + KSP |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Android Studio Hedgehog or newer
+- JDK 17+
+- Android SDK 26+
+
+### Build
+
+```bash
+# Clone the repository
+git clone https://github.com/Karna14314/Pdf_Tools.git
+cd Pdf_Tools
+
+# Play Store flavor (ML Kit OCR)
+./gradlew assemblePlaystoreRelease
+
+# F-Droid flavor (Tesseract OCR, no proprietary deps)
+./gradlew assembleFdroidRelease
+
+# Opensource flavor (fully FOSS)
+./gradlew assembleOpensourceRelease
+```
+
+---
+
+## 📦 Download
+
+| Platform | Link | Notes |
+|----------|------|-------|
+| Google Play | [Install](https://play.google.com/store/apps/details?id=com.yourname.pdftoolkit) | Stable, auto-updates |
+| GitHub Releases | [Download APK](https://github.com/Karna14314/Pdf_Tools/releases) | Opensource flavor, manual install |
+| F-Droid | Coming soon | Under review |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request against `master`
+
+**Important:** The F-Droid and opensource flavors must remain free of proprietary dependencies. Any new dependencies must be compatible with the F-Droid inclusion policy.
+
+See [open issues](https://github.com/Karna14314/Pdf_Tools/issues) for feature requests and bug reports.
+
+---
+
+## 👤 Maintainer
+
+**Narisetti Chaitanya Naidu**  
+GitHub: [@Karna14314](https://github.com/Karna14314)
+
+---
+
+## 📄 License
+
+Copyright © 2026 Narisetti Chaitanya Naidu
+
+Licensed under the Apache License, Version 2.0  
+See [LICENSE](LICENSE) for full text.
+
+
+Easily convert your files to PDF, compress and password protect.
+
+PDF CONVERTER is easy to use the application to convert your files or Images to PDF and edit PDFs on your Android devices. 
+
+⭐ No in-app purchases. EVERYTHING FREE!! 
+⭐ Compress and password protect PDF.
+⭐ No limits on file size or the number of documents converted
+⭐Various file formats are supported (Word, Excel, Image, Text, Doc, Docx, QR code, Bar code and more).
+⭐ File converter of excellent conversion quality.
+⭐ PDF scans and complex documents are converted as well.
+⭐ Different PDF size: cropped part, letter,  A4 and even custom sizes are supported
+✔️ Smooth and easy to use interface
+✔️Takes up only a few seconds
+✔️ Select images from camera or Gallery
+✔️ Image enhancement features
+✔️ Crop images before creating a PDF
+✔️ View PDF files
+✔️ Delete PDF files
+✔️ Add or remove password from PDF
+✔️ Rotate PDF pages
+✔️ Add watermark to PDF
+✔️ Add images to existing PDF
+✔️ Extract images from PDF
+✔️ Convert PDF pages to images
+✔️ Split PDF
+✔️ Merge PDF
+✔️ Convert text files to PDF
+✔️ Manage your PDF files
+✔️ Remove pages from PDF
+✔️ Reorder PDF pages
+✔️ Compress PDF
+✔️ Convert QR code and Barcodes to PDF
+✔️ Convert Excel to PDF
+✔️ Add text and Images to existing PDF
+✔️ Invert PDF colours
+✔️ Convert Zip to PDF
+✔️ Share the created PDFs with your friends
+✔️ Easily manage the PDFs created by our app
+
+Supported image input types:
+✔️JPG
+✔️PNG
+✔️GIF
+...and other image formats!
+
+Video, images, text to PDF, Freely design & create PDF documents & presentations
+
+What you will accomplish with this application includes, but is not limited to:
+
+- Create professional PDF pages or presentations from scratch, implementing your own design on every page.
+- Write or paste full text to a new PDF.
+- Remove or extract specific pages from a PDF document.
+- Compress, merge, split, rotate, crop pages or resize any PDF document.
+- Add or remove passwords to a PDF document.
+- Convert complete MP4 videos or GIFs into either a PDF document or a series of individual images.
+- Annotate a video frame by adding images, arrows, drawings, text, or shapes, and then save it as either a PDF or an image.
+- Transform PDFs into a video or a GIF.
+- Trim a video and take only the desired portion.
+- Resize images individually or in batches.
+- Paint new images or edit existing ones.
+
+- Doesn't require online accounts or server usage.
+- No adverts or subscriptions or in-app purchases.
+
+
+In just a few minutes...YOU CAN ↯
+
+* Design and create PDF documents or presentations from scratch in just minutes, anywhere, anytime.
+* Enhance PDFs with white or coloured backgrounds, or even add gradient backgrounds to add a dynamic touch, add photos as PDF page backgrounds, freely append various images, and utilise coloured charts, tables, text, and watermarks to make your documents stand out.
+* The included stickers, emojis, and wallpapers are at your disposal to further unleash your creativity.
+* Enjoy the "Paint" function, which allows you to create new images, overlay existing ones, or perform comprehensive image edits. Utilise brushes, backgrounds, text, crop, rotation, emojis, stickers, and transparent lines drawn by your finger, or opt for automatic transparent backgrounds.
+* Create compact, viewable, and visually appealing PDF documents, books, presentations, CVs, and more.
+* Create PDF photo albums by converting images into a PDF, adding single or multiple images on each page. Add any number of images preserving your personal history and ensuring they are available for generations to come.
+* Secure your albums by adding or removing passwords, or convert any PDF into images.
+* Share to convert text files (.txt) to PDF in the app, or write or copy text in any language, and customise text and background colours, size, and font.
+* Compress or merge PDFs summarising multiple books into a single file even if it's gigabytes in size.
+* Split or summarise PDFs by keeping wanted pages or removing unwanted ones.
+* Draw your own new images, overlay or fully edit existing images, and resize images in batches from 1 to 9000 pixels without losing transparent backgrounds.
+* Extract attached images from a PDF.
+* Convert videos and GIFs to a PDF or individual images.
+* Convert PDF to videos or to GIF.
+* Write notes on video frames or append images, arrows or shapes, then save them as a PDF document or images.
+* Trim videos by removing unwanted sections, mute sound, or extract only the audio.
+* Merge up to 5 videos into one.
+* Convert courses, lectures, social media feeds, chats, or any type of screenshots, videos, or text into a PDF document.
+
+The app is extremely user-friendly. Add items, resize, and rotate them with two-fingers. Position them with a single finger, then press a button to generate your documents. Let your design ideas flow effortlessly.
+
+The application's straightforward operation allows you to select images, videos, or PDFs and perform desired functions with a simple button press. With its multitude of functionalities, your creativity is the main asset, and this app is your ultimate tool.
+
+Convert PDF, images, video & audio easily. 50+ powerful file tools in one app.
+
+File Converter – 50+ Tools is an all-in-one utility app that helps you convert, edit and manage different types of files directly on your device. Convert PDF, images, video, audio and documents quickly using more than 50 powerful tools.
+
+No login required.
+No internet required for most tools.
+Your files stay private on your device.
+
+📄 PDF Tools
+
+Work with PDF files easily.
+
+• Merge multiple PDFs into one
+• Split PDF into separate pages
+• Compress PDF to reduce file size
+• Rotate PDF pages
+• Extract pages from PDF
+
+🖼 Image Tools
+
+Convert and edit images quickly.
+
+• Convert JPG, PNG, WEBP and other formats
+• Resize images
+• Crop images
+• Compress images
+• Convert image to PDF
+
+🎬 Video Tools
+
+Convert and manage video files.
+
+• Convert video formats
+• Extract audio from video
+• Trim video clips
+• Compress video files
+
+🎵 Audio Tools
+
+Handle audio files easily.
+
+• Convert audio formats
+• Extract audio from video
+• Compress audio files
+
+📝 Text & Document Tools
+
+Useful tools for working with documents and text.
+
+• Text conversion tools
+• File utilities
+• Document format conversion
+
+Freely edit, annotate, convert, compress and print PDF files with copilot.
+
+PDFgear is a full-featured and free PDF editor, which provides read, edit, annotation, page management, and print PDF documents. 
+
+"It's called PDFgear, and it's a holy grail I never thought I'd find." - Digital Trends
+"PDFgear is a full toolkit for doing pretty much anything you could want to do with a PDF." - Lifewire
+
+PDFgear is a full-featured, easy-to-use, and free PDF Editor & PDF Reader. With practical functions like view, edit, and page reorganizing in PDFgear, the comprehensive PDF toolkit, users could handle their PDF files with more efficiency. PDFgear offers even more - split PDF into several files, rotate page direction, add or delete pages and so on. 
+
+PDFgear provides free use for all functions without any limits like trial watermark, page count, etc. The concise design brings users a satisfying experience, and the powerful performance makes the perfect document.
+
+PDFgear will be the only PDF solution for you, and it will make your study and work easier to carry out PDFs!
+
+VIEW & PRINT
+• View PDF in single-page or double-page display mode
+• Preview the thumbnails of pages easily
+• Dark Mode supported with native effect
+• Zoom in or out the PDF in a great range
+• Open recent PDFs conveniently
+• Search texts in PDFs rapidly and locate the texts precisely
+• Print PDFs directly from your device
+
+ANNOTATE PDF
+• Markup texts in PDF with highlight, underline & strikethrough in user-defined colors
+• Add Annotations by simply selecting texts in PDF
+• Create rectangles, circles, lines, arrows & free hands with customized colors
+• Insert Text Boxes and Notes into PDF with the font size and color you like
+
+EDIT TEXT & IMAGE
+• Edit text content and properties like fonts, including adding or deleting words and paragraphs
+• Resize, crop images, and insert new images
+
+CONVERSION:
+• Convert PDFs to Word, Excel, PowerPoint, PNG, and JPG formats
+• Create PDFs from Word, Excel, PowerPoint, and images
+
+COMPRESSION:
+• Easily reduce PDF file size for efficient storage and sharing
+
+Bookmark
+• View bookmarks in the PDF, and direct to the place of the bookmark easily
+• Add bookmark at any place of PDF documents
+• Supports rename, delete, and expand/collapse bookmarks in PDF
+
+PAGE EDITOR
+• Merge & split PDFs freely
+• Append pages from other PDF files to the existing one
+• Add new blank pages at the place you set
+• Extract pages from the PDF to create a new one
+• Rotate, reorder & delete pages
+
+
+1. Powerful Office Suite on your Android device
+• Using templates to start editing your budget, Word, PPT, sheet, resumes, documents and other files.
+• Using tools to convert and process Document, PDF and images.
+• Easy to create, edit, share files and collaborated on with others in real-time.
+
+2. Scan, view, edit, convert PDF on your Android device
+• Free PDF reader that can open, view, share and comment on PDFs anywhere and on any device.
+• Document scanner that can scan paper documents to PDF.
+• Convert all Office documents (Word, Text, Sheet, PowerPoint, Docs, Images) to PDF.
+• Support PDF annotation, PDF signature, PDF extraction/split, PDF merge.
+• Easily add and delete watermarks in PDF.
+
+
+Scan documents, highlight PDF text, compress files and sign forms easily.
+
+📄 Xodo — PDF tools for work, study and document productivity
+
+Xodo brings essential PDF tools into one app for reading, editing, scanning, signing and organising documents. Use it as a PDF reader, scanner and converter for contracts, reports and business files, with a smooth file and PDF viewer built for everyday productivity.
+
+From a flexible PDF annotator to a practical PDF editor, Xodo helps you review content, add comments and manage paperwork. Scan papers with a PDF document scanner, highlight PDF text, compress PDF files, and fill and sign PDF forms before sharing.
+
+📖 Read and manage documents with a reliable viewer
+
+Open files quickly with a file and PDF viewer designed for work, study and daily tasks. Navigate reports, zoom into details and keep important files easy to access.
+
+The app works as a PDF reader, scanner and converter, so you can manage files smoothly in one workflow. Whether you need office documents, notes or signed PDFs, Xodo keeps files organised.
+
+✏️ Annotate, highlight and edit PDFs
+
+Review documents with a complete PDF annotator. Add notes, draw, underline text and highlight PDF sections to mark key points in contracts, forms and reports.
+
+Make changes with a PDF editor that lets you leave comments on content, add text and prepare files for sharing. For teams, students and professionals, Xodo makes it simple to highlight PDF text and edit documents. The PDF annotator also keeps feedback clear.
+
+📷 Scan paper documents and extract text with OCR
+
+
+Turn paper into digital files with a PDF document scanner. Capture receipts, handwritten notes, forms and printed pages, then save them as clear, readable PDFs.
+
+Use OCR to extract text from scanned documents, so you can copy, paste and reuse important information without retyping. The built-in PDF document scanner helps you scan, crop, review and organise files without leaving your PDF reader, scanner and converter.
+
+🔄 Convert, compress and share files
+
+Convert PDFs to Word, Excel, PowerPoint, JPG, PNG, HTML and PDF/A, or create PDFs from images and Office files. Xodo also helps you compress PDF files so documents are easier to send and store.
+
+When files are too large, use tools to compress PDF files while keeping them clear enough for business, study and collaboration. The same workflow includes conversion, storage and sharing.
+
+📝 Fill forms, sign documents and finish paperwork
+
+Complete forms faster and fill and sign PDF forms right in one app. Add details, check fields, insert signatures and prepare documents for clients, teams or classes.
+
+Xodo helps you finish applications, invoices and agreements digitally. As a PDF annotator, it gives you control over document workflow right on your smartphone.
+
+🛠️ Advanced tools for everyday productivity
+
+Merge and split PDFs, rotate pages, crop files, extract content, highlight sensitive details and organise pages. A practical file and PDF viewer keeps everything accessible while editing tools help prepare clean final files.
+
+For quick reviews, use tools to highlight PDF text. For storage or email, compress PDF files. For paper tasks, rely on the PDF document scanner. Xodo keeps each step connected.
+
+PDF Editor & PDF Image Editor or PDF Text Editor is a free PDF Creator app to quickly scan documents or photos into a PDF file and add or edit existing text and images in that PDF file. If you’re looking for a complete all-in-one PDF editor app that is trusted and easy to use, you must try using this app. You can scan documents easily using your phone camera or convert an image into a PDF, edit text and images in the PDF,  merge them into a single PDF, name the PDF, and share the PDF via email, WhatsApp, or any other sharing app. 
+
+📋 PDF Reader 
+PDF Editor & PDF Reader is an all-PDF Reader app to read & view any PDF file from your mobile. View any document, read e-books, and share easily. 
+
+►PDF Reader - PDF Viewer, View PDF & Edit PDF -
+⭐Easy and simple PDF App.
+⭐Add labels, mark favorites, and search files easily.
+⭐Share PDF files as a link or document to any platform.
+⭐Print PDF directly from your devices.
+⭐View in light or dark modes.
+
+📝 PDF Text Editor
+You can easily edit or change the text from your pdf for free. Upload your existing pdf and select the text which you want to change and tap on save and your new pdf is ready in a few seconds. Say hello to our easy-to-use free pdf text editor app.
+
+🖼️ PDF Image Editor
+You can easily edit or change Images from your pdf for free. Upload your existing pdf and select the images which you want to change and tap on save and your new pdf is ready in a few seconds. Say hello to our easy-to-use free pdf image editor
+
+🧳 PDF Camera Scanner
+You can carry this user-friendly mobile scanner app in your pocket wherever you go. You can trust it to capture high-quality images using your camera and merge them into a single PDF. It is extremely useful for business users who are looking for a free camera scanner or pdf maker app to scan their documents.
+
+🖼️ Crop Images after scanning
+You can automatically crop images using our automatic edge detector or even manually crop the images before converting images to PDF files. It’s a true scanner app that you can always trust to scan images and convert them into a PDF.
+
+🔆 Add Effects - Adjust Brightness, etc.
+After capturing a photo or scanning the image, you can add magic effects, adjust brightness or contrasts, and change colors quickly to adjust the document as you like.
+
+💳  ID Card Scanner
+Apart from being able to scan regular documents, you can even scan ID Cards such as any Driving License, Passport, PAN Card, Aadhaar Card, SSN Card, or any other Identification Documents. This is not just a document scanner, but a perfect ID Card Scanner that you can trust.
+
+🔐 Private & Secure
+All the scanned documents or PDFs are stored on your device and are never stored on our servers. Your documents are your own and we take your privacy very seriously. You can even create password-protected PDF files.
+
+📋 Fill forms and sign PDF
+You can easily sign PDF files and fill forms with the PDF fill and sign feature easily. Fill and sign college applications and business contracts and share them with others in seconds.
+
+More Features
+♾️ View PDF Files using this PDF Viewer app
+🤑 Free to use, no subscription required
+🔗 Scan Documents Offline without internet
+↔️ Merge into a single PDF or Convert PDF Files
+📝 Text to PDF, Excel to PDF, Images to PDF
+✖️ Easily remove duplicate PDF files
+PDF Scanner is the best cam scanning app that saves a huge amount of both time and money. Start using this amazing free PDF Maker app now on your phone.
+
+ PDF Reader & Viewer: It's completely free, offline and doesn’t need an account! Annotate your PDFs, fill out digital forms, add highlights and signatures, draw and organise pages, save and export, split and merge.
+
+2. The PDF Editor: Edit Everything! Create an account to try its full power.
+
+With PDF Editor powered by AI, you have freedom to edit any element in your PDF. Effortlessly edit any image, text or even sign. You can even merge and convert your PDF files into other types of documents easily. Whether you're a student, professional, or simply need to work with PDFs, we've got you covered.
+
+Experience hassle-free editing with our user-friendly interface. Streamline your PDF workflow today!
+
+
+⭐ WHY USE PDF EDITOR
+• Edit Text and Images: Make quick and precise edits to your PDF documents. Change text, fonts and images as needed.
+• Convert and Export in Multiple Formats: Save PDFs as Word, PPT or image files for versatile sharing and editing options.
+• Resize any PDF: Click on resize and choose your new format in order to easily resize it to fit anywhere with the best quality.
+• Merge PDFs: Combine multiple PDF files into a single document, perfect for reports, presentations and more.
+• Annotation Tools: Highlight, underline or add comments to important sections. Enhance collaboration and communication.
+• Secure Your PDFs: Protect sensitive data with password encryption. Keep your documents safe and confidential.
+• Sign a document by hand: Fill out, save and send PDF forms.
+• Customize PDFs: Add watermarks, headers and footers for a professional touch.
+• Organize Pages: Reorder, rotate and delete pages to structure your PDF exactly how you want it.
+• Optimized Performance: Enjoy fast loading and smooth navigation through your PDFs, even with large files.
+• User-Friendly Interface: Navigate our app with ease, thanks to an intuitive design and user-friendly controls.
+• Boost Productivity: Simplify your PDF workflow and save time on document management tasks.
+• Millions of premium and royalty-free extra resources. Enrich your PDF files with premium and royalty-free images, fonts and icons.
+• One click Background Remover: Our powerful detects the background of your images and removes it in seconds.
+
+
+⭐ USE PDF EDITOR TO CONVERT DOCUMENTS
+• Convert PDF to high-resolution print or small web PDF files.
+• Convert PDF to JPG and PNG.
+• Convert PDF to Word.
+• Convert any image to PDF.
+• Convert Word to PDF.
+• Convert PowerPoint to PDF.
+• Convert Adobe Illustrator to PDF.
+
+
+⭐ USE PDF TEMPLATES FOR YOUR NEW PROJECTS
+• Documents
+• Invoices
+• Presentations
+• Letters
+• Resumes & Certificates
+• Marketing Materials: flyers, business cards & much more!
+
+
+ Recognize text (OCR)
+
+Utilize OCR technology to recognize text from scans and images and easily share the recognized text by email, messaging apps, or upload it to the cloud.
+
+✏️ Edit PDF files
+
+Access one of the most advanced mobile PDF editors on the market and edit PDFs, create blank PDFs, and insert, remove, or modify various document aspects including text, pictures, signatures, comments, drawings, certificates, and more.
+
+✒️ Fill and Sign
+
+Fill out and share forms and sign documents on the go with advanced support for fillable PDFs, enabling you to draw your signature directly on documents or reuse saved electronic signatures while making all the changes you need. 
+
+🖨️ Print PDFs
+
+Print PDF documents wirelessly straight from your phone.
+
+➕ Convert PDFs
+
+Convert PDFs to Word, Excel, PowerPoint, or ePub formats while preserving the original layout and formatting, and save Word, Excel, PowerPoint, and ePub files as PDFs for easy sharing. Enjoy reliable conversion of PNG and JPEG images into editable PDF files or use the free PNG and JPEG converter within MobiPDF to easily turn PDF documents into images.
+
+🔐 Protect PDFs
+
+Protect your sensitive documents with passwords to lock, encrypt, and restrict user access and utilize digital certificates for authenticity validation.
+
+Key Features:
+
+Read PDF
+- Open and view PDF files.
+- View the properties of your PDF files.
+- Add bookmarks to easily locate specific pages. This feature also supports renaming, reordering, and deleting the added bookmarks.
+- Search within lengthy PDFs for specific words or sentences.
+- Switch among four page display modes, including single-page view, two-page view, single-page scrolling, and two-page scrolling.
+
+Edit PDFs
+- Add/edit the text, and images in PDFs.
+
+AI Assistant
+- Summarize, translate, explain, and rephrase lengthy PDFs in just minutes.
+- Two methods are available to access the UPDF assistant: through chat box or select text to choose.
+- Engage in a chat with UPDF and ask it any questions you have.
+
+Annotate PDFs
+- Annotate PDFs by using markup tools like pencil, highlight, underline, strikethrough, or squiggly line.
+- Add comments like text boxes, text comments, callouts, sticky notes, etc.
+- Add shapes, stamps and stickers to PDFs.
+
+PDF editor & reader: edit text, sign, scan & convert PDF files easily
+
+TPDF – PDF Editor & Professional Document Toolkit
+
+TPDF is a high-performance, all-in-one workstation designed to handle any PDF task with precision. From professional content editing to AI-powered recognition, T PDF provides a comprehensive suite of tools for students, educators, and business professionals seeking a robust document solution.
+
+PROFESSIONAL EDITING (OFFLINE SUPPORT) Modify your documents anytime, anywhere without needing an internet connection. Experience a mobile editor that functions like a desktop word processor:
+
+Direct Text Editing: Edit, add, or delete text directly within the PDF. Effortlessly fix typos, update paragraphs, and adjust layouts.
+
+Image Management: Seamlessly insert, replace, resize, or rotate images on any page.
+
+Layout Control: Reorganize content, adjust line spacing, and refine document structures while offline.
+
+Total Privacy: Since editing happens on-device, your sensitive documents never leave your phone.
+
+ADVANCED ANNOTATION & REVIEW Streamline your feedback and study process with professional markup tools:
+
+Precision Markups: Highlight, underline, and strikethrough text with a professional color palette.
+
+Collaboration Tools: Add sticky notes, text boxes, and callout bubbles for detailed feedback.
+
+Drawing & Shapes: Use a freehand pen or insert professional shapes like arrows, rectangles, and circles.
+
+Centralized Review: Manage all your comments and annotations in one place for efficient document review.
+
+AI-POWERED TOOLSETS Harness advanced technology to work smarter and faster with on-device capabilities:
+
+AI OCR & Language Detection: Automatically identify multilingual text in scans and convert them into searchable, editable content.
+
+Smart Shape Recognition: Hand-draw any shape and let the instantly transform it into a perfect, professional graphic.
+
+Smart Extraction: Intelligently extract specific text content or assets from your documents with high precision.
+
+CONVERT & ORGANIZE A robust suite of tools to transform and restructure your files:
+
+Expert PDF Converter: Create PDFs from any file type, including Microsoft Office documents and images.
+
+High-Quality Export: Convert PDFs into Microsoft Word, Excel, PowerPoint, or various image formats (JPG/PNG).
+
+Page Management: Insert, delete, rotate, crop, and reorder pages with an intuitive interface.
+
+Web to PDF: Convert web pages into high-quality PDFs for offline reading.
+
+PERFORMANCE & SECURITY
+
+PDF Compression: Reduce file size for easy sharing without sacrificing quality.
+
+Secure Local Processing: Your privacy is our priority. and editing tasks are processed locally on your device to ensure maximum data protection.
+
+Elite Performance: Engineered to handle large, complex PDF files (100MB+) smoothly without lag.
+
+Optimized Viewing: High-quality rendering engine for a smooth and clear reading experience.
+
+Experience a professional and secure PDF workflow with TPDF – the smart choice for modern document management.
+
+
+
+New Features added:-
+ - Speed significant improvements (up to 30%)
+ - Search added in the main menu
+ - features Vocal remover, multi stem separation, noise, echo, reverb removal, key bpm finder
+ - Audio copy tools in the audio trim improved 
+ - Audio Mix improved
+ - Mix added in stem separation
+Improvement:-  
+ - Lots of bug fixes and performance improvements
+ - Lots of UI improvements
+ - Landscape UI is optimised
+
+Trim audio, record voice, cut MP3, create ringtones, mix songs - all in one app.
+
+AudioLab - The Only Audio Editor App You Will Ever Need
+Edit, Record, and Create Audio - All in One App
+AudioLab is a powerful audio editor and voice recorder designed for anyone who wants to edit audio, record voice, cut MP3s, or create custom ringtones on Android. Whether you’re editing music, recording voice notes, making podcasts, or creating ringtones, AudioLab provides professional audio tools in a simple, easy-to-use app.
+
+From quick trimming to advanced editing and conversion, AudioLab helps you turn raw sound into polished audio in just a few taps.
+
+🎧 Audio Editor & MP3 Cutter
+Edit audio files precisely using a clean and intuitive audio editor.
+● Cut, trim, split, and merge audio tracks
+● MP3 cutter for songs, voice clips, and music files
+● Trim audio accurately and save the best parts
+● Merge multiple audio files into one
+● Edit music tracks without losing quality
+Try AudioLab now and create your perfect sound!
+
+🎙️ Voice Recorder & Audio Recorder
+Capture clear, high-quality sound with the built-in voice recorder and audio recorder.
+● Record voice, music, podcasts, and meetings
+● Adjust volume and improve clarity
+● Save recordings instantly and edit them later
+Ideal for students, content creators, and everyday voice recording needs.
+
+🔄 Audio Converter & MP3 Converter
+Convert audio files quickly and easily with AudioLab’s audio converter.
+● Convert between MP3, WAV, AAC, FLAC, M4A, and more
+● Compress audio files for easier sharing
+● Convert video to audio and extract sound from videos
+A simple solution for managing multiple audio formats on your phone.
+
+🎶 Music Maker, Song Maker & Beat Tools
+Create and experiment with sound using AudioLab’s creative tools.
+● Mix multiple audio tracks
+● Adjust speed, pitch, and tempo
+● Create songs, remixes, and basic beats
+● Enhance audio with an equalizer and sound effects
+AudioLab works as a lightweight music maker and song maker for quick ideas and edits.
+
+🔔 Ringtone Maker & Audio Customization
+Turn any audio file into a custom ringtone or notification sound.
+● Create ringtones from songs or recordings
+● Set audio as a ringtone, alarm, or notification
+● Edit the ringtone length and volume easily
+Personalize your phone with sounds that match your style.
+
+Remove vocals and instruments to play with stems extracted from any music/audio.
+
+World's #1 vocal remover for musicians. Use to extract or remove vocals & instruments from any song and play your favorite music in any key, and at any speed. The best stem player for creating guitar, drums, piano, vocals and bass backing tracks.
+
+Master your audio’s chords and stems with pitch-perfect guitar tabs, smart metronome, and mixer. Get the best driven music tool for stem and vocal remover and join the band today.
+
+Pro features for music makers, guitar players, audio nerds and the everyday musician:
+
+- Audio Separation of Stems: Easily separate vocals, drums, guitar, bass, piano, strings, and other instruments in any song. Moises is your vocal remover or backing track maker.
+
+- Smart Metronome: Instantly generate click tracks that are in sync to the beat of any song.
+
+- Lyric Transcription: Convert music into text effortlessly. Supports audio in English, Spanish, Portuguese, French, and Italian. Transcribe the lyrics of your music for the best karaoke track maker.
+
+- Chord Detection: Follow along to the bars and beats of the song and play along with instantly synced guitar tabs and chords. Featured beginner, intermediate and advanced chord detection.
+
+- Audio Speed Changer: Make challenging sections easy with 1-click slow down or speed up. Moises automatically detects and displays the BPM.
+
+- Pitch Changer: Easily control and change the audio key. Shift the pitch to meet your vocal range or instrument tuning, great for practicing karaoke.
+
+- Key Detection: Detect and change the song key and instantly transpose chords to all 12 keys.
+
+- Collaborative Setlists: Invite collaborators, fine-tune song elements, and centralize all your musical work for enhanced productivity. 
+
+- Count in: Set the "count in" period that precedes the playback so you and the band can start on the right beat. Perfect for rehearsals or your personal practice.
+
+- Backing Tracks: Create acapella, drums, bass, guitar, karaoke, and piano backing tracks.
+
+- Trim and loop music parts: Our detects song parts so you can loop specific ones. Save time and simplify your practice routine.
+
+- Export: Extract and share high-quality audio mixes and separated stems, including the metronome click-track. Easily extract audio stems to be used in any other track maker or within our vocal remover.
+
+Moises makes fine-tuning music a breeze in 3 simple steps:
+1. Upload any audio or video file;Edit, convert, and create: Your all-in-one image powerhouse.
+
+Unleash your inner pixel artist with Image Toolbox - Edit & Convert! This powerful photo editor gives you complete control over your images, from basic pixel-level edits to advanced image manipulation and format conversion.  Looking to tweak a single pixel or transform an entire image? Image Toolbox has you covered.
+
+Pixel Perfect Editing:
+
+* Precise Drawing Tools:  Dive into detailed editing with a wide array of drawing tools, including pen, neon, highlighter, pixelation paint, and more. Perfect for adding highlights, creating custom pixel art, or censoring sensitive areas with privacy blur.
+* Resizing & Cropping: Resize images with pixel-perfect precision, maintaining aspect ratio or cropping to specific dimensions.  Explore unique crop shapes, including rounded corners, hearts, stars, and even custom image masks.
+* Color Utils:  Create stunning color palettes with Material You schemes or extract colors directly from your images.  Design custom gradients and overlay them onto your photos for unique effects.
+
+Beyond Pixel Editing:
+
+Image Toolbox is more than just a pixel editor; it's a complete image manipulation powerhouse.
+
+* Batch Processing:  Edit multiple images at once, saving you valuable time.
+* 160+ Filters:  Experiment with a vast library of filters to achieve the perfect look.  Chain filters together for endless creative possibilities.
+* AI-Powered Background Removal:  Effortlessly remove backgrounds with automatic detection or precise drawing tools.
+* Text Extraction (OCR):  Extract text from images in over 120 languages with varying levels of precision.
+* Image Format Conversion:  Seamlessly convert between various image formats, including HEIF, HEIC, AVIF, WEBP, JPEG, PNG, JXL, and more.  Convert GIFs and SVGs to other formats with ease.
+* Animation Support: Create GIFs and APNGs, and even explore the cutting-edge Animated JXL format.
+* Advanced Features: Edit EXIF metadata, stitch images together, add watermarks, encrypt files, and much more!
+
+ magically separates vocals and instruments into multiple stem tracks, while detecting songs' beat and chords. 
+2. Modify stem tracks, remove vocals, control volume, and easily mute tracks.
+3. Download separated stems or a custom mix.
+
+Audio cutting, audio editing, vocal separation, audio conversion.
+
+Audio Editing: Mix and splice multiple audio files, supporting splitting, cutting, adjusting playback speed, fade in/out, noise reduction, equalizer, modifying pitch, and adjusting volume.
+Vocal/Accompaniment Separation: Extract vocals and accompaniment from audio or video.
+Batch Video to Audio Conversion: Extract audio portions from video files in batches.
+Batch Audio Conversion: Convert audio files in batches.
+Cross-platform File Transfer: Achieve fast transfer and synchronization between mobile phones and computers.
+
+Audio Editor & Music Cutter: Multi-track Editing, MP3 Trim, Mix, Speed & Pitch
+
+🎵 EditBook-AudioEditor — Professional Audio Editor & Trimmer
+
+EditBook-AudioEditor is a powerful, all-in-one audio editor app that supports multi-track editing, single-track editing, audio cutting, audio trimming, audio mixing, audio concatenation, speed & pitch control, and noise reduction. Whether you're creating custom ringtones, editing podcasts, clipping recordings, or performing multi-track mixing, EditBook-AudioEditor makes it all effortless — your ultimate audio editing companion on Android!
+
+🔥 Key Features
+
+✂️ Audio Trimmer / MP3 Cutter
+Precisely select and trim any audio segment with millisecond-level accuracy. Supports MP3, WAV, AAC, OGG, M4A, and more. Visual waveform selection makes cutting ringtones, extracting quotes, or trimming voice notes a breeze.
+
+🎼 Multi-Track Audio Editor
+Import and arrange multiple audio tracks on a professional timeline. Perfect for podcast production, music mixing, voice-over layering, and complex audio compositions — all from your phone.
+
+🔗 Audio Concatenator / Merge Audio
+Seamlessly join multiple audio files into one. Supports MP3 merging, voice recording concatenation, and audio combining. No need to switch apps or upload files online.
+
+🎛️ Audio Mixer / Mix Tracks
+Blend multiple audio tracks together with independent volume controls per track. Add fade-in/fade-out effects and achieve professional-grade audio mixing.
+
+🏃 Audio Speed Changer / Tempo Control
+Adjust playback speed from 0.5x to 2.0x with full independence from pitch. Speed up tutorials, slow down music for practice, or speed up audiobooks — all without losing quality.
+
+🎤 Pitch Shifter / Key Changer
+Easily raise or lower the pitch of any audio file. Create voice changers, tune instruments, or adjust song keys for karaoke — no audio engineering degree required.
+
+🔇 Noise Reduction / Remove Background Noise
+Built-in smart noise suppression algorithm eliminates background hiss, hum, and environmental noise with a single tap. Crystal-clear audio recordings guaranteed.
+
+🎙️ Built-in Recorder & Voice Recorder
+Record voice directly inside the app, then edit and trim your recording instantly. No switching between apps — record, clip, save, done. Perfect for interviews, meetings, and class notes.
+
+🔔 Ringtone Maker
+Extract your favorite song clips and set them as custom ringtones, notification tones, or contact-specific ringtones. Create personalized ringtones in seconds.
+
+Fast and lightweight Audio Recorder application.
+
+Audio recorder - is an open source application makes an easy audio recording experience. 
+App optimized for the fastest start as possible and helps not to miss important sound for the user.
+
+There are few recording formats available:
+M4A format is encoded with AAC audio codec has good quality and small size. 
+Waveform Audio File Format (WAVE, or WAV) audio file format standard for storing an audio bitstream on PCs. Stores audio data uncompressed.
+3gp is a multimedia container format developed for mobile telecommunication services. Use it if you need to save space.
+
+In settings, select sample rate, bitrate (for M4A and 3GP only) and stereo or mono.
+Selected preferences directly affect on record file size.
+
+With colorful themes, customize app looking, and make the experience better for you.
+
+Features:
+- Recording audio
+- Playback records
+- Supported recording formats M4A, WAV and 3GP
+- Set recording sample rate and bitrate
+- Record and Playback in background
+- Display record waveform
+- Rename record
+- Share record
+- Import audio files
+- Records list
+- Add the selected record to bookmarks
+- Colored themes
+
+Added new markup layer features: grouping, locking, shapes, transforms, scaling, and position controls  
+• Added PDF annotation remover, distortion filter, improved SVG support, workers setting, and app logs viewer  
+• Improved cropper tools, previews, markup history, UI, and icons  
+• Fixed multiple rendering, import/export, cropper, and image decoding issues  
+
+Lets swap face Using AI technology Without Watermark and Coins
+
+RemakeFace opens up a new world of digital face personalization. With cutting-edge AI technology, this app gives you the power to replace your face or your friends’ with another, whether it’s a celebrity favorite or from your own gallery. Moreover, RemakeMe comes equipped with a variety of features to enhance your experience:
+
+- Single & Multiple Face: Swap your face or join friends in a single frame.
+- Image Templates: Choose from a variety of available templates to create a new look.
+- Custom Images: Upload images from your gallery for a more personalized face swap.
+- Download & Share: Save your creations to the gallery and easily share them on social media.
+- Unlimited swap Without Watermark and Coins
+- Img2Img: create image with prompt and custom face
+
+Testing, tools and complete information about your hardware and operating system
+
+Monitor your hardware in real time and get complete information about your device, including model, CPU, GPU, memory, battery, camera, storage, network, sensors, and operating system. DevCheck presents all essential hardware and system information in a clear, accurate, and well-organized way.
+
+DevCheck provides some of the most detailed CPU and System-on-a-Chip (SoC) information available on Android. View specifications for Bluetooth, GPU, RAM, storage, and other hardware in your phone or tablet. See detailed Wi-Fi and mobile network information, including dual-SIM support. Monitor sensors in real time and learn about your device’s operating system and architecture. Rooted devices and Shizuku are supported for accessing additional system information on compatible devices.
+
+Dashboard:
+A comprehensive overview of critical device and hardware information, including real-time monitoring of CPU frequencies, memory usage, battery statistics, deep sleep, and uptime, with summaries and shortcuts to system settings.
+
+Hardware:
+Detailed specifications for your SoC, CPU, GPU, memory, storage, Bluetooth, and other hardware, including chip names and manufacturers, architecture, processor cores and configuration, manufacturing process, frequencies, governors, storage capacity, input devices, and display specifications.
+
+System:
+Complete system and software information, including device codename, brand, manufacturer, bootloader, radio, Android version, security patch level, and kernel. DevCheck can also check root, BusyBox, KNOX status, and other operating system details.
+
+Battery:
+Real-time battery information including status, temperature, level, technology, health, voltage, current, power, and capacity. The Pro version adds detailed battery usage tracking with screen-on and screen-off statistics using the Battery Monitor service.
+
+Network:
+Detailed information about Wi-Fi and mobile/cellular connections, including IPv4 and IPv6 addresses, connection details, operator, phone and network type, public IP address, and one of the most complete dual-SIM implementations available.
+
+Apps:
+Detailed information and management for all installed apps.
+
+Camera:
+Advanced camera specifications including aperture, focal length, ISO range, RAW capability, 35mm equivalents, resolution (megapixels), crop factor, field of view, focus modes, flash modes, JPEG quality and image formats, and available face detection modes.
+
+Sensors:
+A complete list of all sensors on the device, including type, manufacturer, power usage, and resolution, with real-time graphical data for accelerometer, step detector, gyroscope, proximity, light, and more.
+
+Tests:
+Flashlight, vibrator, buttons, multitouch, display, backlight, charging, speakers, headset, earpiece, microphone, and biometric scanners (the last six tests require the Pro version).
+
+Tools:
+Root Check, Bluetooth Scan, CPU Analysis, Integrity Check  , Permissions Summary  , Wi-Fi Scan  , Network Mapper  , Usage Stats  , GPS tools  , and USB Check  .
+
+Widgets  :
+Modern, customizable widgets for your home screen. Monitor battery, RAM, storage, and other stats at a glance.
+
+Floating Monitors  :
+Customizable, movable, always-on-top transparent overlays that display real-time information such as CPU frequencies and temperatures, battery status, network activity, and more while using other apps.
+
+
+
+Settings app: Quick Access to All Settings, Make Shortcuts, Find Hidden Settings
+
+Hidden Settings – Activity Launcher for Settings App for Android & MIUI & HyperOS
+
+The best Hidden Settings app out there and best alternative for MIUI hidden settings, Activity Launcher, MIUI downloader news and apps, miuies rom y apps, sam helper hidden settings apps.
+Find useful menus and advanced settings that's not in System Settings App. Make quick shortcut for settings that are hard to find. Hidden Settings is your all-in-one Activity Launcher and Settings App that helps you access All secret and hidden settings on your device. The app works as Activity Launcher and Shortcut Maker for Android, HyperOS, Xiaomi, Realme, Vivo, oppo, MIUI hidden settings and hard to find settings. Explore hidden settings, unlock secret features, and take full control of your phone with the ultimate settings app.
+
+The app includes All settings fetched from the original settings package, all known hidden settings, hyperos and MIUI hidden settings, samsung hidden settings, vivo, oppo hidden settings, MIUI downloader news and apps hidden features, miuies rom y apps hidden features, sam helper hidden settings
+
+🧰 Ideal for All Android Users
+Hidden Settings works great on popular devices and ROMs:
+
+📱 MIUI, HyperOS, MIUI Hidden Settings, and MIUI Downloader users
+📱 Samsung, Realme, Oppo, Vivo, Infinix, and Redmi users
+🧩 Fans of Activity Launcher, Sam Helper, MIUI Downloader – News & Apps, and MIUI ROMs y Apps
+
+If you ever used apps like MIUI hidden settings, miuies downloader, or activity launcher MIUI 12, you’ll feel right at home here — but with a better, smoother, and more organized experience.
+
+✨ Key Features
+► Modern, smooth UI
+► All settings activities
+► Make shortcuts to home screen
+► Smart, Quick search
+► Favorites, and Recommended lists
+► Works as Activity Launcher
+► Dark Mode support
+► Organized categories
+
+🔓 Explore Settings:
+• Disabling apps, removing miui system apps settings, miui bloatware removal settings
+• MIUI Power optimization settings, miui Disable battery optimization settings, Battery optimization and battery saver settings
+• Developer options, System UI Tuner, miui Dual Apps settings (App Cloning or twin apps settings), Second Space settings, and Find My Device settings
+• Engineer Mode settings, MTK Engineering Mode settings
+• Display settings, screen settings, brightness settings, and refresh rate settings, rotation settings, screensaver settings, DPI settings
+• Network settings, Private DNS settings, wifi settings, Band Mode Settings, Radio Info activity launcher, Mobile Data activity launcher, VPN settings, APN settings, LTE settings, roaming settings, hotspot settings, and Google settings
+• Bluetooth settings, NFC settings, Airplane Mode settings, Privacy settings, and Location settings
+• Storage settings, Language settings, Default Apps settings, and Overlay Permission settings
+• security & privacy settings, biometric settings, fingerprint settings, lockscreen settings, notifications settings, usage access activity launcher
+• sound settings, ringtone settings, vibration settings
+• apps settings, default apps settings, permissions settings, dual apps activity launcher, second space settings
+• Samsung hidden settings, advanced Samsung settings
+• Vivo settings, Oppo settings, Realme settings, and Infinix settings
+• MIUI hidden settings, MIUI Downloader settings, MIUI Downloader App, MIUIes ROMs y Apps settings, MIUIes – ROMs & Apps settings
+• HyperOS hidden settings, HyperOS Downloader, and MIUI Additional Settings
+• google settings and ads settings
+• accounts settings, language settings, input settings, accessibility settings, location settings, system UI tuner, Google/autofill sync settings
+
+✅ Works perfectly with:
+MIUI, HyperOS, Samsung, Oppo, Vivo, Realme, Infinix, LG, OnePlus, Poco, and Redmi.
+Supports MIUI Downloader, MIUIes ROMs y Apps, MIUI Downloader App, and Sam Helper settings.
+
+An elegant and intuitve apps manager for all rooted and non-rooted devices.
+
+Inure is a powerful open source applications manager and analyzer with a good-looking and easy to use interface. This app can be used to manage all apps installed in the device, in addition to that Inure App Manager allows you to access all the core components of the app including services, activities etc. and modify them on the go. All that combined with a gorgeous and pleasing interface, with every tap accompanied by fluid animations. 
+
+Features
+• Organized list of all apps
+• Usage stats of all apps
+• Create notes for specific apps
+• Terminal Emulator with commands manager
+• Scan for trackers in any app
+• View and analyze any app and APK in the device
+• Uninstall, disable, force close user/system app (with and without root)
+• Install APK and Split APK files through built-in APK Installer
+• Scan for APK files in the device
+• Dedicated app's component viewer and editor
+• Grant or Deny permissions for any app (also with native app ops support)
+• Block app's trackers
+• Root and Shizuku API support
+• Get information about any app, including uninstalled ones.
+
+Extra Capabilities
+• Audio player
+• Preview any TTF format font
+• Image viewer
+• Inbuilt text viewer and editor
+• Markdown viewer
+• HTML support
+• Pretty code highlight support for some programming languages
+• XML pretty printing and highlighting
+• SVG viewer support
+
+UI Features
+• Full-screen with status and navigation bar
+• Beautiful unique interface
+• Smooth animations for every element of the app
+• Interconnected interface by icons and shared animations
+• Universal accent color picker
+• Ability to change font style of the app
+• Rounded corner support
+• Pleasing colored shadows for every layer of the app
+• Glowing app icons effect
+• Unique switch style
+• Native theme engine to support all dark and light modes
+• AMOLED, Slate, Grey and High Contrast dark modes
+
+Most tools work offline, everything is organized into simple categories, and your favorites are always easy to reach. Whether you need a quick calculation, a smart utility, a photo tool, or a small productivity shortcut, Punto. helps you save time, storage space, and unnecessary downloads.
+
+What you can do with Punto.:
+
+📏 MEASUREMENTS
+Use a 1:1 ruler, bubble level, protractor, lux meter, sound meter, metronome, Pomodoro timer, tally counter, and more.
+
+📝 TEXT
+Count characters, shorten URLs, turn text into emoji, change uppercase/lowercase, reverse text, sort lists, find and replace, remove duplicate words, and more.
+
+🎮 GAMES
+Roll dice, spin the wheel, create teams and tournaments, keep score, use a darts scoreboard, start a chess clock, explore Chess960, or use a game buzzer.
+
+➗ MATH
+Solve percentages and discounts, proportions, Pythagoras, analytic geometry, quadratic equations, Ruffini, simplify fractions, work with GCD/LCM, and factor primes.
+
+🖼 IMAGES
+Compress, resize, convert formats, apply a black and white filter, crop to shape, split images, blur private details, and clean metadata.
+
+🧰 GENERATORS
+Generate random numbers, usernames, passwords, QR codes, barcodes, flip a coin, or use Magic 8 Ball.
+
+🧮 CALCULATORS
+Use currency exchange with live rates, compare prices, split tips and bills, calculate BMI and basal metabolism, convert units, track weighted averages, and find date differences.
+
+💰 FINANCE
+Calculate compound interest, inflation, loans, VAT, CAGR, and DCF.
+
+🧭 OUTDOOR
+Send SOS with whistle and Morse flashlight, use a compass, check altitude and coordinates, open a magnifying glass, generate frequencies, or use a mirror.
+
+🎨 COLORS
+Pick colors from images or camera, convert HEX/RGB/HSL, create tints and shades, find harmonies, and blend colors.
+
+
+Currency converter, calculator with Basic and Advanced Engineering units & Tools
+
+Unit Converter is a simple, smart and elegant tool with more than 70 categories of units that are used in daily life. This is the only Unit Converter App in Google play store that has such a wide range of Unit conversion features with very simple and easy to use interface.
+Despite of having more than 100 features and wide range of categories, unit converter takes up just less than 4 MB storage in your device. Vast usage, easy handling, Simple design, Premium Contents, Regular feature updates are the reasons for our App is loved and supported by more than 5 million users. 
+
+BEST FEATURES OF UNIT CONVERTER APP 
+✓ Built-In real time Currency Converter with 150 world currencies and their latest exchange rates.
+✓ 72 unit categories, 12700+unit conversions
+✓Smart Tools - Bubble Level, Compass, Protractor, Resistor codes, Logic Gates, Stop Watch, Ruler, World Time, Date Converter and much more.
+✓New Tools - Battery Monitor, Notes, Expression Evaluation, Equation Solver, Induction Color codes, Scientific Calculator
+✓ Financial calculators - Loan calculator, Compound interest calculator, Retirement calculator, Service tax calculator, Stock calculator
+✓ Math calculators -Roman numeral converter, Number base converter, Number series generator, Ratio, Fraction, Proportion, etc.
+✓ Has most important conversion tools that are used in daily life including Fuel Calculations, Temperature, Volume, Speed, Weight, Computer Storage, Angle, Power, Viscosity, Force, Energy, Torque, Density and much more… 
+✓ Has Engineering conversion tools like radiation, electric resistance, electric capacitance, inductance, inertia, specific heat density, specific heat capacity, and illumination. 
+✓Premium contents - onetime payment to remove ads and get access to the premium contents
+✓Offline Currency Converter feature lets you to convert all the world currencies without connecting to the internet.
+✓Download exchange rates - now premium users can download the latest currency exchange rates to their device
+✓ Has the highest number of unit conversion categories among all other unit converters. 
+✓ Now you can add a Unit converter Widget to your home screen and convert all the units without opening the application
+✓ Time Zone Calculator with day light savings and accurate time differences calculations.
+✓ Built-In Calculator to perform basic arithmetic operations on the fly while using the unit converter.
+✓ Built-In Search functionality, Application shortcuts
+✓ Supports both Metric and Imperial Units
+✓ A Feature to add your own Custom Unit and favorite Conversions.
+✓ First ever Unit Conversion App to feature and support Latest Material design. 
+
+Pro Units : Construction, Plumbing, Photography Calculators
+✓ New Units - Now Convert amonng 87 Unit Categories, Sort Units
+✓ Crypto Converters, Air Flow, Internet Speed Test
+✓ Electrical Calculators, Favorite and Search Units, Download Currency Rates
+✓ New Tools - Metal Detector, Safety Siren, Screen Flash and more 
+
+Tools Added
+• AI Audio Enhancement
+• Tally Counter
+• Expense Tracker
+• Gold & Silver Rates
+• Protractor
+• Pendulum
+• Mirror
+• GPS GeoTAG Camera
+• Signature Maker
+• Drawing Board
+• Medicine Reminder
+• Heart Rate Monitor
+• AI Code Generation
+
+Features Added
+• Customize Layout
+• Customize Category Colors
+
+Detailed Tool List
+
+Date & Time Utilities:
+ Analog Clock
+ Digital Clock
+ Time Zone Converter
+ Calendar
+ Stopwatch
+ Timer
+ POMODORO Timer
+ Tally Counter
+
+Calculation Utilities:
+ Calculator
+ Scientific Calculator
+ BMI Calculator
+ Age Calculator
+ Discount Calculator
+ Percentage Calculator
+ Fuel Price Calculator
+ Mileage Calculator
+ Electricity Calculator
+ Line Chart Maker
+ Pie Chart Maker
+
+Finance Utilities:
+ Invoice Generator
+ Interest Calculator
+ Mutual Fund Calculator
+ EMI Calculator
+ GST Calculator
+ FD & RD Calculator
+ Expense Tracker
+ Gold/Silver Rates
+
+Essential Utilities
+ Flashlight
+ QR Scanner
+ Weather
+ Voice Recorder
+ Dictionary
+ Translator
+ To-Do Manager
+ Quick Notes
+ Shopping List
+
+Measurement Utilities:
+ Ruler
+ Protractor
+ Spirit Level
+ Vibratometer
+ Pedometer
+ Internet Speed Test
+ Pendulum
+ Sound Meter
+ Light Meter
+
+Common Utilities:
+ Mirror
+ Compass
+ App Backup
+ QR Generator
+ Unit Converter
+ Currency Converter
+ Cash Denomination
+ Frequency Generator
+ Metal Detector
+ Color Blender
+ GPS Geo Tag Camera
+
+Text Utilities:
+ Text Operations
+     Case Converter
+     Find & Replace
+     Edit Features (prefix, suffix,numbering)
+     Remove tools (Remove spaces, lines, duplicates)
+ Text Counter
+ Text Encryption
+ Text Repeater
+ Password Vault
+ Morse Code Converter
+ Text ↔ Binary
+ Typing Test
+ Text Art
+ Text to Speech
+
+Media Tools:
+ Color Picker
+ PDF Maker
+ Image Compressor
+ Video to Audio
+ Background Remover
+ Audio Trimmer
+ Image Converter
+ Text to Image
+ OCR Scanner
+ Signature Maker
+ Drawing Board
+
+Device Utilities:
+ Device Info
+ Battery Info
+ CPU Info
+ Sensor Info
+ Gyroscope
+ RAM Info
+ Wi-Fi Info
+ Storage Info
+ Root Checker
+ Ping Tester
+ Speaker Cleaner
+ Location Detector
+
+Games:
+ 2048
+ Tic Tac Toe
+ Rock Paper Scissors
+ Tower Block
+ Cricket Scorer
+ Coin Toss
+ Dice Roller
+ Math Game
+ Tug of War
+ Lucky Wheel
+ Spin Bottle
+ Online Games
+
+Health Utilities
+ Breathe Control
+ Water Tracker
+ Brain Reaction Test
+ Medicine Reminder
+ Heart Rate Monitor
+
+Social & Web Utilities:
+ WhatsApp Direct
+ Instagram Caption Generator
+ YouTube Description Generator
+ Status Downloader
+
+AI Utilities:
+ Recipe Generator
+ Cooking Tips
+ Grammar Correction
+ Paragraph Generator
+ Paraphraser
+ Email Writer
+ Text Summarizer
+ Ask AI (Students doubt explaining)
+ Code Generator
+ Ai Audio Enhancement
+
+Pro Utilities
+ Code Compiler
+ Speedometer
+ Hash Generator
+ Piano
+
+Carpenter + construction tools kit:
+Ruler;
+Bubble level;
+Laser level;
+Light: Manual torch light, strobe light or a sound driven light show;
+Protractor;
+Magnifier.
+
+Measure tools kit:
+dB level: Measure the sound dB level and its spectrum;
+Location (map) with altimeter;
+Distance meter;
+Stopwatch;
+Thermometer;
+Magnetic field meter (metal detector);
+Vibration level meter;
+Luminosity (LUX) level meter;
+Color sensor;
+Speedometer;
+Compass;
+Battery tester;
+Network speed test;
+Drag Racing.
+
+Other useful utilities kit:
+Unit, currency and size converter;
+Calculator;
+Code scanner: QR code and bar code;
+Text scanner;
+NFC scanner;
+Accelerometer;
+Time zones;
+Mirror;
+Dog whistle;
+Microphone;
+Metronome;
+Pitch tuner;
+Counter;
+Random generator;
+Pedometer;
+Body mass index;
+Period tracker;
+Translator;
+Notepad.
+
+Smart Toolkit - All-in-One Utility App
+Smart Toolkit brings together 28 essential tools in one convenient app, helping you solve everyday problems and boost productivity.
+🔹 Tool Descriptions
+• Age Calculator
+Calculate your exact age in years, months, and days with upcoming birthday countdown.
+• Air Quality Index
+Monitor real-time air quality index (AQI) and health recommendations based on your location.
+• Battery Tester
+Check your phone's battery health, status, and optimization tips.
+• BMI Calculator
+Calculate and track your Body Mass Index with personalized health recommendations.
+• Blood Pressure (BP) Tracker
+Log, track, and analyze your blood pressure readings over time.
+• Calm Relax
+Relax with soothing sounds and ambient noise for stress relief.
+• Clipboard Manager
+Save and manage your clipboard history for easy access to copied text.
+• Compass
+Navigate accurately with a digital compass showing precise directions.
+• Countdown
+Track important events and deadlines with customizable countdown timers.
+• Diabetes / Sugar Tracker
+Monitor and record your blood sugar levels with meal tracking.
+• Discount Calculator
+Calculate discounts and final prices for your shopping needs.
+• EMI Calculator
+Calculate monthly EMIs, total interest, and principal amounts with adjustable loan parameters.
+• Flashlight (Torch)
+Bright LED flashlight with strobe effect and adjustable intensity.
+• Fun Facts
+Discover interesting facts across various categories like science, history, and animals.
+• GPS Tracker
+Get accurate location coordinates and track your position in real-time.
+• GST Calculator
+Simplify GST calculations with inclusive and exclusive tax options.
+• GST Search
+Explore and verify GST registration details easily.
+• Internet Speed Test
+Test your download and upload speeds with detailed metrics.
+• Just A Dice
+Roll virtual dice for games, decisions, or random number generation.
+• Metal Detector
+Detect nearby metal objects using your device's magnetic sensor.
+• Pedometer
+Count your steps and track your daily physical activity.
+• QR Code Scanner
+Scan and decode QR codes instantly with history tracking.
+• Sound dB Meter
+Measure sound levels around you with decibel readings and visualization.
+• Stopwatch
+Track time with precision using this reliable stopwatch tool.
+• Text To PDF
+Convert text to PDF documents with customizable formatting.
+• Text To Speech
+Listen to text read aloud with adjustable speed and voice options.
+• Vibrator
+Create custom vibration patterns for notifications or fun.
+• File Manager
+Browse, organize, and manage your device files efficiently.
+Features
+
+COMPREHENSIVE TOOL KIT:
+
+📐 Measuring & Sensors Turn your phone into a precision instrument.
+
+Speedometer: Track speed and distance.
+
+Sound Meter: Measure noise levels (dB).
+
+Ruler & Protractor: Measure lengths and angles on screen.
+
+Metal Detector (EMF): Detect magnetic fields nearby.
+
+Vibrometer & Accelerometer: Measure vibrations and motion.
+
+Internet Speed Test: Check your connection speed.
+
+📸 Image & Media Utilities Powerful tools to manage and edit your media.
+
+Background Recorder: Capture video seamlessly while multitasking.
+
+Image Editor: Crop, Resize, Flip, and Round images.
+
+Compressor & Converter: Optimize image sizes and formats.
+
+Piano & Metronome: Play music and keep time.
+
+Audio Extractor: Get audio from video files.
+
+Screen Recorder: Record your screen activity.
+
+🔢 Calculator & Converters Solve any math or finance problem.
+
+Unit Converter: Currency, Length, Weight, Temperature, Pressure, and more.
+
+Financial Tools: Loan, Tax, Discount, and Mutual Fund calculators.
+
+Geometry: Calculate Area and Volume for 2D & 3D shapes.
+
+Advanced Math: Binary, Permutation, Prime Checker, and Equation solvers.
+
+❤️ Health & Lifestyle Stay healthy and organized.
+
+Pedometer: Count your daily steps.
+
+Period Tracker: Track cycles and set reminders.
+
+Water Intake: Monitor your hydration.
+
+BMI & BMR: Calculate ideal weight and metabolic rate.
+
+Meditation & Calm Sounds: Relax with breathing exercises.
+
+📝 Text & Productivity Utilities for work and study.
+
+Text Tools: Stylish Fonts, Text to Speech, OCR (Image to Text), and Repeat Text.
+
+Generators: Create QR Codes, Barcodes, and secure Passwords.
+
+General: Flashlight, Stopwatch, Timer, and Grocery List.
+
+🎮 Games & Fun Kill time without installing extra apps.
+
+Play Tic Tac Toe, Sudoku, Snake, 2048, and more directly inside the app.
+
+Social Tools: Status Saver and Direct Chat for WhatsApp.
+
+Main Features Smart Toolbox:
+➤QR Code Scanner: Scan or generate QR codes on the go.
+➤Currency Converter: Check exchange rates anytime, anywhere.
+➤Internet Speed Test: Check your Network Speed Instantly.
+➤Metal Detector: Instantly detect nearby metals using a metal detector.
+➤GPS Camera: Capture photos with real-time location stamps.
+➤Piano: Play melodies anytime with our built-in Piano.
+➤Unit Converter: Convert values across multiple categories.
+➤Device Info: Get detailed information about your device.
+➤Calculator: Perform quick and accurate calculations.
+➤Compass: Find direction accurately with the compass tool.
+➤Speedometer: Track your speed in real time.
+➤Speech to Text: Turn voice into instant text.
+➤Voice Recorder: Record notes, reminders, and audio easily.
+➤Flashlight: Bright and powerful light for emergencies.
+➤Magnifier: Zoom in and read small text clearly.
+➤BMI Calculator: Calculate your BMI for a healthy lifestyle.
+➤Age Calculator: Find your exact age in seconds.
+
+Heart rate: Measure the heart rate in BPM
+
+Steps: Track your fitness, running distance and calories burned
+
+File transfer: Share files without an internet
+
+Music group: Play music on multiple phones in sync
+
+CCTV: View a live camera feed from one phone to another
+
+Control Device: Control the camera and flashlight remotely
+
+Walkie Talkie: Talk over a WIFI connection without the internet
+
+WIFI Calls: Make calls over a WIFI connection using local network
+
+Compass: Shows North, South, East and West directions using GPS
+
+Leveler: A carpenter tool detects phone inclination for angle measurements which can be used for balancing
+
+Speedometer: Measure the traveling speed and distance in kmph, mph and knots
+
+Altitude: Height readings in meters or feet above sea level
+
+Check List: Set up checklists and reminders for tasks
+
+Pendulum bob: Checks inclined angles with our construction tool
+
+Internet speed: Run the test to check the speed of the internet
+
+My Pin Code: Get your current location, latitude, longitude and address
+
+Signal Strength: Signal information for WIFI, Bluetooth and tele services indicating signal direction
+
+Torch: Use your phone flashlight as a strobe light with the screen changing colors
+
+Room temperature: Measure the room ambient temperature
+
+IR Remote: A remote control for TV, AC, setup box, projector and home theater
+
+Color Detector: Get RGB, Hexadecimal, CMYK, HSV and Integer color values from the camera
+
+Text Recognition: Scan and recognise text from a live camera or images from a gallery
+
+Motion cam: Capture pictures when motion is detected by the camera
+
+Cam scanner: Scan or upload images and convert them into a PDF
+
+Magnifier: Zoom in on small objects using the device camera
+
+Night Mode cam: See through the camera in low-light conditions
+
+Blank cam: Capture pictures without a preview
+
+Vibrometer: Detect small vibrations, measure in Hertz and Velocity
+
+Sound Intensity: Measure sound or noise levels in decibels
+
+Atmospheric Light meter: Measure light intensity and brightness in lux
+
+Rpm: Measure the number of rotations per minute of an object
+
+G Meter: Measure the G forces exerted on the device
+
+Ruler: An on-screen measuring scale with guidelines in centi-meters and inches
+
+Protractor: Allows users to rotate their phone to discover angles
+
+Air Pressure: View current pressure in hPa and atm
+
+Metal Detector: Locate nearby metal and magnetic fields
+
+Screen Recorder: Record your screen with audio in MP4 format
+
+Stop motion animation: Create a continuous video from pictures and drawings
+
+Paint: Sketch and doodle using painting tools
+
+Mike: Transmit voice from the microphone to the speakers in real time
+
+Sound generator: Generate sounds of audible frequencies in different wave modes
+
+Text to Speech: Convert text into speech and save as an audio file
+
+Speech to Text: Transform spoken words into text and save them in notes
+
+Music player: Play MP3 audio or music offline
+
+Billing system: Add products and generate tax inclusive bills or invoices
+
+Days counter: Count the number of days between dates and determine age
+
+Generate QR/Bar Code: Convert text into a QR code and bar code
+
+Morse code: Convert text into dashes and dots
+
+Bluetooth Controller: send string to HC05 device via Bluetooth
+
+File locker: Secure your photos, videos, music and data with a password
+
+Top tools included:
+- Drive & Motion
+• Speedometer Pro (custom acceleration, brake, g-force tracking and measurement & HUD)
+• Altimeter Pro (real-time altitude tracking)
+• Seismograph (vibration & movement analysis)
+
+
+- Measurement Tools
+• Bubble Level (horizontal & vertical alignment)
+• Smart Protractor (angle & tilt detection)
+• Light Meter (Lux intensity measurement)
+
+
+- Detection & Sensors
+• Metal Detector (magnetic field detection)
+• Sound Meter (decibel measurement & peaks)
+
+
+- Vision & Camera
+• Color Detective (HEX color recognition) from any picture
+• HD Magnifier (zoom & low-light assist)
+
+
+- System & Diagnostics
+• Battery Lab (health, voltage & temperature)
+• System Inspector (hardware & device info)
+
+
+- Utility Tools
+• Turbo Flashlight (strobe & SOS modes)
+• Pulse Tracker (camera-based heart rate)
+Metal Detector (magnetic field detection)
+• HD Magnifier (zoom & low-light assist)
+• Speedometer with acceleration and braking measure & HUD
+• Color Detective (HEX color recognition) from any picture
+• Seismograph (vibration tracking)
+• Smart Protractor improvements
+• Turbo Flashlight (strobe & SOS modes)
+• Pulse Tracker (camera-based heart rate)
+Smart Toolkit 
+💫 Devices Information: Android Info, Display Details, Battery Details, Device Details
+
+🔋 Modern Battery Alert System: Battery Health Alerts:  1. Stay informed when your device is fully charged, running low, or at optimal levels. 2. Voice Alerts: Hands-free updates to manage battery health efficiently. 3. Instant battery level alerts for smarter device management.
+
+🕒 Time Management Tools: Clock, Stopwatch, Counters
+
+📷 QR Scanner: Fast and accurate QR code scanning for quick information retrieval.
+
+🎉 Financial Calculators – Advanced Computations:
+💫 Simplify complex financial tasks with smart tools like: EMI Calculator, SIP Calculator, Interest Rate Calculator, Commission Calculator, Sales Tax Calculator, FD Calculator, Tip Calculator, Lumpsum and SWP Calculators, Mutual Fund Returns Calculator
+
+🎉 Unit Converter:
+📐 Convert units effortlessly across various categories: 
+1. Common Converters: Area, Speed, Weight, Length
+2. Engineering Converters: Temperature, Angle, Pressure, Sound, and more
+3. Electrical Converters: Resistance, Current, Conductance, etc.
+4. IT Field Converters: Image, Pixel Density, Storage
+5. Medical Converters: Albumin, Glucose, Hemoglobin, etc.
+6. Light Unit Converters: Luminance, Frequency, and Illumination
+
+🎉 Math Calculators:
+💫 Perform advanced math calculations with smart tools like: Mark Percentage Calculator, Binary Calculation, Hexadecimal Calculation, Fraction Calculator, Logarithm Calculator
+
+🎉 Text Case Converter:
+💫 Transform text into various formats with smart tools such as: Upper Case, Lowercase, Title Case, Sentence Case, Alternating Case, Inverse Case, Reverse Text.
+
+🎉 Date Calculations:
+📊 Manage important dates with tools like: Age Calculator (Birthday Calculator), Work Experience Calculator, Pregnancy Due Date Calculator
+
+🎉 Volume Calculator:
+💫 Calculate volumes for shapes like: Sphere, Cone, Cube, Cylinder, Rectangular Prism, Capsule, Ellipsoid, Rectangular Pyramid.
+
+MAIN CALCULATOR
+• Clear design with big buttons
+• Multiple calculator layouts
+• Editable input & cursor
+• Copy & paste support
+• Scientific functions
+• Fraction calculator
+• Calculation history
+• Memory buttons
+• Home widget
+
+75 CALCULATORS & CONVERTERS
+• Algebra, Geometry, Unit Converters, Finance, Health, Date & time
+• Currency converter with 160 currencies (available offline)
+• Instant results delivered as you type
+• Smart search for faster navigation
+
+Algebra
+• Percentage calculator
+• Proportion calculator
+• Ratio calculator
+• Average calculator - arithmetic, geometric and harmonic means
+• Equation solver - linear, quadratic and equation system
+• Greatest common factor & Lowest common multiple calculator
+• Combinations and permutations
+• Decimal to fraction
+• Fraction simplifier
+• Prime number checker
+• Random number generator
+
+Geometry
+• Shape calculators for square, rectangle, parallelogram, trapezoid, rhombus, triangle, pentagon, hexagon, circle, circle arc, ellipse
+• Body calculators for cube, rect. prism, square pyramid, sq. pyramid frustum, cylinder, cone, conical frustum, sphere, spherical cap, spherical frustum, ellipsoid
+
+Unit converters
+• Acceleration converter
+• Angle converter
+• Length converter
+• Energy converter
+• Force converter
+• Torque converter
+• Area converter
+• Volume converter
+• Volumetric flow converter
+• Weight converter
+• Temperature converter
+• Pressure converter
+• Power converter
+• Speed converter
+• Mileage converter
+• Time converter
+• Digital storage converter
+• Data transfer speed converter
+• Numeric base converter
+• Roman numerals converter
+• Shoe size converter
+• Ring size converter
+• Cooking converter
+
+Finance
+• Currency converter with 160 currencies available offline
+• Unit price calculator
+• Sales tax calculator
+• Tip calculator
+• Loan calculator
+• Simple / Compound interest calculator
+
+Health
+• Body mass index - BMI
+• Daily calories burn
+• Body fat percentage
+
+Date & time
+• Age calculator
+• Add & subtract - Add or subtract years, months, days, hours and minutes from a date
+• Time interval - Calculate the difference in time between two dates
+
+Miscellaneous
+• Mileage calculator
+• Ohm's law calculator - voltage, current, resistance and power
+
+View device info, device id, system info, hardware info, And Test Device.
+
+Device Info: View hardware, software and system information. Test Android Device Hardware.
+
+Key Features
+
+👉Device id, Phone id, Advertising ID, Phone info
+View phone info and device id, find your iccid, mcc, mnc, carrier id, etc.
+
+👉Storage Analysis
+Quickly find redundant files, duplicate files, and large files to free up more storage space.
+
+👉Apps Analysis
+Target sdk, min sdk, app installer, native library, sensitive permissions, perform a comprehensive physical examination of the applications in your phone.
+
+👉Device Test Benchmark
+Screen test, button test, sensor test and hardware test to see if everything is normal on your phone.
+
+👉Device Benchmark
+Test Device hardware, view sensors realtime data and test it.
+
+👉App Detail
+Activities, services, broadcast receivers, permissions, view AndroidManifest.xml, you can see all the details of the application.
+
+👉Management Apps
+Export app icons, export app APKs, share apps, uninstall apps, it’s very convenient for you to perform any operations on apps
+
+👉Floating Monitor
+Using the floating monitor, you can see various data of the mobile phone in real time, such as real-time monitoring of FPS, battery current, battery voltage, mobile phone signal, CPU&GPU status, etc.
+
+📱Device Info provides following information of your Android device which grouped as below.
+
+▸Device information, Phone information
+▸System Information
+▸Hardware Information
+▸Device benchmark
+▸Device Test & Hardware Test
+▸SIM Information
+▸Real time Sensor Information 
+▸CPU & Processor Details
+▸Battery Health
+▸Hardware temperature
+▸Network(WiFi & Mobile network)
+▸Camera info
+▸Internal Storage & System Storage & External Storage
+▸Display
+▸GPU & RAM
+▸App details
+▸GPS & Realtime Satellite
+
+BATTERY HEALTH
+ 
+Batteries have a limited lifespan. Every time you charge your device, it wears out the battery, lowering its total capacity.
+ 
+- Use our charge alarm to remember to unplug your charger.
+- Discover how much battery wear was endured during your charge session.
+ 
+📊 BATTERY USE 
+ 
+AccuBattery measures the actual battery usage using information from the battery charge controller. Battery usage per app is determined by combining these measurements with information on which app is in the foreground. Android calculates battery usage using pre-baked profiles that device manufacturers provide, like how much power the CPU uses. In practice however, these numbers tend to be highly inaccurate.
+ 
+- Monitor how much battery your device is using
+- Know how long you can use your device when it’s active or in standby mode
+- Find out how much power each app uses.
+- Check how often your device gets woken up from deep sleep.
+ 
+🔌 CHARGE SPEED
+ 
+Use AccuBattery to find the fastest charger and USB cable for your device. Measure the charging current (in mA) to find out!
+ 
+- Check how fast your device is charging when the screen is on or off.
+- Know how long it takes to charge your phone and when it’s finished.
+ 
+HIGHLIGHTS
+ 
+- Measure real battery capacity (in mAh).
+- See how much wear your battery sustains with each charge session.
+- Look up the discharge speed and battery consumption per app.
+- Remaining charge time - know how long it takes before your battery is charged.
+- Remaining use time - know when you will run out of battery.
+- Screen on or screen off estimations.
+- Check the percentage of deep sleep, when the device is in standby mode.
+- Ongoing notification for real time battery statistics at a glance
+
+Included tools:
+• JSON Formatter — pretty print and validate JSON                                                                       • Base64 Encode/Decode — UTF-8 Base64 conversion          t
+• URL Encode/Decode — encode and decode URL components safely
+• Timestamp Converter — convert Unix ↔ ISO 8601 timestamps
+• UUID Generator — generate random UUID v4
+
+Here is the list of tools available in this app
+- Area calculator
+- Base converter
+- Bitwise calculator
+- Characters copy
+- Clash Royale deck
+- Clock
+- Commons
+- Compass
+- Counter
+- File encryption
+- Flip a coin
+- Game of life
+- HTTP request
+- IP location
+- Map (OSM)
+- MathTeX
+- MC server ping
+- Metronome
+- Morse code
+- Music analyzer
+- Music search
+- National anthems
+- Nearby transport stops
+- Network info
+- NSLookup
+- Password generator
+- Pastebin
+- Percentage calculator
+- Ping
+- Port scanner
+- QR creator
+- QR reader
+- Random color
+- Random number
+- Roman numeral
+- Roulette
+- Sound meter
+- Speedometer
+- SSH client
+- Stopwatch
+- Text counter
+- Text differences
+- Text to speech
+- Timer
+- Timestamp converter
+- URL shortener
+- UUID generator
+- Whiteboard
+- Whois domain
+- YouTube thumbnail
+
+CALL LOG ANALYSIS - CALL HISTORY MANAGE AND FILTER:
+The app helps you keep unlimited records of your call data. (Android keeps recent 500 calls, and deletes older ones). And lets you analyze calls by Duration, Frequency & Recency. Also supports advanced filters such as date range and call types: outgoing, incoming and missed calls.
+
+DIALER - DEFAULT PHONE APP:
+The app implements a smart dialer with T9 keypad to quickly search by name or number. It allows you to add favorite contacts for speed dial and also displays the most frequently contacted numbers. The app has dual-sim or multi-sim support. It allows you to block and unblock numbers which inturn updates device blocked number list
+
+CONTACT SEARCH:
+Search faster using search contacts functionality and perform analysis of any contacts. It allows you to view contact's overall call overview, summary and statistics.
+
+CALL TAGS:
+Add a tag to your calls using call-tags feature. Also, filter call, view analytics, and summaries by a call tag. It helps custom label calls as #Business or #Personal, for instance.
+
+CALL NOTES:
+Add notes to your calls using call notes feature. Also, you could search, filter, star and unstar notes. We have an option to add notes from the last call notification as well.
+
+EXPORT YOUR CALL LOG DATA:
+Export all your calls or on a specific date range from your unlimited record of call history, to perform your own analytics or as an offline backup. We support to export the call log data to a Microsoft Excel (XLS) or CSV. A very useful tool for small businesses and sales executives for call history analysis offline
+
+CALL LOG BACKUP:
+Automatically backup your call log data to Google Drive. You can restore when you reinstall the app later. The backup is important for you to never lose your call data. And the app provides an easy way to backup your call log.
+
+Powerful and Essential Tool for Android Developer. ✓Surprise ✓Automation
+
+
+► App Layout Inspector Tool
+View or export layout or view info of other app, can show view id, width height, parent and child view, coordinate of view.
+
+► Decompile other app
+View app's java file, resource and other file easily, support share files
+
+► View screen color
+Similar to color sampler tool or eyedropper, you can view or copy the color and coordinate of any other App easily, and more ARGB and CMYK
+
+► View the latest open source projects daily
+A well-selected daily Android open source project.
+
+► View activity history
+View the appName, packageName, title, icon, start time of the activity opened, also include current activity, top activity. support open in small window mode.
+
+► View manifest of any apps
+View manifest of any apps, search any content of manifest, save manifest to sdcard in text or html.
+
+► App Management—View info of apps
+You can manage your app easily. View apps installed, recently used apps, recently installed apps in grid mode.
+View app package name, version, uid, apk dir, so dir, data dir, first install and last upgrade time, component info and so on.
+
+► Extract apk or so of apps
+Extract any app's source apk or so file.
+
+► Open or close the options in the developer options quickly
+What used to take seconds is reduced to one click! it includes show screen layout, debug gpu overdraw, show layout updates, forced GPU rendering, show GPU view updates, show GPU Rendering, show pointer position, strict mode, don't keep activities, stay awake, Running Service.
+
+Note: This part of the feature is to solve the cumbersome operation of the developer option through the automated way, if you are tired of the cumbersome operation of the developer option also, then this tool is for you. If you need a tool different from the system developer option, this is not what you want, don't install it, thanks.
+
+► View the system info quickly
+includes system version information, hardware information, screen information, CPU information, virtual machine information, network-related information, Device ID information.
+
+► Open other common features quickly
+includes settings, System UI Tuner, language switching, developer options, my applications.
+
+.
+
+
+Android Dev Tools is a powerful APK Manager, APK & XAPK Installer, and App Analyzer built for Android developers, QA testers, students, and power users who need deeper control and visibility into installed apps.
+
+It combines APK analysis, APK extraction, APK installing, reverse engineering tools, deep link testing, device info, and bulk app management in one fast, lightweight, and privacy-focused Android utility.
+
+---
+
+🔍 Advanced App Inspector & App Analyzer
+
+Inspect installed apps using a detailed App Inspector and App Analyzer. View:
+
+• Package name & version
+• Permissions & components
+• Activities, services & receivers
+• Install source & install date
+• System apps vs user apps
+• App size & usage details
+
+Search, sort, and filter apps instantly to understand how applications are structured on your device.
+
+---
+
+📦 APK Manager, APK Installer & XAPK Installer
+
+Use Android Dev Tools as a complete APK Manager and smart APK & XAPK Installer:
+
+• Install APK files directly from storage
+• Install XAPK files without manual extraction
+• Built-in APK Extractor to export installed apps
+• Backup APK files with automatic version naming
+• Manage multiple APKs efficiently
+
+Ideal for developers who frequently install, test, and manage APK packages.
+
+---
+
+🧩 APK Analyzer, APK Decompiler & DEX Reader
+
+Explore app internals using powerful APK Analyzer, APK Decompiler, and DEX Reader tools:
+
+• Analyze APK structure and resources
+• Browse DEX files, classes, methods & fields
+• View code in a readable Android code viewer
+• Inspect permissions and verify app signatures
+
+Designed for learning, debugging, and understanding how Android apps are built.
+
+---
+
+🔗 Deep Link Tester & Intent Tester
+
+Validate app navigation using the integrated Deep Link Tester and Intent Tester:
+
+• Test deep links and app links
+• Launch custom Android intents
+• Verify routing and intent handling
+• Debug intent filters in real time
+
+Perfect for Android developers and QA testers.
+
+---
+
+📄 Android Manifest Viewer
+
+Use the built-in Manifest Viewer to inspect AndroidManifest.xml clearly:
+
+• Permissions
+• Intent filters
+• Activities, services & receivers
+• App configuration metadata
+
+View manifest details in a clean, readable format.
+
+---
+
+🗑️ Bulk Uninstaller & Smart App Management
+
+Manage your device efficiently with advanced Bulk Uninstaller features:
+
+• Uninstall multiple apps at once
+• Filter system and user apps
+• Mark favorites for quick access
+• Clean up unused apps faster
+
+Optimized to handle hundreds of installed apps smoothly.
+
+---
+
+📱 Device Info & System Details
+
+Access detailed Device Info in one place:
+
+• Android version & API level
+• Device model & manufacturer
+• CPU architecture & ABI
+• Screen resolution & density
+• Available system features
+
+Helpful for compatibility testing and debugging.
+
+---
+
+🔐 Privacy-First & Offline
+
+• All analysis and processing happen locally on your device
+• No app data is uploaded or shared
+• Fully compliant with Google Play policies
+
+
+Device Info is a powerful hardware monitor trusted by over 1 million users. Get comprehensive real-time information about your device's CPU, GPU, RAM, battery health, storage, sensors, display, camera, network connectivity (Wi-Fi, Bluetooth, mobile data), and thermal performance. Run hardware tests, benchmark your device, and export detailed reports—all with zero tracking or data collection
+
+📊 Dashboard
+Overview of your device's software and hardware info, including RAM, Internal Storage, External Storage, Battery, CPU, Sensors Available, and Apps Installed.
+
+📱 Device Information
+Complete phone info including model, manufacturer, brand, hardware, board, build fingerprint, device age, manufactured date, USB host, SIM and network details, and IMEI.
+
+⚙️ System Information
+Complete system and software information including codename, API level, released version, one ui version, bootloader, baseband, Java VM, Android version, security patch level, kernel, Google Play Services, Vulkan support, OpenGL ES, Treble, seamless updates, system uptime, root apps, and language.
+
+🎚️ CPU
+Display all details about the System on Chip(SoC), Processors, CPU Architecture, Supported ABIs, CPU Hardware, CPU Governor, Number of Cores, CPU Frequency, GPU Renderer, GPU Vendor & GPU Version.
+
+🔋 Battery
+Monitor your battery's health, level, status, power source, technology, temperature, voltage, power (watts), current (mA), and capacity in real-time.
+
+🌐 Network
+Show information about IP Address, Gateway, Subnet Mask, DNS, Lease Duration, Interface, Frequency, Wifi Standard, Security & Link Speed.
+
+🛜 Connectivity
+Get details of your device's connectivity options, such as Wifi, Bluetooth, NFC, Ultra-Wideband, and USB.
+
+📟 Display
+Display information including resolution, pixel density, font scale, physical size, refresh rates, HDR support, brightness, screen timeout, and orientation.
+
+💾 Memory
+Detailed RAM usage, RAM type, RAM frequency, storage capacity, and internal and external storage with real-time usage statistics.
+
+📡 Sensors
+Details of all sensors, including Sensor Name, Sensor Vendor, Type, Power, Wake-Up or Dynamic Sensor & Maximum Range
+
+📚 Apps
+Detailed info about User Apps and Installed Apps, including App Version, Minimum OS, Target OS, Permissions, Activities, Services, Providers, Receivers & Extract App Apks
+
+🔍 App Analyzer
+Analyze all your applications with the help of advanced graphs. You can also group them by target SDK, min SDK, install location, platform, installer & signature.
+
+🛜 WiFi Analyzer
+Built-in Wi-Fi analyzer to scan nearby networks and analyze signal strength, channels, Wi-Fi standards, security protocols, and estimated distance.
+
+☑️ Device Tests & Benchmarks
+Benchmark your device with the following tests: Display, Multi-touch, Flashlight, Loudspeaker, Ear Speaker, Microphone, Ear Proximity, Light, Accelerometer, Charging, Headset, Vibration, Bluetooth, Fingerprint, Volume up button, and Volume down button.
+
+🌡️ Temperature
+View all thermal zones' values given by the system for accurate temperature monitoring.
+
+📷 Camera
+Advanced camera specifications including aperture, focal length, ISO range, RAW capability, resolution, crop factor, focus modes, flash modes, image formats, and face detection modes.
+
+🪟 Floating Monitor
+The floating monitor overlays real-time RAM, battery, and temperature that stays on top of your screen.
+
+🎨 Themes
+Material You light and dark themes with custom color schemes.
+
+🪟 Material You Widgets
+Modern and customizable Material You widgets to monitor battery, RAM usage, storage, and other system stats directly from your home screen.
+
+📄 Export Reports
+Export detailed device and system information as text or PDF reports for diagnostics or technical support.
+
+🛠️ Tools
+App Analyzer, Floating Monitor, Permission Analyzer, Export Reports, Widgets, Wifi Analyzer, Data Usage, Compass
+
+File Viewer for Android is an easy-to-use file viewer and file manager that can open over 150 file types, including PDFs, Office documents (.doc, .docx, .ppt, .pptx, .xls, .xlsx), eBooks (.epub, .mobi, .azw3), and multimedia files.  View the full list of supported file formats below.
+
+🌟 Features
+✔ Open over 150 different file formats with a single app
+✔ Browse, search, and manage files with the built-in file manager and file explorer
+✔ View documents (DOCX reader, DOC reader, PDF viewer, PPTX viewer, PPT viewer, CSV viewer)
+✔ Convert documents (DOCX to PDF converter, PPTX to PDF converter, PPT to PDF converter)
+✔ Open image formats not supported on Android (TIFF file viewer, SVG viewer, Raw photo viewer)
+✔ Extract compressed archives (Zip file extractor, 7z extractor, Tar Gzip extractor)
+✔ Read eBook files (EPUB reader, MOBI reader, Kindle reader)
+✔ View and install APK files (APK installer)
+✔ View file metadata, MD5 checksums, and EXIF data
+
+📄 Documents
+- PDF Document (.pdf)
+- Microsoft Word Document (.doc, .docx, .docm, .dot, .dotm, .dotx)
+- Microsoft PowerPoint Presentation (.ppt, .pptx, .pptm, .pot, .potm, .potx, .pps, .ppsx, .ppsm)
+- Microsoft Excel Spreadsheet (.xls, .xlsx, .xlsm, .xlt, .xltm, .xltx) *print preview only
+- Comma-Separated Values (.csv, .tsv, .psv, .ssv)
+- XML Paper Specification (.xps)
+- OpenXPS (.oxps)
+
+📖 eBooks*
+- EPUB eBook (.epub)
+- Mobipocket eBook (.mobi)
+- Amazon Kindle eBook (.azw, .azw3)
+- Palm eBook (.pdb)
+*non-DRM protected
+
+📨 Emails
+- Email Message (.eml, .emlx)
+- Outlook Message (.msg, .oft)
+- Outlook Email Attachment (winmail.dat)
+
+📸 Camera Raws
+- Hasselblad (.3fr)
+- Sony (.arw, .sr2, .srw)
+- Casio (.bay)
+- Canon (.cr2, .crw)
+- Canon Raw 3 (.cr3)
+- Kodak (.dcr, .kdc)
+- Digital Negative Image (.dng)
+- Epson (.erf)
+- Leaf (.mos)
+- Mamiya (.mrw)
+- Nikon (.nef, .nrw)
+- Olympus (.orf)
+- Pentax (.pef)
+- Fuji (.raf)
+- Camera Raw (.raw)
+- Panasonic (.rw2)
+- Leica (.rwl)
+- Samsung (.srw)
+- SIGMA (.x3f)
+
+🏞 Images
+- AVIF Image (.avif) - Android 12+ only
+- Bitmap Image (.bmp)
+- DirectDraw Surface (.dds)
+- GIF Image (.gif)
+- High Efficiency File Format (.heic, .heif) - Android 9+ only
+- Icon File (.ico)
+- JPEG Network Graphic (.jng)
+- JPEG 2000 Image (.jp2)
+- JPEG Image (.jpg, .jpeg)
+- OpenEXR (.exr)
+- Kodak Photo CD (.pcd)
+- PNG Image (.png)
+- Photoshop Document (.psd)
+- Scalable Vector Graphics (.svg)
+- Targa Image (.tga, .targa)
+- TIFF Image (.tif, .tiff)
+- WebP Image (.webp) - Note: animated WebP images not supported
+- Other: .iff, .mng, .pbm, .pcx, .pfm, .pgm, .ppm, .ras, .sgi, .wbmp, .xbm, .xpm
+
+🎧 Audio: 3ga, aac, amr, flac, m4a, mka, mp3, ogg, opus, wav, imy, mid, midi, ota
+
+🎞 Video: 3gp, mkv, mp4, ts, webm
+
+🗂 Archives: 7z, apk, bz2, cbz, tbz2, tar.bz2, gz, jar, tar, tgz, tar.gz, z, zip
+
+📄 Text: cfg, conf, txt
+
+🌐 Web: htm, html, xhtml
+
+💻 Source Code
+* View with syntax highlighting
+
+Supported languages: Ada (.ada), AutoHotkey (.ahk), ActionScript (.as), BASIC (.bas), C/C++ (.c, .cpp, .h), Coffee (.coffee), C# (.cs), CSS (.css), Dart (.dart), Gradle (.gradle), Groovy (.groovy), Haml (.haml), HTACCESS (.htaccess), Windows INI (.ini), Java (.java), JavaScript (.js), JSON (.json), Kotlin (.kt), Less (.less), Lisp (.lisp) Lua (.lua), Objective-C (.m), Makefile (.mk), Markdown (.md), Nim (.nim), NSIS (.nsi), Pascal (.pas), PHP (.php), Perl (.pl), Java Properties (.properties), PowerShell (.ps1), Python (.py), R Script (.r), Ruby (.rb), Sass (.sass, .scss), Bash (.sh), SQL (.sql), Swift (.swift), Tcl (.tcl), Visual Basic (.vb), XML (.xml), XQuery (.xq, .xquery), YAML (.yaml, .yml)
+
+
+
+- Batch compression of images: Supports batch compression of single or multiple images, and supports specifying the compression size. The intelligent compression algorithm reduces the space occupied by the picture as much as possible without changing the resolution as much as possible.
+
+- Image batch scaling: Supports size adjustment of single or multiple images, supports scaling based on percentage, and can also customize the resolution of images. Easily meet the special requirements for picture size in some occasions.
+
+- Image cropping: Support image cropping. Got extra? Cut it off!
+
+- Batch rotation of images: Supports rotating or flipping single or multiple images.
+
+- Image batch format conversion: Support conversion between JPEG, PNG, WEBP and other mainstream formats. File format is no longer an issue.
+
+- PDF to image: Save each page in the PDF file as a image, no need to take screenshots one by one.
+
+- Image to PDF: Save the selected single or multiple images as one or more PDF files.
+
+- Image package: Package the selected single or multiple images into one or more compressed files in .zip format, and support password encryption and file name modification.
+
+- Gif to Image: Convert each frame in the gif animation to a picture.
+
+- Video to Gif: Convert short video to gif animation.
+
+- EXIF information: View and edit a image's EXIF metadata.
+
+- Material theme preview: Support to generate the corresponding material theme 3 according to the selected picture, and various controls are available for preview.
+
+- Picture color selection: Pick and view a color anywhere on the picture.
+
+* Completely free
+* Batch operation, saving time and effort
+* Modern interface design, beautiful and easy to use
+* Save storage space on devices such as mobile phones and tablets
+* Adapt to the latest Api 34, support predictive return gestures, photo picker and other new features
+
+Enjoy more than 100 tools designed to boost your productivity. All available offline and in just 27mb.
+
+🔤 TEXT TOOLS
+Create stylish text, count characters, remove duplicates, decorate fonts, or use expressive kaomoji. Speed up writing, fix formatting instantly, and polish your content with zero effort. Designed for fast productivity, clean edits, and social media-ready text.
+
+🖼️ IMAGE TOOLS
+Resize, crop, rotate, and round photos in seconds. Ideal for quick image optimization, social posts, IDs, documents, and clean visual layouts. No confusing menus — just simple mobile tools that work offline.
+
+🧮 CALCULATION TOOLS
+Solve everyday math faster with all calculators in one. Perform algebra, geometry, percentage, and finance calculations with instant results and clean visuals. Includes 2D & 3D shape calculators for students, architects, DIY projects, and quick work tasks.
+
+📏 UNIT CONVERTER
+A powerful unit converter calculator for weight, currency, length, temperature, time, speed, and more. Fast, accurate, and essential for schoolwork, travel, cooking, engineering, and day-to-day tasks. Works fully offline except for currency updates.
+
+💻 PROGRAMMING TOOLS
+Beautify JSON, HTML, XML, or CSS instantly. Developers can clean, reformat, and inspect code with one tap. Our all tools application is perfect for quick debugging, studying, or preparing code snippets on the go.
+
+🎨 COLOR TOOLS
+Pick, blend, and extract colors from photos, then view HEX, RGB, and more. A must-have for designers, artists, UI creators, and brand work. Use all tools here to build palettes and match colors with precision.
+
+🎲 RANDOMIZER TOOLS
+Spin a lucky wheel, roll dice, flip coins, generate numbers, or play rock-paper-scissors. Great for decision-making, games, content ideas, classroom activities, or creative brainstorming.
+
