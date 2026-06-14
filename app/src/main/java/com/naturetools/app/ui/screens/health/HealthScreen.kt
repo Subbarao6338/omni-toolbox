@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.HealthAndSafety
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,6 +46,73 @@ fun SleepCycleCalculator() {
                         Text("$hours hours of sleep")
                     }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun MedicationReminderSystem() {
+    var medicineName by remember { mutableStateOf("") }
+    var time by remember { mutableStateOf("08:00") }
+    val reminders = remember { mutableStateListOf<Pair<String, String>>() }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Medicine Reminder", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = medicineName,
+            onValueChange = { medicineName = it },
+            label = { Text("Medicine Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = time,
+            onValueChange = { time = it },
+            label = { Text("Time (HH:mm)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                if (medicineName.isNotBlank()) {
+                    reminders.add(medicineName to time)
+                    medicineName = ""
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Default.Add, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Add Reminder")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text("Scheduled Reminders", style = MaterialTheme.typography.titleSmall)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (reminders.isEmpty()) {
+            Text("No reminders set", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+        } else {
+            reminders.forEach { reminder ->
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Alarm, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(reminder.first, style = MaterialTheme.typography.bodyLarge)
+                            Text(reminder.second, style = MaterialTheme.typography.bodySmall)
+                        }
+                        IconButton(onClick = { reminders.remove(reminder) }) {
+                            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
+                        }
+                    }
+                }
             }
         }
     }
@@ -97,11 +164,7 @@ fun HealthScreen(navController: NavHostController, title: String) {
                     Text("Last period: Oct 1 - Oct 5")
                 }
                 "Medication Tracker" -> {
-                    Text("No medications scheduled for today", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Button(onClick = { /* Add medication */ }) {
-                        Text("Add Medication")
-                    }
+                    MedicationReminderSystem()
                 }
                 "Sleep Cycle", "Sleep Cycle calculator" -> SleepCycleCalculator()
                 else -> {

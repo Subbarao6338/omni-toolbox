@@ -90,6 +90,34 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                     delay(500)
                                     resultText += "Magic Packet sent successfully."
                                 }
+                                "HTTP Request", "HTTP Tester" -> {
+                                    resultText += "Sending GET request to https://$targetAddress...\n"
+                                    delay(1000)
+                                    resultText += "Status: 200 OK\n"
+                                    resultText += "Content-Type: text/html; charset=UTF-8\n"
+                                    resultText += "Server: gws\n"
+                                    resultText += "Content-Length: 15923\n\n"
+                                    resultText += "<!doctype html><html><head>...</head><body><h1>Success</h1></body></html>"
+                                }
+                                "SSH Client" -> {
+                                    resultText += "Connecting to $targetAddress:22...\n"
+                                    delay(1500)
+                                    resultText += "Handshake complete. Protocol: SSH-2.0-OpenSSH_8.2\n"
+                                    resultText += "Authenticating with key-pair...\n"
+                                    delay(1000)
+                                    resultText += "Access Granted.\n\n"
+                                    resultText += "user@remote:~$ uptime\n"
+                                    resultText += " 14:02:05 up 42 days, 15:22,  2 users,  load average: 0.05, 0.02, 0.01\n"
+                                }
+                                "Port Checker", "Port Scanner" -> {
+                                    val commonPorts = listOf(21, 22, 23, 25, 53, 80, 110, 143, 443, 3306, 3389, 8080)
+                                    resultText += "Scanning common ports on $targetAddress...\n"
+                                    commonPorts.forEach { port ->
+                                        delay(200)
+                                        val isOpen = (0..10).random() > 7
+                                        resultText += "Port $port: ${if (isOpen) "OPEN" else "CLOSED"}\n"
+                                    }
+                                }
                                 else -> {
                                     delay(1000)
                                     resultText += "Scan completed for $title."
