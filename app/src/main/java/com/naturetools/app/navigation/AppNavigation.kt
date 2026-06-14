@@ -301,7 +301,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "morse" -> MorseCodeScreen(navController)
         route == "morse_decoder" -> MorseDecoderScreen(navController)
         route == "text_diff" -> TextDiffScreen(navController)
-        listOf("case_converter", "lorem", "anagram", "word_rank_calc").contains(route) -> TextToolScreen(navController, tool.name)
+        listOf("case_converter", "lorem", "anagram").contains(route) -> TextToolScreen(navController, tool.name)
+        route == "word_rank_calc" -> WordRankScreen(navController)
 
         route == "plant_care" -> PlantCareScreen(navController)
         route == "fuel" -> FuelCostCalculatorScreen(navController)

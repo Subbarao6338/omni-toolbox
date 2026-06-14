@@ -2,6 +2,12 @@ package com.naturetools.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Omni Toolbox Slate-Carbon Theme
+val NeonMint = Color(0xFF39FF14)
+val SlateDark = Color(0xFF121212)
+val CarbonGray = Color(0xFF1E1E1E)
+val SoftWhite = Color(0xFFF8F9FF)
+
 // Nature-Inspired Colors
 val LeafGreen = Color(0xFF4CAF50)
 val DarkLeafGreen = Color(0xFF388E3C)
