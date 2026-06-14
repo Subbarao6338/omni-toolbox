@@ -1,4 +1,4 @@
-package omni.toolbox.ui.screens.image
+package omni.toolbox.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

@@ -22,6 +22,7 @@ import androidx.navigation.navDeepLink
 import omni.toolbox.model.Tool
 import omni.toolbox.model.ToolProvider
 import omni.toolbox.ui.screens.HomeScreen
+import omni.toolbox.ui.components.ToolGroupScreen
 import omni.toolbox.ui.screens.ai.*
 import omni.toolbox.ui.screens.system.DashboardScreen
 import omni.toolbox.ui.screens.system.DeveloperScreen
@@ -274,6 +275,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "sensors_list" -> SensorsListScreen(navController)
         route == "spl_meter" -> SensorDataScreen(navController)
         route == "sensor_data" -> SensorDataScreen(navController)
+        route == "data_viz" -> DataVisualizerScreen(navController)
         route == "gforce_meter" -> SensorDataScreen(navController)
         route == "light" -> LightMeterScreen(navController)
         route == "metal" -> MetalDetectorScreen(navController)
@@ -326,7 +328,6 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "text_diff" -> TextDiffScreen(navController)
         listOf("case_converter", "lorem", "anagram").contains(route) -> TextToolScreen(navController, tool.name)
         route == "word_rank_calc" -> WordRankScreen(navController)
-        route == "panchangam" -> PanchangamScreen(navController)
 
         route == "plant_care" -> PlantCareScreen(navController)
         route == "fuel" -> FuelCostCalculatorScreen(navController)
@@ -375,7 +376,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
             else ImageToolScreen(navController, tool.name)
         }
         category == "Health" -> HealthScreen(navController, tool.name)
-        category == "Device" -> if (route == "smart_hub") SystemLabScreen(navController, tool.name) else SystemLabScreen(navController, tool.name)
+        category == "Device" -> SystemLabScreen(navController, tool.name)
         category == "Security" -> SystemLabScreen(navController, tool.name)
         category == "Weather" -> EnvironmentToolScreen(navController, tool.name)
         category == "Travel" -> OutdoorToolScreen(navController, tool.name)
@@ -383,7 +384,12 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         category == "DIY" -> EngineeringToolScreen(navController, tool.name)
         category == "Developer" -> DeveloperExpertScreen(navController, tool.name)
         category == "Data" -> if (route == "yaml_to_json") DeveloperExpertScreen(navController, tool.name) else FileToolScreen(navController, tool.name)
+        category == "Web" -> WebToolScreen(navController, initialUrl = "https://www.google.com", title = tool.name)
+        category == "Utilities" -> DashboardScreen(navController)
+        category == "Design" -> ColorToolsScreen(navController)
+        category == "Education" -> EngineeringToolScreen(navController, tool.name)
+        category == "AI Tools" -> ChatToolScreen(navController, tool.name, aiApiKey)
 
-        else -> AudioToolScreen(navController, tool.name)
+        else -> DashboardScreen(navController)
     }
 }
