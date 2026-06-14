@@ -255,6 +255,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "protractor" -> ProtractorScreen(navController)
         route == "zodiac" -> ZodiacFinderScreen(navController)
         route == "macro_splitter" -> MacroSplitterScreen(navController)
+        route == "billing" -> BillingScreen(navController)
 
         listOf("unit_price", "unit_compare").contains(route) -> UnitPriceCalculatorScreen(navController)
         route == "base_conv" -> BaseConverterScreen(navController)
@@ -266,6 +267,10 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "device" -> DeviceScreen(navController)
         route == "storage" -> StorageScreen(navController)
         route == "app_info" -> AppInfoScreen(navController)
+        route == "app_inspector" -> AppDecompilerScreen(navController)
+        listOf("drawing_board", "signature_maker").contains(route) -> DrawingBoardScreen(navController, tool.name)
+        route == "terminal" -> TerminalScreen(navController)
+        route == "face_swap" -> FaceSwapScreen(navController)
         route == "sensors_list" -> SensorsListScreen(navController)
         route == "spl_meter" -> SensorDataScreen(navController)
         route == "sensor_data" -> SensorDataScreen(navController)
@@ -302,6 +307,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "calorie_calc" -> CalorieCalculatorScreen(navController)
         route == "habit_tracker" -> HabitTrackerScreen(navController)
         route == "meditation" -> MeditationTimerScreen(navController)
+        listOf("heart_rate", "blood_pressure", "blood_sugar").contains(route) -> MedicalToolsScreen(navController, tool.name)
 
         route == "travel_budget" -> TravelBudgetScreen(navController)
         route == "world_map" -> WorldMapScreen(navController)

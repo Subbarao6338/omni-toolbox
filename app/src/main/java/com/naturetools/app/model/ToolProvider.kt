@@ -31,7 +31,7 @@ object ToolProvider {
             subToolRoutes = listOf("add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "binaural", "bpm", "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor", "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer", "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "metronome", "noise_generator", "record_audio", "silence_generator", "sound_mastering", "voice_memo", "wave_generator", "ai_noise_remover", "ai_stems_splitter", "ai_voice_mimic", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover")),
         Tool("Video Tools", Icons.Default.VideoLibrary, "video_tools_group", "Media", Color(0xFFF44336),
             description = "Professional video processing tools.",
-            subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool")),
+            subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool", "video_merger")),
         Tool("Image Tools", Icons.Default.PhotoLibrary, "image_tools_group", "Media", Color(0xFF2196F3),
             description = "Image editing and optimization tools.",
             subToolRoutes = listOf("batch_img_pro", "exif_viewer", "image_ai_tools", "image_base64", "image_bg_remover", "image_collage", "image_color_picker", "image_compare", "image_crop", "image_cutting", "image_delete_exif", "image_draw", "image_draw_bg", "image_edit_exif", "image_filter", "image_format_conv", "image_layers_bg", "image_layers_img", "image_mask_filter", "image_noise_gen", "image_ocr", "image_open_project", "image_palette", "image_preview", "image_resize_conv", "image_resize_limits", "image_resize_weight", "image_single_edit", "image_stacking", "image_stitching", "image_to_svg", "image_to_webp", "image_wallpapers", "image_watermark", "image_web_load", "multi_crop", "multi_image_resize", "pixel_art", "profile_photo_maker", "webp_to_images", "file_conv")),
@@ -56,7 +56,7 @@ object ToolProvider {
             subToolRoutes = listOf("checklist", "daily_journal", "daily_quotes", "kanban", "note", "pomodoro", "task_board", "time_logger")),
         Tool("Calculators", Icons.Default.Calculate, "calc_group", "Utilities", Color(0xFFFF9800),
             description = "Practical calculators for daily use.",
-            subToolRoutes = listOf("calculator", "discount", "mortgage_calc", "tip", "unit_compare", "unit_price", "volume_calc")),
+            subToolRoutes = listOf("calculator", "discount", "mortgage_calc", "tip", "unit_compare", "unit_price", "volume_calc", "billing")),
         Tool("Unit Converters", Icons.Default.SwapHoriz, "conv_group", "Utilities", Color(0xFF2196F3),
             description = "Convert between various units.",
             subToolRoutes = listOf("base_conv", "converter", "crypto_conv", "currency", "torque_conv")),
@@ -67,19 +67,23 @@ object ToolProvider {
         // GAMES
         Tool("Game Collection", Icons.Default.Gamepad, "game_group", "Games", Color(0xFFFF9800),
             description = "Simple offline games.",
-            subToolRoutes = listOf("coin_flip", "dice_roller", "memory_game", "number_guessing", "random", "tic_tac_toe", "snake", "ludo", "carroms", "chess")),
+            subToolRoutes = listOf("coin_flip", "dice_roller", "memory_game", "number_guessing", "random", "tic_tac_toe", "snake", "ludo", "carroms", "chess", "game_of_life", "clash_deck", "roulette")),
 
         // DEVICE
         Tool("Omni Dashboard", Icons.Default.Dashboard, "dashboard", "Device", Color(0xFF39FF14),
             description = "Real-time system health and diagnostic hub."),
         Tool("Developer Console", Icons.Default.Code, "developer_console", "Developer", Color(0xFF3F51B5),
             description = "Hardware inspection and app management suite."),
+        Tool("Terminal Emulator", Icons.Default.Terminal, "terminal", "Developer", Color(0xFF212121),
+            description = "Local shell terminal emulator."),
         Tool("Cloud Sync Hub", Icons.Default.CloudSync, "cloud_sync", "Web", Color(0xFF2196F3),
             description = "Multi-account cross-cloud data synchronization."),
         Tool("Web Crawler Pro", Icons.Default.Search, "web_scraper", "Web", Color(0xFF00BCD4),
             description = "Advanced web scraper with Notion integration."),
         Tool("Gemini AI Hub", Icons.Default.AutoAwesome, "ai_companion", "AI Tools", Color(0xFF673AB7),
             description = "Multimodal AI assistant and generative lab."),
+        Tool("Face Swap AI", Icons.Default.Face, "face_swap", "AI Tools", Color(0xFFFF4081),
+            description = "Swap faces in images using AI."),
         Tool("Security Vault", Icons.Default.Lock, "security_vault", "Security", Color(0xFF607D8B),
             description = "Cryptographic tools and secure data locker."),
         Tool("PowerBench", Icons.Default.Speed, "power_bench", "Device", Color(0xFFF44336),
@@ -97,7 +101,7 @@ object ToolProvider {
         // DOCUMENTS
         Tool("PDF Toolkit", Icons.Default.PictureAsPdf, "pdf_tools_group", "Documents", Color(0xFFF44336),
             description = "Comprehensive PDF editing tools.",
-            subToolRoutes = listOf("images_to_pdf", "pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "pdf_merge", "pdf_metadata", "pdf_ocr", "pdf_page_numbers", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip")),
+            subToolRoutes = listOf("images_to_pdf", "pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "pdf_merge", "pdf_metadata", "pdf_ocr", "pdf_page_numbers", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip", "pdf_html_to_pdf", "pdf_scan_to_pdf", "pdf_fill_forms", "pdf_word_to_pdf", "pdf_excel_to_pdf", "pdf_text_to_pdf", "pdf_qr_to_pdf", "pdf_barcode_to_pdf", "pdf_invert")),
         Tool("Office & Files", Icons.Default.Description, "docs_group", "Documents", Color(0xFF607D8B),
             description = "Manage documents and files.",
             subToolRoutes = listOf("ai_doc_translator", "csv_to_json", "doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "storage_cleaner", "zip_unzip", "docs_online")),
@@ -118,7 +122,7 @@ object ToolProvider {
         // NETWORK
         Tool("Network Lab", Icons.Default.NetworkCheck, "net_group", "Network", Color(0xFF00BCD4),
             description = "Network diagnostic and info tools.",
-            subToolRoutes = listOf("device_discovery", "dns_lookup", "mqtt_tester", "my_ip", "network_info", "ping", "port_checker", "port_scanner", "speed_test", "subnet_calc", "wake_on_lan", "whois", "wifi_anal")),
+            subToolRoutes = listOf("device_discovery", "dns_lookup", "mqtt_tester", "my_ip", "network_info", "ping", "port_checker", "port_scanner", "speed_test", "subnet_calc", "wake_on_lan", "whois", "wifi_anal", "http_request", "ssh_client")),
 
         // DATA
         Tool("Data Tools", Icons.Default.Storage, "data_tools_group", "Data", Color(0xFF009688),
@@ -138,7 +142,7 @@ object ToolProvider {
         // HEALTH
         Tool("Health & Vitality", Icons.Default.Favorite, "health_group", "Health", Color(0xFFE91E63),
             description = "Track your health and habits.",
-            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "macro_splitter", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "posture_check", "sleep_tracker", "step_counter", "stretch_guide", "water", "water_reminder", "yoga_guide")),
+            subToolRoutes = listOf("bmi", "bmr", "calorie_calc", "macro_splitter", "eye_exercise", "habit_tracker", "medication_tracker", "meditation", "period_tracker", "posture_check", "sleep_tracker", "step_counter", "stretch_guide", "water", "water_reminder", "yoga_guide", "heart_rate", "blood_pressure", "blood_sugar")),
 
         // WEATHER
         Tool("Weather Center", Icons.Default.Cloud, "weather_group", "Weather", Color(0xFF03A9F4),
@@ -153,15 +157,15 @@ object ToolProvider {
         // DEVELOPER
         Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
             description = "Advanced developer utilities.",
-            subToolRoutes = listOf("ascii_table", "base_conv", "base64", "crontab_gen", "hex_viewer", "jwt_tool", "markdown_preview", "regex_tester", "url_encoder")),
+            subToolRoutes = listOf("ascii_table", "base_conv", "base64", "crontab_gen", "hex_viewer", "jwt_tool", "markdown_preview", "regex_tester", "url_encoder", "app_inspector")),
         Tool("Text Mastery", Icons.Default.TextFields, "text_group", "Developer", Color(0xFF9C27B0),
             description = "Powerful text processing tools.",
             subToolRoutes = listOf("anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter", "word_rank_calc")),
 
         // DESIGN
-        Tool("Color & Design", Icons.Default.Palette, "color_palette_group", "Design", Color(0xFF00BCD4),
-            description = "Design and palette exploration.",
-            subToolRoutes = listOf("color_conv_pro", "color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "image_histogram", "material_you_palette")),
+        Tool("Design & Creative", Icons.Default.Palette, "media_tools_group", "Design", Color(0xFF00BCD4),
+            description = "Design and creative exploration tools.",
+            subToolRoutes = listOf("color_conv_pro", "color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "image_histogram", "material_you_palette", "drawing_board", "signature_maker")),
 
         // DIY
         Tool("DIY & Home", Icons.Default.Home, "diy_home_group", "DIY", Color(0xFF795548),
@@ -283,6 +287,7 @@ object ToolProvider {
         Tool("Video to Audio", Icons.Default.VideoLibrary, "m_video_to_audio", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Video To GIF", Icons.Default.Gif, "video_to_gif", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Video Volume", Icons.AutoMirrored.Filled.VolumeUp, "video_volume_booster", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Video Merger", Icons.Default.Merge, "video_merger", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Voice Changer", Icons.Default.Face, "m_voice_changer", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Voice Memo", Icons.Default.SettingsVoice, "voice_memo", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Volume Booster", Icons.AutoMirrored.Filled.VolumeUp, "m_volume_booster", "Media", isVisibleOnHome = false, isSubTool = true),
@@ -355,6 +360,7 @@ object ToolProvider {
         Tool("Unit Price Calc", Icons.Default.PriceCheck, "unit_price", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Unit Price Comparison", Icons.AutoMirrored.Filled.CompareArrows, "unit_compare", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Vibration Test", Icons.Default.Vibration, "vibration", "Utilities", isVisibleOnHome = false, isSubTool = true),
+        Tool("Billing & Invoices", Icons.Default.Receipt, "billing", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Volume Calc", Icons.Default.VerticalAlignBottom, "volume_calc", "Utilities", isVisibleOnHome = false, isSubTool = true),
         Tool("Wifi QR Generator", Icons.Default.Wifi, "wifi_qr", "Utilities", isVisibleOnHome = false, isSubTool = true),
 
@@ -369,6 +375,9 @@ object ToolProvider {
         Tool("Random Gen", Icons.Default.Casino, "random", "Games", isVisibleOnHome = false, isSubTool = true),
         Tool("Snake", Icons.Default.Gamepad, "snake", "Games", isVisibleOnHome = false, isSubTool = true),
         Tool("Tic Tac Toe", Icons.Default.Close, "tic_tac_toe", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Game of Life", Icons.Default.Grid4x4, "game_of_life", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Clash Deck", Icons.Default.Style, "clash_deck", "Games", isVisibleOnHome = false, isSubTool = true),
+        Tool("Roulette", Icons.Default.Casino, "roulette", "Games", isVisibleOnHome = false, isSubTool = true),
 
         // DEVICE
         Tool("Altimeter", Icons.Default.Landscape, "altimeter", "Device", isVisibleOnHome = false, isSubTool = true),
@@ -424,6 +433,15 @@ object ToolProvider {
         Tool("Unlock PDF", Icons.Default.LockOpen, "pdf_unlock", "Documents", isVisibleOnHome = false, isSubTool = true),
         Tool("Watermarking PDF", Icons.AutoMirrored.Filled.BrandingWatermark, "pdf_watermark", "Documents", isVisibleOnHome = false, isSubTool = true),
         Tool("Zip PDF", Icons.Default.FolderZip, "pdf_zip", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("HTML to PDF", Icons.Default.Html, "pdf_html_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Scan to PDF", Icons.Default.CameraAlt, "pdf_scan_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Fill Forms", Icons.Default.EditNote, "pdf_fill_forms", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Word to PDF", Icons.Default.Description, "pdf_word_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Excel to PDF", Icons.Default.TableChart, "pdf_excel_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Text to PDF", Icons.Default.TextFields, "pdf_text_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("QR to PDF", Icons.Default.QrCode, "pdf_qr_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Barcode to PDF", Icons.Default.QrCode, "pdf_barcode_to_pdf", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Invert PDF", Icons.Default.InvertColors, "pdf_invert", "Documents", isVisibleOnHome = false, isSubTool = true),
         Tool("Zip/Unzip", Icons.Default.FolderZip, "zip_unzip", "Documents", isVisibleOnHome = false, isSubTool = true),
 
         // SECURITY
@@ -467,6 +485,8 @@ object ToolProvider {
         Tool("Wake On LAN", Icons.Default.SettingsPower, "wake_on_lan", "Network", isVisibleOnHome = false, isSubTool = true),
         Tool("Whois", Icons.Default.QuestionMark, "whois", "Network", isVisibleOnHome = false, isSubTool = true),
         Tool("WIFI Analyzer", Icons.Default.Wifi, "wifi_anal", "Network", isVisibleOnHome = false, isSubTool = true),
+        Tool("HTTP Request", Icons.Default.Http, "http_request", "Network", isVisibleOnHome = false, isSubTool = true),
+        Tool("SSH Client", Icons.Default.Terminal, "ssh_client", "Network", isVisibleOnHome = false, isSubTool = true),
 
         // DATA
         Tool("Data Visualizer", Icons.Default.BarChart, "data_viz", "Data", isVisibleOnHome = false, isSubTool = true),
@@ -494,6 +514,7 @@ object ToolProvider {
         Tool("Text Summarizer", Icons.Default.Summarize, "ai_summarizer", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Text Extractor", Icons.Default.TextFields, "ai_text_ext", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Translator", Icons.Default.Translate, "ai_translate", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Face Swap", Icons.Default.Face, "face_swap", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Voice Mimic", Icons.Default.RecordVoiceOver, "ai_voice_mimic", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Audio Master Pro", Icons.Default.SettingsVoice, "aud_master_pro", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Audio Noise Remover", Icons.Default.GraphicEq, "audio_noise_remover", "Media", isVisibleOnHome = false, isSubTool = true),
@@ -537,6 +558,9 @@ object ToolProvider {
         Tool("Stretching Guide", Icons.Default.SelfImprovement, "stretch_guide", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Water Reminder", Icons.Default.NotificationsActive, "water_reminder", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Water Tracker", Icons.Default.LocalDrink, "water", "Health", isVisibleOnHome = false, isSubTool = true),
+        Tool("Heart Rate Monitor", Icons.Default.Favorite, "heart_rate", "Health", isVisibleOnHome = false, isSubTool = true),
+        Tool("Blood Pressure", Icons.Default.MonitorHeart, "blood_pressure", "Health", isVisibleOnHome = false, isSubTool = true),
+        Tool("Blood Sugar", Icons.Default.Bloodtype, "blood_sugar", "Health", isVisibleOnHome = false, isSubTool = true),
         Tool("Yoga Guide", Icons.Default.SelfImprovement, "yoga_guide", "Health", isVisibleOnHome = false, isSubTool = true),
 
         // WEATHER
@@ -577,6 +601,8 @@ object ToolProvider {
         Tool("Regex Tester", Icons.Default.Code, "regex_tester", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Text Diff", Icons.Default.Difference, "text_diff", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", isVisibleOnHome = false, isSubTool = true),
+        Tool("App Inspector", Icons.Default.Android, "app_inspector", "Developer", isVisibleOnHome = false, isSubTool = true),
+        Tool("Terminal", Icons.Default.Terminal, "terminal", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Word Rank", Icons.Default.Calculate, "word_rank_calc", "Developer", isVisibleOnHome = false, isSubTool = true),
 
@@ -590,6 +616,8 @@ object ToolProvider {
         Tool("Generate Palette", Icons.Default.ColorLens, "generate_palette", "Design", isVisibleOnHome = false, isSubTool = true),
         Tool("Histogram", Icons.Default.BarChart, "image_histogram", "Design", isVisibleOnHome = false, isSubTool = true),
         Tool("Material You", Icons.Default.AutoAwesome, "material_you_palette", "Design", isVisibleOnHome = false, isSubTool = true),
+        Tool("Drawing Board", Icons.Default.Brush, "drawing_board", "Design", isVisibleOnHome = false, isSubTool = true),
+        Tool("Signature Maker", Icons.Default.Draw, "signature_maker", "Design", isVisibleOnHome = false, isSubTool = true),
 
         // DIY
         Tool("Car Maintenance", Icons.Default.Build, "car_maintenance", "DIY", isVisibleOnHome = false, isSubTool = true),

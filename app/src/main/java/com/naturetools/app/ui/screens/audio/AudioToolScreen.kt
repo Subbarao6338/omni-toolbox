@@ -1,9 +1,14 @@
 package com.naturetools.app.ui.screens.audio
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -20,14 +25,25 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.naturetools.app.ui.components.AdjustmentSlider
+import com.naturetools.app.ui.components.ToolScreen
 import kotlin.random.Random
 
 @Composable
 fun AudioToolScreen(navController: NavHostController, title: String, mimeType: String = "audio/*") {
+    if (title == "Video Merger" || title == "Audio Joiner" || title == "Audio Mixer") {
+        MultiMediaScreen(navController, title, mimeType)
+    } else {
+        AudioToolScreenSingle(navController, title, mimeType)
+    }
+}
+
+@Composable
+fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeType: String) {
     AudioBaseScreen(navController = navController, title = title, mimeType = mimeType) { _, selectedFileUri ->
         var isPlaying by remember { mutableStateOf(false) }
         var progress by remember { mutableFloatStateOf(0f) }
         val scrollState = rememberScrollState()
+        var showStems by remember { mutableStateOf(false) }
 
         Column(
             modifier = Modifier
@@ -155,10 +171,19 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                             AdjustmentSlider("Noise Reduction (dB)", valueRange = 0f..40f, initialValue = 12f)
                             AdjustmentSlider("Smoothing", initialValue = 0.5f)
                         }
-                        "Vocal Remover" -> {
-                            AdjustmentSlider("Vocal Reduction", initialValue = 0.8f)
-                            AdjustmentSlider("Instrumental Boost", initialValue = 0.2f)
-                            AdjustmentSlider("Frequency Cutoff", valueRange = 100f..10000f, initialValue = 5000f)
+                        "Vocal Remover", "ai_stems_splitter" -> {
+                            if (!showStems) {
+                                Button(onClick = { showStems = true }) {
+                                    Text("Extract Stems")
+                                }
+                            } else {
+                                StemControl("Vocals", 0.8f)
+                                StemControl("Drums", 0.5f)
+                                StemControl("Bass", 0.6f)
+                                StemControl("Other", 0.4f)
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            AdjustmentSlider("AI Model Accuracy", initialValue = 0.9f)
                         }
                         "Reverb Remover", "Echo Remover" -> {
                             AdjustmentSlider("De-reverb Intensity", initialValue = 0.6f)
@@ -215,6 +240,79 @@ fun AudioToolScreen(navController: NavHostController, title: String, mimeType: S
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Process and Save")
+            }
+        }
+    }
+}
+
+@Composable
+fun StemControl(label: String, initialValue: Float) {
+    var volume by remember { mutableFloatStateOf(initialValue) }
+    var isMuted by remember { mutableStateOf(false) }
+
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        IconButton(onClick = { isMuted = !isMuted }) {
+            Icon(if (isMuted) Icons.Default.VolumeOff else Icons.Default.VolumeUp, contentDescription = null)
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(label, style = MaterialTheme.typography.labelMedium)
+            Slider(value = if (isMuted) 0f else volume, onValueChange = { volume = it }, enabled = !isMuted)
+        }
+    }
+}
+
+@Composable
+fun MultiMediaScreen(navController: NavHostController, title: String, mimeType: String) {
+    var selectedFiles by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
+        selectedFiles = it
+    }
+
+    ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+            if (selectedFiles.isEmpty()) {
+                Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Button(onClick = { launcher.launch(mimeType) }) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Select Multiple Files")
+                    }
+                }
+            } else {
+                Text("Selected Files:", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                    selectedFiles.forEachIndexed { index, uri ->
+                        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("${index + 1}.", modifier = Modifier.width(24.dp))
+                                Text(uri.lastPathSegment ?: "Unknown file", modifier = Modifier.weight(1f), maxLines = 1)
+                                IconButton(onClick = { selectedFiles = selectedFiles.filter { it != uri } }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Remove", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
+                        }
+                    }
+                    Button(onClick = { launcher.launch(mimeType) }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        Text("Add More")
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (title == "Audio Mixer") {
+                    Text("Mix Levels", style = MaterialTheme.typography.titleSmall)
+                    selectedFiles.forEach { uri ->
+                        StemControl(uri.lastPathSegment ?: "Track", 0.5f)
+                    }
+                }
+
+                Button(
+                    onClick = { /* Actual Join/Merge/Mix logic */ },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(if (title == "Audio Mixer") "Mix and Export" else "Merge and Save")
+                }
             }
         }
     }
