@@ -48,6 +48,7 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -77,7 +78,11 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
                 Slider(
                     value = progress,
                     onValueChange = { progress = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = SliderDefaults.colors(
+                        thumbColor = MaterialTheme.colorScheme.primary,
+                        activeTrackColor = MaterialTheme.colorScheme.primary
+                    )
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -101,8 +106,8 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
                     Spacer(modifier = Modifier.width(16.dp))
                     LargeFloatingActionButton(
                         onClick = { isPlaying = !isPlaying },
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ) {
                         Icon(
                             if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -237,7 +242,11 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
 
             Button(
                 onClick = { /* Process file logic */ },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
                 Text("Process and Save")
             }
@@ -335,7 +344,7 @@ fun WaveformVisualizer(isPlaying: Boolean) {
     )
 
     val primaryColor = MaterialTheme.colorScheme.primary
-    val secondaryColor = MaterialTheme.colorScheme.secondary
+    val secondaryColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val width = size.width

@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.os.Debug
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -52,11 +53,14 @@ fun DashboardScreen(navController: NavHostController) {
         logs.add("> Real-time Telemetry streams active.")
 
         while(true) {
-            // Actual Battery Level
+            // Actual Battery Level and Thermal
             val batteryStatus: Intent? = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
             val level: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
             val scale: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
             batteryLevel = if (level != -1 && scale != -1) level / scale.toFloat() else 0.8f
+
+            val temp = batteryStatus?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
+            thermalLevel = (temp / 100f) / 100f // Rough normalization for display
 
             // Actual RAM Usage
             val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -68,11 +72,13 @@ fun DashboardScreen(navController: NavHostController) {
             ramUsage = (usedMem / totalMem).toFloat()
             ramText = "${(usedMem / (1024 * 1024 * 1024)).toInt()} GB / ${(totalMem / (1024 * 1024 * 1024)).toInt()} GB"
 
-            cpuLoad = (0.05f + Math.random().toFloat() * 0.45f)
-            thermalLevel = (0.3f + Math.random().toFloat() * 0.1f)
+            // Heuristic CPU Load based on native heap allocation
+            val nativeHeap = Debug.getNativeHeapAllocatedSize()
+            val nativeHeapMax = Debug.getNativeHeapSize()
+            cpuLoad = (nativeHeap.toFloat() / nativeHeapMax.toFloat()).coerceIn(0.05f, 0.95f)
 
             if (logs.size > 15) logs.removeAt(0)
-            logs.add("> [SYS] Thread ${ (1000..9999).random() } status: OK | LOAD: ${(cpuLoad * 100).toInt()}%")
+            logs.add("> [SYS] Thread ${ (1000..9999).random() } status: OK | LOAD: ${(cpuLoad * 100).toInt()}% | TEMP: ${temp/10f}°C")
             delay(3000)
         }
     }

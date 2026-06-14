@@ -163,7 +163,7 @@ object ToolProvider {
             subToolRoutes = listOf("anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff", "word_counter", "word_rank_calc")),
 
         // DESIGN
-        Tool("Design & Creative", Icons.Default.Palette, "media_tools_group", "Design", Color(0xFF00BCD4),
+        Tool("Design & Creative", Icons.Default.Palette, "design_tools_group", "Design", Color(0xFF00BCD4),
             description = "Design and creative exploration tools.",
             subToolRoutes = listOf("color_conv_pro", "color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "image_histogram", "material_you_palette", "drawing_board", "signature_maker")),
 
