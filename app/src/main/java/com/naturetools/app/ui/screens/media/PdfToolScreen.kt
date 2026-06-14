@@ -67,7 +67,13 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
                     onClick = { /* Simulated PDF Action */ },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Process PDF")
+                    val actionLabel = when(title) {
+                        "Flatten PDF" -> "Flatten & Secure"
+                        "Grayscale PDF" -> "Convert to Grayscale"
+                        "PDF Metadata" -> "Update Metadata"
+                        else -> "Process PDF"
+                    }
+                    Text(actionLabel)
                 }
 
                 OutlinedButton(
@@ -108,6 +114,20 @@ fun PdfToolOptions(title: String) {
                 }
             }
         }
+        "PDF Metadata" -> {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Title") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Author") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Keywords") }, modifier = Modifier.fillMaxWidth())
+            }
+        }
+        "Flatten PDF" -> {
+            Text("This will make all form fields and annotations permanent and non-editable.")
+        }
+        "Grayscale PDF" -> {
+            Text("This will convert all colored elements in the PDF to shades of gray to save ink or reduce complexity.")
+        }
     }
 }
 
@@ -121,6 +141,7 @@ fun getPdfToolDescription(title: String): String {
         "PDF Metadata" -> "Edit PDF Title, Author, Subject, and Keywords."
         "Compress PDF" -> "Reduce file size by optimizing PDF streams."
         "Grayscale PDF" -> "Convert all PDF pages to black and white."
+        "Flatten PDF" -> "Make forms and annotations permanent."
         else -> "Professional PDF manipulation tool."
     }
 }

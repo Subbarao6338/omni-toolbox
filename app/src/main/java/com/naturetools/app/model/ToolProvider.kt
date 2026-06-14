@@ -70,6 +70,23 @@ object ToolProvider {
             subToolRoutes = listOf("coin_flip", "dice_roller", "memory_game", "number_guessing", "random", "tic_tac_toe", "snake", "ludo", "carroms", "chess")),
 
         // DEVICE
+        Tool("Omni Dashboard", Icons.Default.Dashboard, "dashboard", "Device", Color(0xFF39FF14),
+            description = "Real-time system health and diagnostic hub."),
+        Tool("Developer Console", Icons.Default.Code, "developer_console", "Developer", Color(0xFF3F51B5),
+            description = "Hardware inspection and app management suite."),
+        Tool("Cloud Sync Hub", Icons.Default.CloudSync, "cloud_sync", "Web", Color(0xFF2196F3),
+            description = "Multi-account cross-cloud data synchronization."),
+        Tool("Web Crawler Pro", Icons.Default.Search, "web_scraper", "Web", Color(0xFF00BCD4),
+            description = "Advanced web scraper with Notion integration."),
+        Tool("Gemini AI Hub", Icons.Default.AutoAwesome, "ai_companion", "AI Tools", Color(0xFF673AB7),
+            description = "Multimodal AI assistant and generative lab."),
+        Tool("Security Vault", Icons.Default.Lock, "security_vault", "Security", Color(0xFF607D8B),
+            description = "Cryptographic tools and secure data locker."),
+        Tool("PowerBench", Icons.Default.Speed, "power_bench", "Device", Color(0xFFF44336),
+            description = "Hardware performance profiling and stress tests."),
+        Tool("Quick Tiles", Icons.Default.Widgets, "quick_tiles", "Utilities", Color(0xFF4CAF50),
+            description = "Create custom settings shade tiles."),
+
         Tool("System Monitor", Icons.Default.Dns, "system_group", "Device", Color(0xFF607D8B),
             description = "Monitor hardware and system status.",
             subToolRoutes = listOf("app_info", "battery", "cpu_info", "ram_info", "device", "device_id", "process_manager", "storage", "system_lab", "update_check")),

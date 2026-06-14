@@ -23,6 +23,10 @@ import com.naturetools.app.model.Tool
 import com.naturetools.app.model.ToolProvider
 import com.naturetools.app.ui.screens.HomeScreen
 import com.naturetools.app.ui.screens.ai.*
+import com.naturetools.app.ui.screens.system.DashboardScreen
+import com.naturetools.app.ui.screens.system.DeveloperScreen
+import com.naturetools.app.ui.screens.system.PowerBenchScreen
+import com.naturetools.app.ui.screens.system.QuickTilesCreatorScreen
 import com.naturetools.app.ui.screens.astronomy.*
 import com.naturetools.app.ui.screens.audio.*
 import com.naturetools.app.ui.screens.calculation.*
@@ -36,12 +40,14 @@ import com.naturetools.app.ui.screens.media.*
 import com.naturetools.app.ui.screens.network.*
 import com.naturetools.app.ui.screens.physics.*
 import com.naturetools.app.ui.screens.productivity.*
+import com.naturetools.app.ui.screens.productivity.SecurityScreen
 import com.naturetools.app.ui.screens.science.*
 import com.naturetools.app.ui.screens.sensor.*
 import com.naturetools.app.ui.screens.survival.*
 import com.naturetools.app.ui.screens.system.*
 import com.naturetools.app.ui.screens.text.*
 import com.naturetools.app.ui.screens.utility.*
+import com.naturetools.app.viewmodel.OmniViewModel
 import com.naturetools.app.ui.screens.engineering.*
 import com.naturetools.app.ui.screens.photography.*
 import com.naturetools.app.ui.screens.music.*
@@ -89,6 +95,8 @@ fun NatureToolsApp(
     }
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
+    val omniViewModel: OmniViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
     var favorites by remember {
         mutableStateOf(prefs.getStringSet("favorites", emptySet<String>()) ?: emptySet<String>())
     }
@@ -122,6 +130,15 @@ fun NatureToolsApp(
                 accentColor, onAccentColorChange
             )
         }
+
+        composable("dashboard") { DashboardScreen(navController) }
+        composable("developer_console") { DeveloperScreen(navController) }
+        composable("cloud_sync") { SyncScreen(navController, omniViewModel) }
+        composable("web_scraper") { DocsCrawlerScreen(navController) }
+        composable("ai_companion") { AICompanionScreen(navController, aiApiKey) }
+        composable("security_vault") { SecurityScreen(navController) }
+        composable("power_bench") { PowerBenchScreen(navController) }
+        composable("quick_tiles") { QuickTilesCreatorScreen(navController) }
 
             addSpecialRoutes(navController)
 
@@ -303,6 +320,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "text_diff" -> TextDiffScreen(navController)
         listOf("case_converter", "lorem", "anagram").contains(route) -> TextToolScreen(navController, tool.name)
         route == "word_rank_calc" -> WordRankScreen(navController)
+        route == "panchangam" -> PanchangamScreen(navController)
 
         route == "plant_care" -> PlantCareScreen(navController)
         route == "fuel" -> FuelCostCalculatorScreen(navController)
