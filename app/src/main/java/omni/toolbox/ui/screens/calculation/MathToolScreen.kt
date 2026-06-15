@@ -241,9 +241,19 @@ fun solveTruthTable(expr: String): String {
 fun solveMatrix(input: String): String {
     return try {
         val nums = input.split(",").map { it.trim().toDouble() }
-        if (nums.size != 4) return "Enter 4 numbers (a,b,c,d) for 2x2 matrix determinant"
-        val det = nums[0] * nums[3] - nums[1] * nums[2]
-        "Matrix:\n[${nums[0]} ${nums[1]}]\n[${nums[2]} ${nums[3]}]\n\nDeterminant: $det"
+        when (nums.size) {
+            4 -> {
+                val det = nums[0] * nums[3] - nums[1] * nums[2]
+                "2x2 Matrix:\n[${nums[0]} ${nums[1]}]\n[${nums[2]} ${nums[3]}]\n\nDeterminant: $det"
+            }
+            9 -> {
+                val det = nums[0]*(nums[4]*nums[8] - nums[5]*nums[7]) -
+                          nums[1]*(nums[3]*nums[8] - nums[5]*nums[6]) +
+                          nums[2]*(nums[3]*nums[7] - nums[4]*nums[6])
+                "3x3 Matrix:\n[${nums[0]} ${nums[1]} ${nums[2]}]\n[${nums[3]} ${nums[4]} ${nums[5]}]\n[${nums[6]} ${nums[7]} ${nums[8]}]\n\nDeterminant: $det"
+            }
+            else -> "Enter 4 numbers for 2x2 or 9 numbers for 3x3 matrix."
+        }
     } catch (e: Exception) {
         "Invalid Input. Format: 1, 2, 3, 4"
     }
