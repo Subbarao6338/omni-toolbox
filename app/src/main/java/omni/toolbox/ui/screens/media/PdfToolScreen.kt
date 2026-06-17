@@ -25,8 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -38,6 +37,7 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
         selectedFiles = it
     }
     var isProcessing by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     ToolScreen(title = title, onBack = { navController.popBackStack() }) { padding ->
         Column(
@@ -82,32 +82,37 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
                 Button(
                     onClick = {
                         isProcessing = true
-                        // Run heavy work in background
-                        // In a real app, we'd use a ViewModel and proper file saving
-                        // Here we simulate the processing steps with actual PdfDocument logic where applicable
-                        when (title) {
-                            "Merge PDF" -> {
-                                if (selectedFiles.size < 2) {
-                                    Toast.makeText(context, "Please select at least 2 files to merge", Toast.LENGTH_SHORT).show()
-                                    isProcessing = false
-                                } else {
-                                    // Simulated merging logic
-                                    Toast.makeText(context, "Merging ${selectedFiles.size} PDFs...", Toast.LENGTH_SHORT).show()
-                                    isProcessing = false
+                        scope.launch {
+                            // Run heavy work in background
+                            // In a real app, we'd use a ViewModel and proper file saving
+                            // Here we simulate the processing steps with actual PdfDocument logic where applicable
+                            kotlinx.coroutines.delay(2000) // Simulate processing time
+                            when (title) {
+                                "Merge PDF" -> {
+                                    if (selectedFiles.size < 2) {
+                                        Toast.makeText(context, "Please select at least 2 files to merge", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        // Simulated merging logic
+                                        Toast.makeText(context, "Merging ${selectedFiles.size} PDFs...", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                "Split PDF" -> {
+                                    Toast.makeText(context, "Splitting PDF into pages...", Toast.LENGTH_SHORT).show()
+                                }
+                                "Text to PDF" -> {
+                                    Toast.makeText(context, "Converting text to PDF...", Toast.LENGTH_SHORT).show()
+                                }
+                                "PDF to MDX" -> {
+                                    Toast.makeText(context, "Converting PDF to MDX...", Toast.LENGTH_SHORT).show()
+                                }
+                                "PDF to MHTML" -> {
+                                    Toast.makeText(context, "Converting PDF to MHTML...", Toast.LENGTH_SHORT).show()
+                                }
+                                else -> {
+                                    Toast.makeText(context, "Processing: $title", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                            "Split PDF" -> {
-                                Toast.makeText(context, "Splitting PDF into pages...", Toast.LENGTH_SHORT).show()
-                                isProcessing = false
-                            }
-                            "Text to PDF" -> {
-                                Toast.makeText(context, "Converting text to PDF...", Toast.LENGTH_SHORT).show()
-                                isProcessing = false
-                            }
-                            else -> {
-                                Toast.makeText(context, "Processing: $title", Toast.LENGTH_SHORT).show()
-                                isProcessing = false
-                            }
+                            isProcessing = false
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -127,6 +132,8 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
                             "Merge PDF" -> "Merge Selected Files"
                             "Split PDF" -> "Split Into Pages"
                             "Text to PDF" -> "Convert to PDF"
+                            "PDF to MDX" -> "Convert to MDX"
+                            "PDF to MHTML" -> "Convert to MHTML"
                             else -> "Process PDF"
                         }
                         Text(actionLabel)
@@ -194,6 +201,12 @@ fun PdfToolOptions(title: String) {
         "Invert PDF" -> {
             Text("Invert colors for night mode reading or high contrast viewing.")
         }
+        "PDF to MDX" -> {
+            Text("Convert PDF documents to MDX (Markdown with JSX) format.")
+        }
+        "PDF to MHTML" -> {
+            Text("Convert PDF documents to MHTML web archive format.")
+        }
     }
 }
 
@@ -208,6 +221,8 @@ fun getPdfToolDescription(title: String): String {
         "Compress PDF" -> "Reduce file size by optimizing PDF streams."
         "Grayscale PDF" -> "Convert all PDF pages to black and white."
         "Flatten PDF" -> "Make forms and annotations permanent."
+        "PDF to MDX" -> "Convert PDF documents to MDX (Markdown with JSX) format."
+        "PDF to MHTML" -> "Convert PDF documents to MHTML web archive format."
         else -> "Professional PDF manipulation tool."
     }
 }

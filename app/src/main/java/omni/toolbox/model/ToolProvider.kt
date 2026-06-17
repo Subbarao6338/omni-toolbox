@@ -101,7 +101,7 @@ object ToolProvider {
         // DOCUMENTS
         Tool("PDF Toolkit", Icons.Default.PictureAsPdf, "pdf_tools_group", "Documents", Color(0xFFF44336),
             description = "Comprehensive PDF editing tools.",
-            subToolRoutes = listOf("images_to_pdf", "pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "pdf_merge", "pdf_metadata", "pdf_ocr", "pdf_page_numbers", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip", "pdf_html_to_pdf", "pdf_scan_to_pdf", "pdf_fill_forms", "pdf_word_to_pdf", "pdf_excel_to_pdf", "pdf_text_to_pdf", "pdf_qr_to_pdf", "pdf_barcode_to_pdf", "pdf_invert")),
+            subToolRoutes = listOf("images_to_pdf", "pdf_compress", "pdf_crop", "pdf_extract_images", "pdf_flatten", "pdf_grayscale", "pdf_merge", "pdf_metadata", "pdf_ocr", "pdf_page_numbers", "pdf_preview", "pdf_print", "pdf_protect", "pdf_rearrange", "pdf_remove_pages", "pdf_repair", "pdf_rotate", "pdf_signature", "pdf_split", "pdf_unlock", "pdf_watermark", "pdf_zip", "pdf_html_to_pdf", "pdf_scan_to_pdf", "pdf_fill_forms", "pdf_word_to_pdf", "pdf_excel_to_pdf", "pdf_text_to_pdf", "pdf_qr_to_pdf", "pdf_barcode_to_pdf", "pdf_invert", "pdf_to_mdx", "pdf_to_mhtml")),
         Tool("Office & Files", Icons.Default.Description, "docs_group", "Documents", Color(0xFF607D8B),
             description = "Manage documents and files.",
             subToolRoutes = listOf("ai_doc_translator", "csv_to_json", "doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "storage_cleaner", "zip_unzip", "docs_online")),
@@ -630,6 +630,9 @@ object ToolProvider {
         // SOCIAL
         Tool("Bio Linker", Icons.Default.Link, "bio_linker", "Social", isVisibleOnHome = false, isSubTool = true),
         Tool("Profile Photo Maker", Icons.Default.AccountCircle, "profile_photo_maker", "Social", isVisibleOnHome = false, isSubTool = true),
-        Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", isVisibleOnHome = false, isSubTool = true)
+        Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", isVisibleOnHome = false, isSubTool = true),
+
+        Tool("PDF to MDX", Icons.Default.Description, "pdf_to_mdx", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("PDF to MHTML", Icons.Default.Html, "pdf_to_mhtml", "Documents", isVisibleOnHome = false, isSubTool = true)
     )
 }
