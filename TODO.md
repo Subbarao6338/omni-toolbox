@@ -22,7 +22,7 @@
     - Implement actual logic for CSV/JSON/Excel processing (Statistics, Cleaning, Anomaly Detection).
 
 ## Media & Utility Tools
-- [ ] **PDF Toolkit**: Implement actual PDF processing (Merge, Split, Compress, Rotate, OCR) using a library like PdfBox-Android (already in requirements).
+- [ ] **PDF Toolkit**: Implement actual PDF processing (Merge, Split, Compress, Rotate, OCR, PDF to MDX, PDF to MHTML) using a library like PdfBox-Android (already in requirements).
 - [ ] **Image Tools**: Implement batch processing, filters, background removal (AI), and format conversion.
 - [ ] **Audio & Video Lab**:
     - Implement actual audio trimming, merging, and mixing.

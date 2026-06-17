@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import omni.toolbox.model.*
 
 @Database(
@@ -37,6 +38,13 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "nature_tools_db"
                 )
+                .addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        db.execSQL("INSERT INTO tasks (title, status, timestamp) VALUES ('Pdf to mdx', 'Todo', ${System.currentTimeMillis()})")
+                        db.execSQL("INSERT INTO tasks (title, status, timestamp) VALUES ('Pdf to mhtml', 'Todo', ${System.currentTimeMillis()})")
+                    }
+                })
                 .fallbackToDestructiveMigration()
                 .build()
                 INSTANCE = instance
