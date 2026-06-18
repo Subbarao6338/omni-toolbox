@@ -39,6 +39,7 @@ android {
         ndk {
             abiFilters.add("arm64-v8a")
         }
+        resourceConfigurations += "en"
     }
 
     signingConfigs {
@@ -112,6 +113,8 @@ dependencies {
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("com.google.mlkit:text-recognition:16.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     val cameraxVersion = "1.3.1"

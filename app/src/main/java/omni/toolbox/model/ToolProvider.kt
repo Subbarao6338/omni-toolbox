@@ -633,6 +633,7 @@ object ToolProvider {
         Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", isVisibleOnHome = false, isSubTool = true),
 
         Tool("PDF to MDX", Icons.Default.Description, "pdf_to_mdx", "Documents", isVisibleOnHome = false, isSubTool = true),
-        Tool("PDF to MHTML", Icons.Default.Html, "pdf_to_mhtml", "Documents", isVisibleOnHome = false, isSubTool = true)
+        Tool("PDF to MHTML", Icons.Default.Html, "pdf_to_mhtml", "Documents", isVisibleOnHome = false, isSubTool = true),
+        Tool("Batch Converter", Icons.Default.Transform, "markitdown", "Documents", isVisibleOnHome = true)
     )
 }
