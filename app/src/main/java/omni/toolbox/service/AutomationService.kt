@@ -1,11 +1,14 @@
 package omni.toolbox.service
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 
@@ -22,6 +25,13 @@ class AutomationWorker(context: Context, workerParams: WorkerParameters) : Worke
     private fun showNotification(ruleName: String) {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "automation_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Log.w("AutomationWorker", "Notification permission not granted, skipping notification")
+                return
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, "Automation Triggers", NotificationManager.IMPORTANCE_DEFAULT)
