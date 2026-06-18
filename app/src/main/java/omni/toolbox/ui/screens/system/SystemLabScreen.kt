@@ -21,11 +21,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import kotlinx.coroutines.delay
+import android.app.ActivityManager
+import android.content.Context
+import android.os.Build
+import android.os.Environment
+import android.os.StatFs
+import androidx.compose.ui.platform.LocalContext
+import java.io.File
 
 data class PermissionInfo(val name: String, val status: String, val count: Int)
 
 @Composable
 fun SystemLabScreen(navController: NavHostController, title: String) {
+    val context = LocalContext.current
     val permissions = listOf(
         PermissionInfo("Camera", "Accessed by 12 apps", 12),
         PermissionInfo("Location", "Accessed by 24 apps", 24),
@@ -34,7 +42,11 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
     )
 
     var cpuLoad by remember { mutableFloatStateOf(0.24f) }
-    var ramUsage by remember { mutableFloatStateOf(0.65f) }
+    var ramUsageProgress by remember { mutableFloatStateOf(0.0f) }
+    var ramUsageText by remember { mutableStateOf("0/0 GB") }
+    var storageProgress by remember { mutableFloatStateOf(0.0f) }
+    var storageText by remember { mutableStateOf("0%") }
+
     val logs = remember { mutableStateListOf<String>() }
 
     LaunchedEffect(Unit) {
@@ -45,8 +57,25 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
         logs.add("[OK] Sensor Hub online.")
 
         while(true) {
+            // RAM Usage
+            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val memoryInfo = ActivityManager.MemoryInfo()
+            activityManager.getMemoryInfo(memoryInfo)
+            val totalRam = memoryInfo.totalMem.toFloat() / (1024 * 1024 * 1024)
+            val availRam = memoryInfo.availMem.toFloat() / (1024 * 1024 * 1024)
+            val usedRam = totalRam - availRam
+            ramUsageProgress = usedRam / totalRam
+            ramUsageText = "%.1f / %.1f GB".format(usedRam, totalRam)
+
+            // Storage Usage
+            val stat = StatFs(Environment.getDataDirectory().path)
+            val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
+            val bytesTotal = stat.blockSizeLong * stat.blockCountLong
+            val bytesUsed = bytesTotal - bytesAvailable
+            storageProgress = bytesUsed.toFloat() / bytesTotal.toFloat()
+            storageText = "${(storageProgress * 100).toInt()}%"
+
             cpuLoad = (0.1f + Math.random().toFloat() * 0.4f)
-            ramUsage = (0.6f + Math.random().toFloat() * 0.1f)
             if (logs.size > 10) logs.removeAt(0)
             logs.add("[DEBUG] CPU Thread ${ (1..8).random() } active: ${ (cpuLoad * 100).toInt() }%")
             delay(2000)
@@ -63,7 +92,7 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
 
                 Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     MonitoringCard("CPU Load", cpuLoad, "${(cpuLoad * 100).toInt()}%", Modifier.weight(1f), MaterialTheme.colorScheme.primary)
-                    MonitoringCard("RAM Usage", ramUsage, "${(ramUsage * 8).toInt()}.${(ramUsage * 10).toInt() % 10} GB", Modifier.weight(1f), MaterialTheme.colorScheme.secondary)
+                    MonitoringCard("RAM Usage", ramUsageProgress, ramUsageText, Modifier.weight(1f), MaterialTheme.colorScheme.secondary)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -90,8 +119,8 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    StatusCard("Storage", "85%", Modifier.weight(1f), MaterialTheme.colorScheme.tertiary)
-                    StatusCard("Battery", "92%", Modifier.weight(1f), MaterialTheme.colorScheme.error)
+                    StatusCard("Storage", storageText, Modifier.weight(1f), MaterialTheme.colorScheme.tertiary)
+                    StatusCard("Kernel", System.getProperty("os.version") ?: "N/A", Modifier.weight(1f), MaterialTheme.colorScheme.error)
                 }
             } else {
                 Card(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
@@ -103,6 +132,19 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
                             Text("Great! Most permissions are restricted.")
                         }
                     }
+                }
+            }
+
+            Text("Hardware Specifications", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp))
+            Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    DetailRow("Model", Build.MODEL)
+                    DetailRow("Manufacturer", Build.MANUFACTURER)
+                    DetailRow("Hardware", Build.HARDWARE)
+                    DetailRow("Board", Build.BOARD)
+                    DetailRow("Brand", Build.BRAND)
+                    DetailRow("Android Version", Build.VERSION.RELEASE)
+                    DetailRow("SDK level", Build.VERSION.SDK_INT.toString())
                 }
             }
 
@@ -149,7 +191,15 @@ fun StatusCard(label: String, value: String, modifier: Modifier, color: Color) {
     Card(modifier = modifier) {
         Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(label, style = MaterialTheme.typography.labelMedium)
-            Text(value, style = MaterialTheme.typography.headlineMedium, color = color)
+            Text(value, style = MaterialTheme.typography.titleLarge, color = color, fontWeight = FontWeight.Bold)
         }
+    }
+}
+
+@Composable
+fun DetailRow(label: String, value: String) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+        Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
     }
 }

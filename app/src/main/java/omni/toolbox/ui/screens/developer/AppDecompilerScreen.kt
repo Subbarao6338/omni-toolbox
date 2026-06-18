@@ -17,6 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
+import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 @Composable
 fun AppDecompilerScreen(navController: NavHostController) {
@@ -47,10 +54,33 @@ fun AppDecompilerScreen(navController: NavHostController) {
             if (showManifest && selectedApp != null) {
                 ManifestViewer(selectedApp!!, manifestContent ?: "Loading manifest...")
             } else if (selectedApp != null) {
-                AppDetailView(selectedApp!!, pm, onDecompile = {
-                    manifestContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    package=\"${selectedApp!!.packageName}\">\n\n    <application\n        android:allowBackup=\"true\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/AppTheme\">\n        \n        <activity android:name=\".MainActivity\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n        \n    </application>\n</manifest>"
-                    showManifest = true
-                })
+                val scope = rememberCoroutineScope()
+                AppDetailView(selectedApp!!, pm,
+                    onDecompile = {
+                        manifestContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    package=\"${selectedApp!!.packageName}\">\n\n    <!-- Real-time extraction of full manifest requires specialized parsing of binary AXML -->\n    <application\n        android:label=\"${selectedApp!!.loadLabel(pm)}\"\n        android:packageName=\"${selectedApp!!.packageName}\"\n        android:targetSdkVersion=\"${selectedApp!!.targetSdkVersion}\">\n        \n        <activity android:name=\".MainActivity\" />\n        \n    </application>\n</manifest>"
+                        showManifest = true
+                    },
+                    onExtract = {
+                        scope.launch(Dispatchers.IO) {
+                            try {
+                                val sourceFile = File(selectedApp!!.sourceDir)
+                                val destFile = File(context.cacheDir, "${selectedApp!!.packageName}.apk")
+                                FileInputStream(sourceFile).use { input ->
+                                    FileOutputStream(destFile).use { output ->
+                                        input.copyTo(output)
+                                    }
+                                }
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "APK extracted to cache: ${destFile.name}", Toast.LENGTH_LONG).show()
+                                }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                    }
+                )
             } else {
                 LazyColumn {
                     items(installedApps) { app ->
@@ -75,7 +105,7 @@ fun AppDecompilerScreen(navController: NavHostController) {
 }
 
 @Composable
-fun AppDetailView(app: ApplicationInfo, pm: PackageManager, onDecompile: () -> Unit) {
+fun AppDetailView(app: ApplicationInfo, pm: PackageManager, onDecompile: () -> Unit, onExtract: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.Android, contentDescription = null, modifier = Modifier.size(48.dp), tint = MaterialTheme.colorScheme.primary)
@@ -105,6 +135,14 @@ fun AppDetailView(app: ApplicationInfo, pm: PackageManager, onDecompile: () -> U
             Icon(Icons.Default.Code, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text("View AndroidManifest.xml")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedButton(onClick = onExtract, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.FileDownload, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Extract APK to Cache")
         }
     }
 }
