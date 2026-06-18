@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.google.ai.client.generativeai.GenerativeModel
 
 @Composable
 fun AICompanionScreen(navController: NavHostController, aiApiKey: String) {
@@ -59,8 +61,15 @@ fun AICompanionScreen(navController: NavHostController, aiApiKey: String) {
 @Composable
 fun ChatAndCodeTab(apiKey: String) {
     var input by remember { mutableStateOf("") }
+    var response by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     var isAnalyzing by remember { mutableStateOf(false) }
+
+    val generativeModel = remember(apiKey) {
+        if (apiKey.isNotEmpty()) {
+            GenerativeModel(modelName = "gemini-1.5-flash", apiKey = apiKey)
+        } else null
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Free Gemini Q&A & Code Analyzer", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -75,10 +84,24 @@ fun ChatAndCodeTab(apiKey: String) {
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(
-                onClick = { /* Chat */ },
-                modifier = Modifier.weight(1f)
+                onClick = {
+                    scope.launch {
+                        isAnalyzing = true
+                        try {
+                            val result = generativeModel?.generateContent(input)
+                            response = result?.text ?: "No response from AI."
+                        } catch (e: Exception) {
+                            response = "Error: ${e.localizedMessage}"
+                        } finally {
+                            isAnalyzing = false
+                        }
+                    }
+                },
+                modifier = Modifier.weight(1f),
+                enabled = apiKey.isNotEmpty() && !isAnalyzing
             ) {
-                Icon(Icons.Default.Chat, contentDescription = null)
+                if (isAnalyzing) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                else Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Ask AI")
             }
@@ -87,17 +110,38 @@ fun ChatAndCodeTab(apiKey: String) {
                 onClick = {
                     scope.launch {
                         isAnalyzing = true
-                        delay(2000)
-                        isAnalyzing = false
+                        try {
+                            val prompt = "Analyze the following code for bugs, memory leaks, and performance issues:\n\n$input"
+                            val result = generativeModel?.generateContent(prompt)
+                            response = result?.text ?: "No analysis available."
+                        } catch (e: Exception) {
+                            response = "Error: ${e.localizedMessage}"
+                        } finally {
+                            isAnalyzing = false
+                        }
                     }
                 },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                enabled = apiKey.isNotEmpty() && !isAnalyzing
             ) {
                 if (isAnalyzing) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
                 else Icon(Icons.Default.BugReport, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Analyze Code")
+            }
+        }
+
+        if (response.isNotEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("AI Response:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(response, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
 
@@ -117,6 +161,15 @@ fun ChatAndCodeTab(apiKey: String) {
 @Composable
 fun SummarizerTab(apiKey: String) {
     var textInput by remember { mutableStateOf("") }
+    var summary by remember { mutableStateOf("") }
+    var isSummarizing by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    val generativeModel = remember(apiKey) {
+        if (apiKey.isNotEmpty()) {
+            GenerativeModel(modelName = "gemini-1.5-flash", apiKey = apiKey)
+        } else null
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Cognitive Content Summarizer", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -128,17 +181,34 @@ fun SummarizerTab(apiKey: String) {
             modifier = Modifier.fillMaxWidth().height(200.dp)
         )
 
-        Button(onClick = { /* Summarize */ }, modifier = Modifier.fillMaxWidth()) {
-            Icon(Icons.Default.Summarize, contentDescription = null)
+        Button(
+            onClick = {
+                scope.launch {
+                    isSummarizing = true
+                    try {
+                        val prompt = "Summarize the following content in a concise manner with key highlights:\n\n$textInput"
+                        val result = generativeModel?.generateContent(prompt)
+                        summary = result?.text ?: "Failed to generate summary."
+                    } catch (e: Exception) {
+                        summary = "Error: ${e.localizedMessage}"
+                    } finally {
+                        isSummarizing = false
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = apiKey.isNotEmpty() && !isSummarizing
+        ) {
+            if (isSummarizing) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+            else Icon(Icons.Default.Summarize, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text("Generate Brief Summary")
         }
 
-        Text("Structural Highlights", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-        repeat(3) {
-            Row(modifier = Modifier.padding(vertical = 4.dp)) {
-                Icon(Icons.Default.ChevronRight, contentDescription = null, modifier = Modifier.size(18.dp))
-                Text("AI-generated bullet point for summary...", style = MaterialTheme.typography.bodyMedium)
+        if (summary.isNotEmpty()) {
+            Text("Structural Highlights", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Text(summary, modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
