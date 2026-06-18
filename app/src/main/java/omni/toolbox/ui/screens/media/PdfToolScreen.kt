@@ -26,8 +26,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import kotlinx.coroutines.*
+import com.tom_roush.pdfbox.io.MemoryUsageSetting
+import com.tom_roush.pdfbox.multipdf.PDFMergerUtility
+import com.tom_roush.pdfbox.multipdf.Splitter
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.pdmodel.PDDocumentInformation
+import com.tom_roush.pdfbox.text.PDFTextStripper
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 
 @Composable
 fun PdfToolScreen(navController: NavHostController, title: String) {
@@ -75,44 +82,142 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                PdfToolOptions(title)
+                var pageRanges by remember { mutableStateOf("") }
+                var password by remember { mutableStateOf("") }
+                var rotationAngle by remember { mutableIntStateOf(90) }
+                var pdfTitle by remember { mutableStateOf("") }
+                var pdfAuthor by remember { mutableStateOf("") }
+                var pdfSubject by remember { mutableStateOf("") }
+                var pdfKeywords by remember { mutableStateOf("") }
+
+                PdfToolOptions(
+                    title,
+                    pageRanges, { pageRanges = it },
+                    password, { password = it },
+                    rotationAngle, { rotationAngle = it },
+                    pdfTitle, { pdfTitle = it },
+                    pdfAuthor, { pdfAuthor = it },
+                    pdfSubject, { pdfSubject = it },
+                    pdfKeywords, { pdfKeywords = it }
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = {
                         isProcessing = true
-                        scope.launch {
-                            // Run heavy work in background
-                            // In a real app, we'd use a ViewModel and proper file saving
-                            // Here we simulate the processing steps with actual PdfDocument logic where applicable
-                            kotlinx.coroutines.delay(2000) // Simulate processing time
-                            when (title) {
-                                "Merge PDF" -> {
-                                    if (selectedFiles.size < 2) {
-                                        Toast.makeText(context, "Please select at least 2 files to merge", Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        // Simulated merging logic
-                                        Toast.makeText(context, "Merging ${selectedFiles.size} PDFs...", Toast.LENGTH_SHORT).show()
+                        scope.launch(Dispatchers.IO) {
+                            try {
+                                val outputDir = File(context.cacheDir, "pdf_output")
+                                if (!outputDir.exists()) outputDir.mkdirs()
+
+                                when (title) {
+                                    "Merge PDF" -> {
+                                        if (selectedFiles.size < 2) {
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Please select at least 2 files to merge", Toast.LENGTH_SHORT).show()
+                                            }
+                                        } else {
+                                            val merger = PDFMergerUtility()
+                                            val outPath = File(outputDir, "merged_${System.currentTimeMillis()}.pdf")
+                                            merger.destinationFileName = outPath.absolutePath
+                                            selectedFiles.forEach { uri ->
+                                                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                                                    merger.addSource(inputStream)
+                                                }
+                                            }
+                                            merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly())
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Merged PDF saved to ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Split PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { inputStream ->
+                                                val document = PDDocument.load(inputStream)
+                                                val splitter = Splitter()
+                                                val pages: List<PDDocument> = splitter.split(document)
+                                                pages.forEachIndexed { index, doc ->
+                                                    val outPath = File(outputDir, "split_${index}_${System.currentTimeMillis()}.pdf")
+                                                    doc.save(outPath)
+                                                    doc.close()
+                                                }
+                                                document.close()
+                                                withContext(Dispatchers.Main) {
+                                                    Toast.makeText(context, "Split into ${pages.size} files", Toast.LENGTH_LONG).show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    "PDF Metadata" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { inputStream ->
+                                                val document = PDDocument.load(inputStream)
+                                                val info = document.documentInformation ?: PDDocumentInformation()
+                                                info.setTitle(pdfTitle)
+                                                info.setAuthor(pdfAuthor)
+                                                info.setSubject(pdfSubject)
+                                                info.setKeywords(pdfKeywords)
+                                                document.documentInformation = info
+                                                val outPath = File(outputDir, "updated_${System.currentTimeMillis()}.pdf")
+                                                document.save(outPath)
+                                                document.close()
+                                                withContext(Dispatchers.Main) {
+                                                    Toast.makeText(context, "Metadata updated: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    "PDF to MDX" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { inputStream ->
+                                                val document = PDDocument.load(inputStream)
+                                                val stripper = PDFTextStripper()
+                                                val rawText = stripper.getText(document)
+                                                document.close()
+
+                                                val mdxContent = buildString {
+                                                    append("---")
+                                                    append("\ntitle: ${selectedFiles[0].lastPathSegment ?: "Converted PDF"}")
+                                                    append("\ndate: ${java.util.Date()}")
+                                                    append("\n---\n\n")
+
+                                                    rawText.lines().forEach { line ->
+                                                        val trimmed = line.trim()
+                                                        if (trimmed.isEmpty()) return@forEach
+                                                        if (trimmed.length < 50 && trimmed.any { it.isUpperCase() } && !trimmed.endsWith(".")) {
+                                                            append("## $trimmed\n")
+                                                        } else if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
+                                                            append("* ${trimmed.substring(1).trim()}\n")
+                                                        } else {
+                                                            append(trimmed)
+                                                            append("\n\n")
+                                                        }
+                                                    }
+                                                }
+                                                val outPath = File(outputDir, "docling_${System.currentTimeMillis()}.mdx")
+                                                outPath.writeText(mdxContent)
+                                                withContext(Dispatchers.Main) {
+                                                    Toast.makeText(context, "Locally converted to MDX: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else -> {
+                                        delay(1500)
+                                        withContext(Dispatchers.Main) {
+                                            Toast.makeText(context, "Action '$title' coming soon", Toast.LENGTH_SHORT).show()
+                                        }
                                     }
                                 }
-                                "Split PDF" -> {
-                                    Toast.makeText(context, "Splitting PDF into pages...", Toast.LENGTH_SHORT).show()
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                                 }
-                                "Text to PDF" -> {
-                                    Toast.makeText(context, "Converting text to PDF...", Toast.LENGTH_SHORT).show()
-                                }
-                                "PDF to MDX" -> {
-                                    Toast.makeText(context, "Converting PDF to MDX...", Toast.LENGTH_SHORT).show()
-                                }
-                                "PDF to MHTML" -> {
-                                    Toast.makeText(context, "Converting PDF to MHTML...", Toast.LENGTH_SHORT).show()
-                                }
-                                else -> {
-                                    Toast.makeText(context, "Processing: $title", Toast.LENGTH_SHORT).show()
-                                }
+                            } finally {
+                                isProcessing = false
                             }
-                            isProcessing = false
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -152,26 +257,34 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
 }
 
 @Composable
-fun PdfToolOptions(title: String) {
+fun PdfToolOptions(
+    title: String,
+    pageRanges: String, onPageRangesChange: (String) -> Unit,
+    password: String, onPasswordChange: (String) -> Unit,
+    rotation: Int, onRotationChange: (Int) -> Unit,
+    pdfTitle: String, onPdfTitleChange: (String) -> Unit,
+    pdfAuthor: String, onPdfAuthorChange: (String) -> Unit,
+    pdfSubject: String, onPdfSubjectChange: (String) -> Unit,
+    pdfKeywords: String, onPdfKeywordsChange: (String) -> Unit
+) {
     when (title) {
         "Split PDF" -> {
-            OutlinedTextField(value = "", onValueChange = {}, label = { Text("Page Ranges (e.g., 1-5, 8, 11-13)") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = pageRanges, onValueChange = onPageRangesChange, label = { Text("Page Ranges (e.g., 1-5, 8, 11-13)") }, modifier = Modifier.fillMaxWidth())
         }
         "Merge PDF" -> {
             Text("Files will be merged in the order they were selected.")
         }
         "Protect PDF" -> {
-            OutlinedTextField(value = "", onValueChange = {}, label = { Text("Set Password") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = password, onValueChange = onPasswordChange, label = { Text("Set Password") }, modifier = Modifier.fillMaxWidth())
         }
         "Rotate PDF" -> {
-            var rotation by remember { mutableIntStateOf(90) }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Rotation Angle:")
                 Spacer(modifier = Modifier.width(16.dp))
                 listOf(90, 180, 270).forEach { angle ->
                     FilterChip(
                         selected = rotation == angle,
-                        onClick = { rotation = angle },
+                        onClick = { onRotationChange(angle) },
                         label = { Text("$angle°") },
                         modifier = Modifier.padding(end = 8.dp)
                     )
@@ -180,10 +293,10 @@ fun PdfToolOptions(title: String) {
         }
         "PDF Metadata" -> {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Title") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Author") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = "", onValueChange = {}, label = { Text("Keywords") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = pdfTitle, onValueChange = onPdfTitleChange, label = { Text("Title") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = pdfAuthor, onValueChange = onPdfAuthorChange, label = { Text("Author") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = pdfSubject, onValueChange = onPdfSubjectChange, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(value = pdfKeywords, onValueChange = onPdfKeywordsChange, label = { Text("Keywords") }, modifier = Modifier.fillMaxWidth())
             }
         }
         "Flatten PDF" -> {

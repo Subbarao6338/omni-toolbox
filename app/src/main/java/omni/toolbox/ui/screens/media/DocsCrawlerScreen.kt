@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import org.jsoup.Jsoup
+import java.net.URL
 
 data class ScraperRule(
     val name: String,
@@ -153,20 +154,31 @@ fun DocsCrawlerScreen(navController: NavHostController) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(
                     onClick = {
-                        scope.launch {
+                        scope.launch(Dispatchers.IO) {
                             isCrawling = true
-                            logs.add("> Initializing spider for $targetUrl...")
-                            delay(1000)
-                            logs.add("> Handshaking with target domain...")
-                            delay(500)
-                            logs.add("> Rule matched: $selectedRule")
-                            delay(1000)
-                            logs.add("> Scoping thread hierarchy (depth: 3)...")
-                            delay(2000)
-                            logs.add("> Found 42 threads. Extracting content...")
-                            delay(1500)
-                            logs.add("> [OK] Content extraction complete.")
-                            isCrawling = false
+                            try {
+                                withContext(Dispatchers.Main) { logs.add("> Initializing spider for $targetUrl...") }
+                                val doc = Jsoup.connect(targetUrl).get()
+                                withContext(Dispatchers.Main) {
+                                    logs.add("> Connected: ${doc.title()}")
+                                    logs.add("> Rule matched: $selectedRule")
+                                }
+
+                                val links = doc.select("a[href]")
+                                withContext(Dispatchers.Main) { logs.add("> Found ${links.size} links. Extracting context...") }
+
+                                links.take(10).forEach { link ->
+                                    val href = link.attr("abs:href")
+                                    withContext(Dispatchers.Main) { logs.add("> Crawled: $href") }
+                                    delay(200)
+                                }
+
+                                withContext(Dispatchers.Main) { logs.add("> [OK] Content extraction complete.") }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) { logs.add("> [ERROR] ${e.message}") }
+                            } finally {
+                                isCrawling = false
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f),
