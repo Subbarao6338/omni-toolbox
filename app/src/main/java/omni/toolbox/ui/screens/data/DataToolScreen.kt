@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,7 +108,7 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("Select Dataset", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Supported formats: CSV, Excel, JSON, Parquet", style = MaterialTheme.typography.bodySmall)
+                    Text("Supported formats: CSV, JSON", style = MaterialTheme.typography.bodySmall)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
@@ -152,7 +154,6 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
             Spacer(modifier = Modifier.height(24.dp))
 
             // Action Section
-            // Action Section
             if (selectedFileName != null && !resultGenerated) {
                 Button(
                     onClick = {
@@ -160,13 +161,25 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
                             processing = true
                             if (selectedFileUri != null && dataState.isEmpty()) {
                                 try {
-                                    context.contentResolver.openInputStream(selectedFileUri!!)?.bufferedReader()?.use { reader ->
-                                        val lines = reader.readLines()
+                                    val content = context.contentResolver.openInputStream(selectedFileUri!!)?.bufferedReader()?.readText() ?: ""
+                                    if (content.trim().startsWith("[")) {
+                                        val array = JSONArray(content)
+                                        for (i in 0 until array.length()) {
+                                            val obj = array.getJSONObject(i)
+                                            val map = mutableMapOf<String, String>()
+                                            obj.keys().forEach { key ->
+                                                map[key] = obj.get(key).toString()
+                                            }
+                                            dataState.add(map)
+                                        }
+                                    } else {
+                                        val lines = content.lines().filter { it.isNotBlank() }
                                         if (lines.isNotEmpty()) {
-                                            val header = lines.first().split(",")
-                                            val rows = lines.drop(1).map { it.split(",") }
+                                            val delimiter = if (lines.first().contains(";")) ";" else ","
+                                            val header = parseCsvLine(lines.first(), delimiter)
+                                            val rows = lines.drop(1).map { parseCsvLine(it, delimiter) }
                                             dataState.addAll(rows.map { row ->
-                                                header.zip(row).toMap()
+                                                header.mapIndexed { index, h -> h to (row.getOrNull(index) ?: "") }.toMap()
                                             })
                                         }
                                     }
@@ -218,6 +231,28 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
     }
 }
 
+private fun parseCsvLine(line: String, delimiter: String): List<String> {
+    val result = mutableListOf<String>()
+    var cur = StringBuilder()
+    var inQuotes = false
+    var i = 0
+    while (i < line.length) {
+        val c = line[i]
+        if (c == '\"') {
+            inQuotes = !inQuotes
+        } else if (line.substring(i).startsWith(delimiter) && !inQuotes) {
+            result.add(cur.toString().trim())
+            cur = StringBuilder()
+            i += delimiter.length - 1
+        } else {
+            cur.append(c)
+        }
+        i++
+    }
+    result.add(cur.toString().trim())
+    return result
+}
+
 @Composable
 fun ActualResultView(route: String, toolName: String, data: List<Map<String, String>>) {
     Card(
@@ -236,7 +271,7 @@ fun ActualResultView(route: String, toolName: String, data: List<Map<String, Str
                         val stdDev = Math.sqrt(values.map { Math.pow(it - mean, 2.0) }.average())
                         val anomalies = data.filter {
                             val v = it["value"]?.toDoubleOrNull() ?: 0.0
-                            Math.abs(v - mean) > 1.5 * stdDev // Using 1.5 for better sensitivity in demo
+                            Math.abs(v - mean) > 1.5 * stdDev
                         }
                         Text("Detected ${anomalies.size} anomalies in dataset.")
                         anomalies.forEach {
@@ -254,7 +289,7 @@ fun ActualResultView(route: String, toolName: String, data: List<Map<String, Str
                     Text("Count: ${values.size}")
                 }
                 "data_profiling" -> {
-                    Text("Columns: id, value, label")
+                    Text("Columns: ${data.firstOrNull()?.keys?.joinToString(", ") ?: "None"}")
                     Text("Rows: ${data.size}")
                     Text("Missing Values: ${data.sumOf { if (it.values.any { v -> v.isEmpty() }) 1L else 0L }}")
                 }
@@ -302,7 +337,7 @@ fun ActualResultView(route: String, toolName: String, data: List<Map<String, Str
                     data.forEach {
                         val v = it["value"]?.toDoubleOrNull() ?: 0.0
                         val bar = "█".repeat(((v / max) * 10).toInt())
-                        Text("${it["label"]}: $bar ($v)", style = MaterialTheme.typography.bodySmall)
+                        Text("${it["label"] ?: it.keys.first()}: $bar ($v)", style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 else -> {

@@ -1,6 +1,10 @@
 package omni.toolbox.ui.screens.system
 
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,10 +15,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
+import java.io.File
 
 @Composable
 fun DeveloperScreen(navController: NavHostController) {
@@ -39,13 +45,12 @@ fun DeveloperScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
                 when (selectedTab) {
-                    0 -> SpecificationsTab()
+                    0 -> Column(modifier = Modifier.verticalScroll(rememberScrollState())) { SpecificationsTab() }
                     1 -> AppManagerTab()
-                    2 -> IntegrityTab()
+                    2 -> Column(modifier = Modifier.verticalScroll(rememberScrollState())) { IntegrityTab() }
                 }
             }
         }
@@ -66,34 +71,88 @@ fun SpecificationsTab() {
 
 @Composable
 fun AppManagerTab() {
+    val context = LocalContext.current
+    val pm = context.packageManager
+    val apps = remember {
+        pm.getInstalledApplications(PackageManager.GET_META_DATA)
+            .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 }
+            .sortedBy { it.loadLabel(pm).toString() }
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Active Packages", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("User Packages (${apps.size})", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
-        repeat(5) { index ->
-            val pkgName = listOf("com.android.chrome", "com.google.android.youtube", "com.whatsapp", "com.instagram.android", "com.spotify.music")[index]
-            val appName = listOf("Chrome", "YouTube", "WhatsApp", "Instagram", "Spotify")[index]
+        androidx.compose.foundation.lazy.LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(apps.size) { index ->
+                val app = apps[index]
+                ListItem(
+                    headlineContent = { Text(app.loadLabel(pm).toString()) },
+                    supportingContent = { Text(app.packageName) },
+                    leadingContent = {
+                        Icon(Icons.Default.Android, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    },
+                    trailingContent = {
+                        Row {
+                            IconButton(onClick = {
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                                val clip = android.content.ClipData.newPlainText("Package Name", app.packageName)
+                                clipboard.setPrimaryClip(clip)
+                                Toast.makeText(context, "Copied: ${app.packageName}", Toast.LENGTH_SHORT).show()
+                            }) { Icon(Icons.Default.ContentCopy, contentDescription = "Copy Package") }
 
-            ListItem(
-                headlineContent = { Text(appName) },
-                supportingContent = { Text(pkgName) },
-                leadingContent = { Icon(Icons.Default.Android, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-                trailingContent = {
-                    Row {
-                        IconButton(onClick = {}) { Icon(Icons.Default.ContentCopy, contentDescription = "Copy Package") }
-                        IconButton(onClick = {}) { Icon(Icons.Default.Backup, contentDescription = "Backup APK") }
+                            IconButton(onClick = {
+                                try {
+                                    val sourceFile = File(app.sourceDir)
+                                    val destDir = File(context.cacheDir, "apk_backups")
+                                    if (!destDir.exists()) destDir.mkdirs()
+                                    val destFile = File(destDir, "${app.packageName}.apk")
+                                    sourceFile.copyTo(destFile, overwrite = true)
+                                    Toast.makeText(context, "APK Backed up: ${destFile.name}", Toast.LENGTH_LONG).show()
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Backup failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }) { Icon(Icons.Default.Backup, contentDescription = "Backup APK") }
+                        }
                     }
-                }
-            )
-            HorizontalDivider()
+                )
+                HorizontalDivider()
+            }
         }
 
-        Button(
-            onClick = { /* Export all */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.Share, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Export All Installed Packages")
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = { /* Export logic */ },
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(Icons.Default.Share, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Export List")
+            }
+
+            Button(
+                onClick = {
+                    try {
+                        val cacheDir = context.cacheDir
+                        val files = cacheDir.listFiles()
+                        var deletedCount = 0
+                        files?.forEach {
+                            if (it.deleteRecursively()) deletedCount++
+                        }
+                        Toast.makeText(context, "Cleaned $deletedCount cache segments", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Cleanup failed", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+            ) {
+                Icon(Icons.Default.CleaningServices, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Clear Cache")
+            }
         }
     }
 }

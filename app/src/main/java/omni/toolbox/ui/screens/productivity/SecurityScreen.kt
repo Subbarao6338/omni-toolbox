@@ -23,6 +23,11 @@ import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import android.util.Base64
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 
 @Composable
 fun SecurityScreen(navController: NavHostController) {
@@ -53,7 +58,7 @@ fun SecurityScreen(navController: NavHostController) {
                 when (selectedTab) {
                     0 -> EncryptionTab()
                     1 -> PasswordTab()
-                    2 -> QrStudioTab()
+                    2 -> QrStudioTab(navController)
                 }
             }
         }
@@ -168,11 +173,38 @@ fun PasswordTab() {
 }
 
 @Composable
-fun QrStudioTab() {
+fun QrStudioTab(navController: NavHostController) {
     var qrText by remember { mutableStateOf("Omni Toolbox Secure QR") }
+    var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    fun generateQr(content: String) {
+        if (content.isBlank()) {
+            qrBitmap = null
+            return
+        }
+        try {
+            val writer = QRCodeWriter()
+            val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bitmap.setPixel(x, y, if (bitMatrix.get(x, y)) android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+                }
+            }
+            qrBitmap = bitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    LaunchedEffect(qrText) {
+        generateQr(qrText)
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Vector QR Utilities Sandbox", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("Secure QR Generator", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
         OutlinedTextField(
             value = qrText,
@@ -182,32 +214,22 @@ fun QrStudioTab() {
         )
 
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
-            Canvas(modifier = Modifier.size(200.dp)) {
-                // Simplified mock QR matrix drawing
-                val size = 15
-                val cellSize = size.toFloat() / size
-                for (i in 0 until size) {
-                    for (j in 0 until size) {
-                        if (Random(qrText.hashCode().toLong() + i * j).nextBoolean()) {
-                            drawRect(
-                                color = Color.Black,
-                                topLeft = androidx.compose.ui.geometry.Offset(i * (200f/size), j * (200f/size)),
-                                size = androidx.compose.ui.geometry.Size(200f/size, 200f/size),
-                                style = Fill
-                            )
-                        }
-                    }
-                }
-            }
+            qrBitmap?.let {
+                Image(
+                    bitmap = it.asImageBitmap(),
+                    contentDescription = "QR Code",
+                    modifier = Modifier.size(200.dp)
+                )
+            } ?: Box(modifier = Modifier.size(200.dp).background(Color.LightGray))
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = {}, modifier = Modifier.weight(1f)) {
+            Button(onClick = { navController.navigate("qr_scanner") }, modifier = Modifier.weight(1f)) {
                 Icon(Icons.Default.CameraAlt, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Scan")
             }
-            Button(onClick = {}, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
+            Button(onClick = { /* Export */ }, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
                 Icon(Icons.Default.Download, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Save QR")

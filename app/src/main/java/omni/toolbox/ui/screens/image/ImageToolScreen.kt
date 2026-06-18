@@ -23,9 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import omni.toolbox.ui.components.ToolScreen
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Matrix
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 @Composable
 fun ImageToolScreen(navController: NavHostController, title: String) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var brightness by remember { mutableFloatStateOf(0f) }
     var contrast by remember { mutableFloatStateOf(1f) }
@@ -116,7 +130,41 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = { /* Simulated Save */ },
+                    onClick = {
+                        scope.launch(Dispatchers.IO) {
+                            try {
+                                val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
+                                val originalBitmap = BitmapFactory.decodeStream(inputStream)
+
+                                val config = originalBitmap.config ?: Bitmap.Config.ARGB_8888
+                                val resultBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, config)
+                                val canvas = Canvas(resultBitmap)
+                                val paint = Paint().apply {
+                                    colorFilter = android.graphics.ColorMatrixColorFilter(colorMatrix.values)
+                                }
+
+                                val matrix = Matrix()
+                                matrix.postRotate(rotation, originalBitmap.width / 2f, originalBitmap.height / 2f)
+                                canvas.drawBitmap(originalBitmap, matrix, paint)
+
+                                val outputDir = File(context.cacheDir, "image_output")
+                                if (!outputDir.exists()) outputDir.mkdirs()
+                                val outPath = File(outputDir, "edited_${System.currentTimeMillis()}.jpg")
+
+                                FileOutputStream(outPath).use { out ->
+                                    resultBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                                }
+
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Image saved: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
                 ) {

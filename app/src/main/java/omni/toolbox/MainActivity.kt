@@ -16,6 +16,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import omni.toolbox.navigation.OmniToolboxApp
 import omni.toolbox.ui.theme.OmniToolboxTheme
 
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PDFBoxResourceLoader.init(applicationContext)
         intentState.value = intent
         val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
         setContent {
