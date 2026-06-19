@@ -153,7 +153,6 @@ fun DataConverter(type: String) {
                 type.contains("YAML") -> {
                     val lines = input.lines().filter { it.isNotBlank() }
                     val result = mutableListOf<String>()
-                    var indentLevel = 0
                     lines.forEach { line ->
                         val trimmed = line.trim()
                         if (trimmed.contains(":")) {

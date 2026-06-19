@@ -82,7 +82,7 @@ fun OmniToolboxApp(
             }
         }
         intent?.data?.let { uri ->
-            if (uri.scheme == "naturetools") {
+            if (uri.scheme == "omnitoolbox") {
                 val host = uri.host
                 val path = uri.path
                 val route = if (path != null && path.length > 1) "$host$path" else host
@@ -165,13 +165,13 @@ fun OmniToolboxApp(
 }
 
 fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
-    composable(route = "calculator", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://calculator" })) { CalculatorScreen(navController) }
-    composable(route = "compass", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://compass" })) { CompassScreen(navController) }
-    composable(route = "note", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://note" })) { NotePadScreen(navController) }
-    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://hub" })) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "nHub") }
-    composable(route = "qr_scanner", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://qr_scanner" })) { QrScannerScreen(navController) }
-    composable(route = "sos", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://sos" })) { EmergencySOSScreen(navController) }
-    composable(route = "metronome", deepLinks = listOf(navDeepLink { uriPattern = "naturetools://metronome" })) { MetronomeScreen(navController) }
+    composable(route = "calculator", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://calculator" })) { CalculatorScreen(navController) }
+    composable(route = "compass", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://compass" })) { CompassScreen(navController) }
+    composable(route = "note", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://note" })) { NotePadScreen(navController) }
+    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://hub" })) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "nHub") }
+    composable(route = "qr_scanner", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://qr_scanner" })) { QrScannerScreen(navController) }
+    composable(route = "sos", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://sos" })) { EmergencySOSScreen(navController) }
+    composable(route = "metronome", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://metronome" })) { MetronomeScreen(navController) }
 
     composable("web?url={url}&showBar={showBar}&title={title}", arguments = listOf(
         navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null },
@@ -187,7 +187,7 @@ fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
     composable(
         route = "media_grabber?url={url}",
         arguments = listOf(navArgument("url") { type = NavType.StringType; nullable = true; defaultValue = null }),
-        deepLinks = listOf(navDeepLink { uriPattern = "naturetools://media_grabber?url={url}" })
+        deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://media_grabber?url={url}" })
     ) { backStackEntry ->
         val url = backStackEntry.arguments?.getString("url")
         MediaGrabberScreen(navController, initialUrl = url)
@@ -201,7 +201,6 @@ fun isSpecialRoute(route: String): Boolean {
 @Composable
 fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String) {
     val route = tool.route
-    val category = tool.category
 
     when {
         // --- 1. Specialized Screens by Route (Direct Mapping) ---
@@ -343,54 +342,70 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
 
         // --- 3. Web Tools (Dynamic URL mapping) ---
         route.startsWith("per_") || listOf("sec_adguard", "sec_nextdns", "sec_bitwarden", "sec_ente", "hub", "web").contains(route) -> {
-             val url = when(route) {
-                "per_hub" -> "https://perchance.org/welcome"
-                "per_image" -> "https://perchance.org/ai-image-generator"
-                "per_story" -> "https://perchance.org/ai-story-generator"
-                "per_character" -> "https://perchance.org/ai-character-generator"
-                "per_image_pro" -> "https://perchance.org/image-generator-professional"
-                "per_text_gen" -> "https://perchance.org/ai-text-generator"
-                "per_text_rewrite" -> "https://perchance.org/ai-text-rewriter"
-                "per_necs_story" -> "https://perchance.org/necs-story"
-                "sec_adguard" -> "https://adguard-dns.io/en/welcome.html"
-                "sec_nextdns" -> "https://my.nextdns.io"
-                "sec_bitwarden" -> "https://vault.bitwarden.com/"
-                "sec_ente" -> "https://auth.ente.com/"
-                "hub" -> "https://nhub-pi.vercel.app"
-                "web" -> "https://www.google.com"
-                else -> "https://perchance.org"
-            }
-            // If the route is 'web' without query params, use Google.
-            // The NavHost handles routes with query params separately in addSpecialRoutes.
-            WebToolScreen(navController, initialUrl = url, showUrlBar = (route == "web"), title = tool.name)
+             WebDispatcher(navController, tool)
         }
 
         // --- 4. Category-Based Fallback Screens ---
-        category == "Games" -> GameToolScreen(navController, tool.name)
-        category == "Network" -> NetworkToolScreen(navController, tool.name)
-        category == "Finance" -> FinanceToolScreen(navController, tool.name)
-        category == "Social" -> SocialToolScreen(navController, tool.name)
-        category == "Media" -> {
-            if (tool.route == "guitar_tuner" || tool.route == "chord_lib") MusicToolScreen(navController, tool.name)
-            else if (tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || tool.route.startsWith("ai_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover").contains(route)) AudioToolScreen(navController, tool.name)
-            else if (tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route)) AudioToolScreen(navController, tool.name, mimeType = "video/*")
-            else ImageToolScreen(navController, tool.name)
-        }
-        category == "Health" -> HealthScreen(navController, tool.name)
-        category == "Device" -> SystemLabScreen(navController, tool.name)
-        category == "Security" -> SystemLabScreen(navController, tool.name)
-        category == "Weather" -> EnvironmentToolScreen(navController, tool.name)
-        category == "Travel" -> OutdoorToolScreen(navController, tool.name)
-        category == "Documents" -> FileToolScreen(navController, tool.name)
-        category == "DIY" -> EngineeringToolScreen(navController, tool.name)
-        category == "Developer" -> DeveloperExpertScreen(navController, tool.name)
-        category == "Data" -> if (route == "yaml_to_json") DeveloperExpertScreen(navController, tool.name) else FileToolScreen(navController, tool.name)
-        category == "Web" -> WebToolScreen(navController, initialUrl = "https://www.google.com", title = tool.name)
-        category == "Utilities" -> SystemLabScreen(navController, tool.name)
-        category == "Design" -> ColorToolsScreen(navController)
-        category == "Education" -> EngineeringToolScreen(navController, tool.name)
-        category == "AI Tools" -> ChatToolScreen(navController, tool.name, aiApiKey)
+        else -> CategoryFallbackDispatcher(navController, tool, aiApiKey)
+    }
+}
 
+@Composable
+fun WebDispatcher(navController: NavHostController, tool: Tool) {
+    val route = tool.route
+    val url = when(route) {
+        "per_hub" -> "https://perchance.org/welcome"
+        "per_image" -> "https://perchance.org/ai-image-generator"
+        "per_story" -> "https://perchance.org/ai-story-generator"
+        "per_character" -> "https://perchance.org/ai-character-generator"
+        "per_image_pro" -> "https://perchance.org/image-generator-professional"
+        "per_text_gen" -> "https://perchance.org/ai-text-generator"
+        "per_text_rewrite" -> "https://perchance.org/ai-text-rewriter"
+        "per_necs_story" -> "https://perchance.org/necs-story"
+        "sec_adguard" -> "https://adguard-dns.io/en/welcome.html"
+        "sec_nextdns" -> "https://my.nextdns.io"
+        "sec_bitwarden" -> "https://vault.bitwarden.com/"
+        "sec_ente" -> "https://auth.ente.com/"
+        "hub" -> "https://nhub-pi.vercel.app"
+        "web" -> "https://www.google.com"
+        else -> "https://perchance.org"
+    }
+    WebToolScreen(navController, initialUrl = url, showUrlBar = (route == "web"), title = tool.name)
+}
+
+@Composable
+fun CategoryFallbackDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String) {
+    val route = tool.route
+    val category = tool.category
+
+    when (category) {
+        "Games" -> GameToolScreen(navController, tool.name)
+        "Network" -> NetworkToolScreen(navController, tool.name)
+        "Finance" -> FinanceToolScreen(navController, tool.name)
+        "Social" -> SocialToolScreen(navController, tool.name)
+        "Media" -> MediaDispatcher(navController, tool)
+        "Health" -> HealthScreen(navController, tool.name)
+        "Device", "Security", "Utilities" -> SystemLabScreen(navController, tool.name)
+        "Weather" -> EnvironmentToolScreen(navController, tool.name)
+        "Travel" -> OutdoorToolScreen(navController, tool.name)
+        "Documents" -> FileToolScreen(navController, tool.name)
+        "DIY", "Education" -> EngineeringToolScreen(navController, tool.name)
+        "Developer" -> DeveloperExpertScreen(navController, tool.name)
+        "Data" -> if (route == "yaml_to_json") DeveloperExpertScreen(navController, tool.name) else FileToolScreen(navController, tool.name)
+        "Web" -> WebToolScreen(navController, initialUrl = "https://www.google.com", title = tool.name)
+        "Design" -> ColorToolsScreen(navController)
+        "AI Tools" -> ChatToolScreen(navController, tool.name, aiApiKey)
         else -> DashboardScreen(navController)
+    }
+}
+
+@Composable
+fun MediaDispatcher(navController: NavHostController, tool: Tool) {
+    val route = tool.route
+    when {
+        tool.route == "guitar_tuner" || tool.route == "chord_lib" -> MusicToolScreen(navController, tool.name)
+        tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || tool.route.startsWith("ai_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover").contains(route) -> AudioToolScreen(navController, tool.name)
+        tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route) -> AudioToolScreen(navController, tool.name, mimeType = "video/*")
+        else -> ImageToolScreen(navController, tool.name)
     }
 }

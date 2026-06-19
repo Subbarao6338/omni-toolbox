@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -235,10 +236,6 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
                             AdjustmentSlider("Master Gain", initialValue = 0.8f)
                             AdjustmentSlider("Pan (L-R)", valueRange = -1f..1f, initialValue = 0f)
                         }
-                        "Video Flip", "video_flip" -> {
-                            AdjustmentSlider("Horizontal Flip (0/1)", valueRange = 0f..1f, initialValue = 0f)
-                            AdjustmentSlider("Vertical Flip (0/1)", valueRange = 0f..1f, initialValue = 0f)
-                        }
                         "Audio Converter", "Convert to MP4", "Multi Convert" -> {
                             AdjustmentSlider("Sample Rate (kHz)", valueRange = 8f..192f, initialValue = 44.1f)
                             AdjustmentSlider("Channels (1:Mono, 2:Stereo)", valueRange = 1f..2f, initialValue = 2f)
@@ -331,7 +328,7 @@ fun StemControl(label: String, initialValue: Float) {
 
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
         IconButton(onClick = { isMuted = !isMuted }) {
-            Icon(if (isMuted) Icons.Default.VolumeOff else Icons.Default.VolumeUp, contentDescription = null)
+            Icon(if (isMuted) Icons.AutoMirrored.Filled.VolumeOff else Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null)
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.labelMedium)
