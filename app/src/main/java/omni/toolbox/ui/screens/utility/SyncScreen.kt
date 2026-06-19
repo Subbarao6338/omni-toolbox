@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,7 +30,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SyncScreen(navController: NavHostController, viewModel: OmniViewModel) {
-    val scope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Accounts", "Backups", "Logs")
 
@@ -56,7 +56,7 @@ fun SyncScreen(navController: NavHostController, viewModel: OmniViewModel) {
             ) {
                 when (selectedTab) {
                     0 -> AccountsTab(viewModel)
-                    1 -> BackupsTab(viewModel)
+                    1 -> BackupsTab()
                     2 -> LogsTab(viewModel)
                 }
             }
@@ -140,12 +140,12 @@ fun AccountCard(account: CloudAccount, onDelete: () -> Unit) {
 }
 
 @Composable
-fun BackupsTab(viewModel: OmniViewModel) {
+fun BackupsTab() {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Local Data Backups", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
         BackupItem("Call Logs", "2,450 entries", Icons.Default.Call)
-        BackupItem("SMS Messages", "14,201 messages", Icons.Default.Message)
+        BackupItem("SMS Messages", "14,201 messages", Icons.AutoMirrored.Filled.Message)
         BackupItem("App Contacts", "412 contacts", Icons.Default.Contacts)
         BackupItem("System Logs", "1.2 MB archived", Icons.Default.History)
 

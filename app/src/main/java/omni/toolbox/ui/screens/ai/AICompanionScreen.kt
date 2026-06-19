@@ -51,7 +51,7 @@ fun AICompanionScreen(navController: NavHostController, aiApiKey: String) {
                 when (selectedTab) {
                     0 -> ChatAndCodeTab(aiApiKey)
                     1 -> SummarizerTab(aiApiKey)
-                    2 -> MediaGenTab(aiApiKey)
+                    2 -> MediaGenTab()
                 }
             }
         }
@@ -215,7 +215,7 @@ fun SummarizerTab(apiKey: String) {
 }
 
 @Composable
-fun MediaGenTab(apiKey: String) {
+fun MediaGenTab() {
     var prompt by remember { mutableStateOf("") }
     var isGenerating by remember { mutableStateOf(false) }
     var progress by remember { mutableFloatStateOf(0f) }
