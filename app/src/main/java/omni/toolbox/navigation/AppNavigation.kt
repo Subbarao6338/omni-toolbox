@@ -293,6 +293,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "password_manager" -> PasswordManagerScreen(navController)
 
         route == "meta_anal" -> MetaTagScreen(navController)
+        route == "markitdown" -> MarkItDownScreen(navController)
 
         route == "network_info" -> NetworkInfoScreen(navController)
         route == "my_ip" -> MyIPScreen(navController)
