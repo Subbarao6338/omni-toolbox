@@ -1,0 +1,98 @@
+name: Build Nature Tools
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set SOURCE_DATE_EPOCH
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> $GITHUB_ENV
+    
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        packages: "build-tools;34.0.0"
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: 9.3.1
+        cache-disabled: true
+
+    - name: Decode Keystore
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      run: |
+        if [ -n "${{ secrets.KEYSTORE }}" ]; then
+          echo "${{ secrets.KEYSTORE }}" | base64 --decode > app/release.keystore
+          echo "HAS_KEYSTORE=true" >> $GITHUB_ENV
+        fi
+
+    - name: Get Version
+      id: get_version
+      run: |
+        VERSION_CODE=$(git rev-list --count HEAD)
+        # Extract default version from build.gradle.kts
+        DEFAULT_VERSION=$(grep "versionName =" app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/' | sed "s/\$commitCount/${VERSION_CODE}/")
+
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION_NAME=${TAG_NAME#v}
+          # Strip 'v' prefix for versionName if present in tag name
+        else
+          VERSION_NAME=$DEFAULT_VERSION
+          TAG_NAME="v${VERSION_NAME}-$(date +'%Y%m%d-%H%M%S')"
+        fi
+
+        echo "VERSION=${TAG_NAME}" >> $GITHUB_OUTPUT
+        echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_OUTPUT
+        echo "VERSION_CODE=${VERSION_CODE}" >> $GITHUB_OUTPUT
+
+    - name: Build Release APK
+      run: |
+        if [ "$HAS_KEYSTORE" = "true" ]; then
+          export KEYSTORE_FILE_PATH=release.keystore
+        fi
+        ./gradlew assembleRelease --stacktrace --no-daemon --console=plain
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        APP_VERSION_NAME: ${{ steps.get_version.outputs.VERSION_NAME }}
+        APP_VERSION_CODE: ${{ steps.get_version.outputs.VERSION_CODE }}
+
+    - name: Create Release
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      uses: softprops/action-gh-release@v2
+      with:
+        files: app/build/outputs/apk/release/*.apk
+        tag_name: ${{ steps.get_version.outputs.VERSION }}
+        name: Nature Tools ${{ steps.get_version.outputs.VERSION }}
+        draft: false
+        prerelease: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: NatureTools-Release-APK
+        path: app/build/outputs/apk/release/*.apk

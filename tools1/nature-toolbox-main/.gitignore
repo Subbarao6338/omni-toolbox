@@ -1,0 +1,19 @@
+# Android
+android/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/captures/
+android/.externalNativeBuild
+android/.cxx
+android/*.iml
+android/app/*.iml
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Misc
+.DS_Store
+.idea/

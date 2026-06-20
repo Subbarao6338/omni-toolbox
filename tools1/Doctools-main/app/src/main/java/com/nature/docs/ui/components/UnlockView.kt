@@ -1,0 +1,293 @@
+package com.nature.docs.ui.components
+
+import android.graphics.Bitmap
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.nature.docs.ui.theme.NatureGreen
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+@Composable
+fun UnlockView(
+    initialUri: Uri? = null,
+    onBack: () -> Unit,
+    onOpenPreview: (Uri, String, Int) -> Unit
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val isDark = MaterialTheme.colorScheme.background == Color.Black
+    val accentColor = Color(0xFF6366F1)
+
+    var selectedUri by remember { mutableStateOf(initialUri) }
+    var outputUri by remember { mutableStateOf<Uri?>(null) }
+    var password by remember { mutableStateOf("") }
+    var fileName by remember { mutableStateOf("") }
+    var fileSize by remember { mutableStateOf("") }
+    var pageCount by remember { mutableIntStateOf(0) }
+    var isFileLoading by remember { mutableStateOf(false) }
+    var processingTime by remember { mutableStateOf("") }
+    var showLoadingWarning by remember { mutableStateOf(false) }
+    var fileToUnlock by remember { mutableStateOf<String?>(null) }
+    var currentState by remember { mutableStateOf(ToolState.SELECTING) }
+
+    LaunchedEffect(isFileLoading, currentState) {
+        if (isFileLoading || currentState == ToolState.PROCESSING) {
+            delay(5000)
+            showLoadingWarning = true
+        } else {
+            showLoadingWarning = false
+        }
+    }
+
+    val pickLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            selectedUri = it
+            val details = getUriDetails(context, it)
+            fileName = details.name
+            fileSize = details.size
+            isFileLoading = true
+            scope.launch(Dispatchers.IO) {
+                val isEncrypted = checkIsEncryptedLocal(context, it)
+                if (isEncrypted) {
+                    withContext(Dispatchers.Main) {
+                        fileToUnlock = fileName
+                        isFileLoading = false
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "File is not encrypted", Toast.LENGTH_SHORT).show()
+                        isFileLoading = false
+                    }
+                }
+            }
+        }
+    }
+
+    val saveLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        uri?.let { saveUri ->
+            currentState = ToolState.PROCESSING
+            val startTime = System.currentTimeMillis()
+            scope.launch(Dispatchers.IO) {
+                try {
+                    context.contentResolver.openInputStream(selectedUri!!)?.use { inputStream ->
+                        val document = PDDocument.load(inputStream, password)
+                        document.isAllSecurityToBeRemoved = true
+                        saveAndFlush(context, document, saveUri)
+                    }
+                    val endTime = System.currentTimeMillis()
+                    val timeStr = String.format("%.1fs", (endTime - startTime) / 1000.0)
+                    withContext(Dispatchers.Main) {
+                        processingTime = timeStr
+                        outputUri = saveUri
+                        SessionManager.addEntry(fileName, "Unlock", "Decrypted", Icons.Outlined.LockOpen, saveUri, pageCount)
+                        currentState = ToolState.SUCCESS
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                        currentState = ToolState.SELECTING
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) { PDFBoxResourceLoader.init(context) }
+
+    LaunchedEffect(initialUri) {
+        if (initialUri != null) {
+            selectedUri = initialUri
+            val details = getUriDetails(context, initialUri)
+            fileName = details.name
+            fileSize = details.size
+            isFileLoading = true
+            val isEncrypted = checkIsEncryptedLocal(context, initialUri)
+            if (isEncrypted) {
+                fileToUnlock = fileName
+                isFileLoading = false
+            } else {
+                Toast.makeText(context, "File is not encrypted", Toast.LENGTH_SHORT).show()
+                isFileLoading = false
+            }
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            if (currentState != ToolState.SUCCESS && currentState != ToolState.PROCESSING) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                    tonalElevation = 2.dp
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", modifier = Modifier.size(22.dp))
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text("Unlock", fontSize = 16.sp, fontWeight = FontWeight.Black)
+                            Text("REMOVE PDF RESTRICTIONS", fontSize = 8.sp, fontWeight = FontWeight.Black, color = accentColor, letterSpacing = 1.sp)
+                        }
+                        if (selectedUri != null && currentState == ToolState.CONFIGURING) {
+                            TextButton(onClick = { selectedUri = null; currentState = ToolState.SELECTING }) {
+                                Text("CHANGE", fontSize = 11.sp, fontWeight = FontWeight.Black, color = Color.Gray)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ) { padding ->
+        Box(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 20.dp)) {
+            if (isFileLoading) {
+                LoadingStateView(accentColor, showLoadingWarning, "Preparing document...")
+            } else {
+                when (currentState) {
+                    ToolState.SELECTING -> {
+                        SelectionGrid(
+                            onSelect = { pickLauncher.launch("application/pdf") }, 
+                            isDark = isDark,
+                            icon = Icons.Outlined.LockOpen,
+                            title = "Tap to select locked file",
+                            subtitle = "REMOVE PASSWORD PROTECTION",
+                            accentColor = accentColor,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    ToolState.CONFIGURING -> {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(Modifier.height(12.dp))
+                            
+                            Box(modifier = Modifier.weight(1f).fillMaxWidth(0.75f)) {
+                                UnifiedPdfPreview(
+                                    uri = selectedUri!!,
+                                    pageCount = pageCount,
+                                    mode = PreviewMode.COVER,
+                                    password = null, 
+                                    accentColor = accentColor
+                                )
+                            }
+                            
+                            Spacer(Modifier.height(12.dp))
+                            Text(fileName, fontWeight = FontWeight.Black, fontSize = 14.sp, maxLines = 1)
+                            Text("$fileSize • $pageCount PAGES", fontSize = 10.sp, color = Color.Gray)
+                            
+                            Spacer(Modifier.height(20.dp))
+                            Text("DOCUMENT UNLOCKED", fontSize = 9.sp, fontWeight = FontWeight.Black, color = accentColor, letterSpacing = 1.2.sp)
+                            Text("Ready to save without restrictions.", color = Color.Gray, fontSize = 11.sp)
+                            
+                            Spacer(Modifier.height(32.dp))
+                            Button(
+                                onClick = { 
+                                    val defaultName = fileName.replace(".pdf", "", true) + "-unlocked.pdf"
+                                    saveLauncher.launch(defaultName) 
+                                }, 
+                                modifier = Modifier.fillMaxWidth().height(60.dp), 
+                                shape = RoundedCornerShape(20.dp), 
+                                colors = ButtonDefaults.buttonColors(containerColor = accentColor, contentColor = Color.White)
+                            ) {
+                                Text("SAVE UNRESTRICTED PDF", fontWeight = FontWeight.Black, color = Color.White)
+                            }
+                            Spacer(Modifier.height(32.dp))
+                        }
+                    }
+                    ToolState.PROCESSING -> {
+                        ProcessingStateView(
+                            accentColor = accentColor,
+                            uri = selectedUri,
+                            password = password,
+                            text = "Decrypting document...",
+                            current = 0,
+                            total = 0,
+                            showWarning = showLoadingWarning
+                        )
+                    }
+                    ToolState.SUCCESS -> {
+                        SuccessView(
+                            message = "File Unlocked",
+                            subMessage = "Password protection removed",
+                            processingTime = processingTime,
+                            onDone = onBack,
+                            onProcessMore = { 
+                                selectedUri = null
+                                password = ""
+                                currentState = ToolState.SELECTING 
+                            },
+                            onPreview = { outputUri?.let { uri -> onOpenPreview(uri, fileName, pageCount) } },
+                            accentColor = accentColor
+                        )
+                    }
+                    else -> {}
+                }
+            }
+            
+            if (fileToUnlock != null) {
+                LockedFilePrompt(
+                    fileName = fileToUnlock!!,
+                    onDismiss = { fileToUnlock = null; selectedUri = null; currentState = ToolState.SELECTING },
+                    onUnlocked = { pass ->
+                        password = pass
+                        isFileLoading = true
+                        scope.launch(Dispatchers.IO) {
+                            val decryptedUri = decryptToCache(context, selectedUri!!, password)
+                            if (decryptedUri != null) {
+                                val count = getPageCount(context, decryptedUri, null)
+                                withContext(Dispatchers.Main) { 
+                                    selectedUri = decryptedUri
+                                    pageCount = count
+                                    currentState = ToolState.CONFIGURING
+                                    isFileLoading = false 
+                                    fileToUnlock = null
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) { 
+                                    Toast.makeText(context, "Invalid Password", Toast.LENGTH_SHORT).show()
+                                    isFileLoading = false 
+                                }
+                            }
+                        }
+                    },
+                    accentColor = accentColor,
+                    isLoading = isFileLoading
+                )
+            }
+        }
+    }
+}

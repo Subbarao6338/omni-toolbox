@@ -1,0 +1,10 @@
+android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file('nature_files.jks')
+            storePassword 'nature'
+            keyAlias 'nature'
+            keyPassword 'nature'
+        }
+    }
+}

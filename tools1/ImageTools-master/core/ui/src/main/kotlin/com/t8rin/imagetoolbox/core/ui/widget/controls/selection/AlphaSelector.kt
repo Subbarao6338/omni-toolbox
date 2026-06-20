@@ -1,0 +1,64 @@
+/*
+ * ImageToolbox is an image editor for android
+ * Copyright (c) 2026 T8RIN (Malik Mukhametzyanov)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * You should have received a copy of the Apache License
+ * along with this program.  If not, see <http://www.apache.org/licenses/LICENSE-2.0>.
+ */
+
+package com.t8rin.imagetoolbox.core.ui.widget.controls.selection
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Opacity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.t8rin.colors.util.roundToTwoDigits
+import com.t8rin.imagetoolbox.core.resources.R
+import com.t8rin.imagetoolbox.core.ui.widget.enhanced.EnhancedSliderItem
+import com.t8rin.imagetoolbox.core.ui.widget.modifier.ShapeDefaults
+
+@Composable
+fun AlphaSelector(
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    onValueChangeFinished: ((Float) -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    shape: Shape = ShapeDefaults.extraLarge,
+    title: String = stringResource(R.string.paint_alpha),
+    icon: ImageVector = Icons.Rounded.Opacity
+) {
+    EnhancedSliderItem(
+        modifier = modifier,
+        value = value,
+        icon = icon,
+        title = title,
+        sliderModifier = Modifier
+            .padding(top = 14.dp, start = 12.dp, end = 12.dp, bottom = 10.dp),
+        valueRange = 0f..1f,
+        internalStateTransformation = {
+            it.roundToTwoDigits()
+        },
+        onValueChange = {
+            onValueChange(it.roundToTwoDigits())
+        },
+        onValueChangeFinished = onValueChangeFinished,
+        shape = shape,
+        containerColor = color
+    )
+}

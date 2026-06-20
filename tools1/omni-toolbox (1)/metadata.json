@@ -1,0 +1,6 @@
+{
+  "name": "OmniSync & AI",
+  "description": "Multi-cloud sync, contact management, and AI content summarization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

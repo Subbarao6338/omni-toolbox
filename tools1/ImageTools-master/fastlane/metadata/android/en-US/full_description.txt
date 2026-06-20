@@ -1,0 +1,60 @@
+<h1>✨ Image Toolbox ✨</h1>
+
+<p>Powerful all-in-one image editor, AI toolkit and format converter for creators and power users.</p>
+
+<p><strong>Note:</strong> This is only a partial list of features. Full list is available in the <a href="https://github.com/T8RIN/ImageToolbox/blob/master/README.md">README</a>.</p>
+
+<h2>Core Features</h2>
+<ul>
+<li>Batch processing</li>
+<li>310+ filters + custom filter chains (share via QR)</li>
+<li>File encryption/decryption (100+ algorithms)</li>
+<li>EXIF editing/deleting</li>
+<li>Load images from the internet</li>
+<li>Background removal (manual + AI models)</li>
+<li>Markup layers (stickers, text, shapes)</li>
+<li>Advanced drawing tools (pen, neon, highlighter, warp, pixelation, blur, spot healing)</li>
+<li>Flexible resizing (adaptive, aspect ratio, limits, multiple algorithms)</li>
+<li>Quality compression & size reduction</li>
+</ul>
+
+<h2>AI Tools</h2>
+<ul>
+<li>81 ready AI models</li>
+<li>Upscale, denoise, colorize, enhance</li>
+</ul>
+
+<h2>OCR (Text from Images)</h2>
+<ul>
+<li>120+ languages</li>
+<li>Fast / Standard / Best modes</li>
+<li>Batch extraction</li>
+<li>Write results to files or EXIF</li>
+</ul>
+
+<h2>Conversion & Media</h2>
+<ul>
+<li>HEIF, HEIC, AVIF, WEBP, JPEG, PNG, JXL, TIFF, QOI, ICO</li>
+</ul>
+
+<h2>PDF & Documents</h2>
+<ul>
+<li>PDF → Images</li>
+<li>Images → PDF</li>
+<li>Document scanning</li>
+</ul>
+
+<h2>Image Tools</h2>
+<ul>
+<li>Stitching, stacking, splitting</li>
+<li>Batch cutting</li>
+<li>Raster → SVG tracing</li>
+<li>Collages (2–10 images, 180+ layouts)</li>
+<li>Watermarking (text, image, timestamp, steganography)</li>
+</ul>
+
+<h2>Barcodes</h2>
+<ul>
+<li>Create & scan 13 formats (QR, Aztec, Data Matrix, EAN, Code 128, PDF417, UPC)</li>
+<li>Share as images</li>
+</ul>

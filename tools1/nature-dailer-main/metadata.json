@@ -1,0 +1,6 @@
+{
+  "name": "Nature Dialer",
+  "description": "A high-fidelity Android-inspired dialer with immersive nature themes and deep customization.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["PWA", "Theming", "Interactive UI"]
+}

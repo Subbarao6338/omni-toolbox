@@ -1,0 +1,436 @@
+package com.nature.docs
+
+import android.net.Uri
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import com.nature.docs.ui.components.*
+import com.nature.docs.ui.theme.NatureToolsTheme
+import com.nature.docs.ui.theme.NatureGreen
+import kotlinx.coroutines.launch
+
+class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        com.tom_roush.pdfbox.android.PDFBoxResourceLoader.init(applicationContext)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        setContent {
+            // NITRO: Dynamic Theme Engine
+            var darkModePreference by remember { mutableIntStateOf(PreferencesManager.getDarkMode(applicationContext)) }
+            var themeId by remember { mutableIntStateOf(PreferencesManager.getThemeId(applicationContext)) }
+
+            // Observe system theme changes if in "System" mode
+            val systemDark = isSystemInDarkTheme()
+            val isDarkMode = remember(darkModePreference, systemDark) {
+                when(darkModePreference) {
+                    1 -> false
+                    2 -> true
+                    else -> systemDark
+                }
+            }
+
+            var isInitialized by remember { mutableStateOf(false) }
+
+            LaunchedEffect(Unit) {
+                val retention = PreferencesManager.getHistoryRetention(applicationContext)
+                SessionManager.purgeHistory(retention)
+                kotlinx.coroutines.delay(1200) 
+                isInitialized = true
+            }
+
+            NatureToolsTheme(themeId = themeId, darkTheme = isDarkMode) {
+                    val sheetState = rememberModalBottomSheetState()
+                    var showToolPicker by remember { mutableStateOf(false) }
+                    val scope = rememberCoroutineScope()
+
+                    Box(Modifier.fillMaxSize()) {
+                        var currentTool by remember { mutableStateOf<String?>(null) }
+                        var previewData by remember { mutableStateOf<Triple<Uri, String, Int>?>(null) }
+                        var toolInitialUri by remember { mutableStateOf<Uri?>(null) }
+                        var toolInitialPassword by remember { mutableStateOf<String?>(null) }
+                        var aboutInitialPage by remember { mutableStateOf("main") }
+                        var isAboutFromSettings by remember { mutableStateOf(false) }
+                        
+                        val mainScreens = listOf("home", "tools", "history", "settings")
+                        val pagerState = androidx.compose.foundation.pager.rememberPagerState { mainScreens.size }
+
+                        // Handle incoming PDF from external apps (e.g., WhatsApp file share)
+                        val incomingPdfData = remember(intent) {
+                            val uri = intent?.data
+                            if (uri != null && (intent?.type == "application/pdf" || uri.toString().lowercase().endsWith(".pdf"))) {
+                                // Grant persistent URI permission
+                                try {
+                                    contentResolver.takePersistableUriPermission(
+                                        uri,
+                                        android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    )
+                                } catch (e: SecurityException) {
+                                    // Permission already taken or not available
+                                }
+                                // Get file name
+                                var fileName = ""
+                                contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                                    if (cursor.moveToFirst()) {
+                                        val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                                        if (nameIndex >= 0) {
+                                            fileName = cursor.getString(nameIndex) ?: "Document"
+                                        }
+                                    }
+                                }
+                                if (fileName.isEmpty()) {
+                                    fileName = uri.lastPathSegment ?: "Document"
+                                }
+                                Pair(uri, fileName)
+                            } else {
+                                null
+                            }
+                        }
+
+                        // Navigate to UltraPreview when incoming PDF is detected
+                        LaunchedEffect(incomingPdfData) {
+                            if (incomingPdfData != null && currentTool == null) {
+                                previewData = Triple(incomingPdfData.first, incomingPdfData.second, 0)
+                                currentTool = "ultra_preview"
+                            }
+                        }
+
+                        BackHandler(enabled = currentTool != null || pagerState.currentPage != 0 || showToolPicker) {
+                            if (showToolPicker) {
+                                scope.launch { sheetState.hide() }.invokeOnCompletion { showToolPicker = false }
+                            } else if (currentTool != null) {
+                                currentTool = null
+                            } else if (pagerState.currentPage != 0) {
+                                scope.launch { pagerState.animateScrollToPage(0) }
+                            }
+                        }
+
+                        // ROOT CONTAINER
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.background)
+                                .navigationBarsPadding()
+                        ) {
+                            Column(modifier = Modifier.fillMaxSize().padding(bottom = 84.dp)) {
+                                androidx.compose.foundation.pager.HorizontalPager(
+                                    state = pagerState,
+                                    modifier = Modifier.weight(1f),
+                                    userScrollEnabled = currentTool == null,
+                                    beyondBoundsPageCount = 0
+                                ) { page ->
+                                    when (mainScreens[page]) {
+                                        "home" -> HomeView(
+                                            isDarkMode = isDarkMode,
+                                            onThemeToggle = { 
+                                                darkModePreference = if (isDarkMode) 1 else 2
+                                                PreferencesManager.setDarkMode(applicationContext, darkModePreference)
+                                            },
+                                            onToolClick = { 
+                                                toolInitialUri = null
+                                                if (it == "about") {
+                                                    aboutInitialPage = "support"
+                                                    isAboutFromSettings = false
+                                                    currentTool = "about"
+                                                } else if (it == "tools") {
+                                                    scope.launch { pagerState.animateScrollToPage(1) }
+                                                } else {
+                                                    currentTool = it 
+                                                }
+                                            },
+                                            onOpenPreview = { uri, name, count ->
+                                                previewData = Triple(uri, name, count)
+                                                currentTool = "ultra_preview"
+                                            }
+                                        )
+                                        "tools" -> ToolsView(onToolClick = { 
+                                            toolInitialUri = null
+                                            toolInitialPassword = null
+                                            currentTool = it 
+                                        })
+                                        "history" -> HistoryView(onItemClick = { uri, name, count ->
+                                            previewData = Triple(uri, name, count)
+                                            toolInitialPassword = null
+                                            currentTool = "ultra_preview"
+                                        })
+                                        "settings" -> SettingsView(
+                                            isDarkMode = isDarkMode,
+                                            onDarkModeChange = { mode ->
+                                                darkModePreference = mode
+                                                PreferencesManager.setDarkMode(applicationContext, mode)
+                                            },
+                                            onThemeIdChange = { id ->
+                                                themeId = id
+                                                PreferencesManager.setThemeId(applicationContext, id)
+                                            },
+                                            onNavigateToAbout = { 
+                                                aboutInitialPage = it
+                                                isAboutFromSettings = true
+                                                currentTool = "about" 
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+
+                            if (currentTool == null) {
+                                FixedTitanBottomBar(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter),
+                                    currentScreen = mainScreens[pagerState.currentPage],
+                                    onNavigate = { screen ->
+                                        val index = mainScreens.indexOf(screen)
+                                        if (index != -1) {
+                                            scope.launch { pagerState.scrollToPage(index) }
+                                        }
+                                    },
+                                    onPlusClick = { showToolPicker = true }
+                                )
+                            }
+
+                            if (showToolPicker) {
+                                ModalBottomSheet(
+                                    onDismissRequest = { showToolPicker = false },
+                                    sheetState = sheetState,
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    dragHandle = { BottomSheetDefaults.DragHandle(color = Color.Gray.copy(0.2f)) },
+                                    shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+                                ) {
+                                    ToolPickerContent(
+                                        onToolClick = { tool ->
+                                            scope.launch { sheetState.hide() }.invokeOnCompletion { 
+                                                showToolPicker = false
+                                                toolInitialUri = previewData?.first
+                                                toolInitialPassword = null
+                                                currentTool = tool 
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = currentTool != null,
+                                enter = androidx.compose.animation.fadeIn(),
+                                exit = androidx.compose.animation.fadeOut()
+                            ) {
+                                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                                    when (currentTool) {
+                                        "pdf_editor" -> toolInitialUri?.let { PdfEditorView(uri = it, onBack = { currentTool = null }) }
+                                        "image_editor" -> {
+                                            toolInitialUri?.let { uri ->
+                                                val bitmap = remember(uri) {
+                                                    val inputStream = contentResolver.openInputStream(uri)
+                                                    android.graphics.BitmapFactory.decodeStream(inputStream)
+                                                }
+                                                bitmap?.let { ImageEditorView(bitmap = it, onBack = { currentTool = null }) }
+                                            }
+                                        }
+                                        "video_editor" -> toolInitialUri?.let { VideoEditorView(uri = it, onBack = { currentTool = null }) }
+                                        "audio_tools" -> AudioToolsView(onBack = { currentTool = null })
+                                        "scanner" -> ScannerView(onBack = { currentTool = null })
+                                        "about" -> AboutView(initialPage = aboutInitialPage, isFromSettings = isAboutFromSettings, onBack = { currentTool = null })
+                                        "merge" -> MergeView(initialUri = toolInitialUri, initialPassword = toolInitialPassword, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "split" -> SplitView(initialUri = toolInitialUri, initialPassword = toolInitialPassword, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "delete" -> DeleteView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "compress" -> CompressView(initialUri = toolInitialUri, initialPassword = toolInitialPassword, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "repair" -> RepairView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "rotate" -> RotateView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "rearrange" -> RearrangeView(initialUri = toolInitialUri, initialPassword = toolInitialPassword, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "protect" -> ProtectView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "unlock" -> UnlockView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "grayscale" -> GrayscaleView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "metadata" -> MetadataView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "img2pdf" -> ImageToPdfView(onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "pdf2img" -> PdfToImageView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "pdf2text" -> PdfToTextView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "pdf2zip" -> PdfToZipView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "sign" -> SignView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "watermark" -> WatermarkView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "page-numbers" -> PageNumbersView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "bookmarks" -> BookmarksView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "extract-images" -> ExtractImagesView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "compare" -> CompareView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "word2pdf" -> WordToPdfView(onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "excel2pdf" -> ExcelToPdfView(onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "ppt2pdf" -> PptToPdfView(onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "pdf2word" -> PdfToWordView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "scan" -> ScanPdfView(onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "flatten" -> FlattenView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "crop" -> CropView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "n-up" -> NUpView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "invert" -> InvertView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "add-blank-page" -> AddBlankPageView(initialUri = toolInitialUri, onBack = { currentTool = null }, onOpenPreview = { uri, name, count -> previewData = Triple(uri, name, count); currentTool = "ultra_preview" })
+                                        "palette-extractor" -> PaletteExtractorView(onBack = { currentTool = null })
+                                        "booklet-imposer" -> BookletImposerView(onBack = { currentTool = null })
+                                        "ultra_preview" -> {
+                                            previewData?.let { (uri, name, count) ->
+                                                UltraPreview(
+                                                    uri = uri, fileName = name, pageCount = count, 
+                                                    onDismiss = { currentTool = null }, 
+                                                    onOpenInTool = { tool, targetUri, targetPass -> 
+                                                        toolInitialUri = targetUri
+                                                        toolInitialPassword = targetPass
+                                                        currentTool = tool 
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = !isInitialized,
+                            exit = androidx.compose.animation.fadeOut(animationSpec = tween(500))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(if (isDarkMode) Color.Black else Color.White),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Logo(modifier = Modifier.size(64.dp), partColor = if (isDarkMode) Color.White else Color.Black)
+                                    Spacer(Modifier.height(24.dp))
+                                    CircularProgressIndicator(color = NatureGreen, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+@Composable
+fun FixedTitanBottomBar(
+    modifier: Modifier = Modifier,
+    currentScreen: String,
+    onNavigate: (String) -> Unit,
+    onPlusClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.98f))
+            .height(84.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Box(
+            modifier = Modifier
+                .offset(y = (-32).dp)
+                .size(40.dp)
+                .background(Brush.radialGradient(listOf(NatureGreen.copy(alpha = 0.4f), Color.Transparent)))
+        )
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(68.dp),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
+            tonalElevation = 8.dp
+        ) {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxSize().padding(bottom = 2.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        NavItem(Icons.Outlined.Home, "Home", currentScreen == "home") { onNavigate("home") }
+                        NavItem(Icons.Outlined.GridView, "Tools", currentScreen == "tools") { onNavigate("tools") }
+                    }
+                    
+                    Spacer(modifier = Modifier.width(72.dp))
+                    
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        NavItem(Icons.Outlined.History, "History", currentScreen == "history") { onNavigate("history") }
+                        NavItem(Icons.Outlined.Settings, "Settings", currentScreen == "settings" || currentScreen == "about") { onNavigate("settings") }
+                    }
+                }
+            }
+        }
+
+        Surface(
+            modifier = Modifier
+                .offset(y = (-34).dp)
+                .size(58.dp)
+                .border(2.5.dp, if (MaterialTheme.colorScheme.background == Color.Black) Color.Black else Color.White, RoundedCornerShape(20.dp))
+                .shadow(elevation = 12.dp, shape = RoundedCornerShape(20.dp), spotColor = NatureGreen)
+                .clickable { onPlusClick() },
+            shape = RoundedCornerShape(20.dp),
+            color = NatureGreen
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(Icons.Filled.Add, contentDescription = "Add", tint = Color.White, modifier = Modifier.size(32.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun NavItem(icon: ImageVector, label: String, selected: Boolean, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 4.dp, horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = if (selected) NatureGreen else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+            modifier = Modifier.size(24.dp)
+        )
+        Text(
+            text = label,
+            fontSize = 9.sp,
+            fontWeight = if (selected) FontWeight.Black else FontWeight.Bold,
+            color = if (selected) NatureGreen else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+            letterSpacing = 0.2.sp
+        )
+    }
+}

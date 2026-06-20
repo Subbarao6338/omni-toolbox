@@ -1,0 +1,430 @@
+package com.nature.docs.ui.components
+
+import android.graphics.Bitmap
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.nature.docs.ui.theme.NatureGreen
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+@Composable
+fun SplitView(
+    initialUri: Uri? = null,
+    initialPassword: String? = null,
+    onBack: () -> Unit,
+    onOpenPreview: (Uri, String, Int) -> Unit
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val isDark = MaterialTheme.colorScheme.background == Color.Black
+    val accentColor = Color(0xFFF43F5E)
+
+    var currentState by remember { mutableStateOf<ToolState>(ToolState.SELECTING) }
+    var selectedUri by remember { mutableStateOf<Uri?>(null) }
+    var outputUri by remember { mutableStateOf<Uri?>(null) }
+    var unlockPassword by remember { mutableStateOf(initialPassword ?: "") }
+    var rangeText by remember { mutableStateOf("") }
+    var selectedPages by remember { mutableStateOf<Set<Int>>(emptySet()) }
+    
+    var fileName by remember { mutableStateOf("") }
+    var fileSize by remember { mutableStateOf("") }
+    var pageCount by remember { mutableIntStateOf(0) }
+    var progressCount by remember { mutableIntStateOf(0) }
+    var isFileLoading by remember { mutableStateOf(false) }
+    var processingTime by remember { mutableStateOf("") }
+    var showLoadingWarning by remember { mutableStateOf(false) }
+    var fileToUnlock by remember { mutableStateOf<String?>(null) }
+    var showRangeInput by remember { mutableStateOf(false) }
+
+    fun handleFileSelection(uri: Uri, password: String? = null) {
+        selectedUri = uri
+        val details = getUriDetails(context, uri)
+        fileName = details.name
+        fileSize = details.size
+        isFileLoading = true
+        scope.launch(Dispatchers.IO) {
+            val isEncrypted = checkIsEncryptedLocal(context, uri)
+            if (isEncrypted && password == null) {
+                withContext(Dispatchers.Main) {
+                    fileToUnlock = fileName
+                    isFileLoading = false
+                }
+            } else {
+                val count = getPageCount(context, uri, password)
+                withContext(Dispatchers.Main) {
+                    pageCount = count
+                    selectedPages = emptySet()
+                    rangeText = ""
+                    currentState = ToolState.CONFIGURING
+                    isFileLoading = false
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(initialUri) {
+        initialUri?.let { handleFileSelection(it, initialPassword) }
+    }
+
+    LaunchedEffect(isFileLoading, currentState) {
+        if (isFileLoading || currentState == ToolState.PROCESSING) {
+            delay(5000)
+            showLoadingWarning = true
+        } else {
+            showLoadingWarning = false
+        }
+    }
+
+    // Range Parser
+    fun parseRange(input: String, max: Int): Set<Int> {
+        val pages = mutableSetOf<Int>()
+        try {
+            input.split(",").forEach { part ->
+                if (part.contains("-")) {
+                    val split = part.split("-")
+                    val start = split[0].trim().toInt().coerceIn(1, max)
+                    val end = split[1].trim().toInt().coerceIn(1, max)
+                    for (i in start..end) pages.add(i - 1)
+                } else {
+                    val p = part.trim().toIntOrNull()
+                    if (p != null && p in 1..max) pages.add(p - 1)
+                }
+            }
+        } catch (e: Exception) {}
+        return pages
+    }
+
+    // Set to Range String
+    fun generateRangeString(pages: Set<Int>): String {
+        if (pages.isEmpty()) return ""
+        val sorted = pages.toList().sorted()
+        val result = mutableListOf<String>()
+        var start = sorted[0]
+        var prev = start
+        
+        for (i in 1 until sorted.size) {
+            if (sorted[i] == prev + 1) {
+                prev = sorted[i]
+            } else {
+                if (start == prev) result.add("${start + 1}")
+                else result.add("${start + 1}-${prev + 1}")
+                start = sorted[i]
+                prev = start
+            }
+        }
+        if (start == prev) result.add("${start + 1}")
+        else result.add("${start + 1}-${prev + 1}")
+        
+        return result.joinToString(", ")
+    }
+
+    val pickLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { handleFileSelection(it) }
+    }
+
+    val saveLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        uri?.let { saveUri ->
+            currentState = ToolState.PROCESSING
+            val startTime = System.currentTimeMillis()
+            scope.launch(Dispatchers.IO) {
+                try {
+                    withContext(Dispatchers.Main) { progressCount = 0 }
+                    context.contentResolver.openInputStream(selectedUri!!)?.use { inputStream ->
+                        val document = if (unlockPassword.isNotEmpty()) PDDocument.load(inputStream, unlockPassword) else PDDocument.load(inputStream)
+                        val newDocument = PDDocument()
+                        
+                        selectedPages.toList().sorted().forEach { index ->
+                            if (index < document.numberOfPages) {
+                                newDocument.importPage(document.getPage(index))
+                                withContext(Dispatchers.Main) { progressCount++ }
+                            }
+                        }
+                        
+                        saveAndFlush(context, newDocument, saveUri)
+                        document.close()
+                    }
+                    val endTime = System.currentTimeMillis()
+                    val timeStr = String.format("%.1fs", (endTime - startTime) / 1000.0)
+                    val finalCount = getPageCount(context, saveUri, null)
+                    withContext(Dispatchers.Main) {
+                        processingTime = timeStr
+                        outputUri = saveUri
+                        SessionManager.addEntry(fileName, "Split", "${selectedPages.size} pages extracted", Icons.Filled.ContentCut, saveUri, finalCount)
+                        currentState = ToolState.SUCCESS
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                        currentState = ToolState.CONFIGURING
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) { PDFBoxResourceLoader.init(context) }
+
+    Scaffold(
+        topBar = {
+            if (currentState != ToolState.SUCCESS && currentState != ToolState.PROCESSING) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                    tonalElevation = 2.dp
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", modifier = Modifier.size(22.dp))
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text("Split", fontSize = 16.sp, fontWeight = FontWeight.Black)
+                            Text("EXTRACT PAGES FROM PDF", fontSize = 8.sp, fontWeight = FontWeight.Black, color = accentColor, letterSpacing = 1.sp)
+                        }
+                        if (selectedUri != null && currentState == ToolState.CONFIGURING) {
+                            TextButton(onClick = { selectedUri = null; currentState = ToolState.SELECTING }) {
+                                Text("CHANGE", fontSize = 11.sp, fontWeight = FontWeight.Black, color = Color.Gray)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ) { padding ->
+        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+            if (isFileLoading) {
+                LoadingStateView(accentColor, showLoadingWarning, "Preparing document...")
+            } else {
+                when (currentState) {
+                    ToolState.SELECTING -> {
+                        SelectionGrid(
+                            onSelect = { pickLauncher.launch("application/pdf") }, 
+                            isDark = isDark,
+                            icon = Icons.Filled.ContentCut,
+                            title = "Tap to enter file",
+                            subtitle = "SPLIT PDF INTO PARTS",
+                            accentColor = accentColor,
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)
+                        )
+                    }
+                    ToolState.CONFIGURING -> {
+                        Column(Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
+                            // Header Info
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text(fileName, fontWeight = FontWeight.Black, fontSize = 14.sp, maxLines = 1)
+                                    Text("${selectedPages.size} / $pageCount PAGES SELECTED", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = accentColor)
+                                }
+                                
+                                TextButton(onClick = { showRangeInput = !showRangeInput }) {
+                                    Icon(if (showRangeInput) Icons.Filled.KeyboardArrowUp else Icons.Filled.Create, null, modifier = Modifier.size(16.dp), tint = accentColor)
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(if (showRangeInput) "HIDE RANGE" else "ENTER RANGE", fontSize = 10.sp, fontWeight = FontWeight.Black, color = accentColor)
+                                }
+                            }
+
+                            // Batch Selection Row
+                            AnimatedVisibility(visible = !showRangeInput) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Button(
+                                        onClick = { 
+                                            val all = (0 until pageCount).toSet()
+                                            selectedPages = all
+                                            rangeText = generateRangeString(all)
+                                        },
+                                        modifier = Modifier.weight(1f).height(36.dp),
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = accentColor.copy(alpha = 0.1f), contentColor = accentColor),
+                                        contentPadding = PaddingValues(0.dp)
+                                    ) {
+                                        Text("SELECT ALL", fontSize = 10.sp, fontWeight = FontWeight.Black)
+                                    }
+                                    Button(
+                                        onClick = { 
+                                            selectedPages = emptySet()
+                                            rangeText = ""
+                                        },
+                                        modifier = Modifier.weight(1f).height(36.dp),
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.1f), contentColor = Color.Gray),
+                                        contentPadding = PaddingValues(0.dp)
+                                    ) {
+                                        Text("CLEAR ALL", fontSize = 10.sp, fontWeight = FontWeight.Black)
+                                    }
+                                }
+                            }
+
+                            if (showRangeInput) {
+                                Surface(
+                                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Column(Modifier.padding(16.dp)) {
+                                        OutlinedTextField(
+                                            value = rangeText,
+                                            onValueChange = { 
+                                                rangeText = it
+                                                selectedPages = parseRange(it, pageCount)
+                                            },
+                                            label = { Text("Example: 1-5, 8, 11-13") },
+                                            modifier = Modifier.fillMaxWidth(),
+                                            shape = RoundedCornerShape(12.dp),
+                                            singleLine = true,
+                                            colors = OutlinedTextFieldDefaults.colors(
+                                                focusedBorderColor = accentColor,
+                                                cursorColor = accentColor
+                                            )
+                                        )
+                                        Spacer(Modifier.height(8.dp))
+                                        Text("Tip: Use commas for lists and dashes for spans.", fontSize = 10.sp, color = Color.Gray)
+                                    }
+                                }
+                            }
+
+                            Box(modifier = Modifier.weight(1f)) {
+                                UnifiedPdfPreview(
+                                    uri = selectedUri!!,
+                                    pageCount = pageCount,
+                                    mode = PreviewMode.GRID,
+                                    password = null, 
+                                    accentColor = accentColor,
+                                    selectedPages = selectedPages,
+                                    onToggleSelection = { index ->
+                                        val newSet = if (selectedPages.contains(index)) selectedPages - index else selectedPages + index
+                                        selectedPages = newSet
+                                        rangeText = generateRangeString(newSet)
+                                    }
+                                )
+                            }
+                            
+                            // PRIMARY BUTTON: Fixed background and white text
+                            Button(
+                                onClick = { saveLauncher.launch(fileName.replace(".pdf", "", true) + "-split.pdf") }, 
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp).height(60.dp), 
+                                enabled = selectedPages.isNotEmpty(),
+                                shape = RoundedCornerShape(20.dp), 
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = accentColor,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                Text("EXTRACT ${selectedPages.size} PAGES", fontWeight = FontWeight.Black)
+                            }
+                        }
+                    }
+                    ToolState.PROCESSING -> {
+                        ProcessingStateView(
+                            accentColor = accentColor,
+                            uri = selectedUri,
+                            password = unlockPassword.ifEmpty { null },
+                            text = "Extracting specified pages...",
+                            current = progressCount,
+                            total = selectedPages.size,
+                            showWarning = showLoadingWarning
+                        )
+                    }
+                    ToolState.SUCCESS -> {
+                        SuccessView(
+                            message = "Split Complete",
+                            subMessage = "Selected pages saved successfully",
+                            processingTime = processingTime,
+                            onDone = onBack,
+                            onProcessMore = { 
+                                selectedUri = null
+                                outputUri = null
+                                unlockPassword = ""
+                                currentState = ToolState.SELECTING 
+                            },
+                            onPreview = {
+                                outputUri?.let { uri ->
+                                    scope.launch {
+                                        val count = getPageCount(context, uri, null)
+                                        onOpenPreview(uri, fileName, count)
+                                    }
+                                }
+                            },
+                            accentColor = accentColor
+                        )
+                    }
+                    else -> {}
+                }
+            }
+
+            if (fileToUnlock != null) {
+                LockedFilePrompt(
+                    fileName = fileToUnlock!!,
+                    onDismiss = { fileToUnlock = null; selectedUri = null; currentState = ToolState.SELECTING },
+                    onUnlocked = { pass ->
+                        isFileLoading = true
+                        scope.launch(Dispatchers.IO) {
+                            val decryptedUri = decryptToCache(context, selectedUri!!, pass)
+                            if (decryptedUri != null) {
+                                val count = getPageCount(context, decryptedUri, null)
+                                withContext(Dispatchers.Main) { 
+                                    if (count > 0) {
+                                        unlockPassword = pass
+                                        selectedUri = decryptedUri
+                                        pageCount = count
+                                        currentState = ToolState.CONFIGURING
+                                        fileToUnlock = null
+                                    } else {
+                                        Toast.makeText(context, "Invalid Password", Toast.LENGTH_SHORT).show()
+                                    }
+                                    isFileLoading = false 
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) { 
+                                    Toast.makeText(context, "Invalid Password", Toast.LENGTH_SHORT).show()
+                                    isFileLoading = false 
+                                }
+                            }
+                        }
+                    },
+                    accentColor = accentColor,
+                    isLoading = isFileLoading
+                )
+            }
+        }
+    }
+}

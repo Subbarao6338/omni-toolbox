@@ -1,0 +1,6 @@
+{
+  "name": "Nature Messages",
+  "description": "Nature-themed messaging platform with categorization, blocking, and reminders.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": []
+}

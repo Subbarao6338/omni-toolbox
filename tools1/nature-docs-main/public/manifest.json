@@ -1,0 +1,21 @@
+{
+  "name": "Nature Docs",
+  "short_name": "NatureDocs",
+  "description": "Unified document reader for local and cloud sources.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBFF",
+  "theme_color": "#0061A4",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

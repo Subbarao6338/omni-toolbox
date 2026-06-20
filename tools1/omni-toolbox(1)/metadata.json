@@ -1,0 +1,6 @@
+{
+  "name": "OmniSync & AI",
+  "description": "Multi-cloud sync (GDrive, Mega, OneDrive, NextCloud with multiple accounts) and integrated 11-tool diagnostics suite.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

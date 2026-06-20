@@ -1,0 +1,18 @@
+# Built artifacts
+**/build/
+*.apk
+*.aar
+
+# Android Studio / IntelliJ files
+*.iml
+.gradle
+local.properties
+.idea/
+*.iws
+*.ipr
+
+# Other
+.DS_Store
+captures/
+.externalNativeBuild
+.cxx

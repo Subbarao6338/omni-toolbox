@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Theme-aware Semantic Colors */
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-text-main: var(--text-main);
+  --color-text-dim: var(--text-dim);
+  --color-accent: #5EB362;
+  --color-accent-glow: rgba(94, 179, 98, 0.2);
+}
+
+:root {
+  /* Nature Light Palette */
+  --bg: #F3F7F3;
+  --card: #FFFFFF;
+  --border: #E0E6E0;
+  --text-main: #242E24;
+  --text-dim: #6B7F6B;
+}
+
+.dark {
+  /* Nature Dark Palette (Elegant Dark) */
+  --bg: #0A0D0A;
+  --card: #141A14;
+  --border: #242E24;
+  --text-main: #E0E4E0;
+  --text-dim: #889288;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-main font-sans antialiased selection:bg-accent/30 overflow-hidden transition-colors duration-300;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-sans font-semibold tracking-tight;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-bg transition-colors duration-300;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full hover:bg-accent/40 transition-all;
+}
+
+.glass-panel {
+  @apply bg-card/80 backdrop-blur-md border border-border transition-all duration-300;
+}
+
+.tool-card {
+  @apply relative p-5 rounded-2xl bg-card border border-border transition-all duration-300 cursor-pointer hover:border-accent hover:shadow-lg hover:-translate-y-1;
+}
+
+.nav-item {
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-text-dim transition-all duration-300 cursor-pointer hover:bg-card hover:text-text-main;
+}
+
+.nav-item.active {
+  @apply bg-card text-accent border-r-2 border-accent font-medium shadow-sm transition-all duration-300;
+}
+
+.widget-card {
+  @apply bg-card border border-border rounded-2xl p-4 shadow-sm transition-all duration-300;
+}
+
+.progress-bar {
+  @apply h-1.5 bg-border rounded-full overflow-hidden transition-colors duration-300;
+}
+
+.progress-fill {
+  @apply h-full bg-accent transition-all duration-500;
+}

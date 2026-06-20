@@ -1,0 +1,61 @@
+[versions]
+#jetbrains
+geocoderVersion = "3.27"
+kotlin = "2.3.20"
+kotlinxSerializationJson = "1.10.0"
+#Detekt
+detekt = "1.23.8"
+detektCompose = "0.4.28"
+#Eventbus
+eventbus = "3.3.1"
+#Fossify
+commons = "6.1.6"
+#Gradle
+gradlePlugins-agp = "9.0.1"
+#Other
+indicatorFastScroll = "c7873f7168"
+autofitTextView = "0.2.1"
+libphonenumberVersion = "9.0.27"
+#build
+app-build-compileSDKVersion = "36"
+app-build-targetSDK = "36"
+app-build-minimumSDK = "26"
+app-build-javaVersion = "VERSION_17"
+app-build-kotlinJVMTarget = "17"
+
+# Compose
+androidxComposeBom = "2025.02.00"
+androidxActivityCompose = "1.10.0"
+androidxLifecycle = "2.8.7"
+androidxNavigationCompose = "2.8.8"
+
+[libraries]
+#Compose
+compose-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+#Fossify
+fossify-commons = { module = "org.fossify:commons", version.ref = "commons" }
+#EventBus
+eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+#Kotlin
+geocoder = { module = "com.googlecode.libphonenumber:geocoder", version.ref = "geocoderVersion" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+#Other
+indicator-fast-scroll = { module = "org.fossify:IndicatorFastScroll", version.ref = "indicatorFastScroll" }
+autofit-text-view = { module = "me.grantland:autofittextview", version.ref = "autofitTextView" }
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
+
+[plugins]
+android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

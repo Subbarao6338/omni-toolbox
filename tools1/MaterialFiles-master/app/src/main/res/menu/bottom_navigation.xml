@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/about_icon_white_24dp"
+        android:title="Home" />
+    <item
+        android:id="@+id/navigation_files"
+        android:icon="@drawable/directory_icon_white_24dp"
+        android:title="Files" />
+</menu>
