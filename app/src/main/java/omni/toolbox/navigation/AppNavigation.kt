@@ -58,6 +58,7 @@ import omni.toolbox.ui.screens.automotive.*
 import omni.toolbox.ui.screens.social.*
 import omni.toolbox.ui.screens.electronics.*
 import omni.toolbox.ui.screens.data.*
+import omni.toolbox.ui.screens.comm.*
 
 @Composable
 fun OmniToolboxApp(
@@ -329,11 +330,18 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         listOf("case_converter", "lorem", "anagram").contains(route) -> TextToolScreen(navController, tool.name)
         route == "word_rank_calc" -> WordRankScreen(navController)
 
+        route == "dialer" -> DialerScreen(navController)
+        route == "call_history" -> HistoryScreen(navController)
+        route == "contacts" -> ContactsScreen(navController)
+        route == "messages" -> MessagesScreen(navController)
+        route == "vocal_remover" || route == "ai_stems_splitter" -> VocalRemoverScreen(navController, tool.name)
+
         route == "plant_care" -> PlantCareScreen(navController)
         route == "fuel" -> FuelCostCalculatorScreen(navController)
         listOf("speedometer", "fuel_consumption", "car_maintenance").contains(route) -> AutomotiveToolScreen(navController, tool.name)
 
         listOf("image_color_picker", "image_palette", "color_palette_group").contains(route) -> ColorToolsScreen(navController)
+        route == "image_bg_remover" || route == "image_ai_tools" -> ImageAIScreen(navController, tool.name)
 
         // --- 2. Shared Multi-Category Screens ---
         listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "binary_calc", "stats").contains(route) -> MathToolScreen(navController, tool.name)
@@ -404,8 +412,24 @@ fun MediaDispatcher(navController: NavHostController, tool: Tool) {
     val route = tool.route
     when {
         tool.route == "guitar_tuner" || tool.route == "chord_lib" -> MusicToolScreen(navController, tool.name)
-        tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || tool.route.startsWith("ai_") || listOf("m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover", "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer", "m_volume_booster", "aud_master_pro", "audio_noise_remover", "echo_remover", "reverb_remover", "vocal_autotuner", "vocal_remover").contains(route) -> AudioToolScreen(navController, tool.name)
-        tool.route.startsWith("video_") || tool.route.startsWith("vid_") || listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier", "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif", "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_volume_booster").contains(route) -> AudioToolScreen(navController, tool.name, mimeType = "video/*")
+        tool.route.startsWith("m_audio") || tool.route.startsWith("aud_") || tool.route.startsWith("ai_") ||
+                listOf(
+                    "m_3d_audio", "m_bass_booster", "m_echo_effect", "m_equalizer", "m_karaoke_maker",
+                    "m_mute_audio", "m_reverse_audio", "m_ringtone_maker", "m_silence_remover",
+                    "m_speech_to_text", "m_speed_changer", "m_text_to_speech", "m_voice_changer",
+                    "m_volume_booster", "aud_master_pro", "audio_noise_remover", "echo_remover",
+                    "reverb_remover", "vocal_autotuner", "add_sfx", "audio_loop",
+                    "key_bpm_finder", "noise_generator", "record_audio", "silence_generator",
+                    "sound_mastering", "wave_generator"
+                ).contains(route) -> AudioToolScreen(navController, tool.name)
+        tool.route.startsWith("video_") || tool.route.startsWith("vid_") ||
+                listOf(
+                    "frame_grabber", "m_video_to_audio", "mix_video_audio", "digital_magnifier",
+                    "mirror_tool", "video_compress", "video_trim", "vid_edit_pro", "video_to_gif",
+                    "vid_thumb", "video_delete", "video_flip", "video_loop", "video_reverse",
+                    "video_sfx", "video_silence", "video_speed_changer", "video_splitter",
+                    "video_stabilizer", "video_volume_booster", "video_merger"
+                ).contains(route) -> AudioToolScreen(navController, tool.name, mimeType = "video/*")
         else -> ImageToolScreen(navController, tool.name)
     }
 }
