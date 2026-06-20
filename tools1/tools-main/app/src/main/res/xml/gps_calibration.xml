@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/gps">
+
+        <Preference
+            android:summary="-"
+            android:title="@string/location"
+            app:icon="@drawable/satellite"
+            app:key="@string/pref_holder_location"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_auto_location"
+            app:singleLineTitle="false"
+            app:title="@string/pref_auto_location_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            android:dependency="@string/pref_auto_location"
+            app:key="@string/pref_require_satellites"
+            app:singleLineTitle="false"
+            app:title="@string/pref_require_satellites_title"
+            android:summary="@string/pref_require_satellites_description"/>
+
+        <Preference
+            android:title="@string/request_permission"
+            app:iconSpaceReserved="false"
+            app:isPreferenceVisible="false"
+            app:key="@string/pref_gps_request_permission"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/clear_cache"
+            android:dependency="@string/pref_auto_location"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_gps_clear_cache"
+            app:singleLineTitle="false" />
+
+        <com.kylecorry.trail_sense.shared.views.CoordinatePreference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_gps_override">
+        </com.kylecorry.trail_sense.shared.views.CoordinatePreference>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

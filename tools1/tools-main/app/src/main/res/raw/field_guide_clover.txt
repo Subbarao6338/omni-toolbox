@@ -1,0 +1,4 @@
+Clover
+A small plant with 3 leaves, commonly found in fields and grassy areas. Its leaves and flowers are edible.
+
+https://en.m.wikipedia.org/wiki/Clover

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_create_map_group"
+        android:icon="@drawable/ic_map_group"
+        android:title="@string/group" />
+    <item
+        android:id="@+id/action_import_map_file"
+        android:icon="@drawable/ic_file"
+        android:title="@string/map_file" />
+    <item
+        android:id="@+id/action_import_map_camera"
+        android:icon="@drawable/ic_camera"
+        android:title="@string/camera" />
+    <item
+        android:id="@+id/action_create_blank_map"
+        android:icon="@drawable/maps"
+        android:title="@string/blank" />
+</menu>

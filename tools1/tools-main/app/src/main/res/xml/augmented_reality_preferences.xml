@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/beacons">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_beacon_layer"
+            app:singleLineTitle="false"
+            app:title="@string/visible" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_view_distance_beacons_holder"
+            app:singleLineTitle="false"
+            app:title="@string/view_distance" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/paths">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_path_layer"
+            app:singleLineTitle="false"
+            app:title="@string/visible" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_view_distance_paths_holder"
+            app:singleLineTitle="false"
+            app:title="@string/view_distance" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_ar_adjust_for_path_elevation"
+            app:singleLineTitle="false"
+            app:title="@string/use_path_elevation" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/astronomy">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_astronomy_layer"
+            app:singleLineTitle="false"
+            app:title="@string/visible" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:dependency="@string/pref_show_ar_astronomy_layer"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_stars"
+            app:singleLineTitle="false"
+            app:title="@string/show_stars" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:dependency="@string/pref_show_ar_stars"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_low_brightness"
+            app:singleLineTitle="false"
+            app:title="@string/show_low_brightness_objects" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:dependency="@string/pref_show_ar_astronomy_layer"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_constellations"
+            app:singleLineTitle="false"
+            app:title="@string/show_constellations" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:dependency="@string/pref_show_ar_astronomy_layer"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_astronomy_below_horizon"
+            app:singleLineTitle="false"
+            app:title="@string/show_below_horizon" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/grid">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_ar_grid_layer"
+            app:singleLineTitle="false"
+            app:title="@string/visible" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/advanced">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_ar_use_gyro_only_after_calibration"
+            app:singleLineTitle="false"
+            app:summary="@string/use_gyroscope_after_calibration_description"
+            app:title="@string/use_gyroscope_after_calibration" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_increase_ar_exposure_at_night"
+            app:singleLineTitle="false"
+            app:title="@string/increase_exposure_at_night" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

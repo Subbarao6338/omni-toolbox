@@ -1,0 +1,94 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/pref_altimeter_calibration_title">
+
+        <Preference
+            android:icon="@drawable/ic_altitude"
+            android:summary="-"
+            android:title="@string/elevation"
+            app:key="@string/pref_holder_altitude"
+            app:singleLineTitle="false" />
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_altimeter_calibration_mode"
+            app:singleLineTitle="false"
+            app:title="@string/source"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:title="@string/pref_elevation_override_title"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_altitude_override"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/override_from_gps"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_altitude_from_gps_btn"
+            app:singleLineTitle="false" />
+
+        <EditTextPreference
+            android:defaultValue="0.0"
+            android:dialogMessage="@string/pref_elevation_override_sea_level_dialog_msg"
+            android:dialogTitle="@string/pref_elevation_override_sea_level_dialog_title"
+            android:inputType="numberDecimal"
+            android:summary="@string/pref_elevation_override_sea_level_title"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_altitude_override_sea_level"
+            app:singleLineTitle="false"
+            app:title="@string/elevation_from_pressure" />
+
+        <Preference
+            android:title="@string/fused_altimeter_force_calibration"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_fused_altimeter_force_calibration_holder"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/continuous_calibration_description"
+            android:title="@string/continuous_calibration"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_altimeter_continuous_calibration"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/plugin_digital_elevation_model"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_load_dem_button"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/remove_dem"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_clear_dem_button"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:key="@string/pref_altimeter_accuracy_holder"
+            android:title="@string/samples"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/pref_nmea_elevation_summary"
+            android:title="@string/pref_nmea_elevation_title"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_nmea_altitude"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:key="@string/pref_altimeter_clear_cache_holder"
+            android:title="@string/reset_calibration"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,20 @@
+192.168.4.164 07/19/2017 10:13:03 56441 INFO executor.CoarseGrainedExecutorBackend: Registered signal handlers for [TERM, HUP, INT]
+192.168.4.165 07/19/2017 10:13:07 56442 WARN spark.SecurityManager: Changing view acls to: yarn,curi1
+92.168.4.166 07/19/2017 10:13:11 56443 ERROR Changing modify acls to: yarn,curi
+192.168.4.167 07/19/2017 10:13:15 56444 ALERT SecurityManager: authentication disabled; ui acls disabled; userswith view permissions: Set(yarn, curi); users with modify permissions: Set(yarn, curi)
+192.168.4.168 07/19/2017 10:13:19 56445 DEBUG Changing view acls to: yarn,curi
+192.168.4.169 07/19/2017 10:13:23 56446 INFO executor.CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@10.10.34.11:48069
+192.168.4.160 07/19/2017 10:13:27 56447 WARN executor.CoarseGrainedExecutorBackend: Got assigned task 0
+192.168.4.161 07/19/2017 10:13:31 56448 ERROR Remoting: Starting remoting
+192.168.4.162 07/19/2017 10:13:35 56449 ALERT Remoting: Remoting started; listening on addresses :[akka.tcp://sparkExecutorActorSystem@mesos-slave-07:55904]
+192.168.4.163 07/19/2017 10:13:39 56450 DEBUG storage.MemoryStore: MemoryStore started with capacity 17.7GB
+192.168.4.164 07/19/2017 10:13:43 56451 INFO executor.Executor: Running task 0.0 in stage 0.0 (TID 0)
+192.168.4.165 07/19/2017 10:13:47 56452 WARN storage.MemoryStore: Block broadcast_9_piece0 stored as bytes in memory (estimated size 5.2 KB, free 5.2 KB)
+192.168.4.166 07/19/2017 10:13:51 56453 ERROR spark.CacheManager: Partition rdd_2_1 not found, computing it
+192.168.4.167 07/19/2017 10:13:55 56454 ALERT rdd.HadoopRDD: Input split: hdfs://10.10.34.11:9000/pjhe/logs/2kSOSP.log:21876+7292
+192.168.4.168 07/19/2017 10:13:59 56455 DEBUG broadcast.TorrentBroadcast: Started reading broadcast variable8
+192.168.4.169 07/19/2017 10:14:03 56456 INFO broadcast.TorrentBroadcast: Reading broadcast variable 8 took 19ms
+192.168.4.160 07/19/2017 10:13:07 56457 WARN Configuration.deprecation: mapred.task.id is deprecated. Instead,use mapreduce.task.attempt.id
+192.168.4.161 07/19/2017 10:13:11 56458 ERROR storage.MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 95.0 B, free 317.6 KB)
+192.168.4.162 07/19/2017 10:13:15 56459 ALERT python.PythonRunner: Times: total = 1072, boot = 856, init = 210, finish = 6
+192.168.4.163 07/19/2017 10:13:19 56460 DEBUG storage.MemoryStore: Block rdd_2_2 stored as bytes in memory (estimated size 850.0 B, free 320.3 KB)

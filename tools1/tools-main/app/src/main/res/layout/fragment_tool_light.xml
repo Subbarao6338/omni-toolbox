@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.kylecorry.andromeda.views.toolbar.Toolbar
+        android:id="@+id/light_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:subtitle="13,500 cd"
+        tools:title="10 lux" />
+
+    <TextView
+        android:id="@+id/beam_distance_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintBottom_toTopOf="@+id/light_chart"
+        app:layout_constraintEnd_toEndOf="@+id/lux"
+        app:layout_constraintStart_toStartOf="@+id/lux"
+        tools:text="180 meter beam distance" />
+
+    <com.kylecorry.trail_sense.tools.light.ui.LightBarView
+        android:id="@+id/light_chart"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/distance_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/distance_from_flashlight"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+    <com.kylecorry.trail_sense.shared.views.DistanceInputView
+        android:id="@+id/beam_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <Button
+        android:id="@+id/reset_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/reset" />
+
+
+</LinearLayout>

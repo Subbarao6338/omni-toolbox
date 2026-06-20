@@ -1,0 +1,36 @@
+package com.kylecorry.trail_sense.tools.ballistics.domain
+
+import com.kylecorry.sol.math.Vector2
+import com.kylecorry.sol.math.interpolation.LocalNewtonInterpolator
+import com.kylecorry.sol.math.trigonometry.Trigonometry
+import com.kylecorry.sol.science.physics.DragModel
+import kotlin.math.abs
+
+abstract class TabulatedDragModel(val bc: Float = 1f) : DragModel {
+
+    abstract val dragTable: Map<Float, Float>
+
+    private val interpolator by lazy {
+        LocalNewtonInterpolator(dragTable.entries.map {
+            Vector2(
+                it.key,
+                it.value
+            )
+        }, 3)
+    }
+
+
+    override fun getDragAcceleration(velocity: Vector2): Vector2 {
+        val magnitude = velocity.magnitude()
+        val angle = velocity.angle()
+        val drag = interpolator.interpolate(magnitude)
+        val dragX = drag * Trigonometry.cosDegrees(angle)
+        val dragY = drag * Trigonometry.sinDegrees(angle)
+
+        // Always in the direction opposite to the velocity
+        val xSign = if (velocity.x < 0) 1 else -1
+        val ySign = if (velocity.y < 0) 1 else -1
+
+        return Vector2(abs(dragX) * xSign / bc, abs(dragY) * ySign / bc)
+    }
+}

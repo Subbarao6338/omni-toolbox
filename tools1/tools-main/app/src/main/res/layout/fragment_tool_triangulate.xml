@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/default_bottom_margin"
+        android:orientation="vertical">
+
+        <com.kylecorry.andromeda.views.toolbar.Toolbar
+            android:id="@+id/triangulate_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:showSubtitle="false"
+            tools:title="10.0000, 40.0000" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/create_beacon"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/beacon"
+                app:chipIcon="@drawable/ic_location"
+                app:chipIconSize="@dimen/chip_icon_size"
+                app:chipIconTint="?android:textColorSecondary"
+                app:iconStartPadding="4dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/navigate"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/navigate"
+                app:chipIcon="@drawable/ic_beacon"
+                app:chipIconSize="@dimen/chip_icon_size"
+                app:chipIconTint="?android:textColorSecondary"
+                app:iconStartPadding="4dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/share_location"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/share_ellipsis"
+                app:chipIcon="@drawable/ic_share"
+                app:chipIconSize="@dimen/chip_icon_size"
+                app:chipIconTint="?android:textColorSecondary"
+                app:iconStartPadding="4dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/update_gps_override"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/update_gps_override"
+                app:chipIcon="@drawable/satellite"
+                app:chipIconSize="@dimen/chip_icon_size"
+                app:chipIconTint="?android:textColorSecondary"
+                app:iconStartPadding="4dp" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.kylecorry.trail_sense.tools.map.ui.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="@color/colorSecondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/location_to_triangulate" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/location_button_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/location_button_other"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/destination"
+                android:textColor="?attr/colorOnSurface" />
+
+            <Button
+                android:id="@+id/location_button_self"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/my_location"
+                android:textColor="?attr/colorOnSurface" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.kylecorry.andromeda.core.ui.ExpansionLayout
+            android:id="@+id/location_1_expansion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="?attr/colorBackgroundFloating">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/location_1_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_info"
+                    app:drawableTint="?android:textColorSecondary" />
+
+                <ImageView
+                    android:id="@+id/location_1_dropdown_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_drop_down"
+                    app:tint="?android:textColorSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingTop="0dp">
+
+                <TextView
+                    android:id="@+id/location_1_instructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.kylecorry.trail_sense.shared.views.CoordinateInputView
+                    android:id="@+id/location_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp" />
+
+                <com.kylecorry.trail_sense.shared.views.BearingInputView
+                    android:id="@+id/bearing_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp" />
+            </LinearLayout>
+
+        </com.kylecorry.andromeda.core.ui.ExpansionLayout>
+
+
+        <com.kylecorry.andromeda.core.ui.ExpansionLayout
+            android:id="@+id/location_2_expansion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="?attr/colorBackgroundFloating">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/location_2_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_info"
+                    app:drawableTint="?android:textColorSecondary" />
+
+                <ImageView
+                    android:id="@+id/location_2_dropdown_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_drop_down"
+                    app:tint="?android:textColorSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingTop="0dp">
+
+                <TextView
+                    android:id="@+id/location_2_instructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.kylecorry.trail_sense.shared.views.CoordinateInputView
+                    android:id="@+id/location_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp" />
+
+                <com.kylecorry.trail_sense.shared.views.BearingInputView
+                    android:id="@+id/bearing_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp" />
+            </LinearLayout>
+
+        </com.kylecorry.andromeda.core.ui.ExpansionLayout>
+
+        <Button
+            android:id="@+id/reset_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/reset" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,44 @@
+package com.kylecorry.trail_sense.tools.beacons.infrastructure.share
+
+import android.content.Context
+import android.content.Intent
+import com.kylecorry.trail_sense.R
+import com.kylecorry.trail_sense.shared.FormatService
+import com.kylecorry.trail_sense.shared.UserPreferences
+import com.kylecorry.trail_sense.shared.domain.BuiltInCoordinateFormat
+import com.kylecorry.trail_sense.shared.sharing.MapSiteService
+import com.kylecorry.trail_sense.tools.beacons.domain.Beacon
+
+class BeaconSharesheet(private val context: Context) : IBeaconSender {
+
+    private val prefs by lazy { UserPreferences(context) }
+    private val formatService by lazy { FormatService.getInstance(context) }
+    private val mapService = MapSiteService()
+
+    override fun send(beacon: Beacon) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, getShareText(beacon))
+            // TODO: Share other details
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
+    }
+
+    private fun getShareText(beacon: Beacon): String {
+        val name = beacon.name
+        val coordinate = beacon.coordinate
+        val mapUrl = mapService.getUrl(coordinate, prefs.mapSite)
+        val coordinateString =
+            formatService.formatLocation(coordinate, BuiltInCoordinateFormat.DecimalDegrees)
+        val coordinateUser = formatService.formatLocation(coordinate)
+        return "${name}\n\n${coordinateString}\n\n${formatService.formatCoordinateType(prefs.navigation.coordinateFormat)}: ${coordinateUser}\n\n${
+            context.getString(
+                R.string.maps
+            )
+        }: $mapUrl"
+    }
+
+}

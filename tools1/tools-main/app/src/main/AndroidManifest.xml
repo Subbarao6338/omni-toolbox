@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <queries>
+        <package android:name="com.kylecorry.trail_sense_comms" />
+        <intent>
+            <action android:name="com.kylecorry.trail_sense.PLUGIN_SERVICE" />
+        </intent>
+    </queries>
+
+    <!--Features-->
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.barometer"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.ambient_temperature"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.light"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.relative_humidity"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.compass"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"
+        tools:ignore="DuplicateUsesFeature" />
+
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.audio.output"
+        android:required="false" />
+
+    <!--Queries-->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
+
+    <!--Permissions-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!--Force remove this permission from androidx-->
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+
+    <application
+        android:name=".main.TrailSenseApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/backup_rules_31_higher"
+        android:enableOnBackInvokedCallback="true"
+        android:fullBackupContent="@xml/backup_rules_30_lower"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="tiramisu">
+        <activity
+            android:name="com.kylecorry.trail_sense.main.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <nav-graph android:value="@navigation/nav_graph" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+            <intent-filter android:label="@string/create_beacon">
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="geo" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:label="@string/create_beacon">
+                <action android:name="com.kylecorry.trail_sense.PLACE_BEACON" />
+                <data android:scheme="geo" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:label="@string/import_map">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/pdf" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name="com.kylecorry.trail_sense.onboarding.OnboardingActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".tools.flashlight.widgets.FlashlightWidgetActivityWorkaround"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <activity
+            android:name="com.kylecorry.trail_sense.tools.tools.widgets.ToolWidgetConfigureActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".tools.flashlight.infrastructure.FlashlightService"
+            android:exported="false" />
+        <service
+            android:name=".tools.waterpurification.infrastructure.WaterPurificationTimerService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="timer" />
+        </service>
+
+        <service
+            android:name="com.kylecorry.trail_sense.tools.paths.infrastructure.services.BacktrackService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <service
+            android:name=".tools.weather.infrastructure.WeatherMonitorService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location|specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="barometer" />
+        </service>
+
+        <service
+            android:name=".tools.pedometer.infrastructure.StepCounterService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="health" />
+
+        <service
+            android:name=".tools.whitenoise.infrastructure.WhiteNoiseService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <!--Tiles-->
+        <service
+            android:name=".tools.paths.tiles.BacktrackTile"
+            android:exported="true"
+            android:icon="@drawable/ic_tool_backtrack"
+            android:label="@string/backtrack"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".tools.weather.tiles.WeatherMonitorTile"
+            android:exported="true"
+            android:icon="@drawable/cloud"
+            android:label="@string/weather_monitor"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".tools.pedometer.tiles.PedometerTile"
+            android:exported="true"
+            android:icon="@drawable/steps"
+            android:label="@string/pedometer"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.clock.infrastructure.NextMinuteBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.flashlight.widgets.FlashlightWidgetReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.paths.infrastructure.receivers.StopBacktrackReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".tools.pedometer.infrastructure.StopPedometerReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".tools.waterpurification.infrastructure.WaterPurificationCancelReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".tools.whitenoise.infrastructure.WhiteNoiseOffReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".tools.battery.infrastructure.BatteryLevelReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receivers.ExactAlarmPermissionChangedReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.astronomy.infrastructure.receivers.SunsetAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.astronomy.infrastructure.receivers.SunriseAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.turn_back.infrastructure.receivers.TurnBackAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.weather.infrastructure.receivers.WeatherStopMonitoringReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.flashlight.infrastructure.FlashlightOffReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.kylecorry.trail_sense.receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kylecorry.trail_sense.receivers.PackageReplacedReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.receivers.TimeChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Widgets -->
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.astronomy.widgets.AppWidgetMoon"
+            android:exported="false"
+            android:label="@string/moon">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_moon_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.astronomy.widgets.AppWidgetSun"
+            android:exported="false"
+            android:label="@string/sun">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_sun_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.weather.widgets.AppWidgetWeather"
+            android:exported="false"
+            android:label="@string/weather">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_weather_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.tides.widgets.AppWidgetTides"
+            android:exported="false"
+            android:label="@string/tides">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_tides_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.pedometer.widgets.AppWidgetPedometer"
+            android:exported="false"
+            android:label="@string/pedometer">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_pedometer_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.paths.widgets.AppWidgetBacktrack"
+            android:exported="false"
+            android:label="@string/backtrack">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_backtrack_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.weather.widgets.AppWidgetPressure"
+            android:exported="false"
+            android:label="@string/pressure">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_pressure_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.sensors.widgets.AppWidgetLocation"
+            android:exported="false"
+            android:label="@string/location">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_location_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.sensors.widgets.AppWidgetElevation"
+            android:exported="false"
+            android:label="@string/elevation">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_elevation_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.flashlight.widgets.AppWidgetFlashlight"
+            android:exported="false"
+            android:label="@string/flashlight_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_flashlight_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.astronomy.widgets.AppWidgetSunAndMoonChart"
+            android:exported="false"
+            android:label="@string/sun_moon_chart">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_sun_and_moon_chart_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.weather.widgets.AppWidgetPressureChart"
+            android:exported="false"
+            android:label="@string/pressure_chart">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_pressure_chart_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.tides.widgets.AppWidgetTideChart"
+            android:exported="false"
+            android:label="@string/tide_chart">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_tide_chart_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.beacons.widgets.AppWidgetNearbyBeacons"
+            android:exported="false"
+            android:label="@string/nearby_beacons">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_nearby_beacons_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.kylecorry.trail_sense.tools.map.widgets.AppWidgetMap"
+            android:exported="false"
+            android:label="@string/map">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_map_info" />
+        </receiver>
+    </application>
+
+</manifest>

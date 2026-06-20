@@ -1,0 +1,135 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/general">
+
+        <ListPreference
+            app:defaultValue="actual"
+            app:entries="@array/sun_times_entries"
+            app:entryValues="@array/sun_times_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sun_time_mode"
+            app:singleLineTitle="false"
+            app:title="@string/pref_sun_time_mode_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_center_sun_and_moon"
+            app:singleLineTitle="false"
+            app:title="@string/pref_center_sun_and_moon_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_astronomy_bands"
+            app:singleLineTitle="false"
+            app:title="@string/pref_show_astronomy_bands_title" />
+
+        <ListPreference
+            app:defaultValue="1"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_astronomy_quick_action_left"
+            app:singleLineTitle="false"
+            app:title="@string/left_quick_action"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="13"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_astronomy_quick_action_right"
+            app:singleLineTitle="false"
+            app:title="@string/right_quick_action"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/pref_start_camera_in_3d_view_summary"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_start_camera_in_3d_view"
+            app:singleLineTitle="false"
+            app:title="@string/pref_start_camera_in_3d_view_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/alerts">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sunset_alerts"
+            app:singleLineTitle="false"
+            app:title="@string/sunset" />
+
+        <ListPreference
+            android:dependency="@string/pref_sunset_alerts"
+            app:defaultValue="60"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sunset_alert_time"
+            app:singleLineTitle="false"
+            app:title="@string/pref_sunset_alert_time_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:summary="@string/alarm_description"
+            android:title="@string/use_alarm_for_sunset_alert"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_astronomy_use_alarm_for_sunset_alert"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sunrise_alerts"
+            app:singleLineTitle="false"
+            app:title="@string/sunrise" />
+
+        <ListPreference
+            android:dependency="@string/pref_sunrise_alerts"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sunrise_alert_time"
+            app:singleLineTitle="false"
+            app:title="@string/pref_sunrise_alert_time_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:summary="@string/alarm_description"
+            android:title="@string/use_alarm_for_sunrise_alert"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_astronomy_use_alarm_for_sunrise_alert"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_send_meteor_shower_alerts"
+            app:singleLineTitle="false"
+            app:title="@string/pref_meteor_showers_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_send_lunar_eclipse_alerts"
+            app:singleLineTitle="false"
+            app:title="@string/lunar_eclipses" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_send_solar_eclipse_alerts"
+            app:singleLineTitle="false"
+            app:title="@string/solar_eclipses" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

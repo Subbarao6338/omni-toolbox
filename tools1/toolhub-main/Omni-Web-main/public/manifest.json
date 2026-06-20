@@ -1,0 +1,25 @@
+{
+  "short_name": "Omni Web",
+  "name": "Omni Web Browser",
+  "description": "A fast, secure, and feature-rich Android-like web browser.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F5F5",
+  "theme_color": "#3B82F6",
+  "categories": ["browser", "utilities"]
+}

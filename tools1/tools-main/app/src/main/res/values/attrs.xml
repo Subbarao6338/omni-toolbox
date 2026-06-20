@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LinearCompassView">
+        <attr name="backgroundColor" format="color" />
+        <attr name="showMarker" format="boolean" />
+        <attr name="markerColor" format="color" />
+        <attr name="lineColor" format="color" />
+        <attr name="cardinalLineColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="degrees" format="integer" />
+        <attr name="rangeDegrees" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="DistanceInputView">
+        <attr name="hint" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="DataPointView">
+        <attr name="dataPointIcon" format="reference" />
+        <attr name="dataPointText" format="string" />
+        <attr name="dataPointDescription" format="string" />
+        <attr name="dataPointTint" format="color" />
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+    <declare-styleable name="PlayBarView">
+        <attr name="playBarIcon" format="reference" />
+        <attr name="playBarTitle" format="string" />
+        <attr name="playBarSubtitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TileButton">
+        <attr name="tileIcon" format="reference" />
+        <attr name="tileText" format="string" />
+        <attr name="tilePadding" format="dimension" />
+        <attr name="tileTextSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatingActionButtonMenuItem">
+        <attr name="android:src" />
+        <attr name="android:text" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatingActionButtonMenu">
+        <attr name="menu" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ColorButton">
+        <attr name="buttonColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="MaskedProgressView">
+        <attr name="android:drawable" />
+        <attr name="android:drawableTint" />
+        <attr name="android:progress" />
+        <attr name="android:progressTint" />
+        <attr name="horizontal" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CameraView">
+        <attr name="flipEnable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TextInputView">
+        <attr name="android:hint"/>
+    </declare-styleable>
+
+</resources>

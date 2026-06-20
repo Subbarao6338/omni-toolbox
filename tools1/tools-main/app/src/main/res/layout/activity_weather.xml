@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.kylecorry.andromeda.views.toolbar.Toolbar
+        android:id="@+id/weather_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <com.kylecorry.andromeda.views.chart.Chart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chart_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <TextView
+        android:id="@+id/pressure_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        tools:text="999 hPa, 3h ago"
+        tools:visibility="visible" />
+
+    <com.kylecorry.andromeda.views.list.AndromedaListView
+        android:id="@+id/weather_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/weather_updating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:text="@string/updating_weather"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:visibility="gone"
+        app:drawableSize="12dp"
+        app:drawableStartCompat="@drawable/ic_update"
+        app:drawableTint="?android:textColorSecondary"
+        tools:visibility="visible" />
+
+    <com.kylecorry.trail_sense.shared.views.PlayBarView
+        android:id="@+id/weather_play_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:tag="@string/tag_play_bar"
+        app:playBarIcon="@drawable/ic_weather"
+        app:playBarTitle="@string/weather_monitor" />
+
+</LinearLayout>

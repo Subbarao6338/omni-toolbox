@@ -1,0 +1,53 @@
+<p>Odkrywaj świat poza zasięgiem internetu z Trail Sense.</p>
+
+<ul>
+    <li>Zaprojektowany z myślą o wspinaczce, podróżach, biwakowaniu oraz geocachingu</li>
+    <li>Twórz oraz prowadź do punktów nawigacyjnych</li>
+    <li>Używaj telefonu jako kompasu (dostępne na urządzeniach z czujnikiem kompasu)</li>
+    <li>Podążaj ścieżkami</li>
+    <li>Wracaj własnymi śladami ze szlakiem powrotnym</li>
+    <li>Używaj zdjęć jako map</li>
+    <li>Planuj co zapakować</li>
+    <li>Otrzymuj powiadomienia zanim zajdzie słońce</li>
+    <li>Przewiduj pogodę (dostępne na urządzeniach z czujnikiem barometru)</li>
+    <li>Używaj telefonu jako latarki</li>
+    <li>Oraz o wiele więcej!</li>
+</ul>
+
+<p>Trail Sense to narzędzie, jak w przypadku każdego sprzętu zabieranego w dzikie tereny,
+niezbędne jest posiadanie zapasowego wyposażenia oraz umiejętności.
+Aplikacja jest przeznaczona wyłącznie do celów informacyjnych, dokładność prognoz oraz czujnikow jest określana przez wiele czynników, włączając kalibracje, jakość podzespołów, źródła zewnętrzne, itd.
+Używaj na własną odpowiedzialność, zawsze noś przy sobie zapasowe narzędzia (np. kompas) oraz dbaj o bezpieczeństwo.</p>
+
+<p>Aplikacja nie korzysta oraz nigdy nie będzie korzystać z internetu, wszystkie informacje pochodzą bezpośrednio z czujników telefonu oraz żadne dane nie opuszczą Trail Sense.</p>
+
+<h3>CZĘSTE PROBLEMY</h3>
+<ul>
+    <li>Brak kompasu: Jeżeli telefon nie posiada czujnika kompasu, nic nie można zrobić, ponieważ jest to kwestia podzespołów.
+    Nadal można korzystać z innych funkcji Trail Sense.</li>
+    <li>Brak pogody: Jeżeli telefon nie posiada czujnika barometru, narzędzie pogoda nie będzie dostępne.</li>
+</ul>
+
+<p>Chcesz zgłosić błąd lub zaproponować funkcję? Napisz e-mail: trailsense@protonmail.com lub utwórz zgłoszenie na GitHub: github.com/kylecorry31/Trail-Sense</p>
+
+<p>Jestem jedynym deweloperem Trail Sense, zrobię wszystko, aby pomóc rozwiązywać problemy, niestety mam ograniczony wybór sprzętu do testów.</p>
+
+
+<h3>UPRAWNIENIA</h3>
+<ul>
+    <li>Powiadomienia: Pozwala Trail Sense na wyświetlanie powiadomień (szlak powrotny, pogoda, alerty wschodów/zachodów, wydarzenia astronomiczne, minutnik przegotowania wody, itd.)</li>
+    <li>Lokalizacja: Pozwala Trail Sense uzyskać informacje o położeniu do nawigacji, pogody (kalibracja wysokości nad poziomem morza), astronomii.</li>
+    <li>Lokalizacja w tle: Pozwala Trail Sense uzyskać informacje o położeniu do alertów wschodów/zachodów podczas działania w tle.
+    Na niektorych urządzeniach poprawi dokładność szlaku powrotnego oraz monitorowanie pogody.</li>
+    <li>Aktywność fizyczna: Pozwala Trail Sense na dostęp do krokomierza do obliczeń odległości.</li>
+    <li>Aparat: Pozwala Trail Sense używać aparatu w kompasie liniowym, inklinometrze, skanerze chmur, skanerze kodów kreskowych, mapach ze zdjęć.</li>
+    <li>Alarmy i przypomnienia: Pozwala Trail Sense na wyświetlanie powiadomień o wyznaczonym czasie.
+    Używane przez zegar (podczas aktualizacji czasu systemowego) oraz alerty wschodów/zachodów.</li>
+</ul>
+
+<h3>LINKI</h3>
+<ul>
+    <li>Polityka prywatności: https://kylecorry.com/Trail-Sense/#privacy</li>
+    <li>Często zadawane pytania: https://github.com/kylecorry31/Trail-Sense#faq</li>
+    <li>Trail Sense jest udostępniany na licencji MIT: https://opensource.org/license/mit/</li>
+</ul>

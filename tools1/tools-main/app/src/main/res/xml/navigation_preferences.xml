@@ -1,0 +1,172 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/general">
+
+        <ListPreference
+            app:defaultValue="1009"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_quick_action_left"
+            app:singleLineTitle="false"
+            app:title="@string/left_quick_action"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="1008"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_quick_action_right"
+            app:singleLineTitle="false"
+            app:title="@string/right_quick_action"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/navigation">
+        <SwitchPreferenceCompat
+            android:title="@string/pref_show_calibrate_on_navigate_dialog_title"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_calibrate_on_navigate_dialog"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/pref_navigation_lock_screen_presence_title"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_lock_screen_presence"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/pref_navigation_lock_screen_when_open_title"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_keep_unlocked"
+            app:singleLineTitle="false" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_lock_bearing_to_location"
+            app:singleLineTitle="false"
+            app:summary="@string/lock_bearing_to_location_description"
+            app:title="@string/lock_bearing_to_location" />
+
+        <ListPreference
+            android:entries="@array/speedometer_entries"
+            android:entryValues="@array/speedometer_values"
+            app:defaultValue="instant"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_speedometer_type"
+            app:singleLineTitle="false"
+            app:title="@string/speedometer"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/pref_compass_sensor_title">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_linear_compass"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_show_linear_compass_summary"
+            app:title="@string/pref_show_linear_compass_title" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/show_dial_ticks_on_nearby_radar_summary"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_dial_ticks_when_no_compass"
+            app:singleLineTitle="false"
+            app:title="@string/show_dial_ticks_on_nearby_radar" />
+
+        <ListPreference
+            android:entries="@array/sun_moon_compass_entries"
+            android:entryValues="@array/sun_moon_compass_values"
+            app:defaultValue="when_up"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_sun_moon_compass"
+            app:singleLineTitle="false"
+            app:title="@string/pref_show_sun_moon_compass_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_display_multi_beacons"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_display_multi_beacons_summary"
+            app:title="@string/pref_display_multi_beacons_title" />
+
+        <EditTextPreference
+            android:inputType="number"
+            app:defaultValue="10"
+            app:dependency="@string/pref_display_multi_beacons"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_num_visible_beacons"
+            app:min="0"
+            app:singleLineTitle="false"
+            app:title="@string/pref_num_visible_beacons_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:dependency="@string/pref_display_multi_beacons"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_nearby_radius_holder"
+            app:singleLineTitle="false"
+            app:title="@string/pref_max_beacon_distance_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:dependency="@string/pref_display_multi_beacons"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_nearby_linear_only"
+            app:singleLineTitle="false"
+            app:title="@string/pref_nearby_linear_only_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_draw_compass_dial_bezel"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_navigation_draw_compass_dial_bezel_summary"
+            app:title="@string/pref_navigation_draw_compass_dial_bezel_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_show_azimuth_indicator"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_navigation_show_azimuth_indicator_summary"
+            app:title="@string/pref_navigation_show_azimuth_indicator_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/map">
+
+        <SwitchPreferenceCompat
+            android:summary="@string/pref_high_detail_mode_summary"
+            android:title="@string/pref_high_detail_mode_title"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_navigation_high_detail_mode"
+            app:singleLineTitle="false" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_map_layer_button"
+            app:singleLineTitle="false"
+            app:title="@string/layers" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

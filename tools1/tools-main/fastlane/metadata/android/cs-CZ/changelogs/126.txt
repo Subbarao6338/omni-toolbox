@@ -1,0 +1,26 @@
+Widgety
+- Widgety na dom. obr. a v aplikaci (dlouhým stisknutím spodní navigace):
+  - Počasí
+  - Tlak
+  - Graf tlaku
+  - Slunce
+  - Měsíc
+  - Graf Slunce a Měsíce
+  - Výška
+  - Poloha
+  - Příliv a odliv
+  - Graf přílivu a odlivu
+  - Krokoměr
+  - Zpětná stopa
+  - Svítilna
+  - Blízké majáky
+
+Přílivy a odlivy
+- Celosvětový model přílivu a odlivu
+- Příliv a odliv v okolí
+
+Záloha
+- Nastavení autom. zálohování (jednou denně, uchovává poslední 2 zálohy)
+
+Rozšířená realita
+- Zobrazení hvězd v noci

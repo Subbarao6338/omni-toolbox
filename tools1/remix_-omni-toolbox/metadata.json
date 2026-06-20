@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Omni Toolbox",
+  "description": "The ultimate developer, productivity, network, and security toolkit containing unit converters, crawler/scrapers, password generators, file managers, local sharing networks, and offline document editors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

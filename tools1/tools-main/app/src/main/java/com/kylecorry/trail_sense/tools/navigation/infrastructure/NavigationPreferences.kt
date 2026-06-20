@@ -1,0 +1,239 @@
+package com.kylecorry.trail_sense.tools.navigation.infrastructure
+
+import android.content.Context
+import com.kylecorry.andromeda.core.toFloatCompat
+import com.kylecorry.andromeda.core.toIntCompat
+import com.kylecorry.andromeda.preferences.BooleanPreference
+import com.kylecorry.andromeda.preferences.FloatPreference
+import com.kylecorry.andromeda.preferences.IntEnumPreference
+import com.kylecorry.andromeda.preferences.StringEnumPreference
+import com.kylecorry.sol.units.Distance
+import com.kylecorry.sol.units.DistanceUnits
+import com.kylecorry.trail_sense.R
+import com.kylecorry.trail_sense.settings.infrastructure.ICompassStylePreferences
+import com.kylecorry.trail_sense.shared.colors.AppColor
+import com.kylecorry.trail_sense.shared.domain.BuiltInCoordinateFormat
+import com.kylecorry.trail_sense.shared.preferences.PreferencesSubsystem
+import com.kylecorry.trail_sense.shared.sensors.SensorService
+import com.kylecorry.trail_sense.tools.paths.domain.LineStyle
+import com.kylecorry.trail_sense.tools.paths.domain.PathPointColoringStyle
+import com.kylecorry.trail_sense.tools.paths.domain.PathStyle
+import com.kylecorry.trail_sense.tools.paths.infrastructure.persistence.IPathPreferences
+import com.kylecorry.trail_sense.tools.paths.ui.PathSortMethod
+import com.kylecorry.trail_sense.tools.tools.infrastructure.Tools
+import java.time.Duration
+
+class NavigationPreferences(private val context: Context) : ICompassStylePreferences,
+    IPathPreferences {
+
+    private val cache by lazy { PreferencesSubsystem.getInstance(context).preferences }
+    private val sensors by lazy { SensorService(context) }
+
+    private var _showCalibrationOnNavigateDialog by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_show_calibrate_on_navigate_dialog),
+        true
+    )
+
+    var showCalibrationOnNavigateDialog: Boolean
+        get() = sensors.hasCompass() && _showCalibrationOnNavigateDialog
+        set(value) {
+            _showCalibrationOnNavigateDialog = value
+        }
+
+    val keepScreenUnlockedWhileNavigating: Boolean
+        get() = cache.getBoolean(context.getString(R.string.pref_navigation_lock_screen_presence))
+            ?: false
+
+    val keepScreenUnlockedWhileOpen by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_navigation_keep_unlocked),
+        false
+    )
+
+    override val useLinearCompass: Boolean
+        get() = cache.getBoolean(context.getString(R.string.pref_show_linear_compass)) ?: true
+
+    val showMultipleBeacons: Boolean
+        get() = !sensors.hasCompass() || cache.getBoolean(context.getString(R.string.pref_display_multi_beacons)) ?: true
+
+    val showNearbyBeaconsOnlyOnLinearCompass by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_nearby_linear_only),
+        false
+    )
+
+    val numberOfVisibleBeacons: Int
+        get() {
+            val raw = cache.getString(context.getString(R.string.pref_num_visible_beacons)) ?: "10"
+            return raw.toIntOrNull() ?: 10
+        }
+
+    override val showDialTicksWhenNoCompass by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_show_dial_ticks_when_no_compass),
+        false
+    )
+
+    val highDetailMode by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_navigation_high_detail_mode),
+        false
+    )
+
+    var defaultPathColor: AppColor
+        get() {
+            val id = cache.getLong(context.getString(R.string.pref_backtrack_path_color))
+            return AppColor.values().firstOrNull { it.id == id } ?: AppColor.Gray
+        }
+        set(value) {
+            cache.putLong(context.getString(R.string.pref_backtrack_path_color), value.id)
+        }
+
+    private val backtrackPathLineStyle: LineStyle
+        get() {
+            return when (cache.getString(context.getString(R.string.pref_backtrack_path_style))) {
+                "solid" -> LineStyle.Solid
+                "arrow" -> LineStyle.Arrow
+                "dashed" -> LineStyle.Dashed
+                "square" -> LineStyle.Square
+                "diamond" -> LineStyle.Diamond
+                "cross" -> LineStyle.Cross
+                else -> LineStyle.Dotted
+            }
+        }
+    private val defaultPathPointStyle: PathPointColoringStyle
+        get() = PathPointColoringStyle.None
+
+    override val defaultPathStyle: PathStyle
+        get() = PathStyle(
+            backtrackPathLineStyle,
+            defaultPathPointStyle,
+            defaultPathColor.color,
+            true
+        )
+
+    override var backtrackHistory: Duration
+        get() {
+            val days = cache.getInt(context.getString(R.string.pref_backtrack_history_days)) ?: 2
+            return Duration.ofDays(days.toLong())
+        }
+        set(value) {
+            val d = value.toDays().toInt()
+            cache.putInt(
+                context.getString(R.string.pref_backtrack_history_days),
+                if (d > 0) d else 1
+            )
+        }
+    override val simplifyPathOnImport by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_auto_simplify_paths),
+        true
+    )
+
+    override val onlyNavigateToPoints by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_only_navigate_path_points),
+        true
+    )
+    override val useFastPathRendering by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_fast_path_rendering),
+        false
+    )
+
+    var maxBeaconDistance: Float
+        get() {
+            val raw =
+                cache.getString(context.getString(R.string.pref_max_beacon_distance)) ?: "0.5"
+            return Distance.kilometers(raw.toFloatCompat() ?: 0.5f)
+                .meters()
+                .value
+                .coerceIn(1f, 25000000f)
+        }
+        set(value) {
+            val meters = Distance.meters(value.coerceIn(1f, 25000000f))
+            cache.putString(
+                context.getString(R.string.pref_max_beacon_distance),
+                meters.convertTo(DistanceUnits.Kilometers).value.toString()
+            )
+        }
+
+    var radarCompassScale: Float by FloatPreference(
+        cache,
+        "cache_radar_compass_state_scale",
+        2f
+    )
+
+    val coordinateFormat: BuiltInCoordinateFormat
+        get() {
+            return when (cache.getString(context.getString(R.string.pref_coordinate_format))) {
+                "dms" -> BuiltInCoordinateFormat.DegreesMinutesSeconds
+                "ddm" -> BuiltInCoordinateFormat.DegreesDecimalMinutes
+                "utm" -> BuiltInCoordinateFormat.UTM
+                "mgrs" -> BuiltInCoordinateFormat.MGRS
+                "usng" -> BuiltInCoordinateFormat.USNG
+                "osng" -> BuiltInCoordinateFormat.OSGB
+                else -> BuiltInCoordinateFormat.DecimalDegrees
+            }
+        }
+
+    var pathSort: PathSortMethod by IntEnumPreference(
+        cache,
+        context.getString(R.string.pref_path_sort),
+        PathSortMethod.values().associateBy { it.id.toInt() },
+        PathSortMethod.MostRecent
+    )
+
+    val leftButton: Int
+        get() {
+            val id = cache.getString(context.getString(R.string.pref_navigation_quick_action_left))
+                ?.toIntCompat()
+            return id ?: (Tools.PATHS.toInt() + Tools.TOOL_QUICK_ACTION_OFFSET)
+        }
+
+    val rightButton: Int
+        get() {
+            val id = cache.getString(context.getString(R.string.pref_navigation_quick_action_right))
+                ?.toIntCompat()
+            return id ?: (Tools.PHOTO_MAPS.toInt() + Tools.TOOL_QUICK_ACTION_OFFSET)
+        }
+
+    var speedometerMode by StringEnumPreference(
+        cache,
+        context.getString(R.string.pref_navigation_speedometer_type),
+        mapOf(
+            "average" to SpeedometerMode.Backtrack,
+            "instant_pedometer" to SpeedometerMode.CurrentPace,
+            "average_pedometer" to SpeedometerMode.AveragePace,
+            "instant" to SpeedometerMode.GPS
+        ),
+        SpeedometerMode.GPS
+    )
+
+    val drawDialBezel by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_navigation_draw_compass_dial_bezel),
+        false
+    )
+
+    val showAzimuthIndicator by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_navigation_show_azimuth_indicator),
+        true
+    )
+
+    var lockBearingToLocation by BooleanPreference(
+        cache,
+        context.getString(R.string.pref_lock_bearing_to_location),
+        false
+    )
+
+    enum class SpeedometerMode {
+        Backtrack,
+        GPS,
+        CurrentPace,
+        AveragePace
+    }
+
+}

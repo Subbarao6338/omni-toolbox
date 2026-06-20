@@ -1,0 +1,59 @@
+package com.kylecorry.trail_sense.shared.map_layers.preferences.ui
+
+import android.content.DialogInterface
+import com.kylecorry.andromeda.core.ui.useService
+import com.kylecorry.andromeda.fragments.useBackgroundMemo
+import com.kylecorry.andromeda.views.toolbar.Toolbar
+import com.kylecorry.trail_sense.R
+import com.kylecorry.trail_sense.main.MainActivity
+import com.kylecorry.trail_sense.shared.CustomUiUtils.replaceChildFragment
+import com.kylecorry.trail_sense.shared.extensions.TrailSenseReactiveBottomSheetFragment
+import com.kylecorry.trail_sense.shared.map_layers.MapLayerLoader
+import com.kylecorry.trail_sense.tools.map.MapToolRegistration
+import com.kylecorry.trail_sense.tools.tools.infrastructure.Tools
+
+class MapLayersBottomSheet(
+    private val mapId: String,
+    private val alwaysEnabledLayerIds: List<String> = emptyList()
+) : TrailSenseReactiveBottomSheetFragment(R.layout.fragment_map_layers_bottom_sheet) {
+
+    private var onDismissListener: (() -> Unit)? = null
+
+    fun setOnDismissListener(listener: (() -> Unit)?) {
+        onDismissListener = listener
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener?.invoke()
+        if (mapId == MapToolRegistration.MAP_ID) {
+            Tools.triggerWidgetUpdate(requireContext(), MapToolRegistration.WIDGET_MAP)
+        }
+    }
+
+    override fun update() {
+        val titleView = useView<Toolbar>(R.id.title)
+        val mainActivity = useActivity() as MainActivity
+        val loader = useService<MapLayerLoader>()
+        val definitions = useBackgroundMemo {
+            loader.getDefinitions().values.filter { it.isConfigurable }
+        }
+
+        val preferences = useMemo(definitions) {
+            val manager =
+                MapLayerPreferenceManager(mapId, definitions ?: emptyList(), alwaysEnabledLayerIds)
+            MapLayersBottomSheetFragment(manager, mainActivity)
+        }
+
+        useEffect(titleView) {
+            titleView.rightButton.setOnClickListener {
+                dismiss()
+            }
+        }
+
+        // TODO: Show loading indicator once plugin layers are in place
+        useEffect(titleView, preferences) {
+            replaceChildFragment(preferences, R.id.preferences_fragment)
+        }
+    }
+}

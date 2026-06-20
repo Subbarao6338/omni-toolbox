@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.kylecorry.andromeda.views.toolbar.Toolbar
+        android:id="@+id/tool_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flattenButtons="true"
+        app:rightButtonIcon="@drawable/ic_cancel"
+        app:showSubtitle="false"
+        app:title="@string/take_photo" />
+
+    <com.kylecorry.trail_sense.shared.views.CameraView
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:flipEnable="true" />
+
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <com.kylecorry.trail_sense.shared.camera.ShutterButton
+            android:id="@+id/capture_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="@string/camera_capture" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/experimental">
+
+        <SwitchPreferenceCompat
+            android:summary="@string/tool_metal_detector_title"
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_experimental_metal_direction"
+            app:singleLineTitle="false"
+            app:title="@string/pref_experimental_metal_direction_title" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/camera"
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_use_zero_shutter_lag"
+            app:singleLineTitle="false"
+            app:title="@string/zero_shutter_lag" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/tool_cliff_height_description"
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_cliff_height_enabled"
+            app:singleLineTitle="false"
+            app:title="@string/tool_cliff_height_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_use_filtered_gps"
+            app:singleLineTitle="false"
+            app:title="@string/smooth_gps_readings" />
+
+        <ListPreference
+            app:defaultValue="1"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_weather_forecast_source"
+            app:singleLineTitle="false"
+            app:title="@string/forecast_algorithm"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_show_pressure_forecast"
+            app:singleLineTitle="false"
+            app:summary="@string/weather"
+            app:title="@string/show_pressure_forecast" />
+
+        <ListPreference
+            app:defaultValue="1"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_notification_group_behavior"
+            app:singleLineTitle="false"
+            app:title="@string/notification_grouping"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  /* Material Design 3 Expressive Palette - Enhanced */
+  --color-primary: #005AC1;
+  --color-on-primary: #FFFFFF;
+  --color-primary-container: #D8E2FF;
+  --color-on-primary-container: #001A41;
+  
+  --color-secondary: #575E71;
+  --color-on-secondary: #FFFFFF;
+  --color-secondary-container: #DBE2F9;
+  --color-on-secondary-container: #141B2C;
+  
+  --color-tertiary: #715573;
+  --color-on-tertiary: #FFFFFF;
+  --color-tertiary-container: #FBD7FC;
+  --color-on-tertiary-container: #29132D;
+  
+  --color-surface: #FDFBFF;
+  --color-on-surface: #1B1B1F;
+  --color-surface-variant: #E1E2EC;
+  --color-on-surface-variant: #44474F;
+  
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #F7F9FF;
+  --color-surface-container: #F0F4FF;
+  --color-surface-container-high: #E1E8F5;
+  --color-surface-container-highest: #DDE3EA;
+  
+  --color-outline: #74777F;
+  --color-outline-variant: #C4C6D0;
+
+  /* Expressive Elevation & Motion */
+  --shadow-expressive: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --easing-expressive: cubic-bezier(0.2, 0, 0, 1);
+}
+
+:root {
+  --browser-font-size: 14px;
+  --browser-padding: 1.5rem;
+  --browser-gap: 1rem;
+  --browser-radius: 32px; /* Increased for expressive look */
+}
+
+[data-font-size="small"] { --browser-font-size: 12px; }
+[data-font-size="medium"] { --browser-font-size: 14px; }
+[data-font-size="large"] { --browser-font-size: 16px; }
+
+[data-compact="true"] {
+  --browser-padding: 0.75rem;
+  --browser-gap: 0.5rem;
+  --browser-radius: 18px;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased transition-colors duration-300;
+    overflow: hidden;
+    font-size: var(--browser-font-size);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-outline-variant/50 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-outline-variant;
+  }
+  ::-webkit-scrollbar-thumb:active {
+    @apply bg-primary/50;
+  }
+}
+
+@layer components {
+  .md-card {
+    @apply bg-surface-container-lowest shadow-sm border border-outline-variant/20 transition-all hover:shadow-expressive;
+    border-radius: var(--browser-radius);
+    padding: var(--browser-padding);
+  }
+  
+  .md-button-filled {
+    @apply bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-sm hover:shadow-expressive active:scale-[0.97] transition-all flex items-center justify-center gap-3;
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-button-tonal {
+    @apply bg-secondary-container text-on-secondary-container px-8 py-4 rounded-full font-bold hover:bg-secondary-container/80 active:scale-[0.97] transition-all flex items-center justify-center gap-3;
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-button-outlined {
+    @apply border-2 border-outline text-primary px-8 py-4 rounded-full font-bold hover:bg-primary/5 active:scale-[0.97] transition-all flex items-center justify-center gap-3;
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-fab {
+    @apply bg-primary-container text-on-primary-container w-16 h-16 shadow-lg flex items-center justify-center hover:shadow-expressive active:scale-90 transition-all;
+    border-radius: calc(var(--browser-radius) * 0.7);
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-chip {
+    @apply bg-surface-variant text-on-surface-variant px-5 py-2 rounded-2xl text-xs font-bold tracking-wide uppercase transition-all hover:bg-surface-variant/80 active:scale-95;
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-input {
+    @apply bg-surface-container border-none py-4 px-6 text-base focus:ring-4 focus:ring-primary/10 focus:bg-surface-container-lowest transition-all outline-none text-on-surface;
+    border-radius: calc(var(--browser-radius) * 0.5);
+    transition-timing-function: var(--easing-expressive);
+  }
+
+  .md-bottom-nav {
+    @apply bg-surface/90 backdrop-blur-xl text-on-surface border-t border-outline-variant/20 px-2 py-4 flex items-center justify-around z-30 shadow-[0_-12px_32px_rgba(0,0,0,0.08)];
+  }
+}
+
+/* Expressive Motion */
+.spring-up {
+  animation: spring-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes spring-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/tool_thermometer_title">
+
+        <Preference
+            android:summary="@string/dash"
+            android:title="@string/temperature"
+            app:icon="@drawable/thermometer_colored"
+            app:key="@string/pref_temperature_holder"
+            app:selectable="false"
+            app:singleLineTitle="false" />
+
+        <com.kylecorry.trail_sense.tools.weather.ui.charts.TemperatureChartPreference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_holder_temperature_chart" />
+
+        <ListPreference
+            app:defaultValue="historic"
+            app:entries="@array/thermometer_source_entries"
+            app:entryValues="@array/thermometer_source_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_thermometer_source"
+            app:singleLineTitle="false"
+            app:title="@string/source"
+            app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:max="1000"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_temperature_smoothing"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:singleLineTitle="false"
+            app:title="@string/smoothing"
+            app:updatesContinuously="true" />
+
+        <!--        Celsius calibration-->
+        <EditTextPreference
+            android:defaultValue="0.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_min_uncalibrated_temp_c"
+            app:singleLineTitle="false"
+            app:title="@string/min_temp_uncalibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="0.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_min_calibrated_temp_c"
+            app:singleLineTitle="false"
+            app:title="@string/min_temp_calibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="100.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_max_uncalibrated_temp_c"
+            app:singleLineTitle="false"
+            app:title="@string/max_temp_uncalibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="100.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_max_calibrated_temp_c"
+            app:singleLineTitle="false"
+            app:title="@string/max_temp_calibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <!--        Fahrenheit calibration-->
+        <EditTextPreference
+            android:defaultValue="32.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_min_uncalibrated_temp_f"
+            app:singleLineTitle="false"
+            app:title="@string/min_temp_uncalibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="32.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_min_calibrated_temp_f"
+            app:singleLineTitle="false"
+            app:title="@string/min_temp_calibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="212.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_max_uncalibrated_temp_f"
+            app:singleLineTitle="false"
+            app:title="@string/max_temp_uncalibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="212.0"
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_max_calibrated_temp_f"
+            app:singleLineTitle="false"
+            app:title="@string/max_temp_calibrated"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:title="@string/reset_calibration"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_reset_thermometer_calibration_button"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/pref_backfill_temperatures_title"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_backfill_temperatures"
+            app:singleLineTitle="false" />
+
+        <Preference
+            android:title="@string/tool_user_guide_title"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_thermometer_user_guide_button"
+            app:singleLineTitle="false" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,51 @@
+<p>Entdecke mit Trail Sense die Welt jenseits des Internets.</p>
+
+<ul>
+<li>Entwickelt für Wandern, Backpacking, Camping und Geocaching</li>
+<li>Platzieren Sie Wegpunkte und navigiere dorthin</li>
+<li>Verwenden Sie Ihr Gerät als Kompass (nur auf Geräten mit Kompasssensor verfügbar)</li>
+<li>Folgen Sie Pfaden</li>
+<li>Verfolgen Sie Ihre Schritte mit gespeicherten Pfaden</li>
+<li>Verwenden Sie ein Foto als Karte</li>
+<li>Planen Sie Ihr Gepäck</li>
+<li>Warnmeldungen vor Sonnenuntergang</li>
+<li>Wettervorhersagen (nur auf Geräten mit Barometersensor verfügbar)</li>
+<li>Verwenden Sie Ihr Smartphone als Taschenlampe</li>
+<li>Und vieles mehr!</li>
+</ul>
+
+<p>Trail Sense ist ein Werkzeug, und wie bei jedem anderen Werkzeug, das Sie in die Wildnis mitnehmen,
+ist es unerlässlich, über Ersatzausrüstung und entsprechende Kenntnisse zu verfügen. Diese App dient ausschließlich Informationszwecken. Die Genauigkeit der Vorhersagen und Sensoren hängt von verschiedenen Faktoren ab, darunter Kalibrierung, Sensorqualität, externe Quellen usw.
+Die Nutzung erfolgt auf eigene Gefahr. Halten Sie stets Backup-Tools (z. B. einen Kompass) bereit und achten Sie auf Ihre Sicherheit.</p>
+
+<p>Diese App nutzt das Internet nicht und wird dies auch nie tun. Alle Informationen in Trail Sense stammen direkt von den Sensoren Ihres Smartphones, und es werden keine Daten von Trail Sense übertragen.</p>
+
+<h3>HÄUFIGE PROBLEME</h3>
+<ul>
+<li>Kein Kompass: Wenn Ihr Smartphone keinen Kompasssensor hat, kann ich nichts tun, um die Funktion zu verbessern, da es sich um Hardware handelt.
+Sie können die anderen Funktionen von Trail Sense weiterhin nutzen.</li>
+<li>Kein Wetter: Das Wettertool ist nur verfügbar, wenn Ihr Smartphone über einen Barometersensor verfügt.</li>
+</ul>
+
+<p>Haben Sie ein Problem gefunden oder wünschen Sie sich eine neue Funktion? Kontaktieren Sie mich unter trailsense@protonmail.com oder erstellen Sie ein neues Problem auf GitHub: github.com/kylecorry31/Trail-Sense</p>
+
+<p>Ich bin der einzige Entwickler von Trail Sense und werde daher mein Bestes tun, um bei Problemen zu helfen. Allerdings steht mir nur eine begrenzte Auswahl an Geräten zum Testen zur Verfügung.</p>
+
+<h3>BERECHTIGUNGEN</h3>
+<ul>
+<li>Benachrichtigungen: Ermöglicht Trail Sense die Anzeige von Benachrichtigungen (Rückweg, Wetter, Sonnenuntergangswarnungen, astronomische Ereignisse, Wasserkochtimer usw.).</li>
+<li>Standort: Ermöglicht Trail Sense, Ihren Standort für Navigation, Wetter (Meeresspiegelkalibrierung) und Astronomie abzurufen.</li>
+<li>Standort im Hintergrund: Ermöglicht Trail Sense die Abfrage Ihres Standorts für Sonnenuntergangswarnungen im Hintergrund.
+Auf einigen Geräten verbessert dies auch die Zuverlässigkeit der Rückverfolgung und der Wetterüberwachung.</li>
+<li>Körperliche Aktivität: Ermöglicht Trail Sense, den Schrittzähler Ihres Smartphones zur Entfernungsberechnung zu verwenden.</li>
+<li>Kamera: Ermöglicht Trail Sense, Ihre Kamera für den Zielkompass, den Neigungsmesser und zum Aufnehmen von Fotos zu verwenden, die vom Wolken-Scanner, QR-Code-Scanner und Fotokarten verwendet werden.</li>
+<li>Alarme und Erinnerungen: Ermöglicht Trail Sense, eine Benachrichtigung zu einem genauen Zeitpunkt zu senden.
+Dies wird vom Uhr-Tool (zum Aktualisieren der Systemzeit) und von Sonnenauf- und -untergangswarnungen verwendet.</li>
+</ul>
+
+<h3>Links</h3>
+<ul>
+<li>Datenschutzrichtlinie: https://kylecorry.com/Trail-Sense/#privacy</li>
+<li>FAQ: https://github.com/kylecorry31/Trail-Sense#faq</li>
+<li>Trail Sense ist unter der MIT-Lizenz verfügbar: https://opensource.org/license/mit/</li>
+</ul>

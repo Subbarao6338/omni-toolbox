@@ -1,0 +1,8 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_phone_portrait" />
+    <item
+        android:width="10dp"
+        android:height="10dp"
+        android:drawable="@drawable/flashlight"
+        android:gravity="center" />
+</layer-list>

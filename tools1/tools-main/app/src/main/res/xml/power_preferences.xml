@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/tool_battery_title">
+
+        <SwitchPreferenceCompat
+            android:summary="@string/pref_low_power_mode_summary"
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_low_power_mode"
+            app:singleLineTitle="false"
+            app:title="@string/pref_low_power_mode_title" />
+
+        <SwitchPreferenceCompat
+            android:summary="@string/pref_auto_low_power_summary"
+            app:defaultValue="false"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_auto_low_power"
+            app:singleLineTitle="false"
+            app:title="@string/pref_auto_low_power_title" />
+
+        <!--TODO: Allow user to decide what low power mode controls-->
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:disableDependentsState="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_start_on_boot"
+            app:singleLineTitle="false"
+            app:title="@string/pref_start_on_boot_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_tiles_enabled"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_tiles_enabled_summary"
+            app:title="@string/pref_tiles_enabled_title" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_battery_log_enabled"
+            app:singleLineTitle="false"
+            app:summary="@string/pref_tiles_enabled_battery_log_summary"
+            app:title="@string/pref_tiles_battery_log" />
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,66 @@
+package com.kylecorry.trail_sense.tools.navigation.domain
+
+import com.kylecorry.andromeda.sense.orientation.DeviceOrientation
+import com.kylecorry.trail_sense.settings.infrastructure.ICompassStylePreferences
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
+import java.util.stream.Stream
+
+internal class CompassStyleChooserTest {
+
+    @ParameterizedTest
+    @MethodSource("provideStyle")
+    fun getStyle(
+        useLinear: Boolean,
+        orientation: DeviceOrientation.Orientation,
+        expected: CompassStyle
+    ) {
+        val prefs = mock<ICompassStylePreferences>()
+        whenever(prefs.useLinearCompass).thenReturn(useLinear)
+        val chooser = CompassStyleChooser(prefs, true)
+        assertEquals(expected, chooser.getStyle(orientation))
+    }
+
+    @Test
+    fun getStylesReturnsRadarWhenNoCompassInsteadOfLinear() {
+        val prefs = mock<ICompassStylePreferences>()
+        whenever(prefs.useLinearCompass).thenReturn(true)
+        val chooser = CompassStyleChooser(prefs, false)
+        assertEquals(CompassStyle.Radar, chooser.getStyle(DeviceOrientation.Orientation.Portrait))
+    }
+
+    @Test
+    fun getStylesReturnsRadarWhenNoCompassInsteadOfRound() {
+        val prefs = mock<ICompassStylePreferences>()
+        whenever(prefs.useLinearCompass).thenReturn(true)
+        val chooser = CompassStyleChooser(prefs, false)
+        assertEquals(CompassStyle.Radar, chooser.getStyle(DeviceOrientation.Orientation.Flat))
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun provideStyle(): Stream<Arguments> {
+            return Stream.of(
+                Arguments.of(true, DeviceOrientation.Orientation.Portrait, CompassStyle.Linear),
+                Arguments.of(true, DeviceOrientation.Orientation.PortraitInverse, CompassStyle.Radar),
+                Arguments.of(true, DeviceOrientation.Orientation.Landscape, CompassStyle.Radar),
+                Arguments.of(true, DeviceOrientation.Orientation.LandscapeInverse, CompassStyle.Radar),
+                Arguments.of(true, DeviceOrientation.Orientation.Flat, CompassStyle.Radar),
+                Arguments.of(true, DeviceOrientation.Orientation.FlatInverse, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.Portrait, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.PortraitInverse, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.Landscape, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.LandscapeInverse, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.Flat, CompassStyle.Radar),
+                Arguments.of(false, DeviceOrientation.Orientation.FlatInverse, CompassStyle.Radar),
+            )
+        }
+    }
+
+}

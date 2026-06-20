@@ -1,0 +1,4 @@
+<!--drawable/earth_box.xml-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:width="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#fff" android:pathData="M5 3C3.89 3 3 3.89 3 5v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5c0-1.11-0.9-2-2-2H5m10.78 2H19v12.18c-0.26-0.8-1.31-1.39-2.2-1.39h-1v-3a1 1 0 0 0-1-1h-6v-2h2a1 1 0 0 0 1-1v-2h2c1.03 0 1.87-0.79 1.98-1.79M5 10.29l4.8 4.5v1c0 1.11 0.9 2 2 2V19H5v-8.71z"/>
+</vector>

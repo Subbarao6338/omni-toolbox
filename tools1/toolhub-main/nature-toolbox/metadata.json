@@ -1,0 +1,9 @@
+{
+  "name": "Nature Toolbox",
+  "description": "The ultimate nature-inspired all-in-one toolbox app for mobile and web. Featuring professional-grade utilities, science tools, and life trackers with a beautiful organic interface.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

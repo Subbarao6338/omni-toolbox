@@ -1,0 +1,5 @@
+{
+  "name": "Omni Web",
+  "description": "A powerful Android-style browser with integrated download manager, media sniffer, advanced page tools, and Omni Hub for GitHub Pages integration.",
+  "requestFramePermissions": []
+}
