@@ -570,6 +570,7 @@ object ToolProvider {
         Tool("Rain Radar", Icons.Default.Water, "rain_radar", "Weather", isVisibleOnHome = false, isSubTool = true),
         Tool("UV Index", Icons.Default.WbSunny, "uv_index", "Weather", isVisibleOnHome = false, isSubTool = true),
         Tool("Weather Forecast", Icons.Default.WbCloudy, "weather_forecast", "Weather", isVisibleOnHome = false, isSubTool = true),
+        Tool("Tides", Icons.Default.Water, "tides", "Weather", isVisibleOnHome = false, isSubTool = true),
 
         // TRAVEL
         Tool("Survival Guide", Icons.Default.AutoStories, "survival_guide", "Travel", isVisibleOnHome = false, isSubTool = true, description = "Comprehensive wilderness survival techniques."),

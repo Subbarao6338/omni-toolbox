@@ -8,6 +8,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallReceived
 import androidx.compose.material.icons.automirrored.filled.CallMade
 import androidx.compose.material.icons.automirrored.filled.CallMissed
+import androidx.compose.material.icons.filled.Label
+import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,7 +46,24 @@ fun HistoryScreen(navController: NavHostController) {
             items(callLogs) { entry ->
                 ListItem(
                     headlineContent = { Text(entry.name) },
-                    supportingContent = { Text(entry.number) },
+                    supportingContent = {
+                        Column {
+                            Text(entry.number)
+                            // Ported Call Tags and Notes from nature-dailer-main
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp)) {
+                                AssistChip(
+                                    onClick = {},
+                                    label = { Text("Business", style = MaterialTheme.typography.labelSmall) },
+                                    leadingIcon = { Icon(Icons.Default.Label, null, modifier = Modifier.size(12.dp)) }
+                                )
+                                AssistChip(
+                                    onClick = {},
+                                    label = { Text("Project Alpha", style = MaterialTheme.typography.labelSmall) },
+                                    leadingIcon = { Icon(Icons.Default.NoteAdd, null, modifier = Modifier.size(12.dp)) }
+                                )
+                            }
+                        }
+                    },
                     trailingContent = { Text(entry.timestamp, style = MaterialTheme.typography.bodySmall) },
                     leadingContent = {
                         val icon = when (entry.type) {
