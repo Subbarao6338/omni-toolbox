@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
@@ -54,6 +55,20 @@ fun EnvironmentToolScreen(navController: NavHostController, title: String) {
                     Text("Low (2)", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(24.dp))
                     Text("Sun protection is generally not needed.", style = MaterialTheme.typography.bodyMedium)
+                }
+                "Weather Forecast", "weather_forecast" -> {
+                    Text("Barometric Pressure Trend", style = MaterialTheme.typography.titleMedium)
+                    Text("1012 hPa", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Trend: Falling slowly", color = MaterialTheme.colorScheme.secondary)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)) {
+                        Column(Modifier.padding(16.dp)) {
+                            Text("Trail Sense Prediction:", fontWeight = FontWeight.Bold)
+                            Text("Scattered showers possible within 12-24 hours based on pressure changes.")
+                        }
+                    }
                 }
                 else -> {
                     Text("Environmental monitoring for $title")

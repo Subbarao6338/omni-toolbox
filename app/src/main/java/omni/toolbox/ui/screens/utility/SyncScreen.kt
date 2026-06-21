@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SyncScreen(navController: NavHostController, viewModel: OmniViewModel) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Accounts", "Backups", "Logs")
+    val tabs = listOf("Accounts", "Backups", "Notion Archiver", "Logs")
 
     ToolScreen(
         title = "Cloud Sync & Data Hub",
@@ -57,7 +57,8 @@ fun SyncScreen(navController: NavHostController, viewModel: OmniViewModel) {
                 when (selectedTab) {
                     0 -> AccountsTab(viewModel)
                     1 -> BackupsTab()
-                    2 -> LogsTab(viewModel)
+                    2 -> NotionArchiverTab()
+                    3 -> LogsTab(viewModel)
                 }
             }
         }
@@ -178,6 +179,64 @@ fun BackupItem(label: String, stats: String, icon: ImageVector) {
                 Text("Backup", fontSize = 12.sp)
             }
         }
+    }
+}
+
+@Composable
+fun NotionArchiverTab() {
+    var folderPath by remember { mutableStateOf("/sdcard/Documents") }
+    var smartChunking by remember { mutableStateOf(true) }
+    var autoTranslate by remember { mutableStateOf(false) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("Advanced Notion Archiver", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+
+        OutlinedTextField(
+            value = folderPath,
+            onValueChange = { folderPath = it },
+            label = { Text("Local Folder Path") },
+            modifier = Modifier.fillMaxWidth(),
+            leadingIcon = { Icon(Icons.Default.Folder, null) }
+        )
+
+        Card {
+            Column(Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = smartChunking, onCheckedChange = { smartChunking = it })
+                    Text("Smart Chunking (Split PDFs every 10 pages)")
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = autoTranslate, onCheckedChange = { autoTranslate = it })
+                    Text("Auto-Translate to English")
+                }
+            }
+        }
+
+        val context = androidx.compose.ui.platform.LocalContext.current
+        var isArchiving by remember { mutableStateOf(false) }
+
+        Button(
+            onClick = {
+                isArchiving = true
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isArchiving
+        ) {
+            if (isArchiving) {
+                CircularProgressIndicator(Modifier.size(24.dp))
+                LaunchedEffect(Unit) {
+                    kotlinx.coroutines.delay(2000)
+                    isArchiving = false
+                    android.widget.Toast.makeText(context, "Recursive ingestion started in background", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Icon(Icons.Default.Upload, null)
+                Spacer(Modifier.width(8.dp))
+                Text("Start Recursive Ingestion")
+            }
+        }
+
+        Text("Supported formats: PDF, DOCX, HTML, MHTML, Markdown, TXT", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
     }
 }
 
