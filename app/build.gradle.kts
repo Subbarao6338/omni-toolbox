@@ -20,6 +20,7 @@ val build = versionProps.getProperty("build", "1").toInt()
 
 val appVersionCode = System.getenv("APP_VERSION_CODE")?.toInt() ?: build
 val appVersionName = System.getenv("APP_VERSION_NAME") ?: "$major.$minor.$patch.$build"
+val geminiApiKey = System.getenv("GEMINI_API_KEY") ?: ""
 
 android {
     namespace = "omni.toolbox"
