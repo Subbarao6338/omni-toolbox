@@ -1,0 +1,804 @@
+--- Analyzing youtube-main ---
+# youtube
+Java/Kotlin packages:
+/com/ntube
+
+
+--- Analyzing nature-docs-main ---
+# Nature Docs
+
+A unified document reader for local and cloud sources.
+
+## Features
+
+- **Multi-source support**: Local files, Google Drive, Notion, Mega.
+- **Multi-account support**: Connect multiple accounts for each cloud provider.
+- **Integrated Viewers**:
+  - PDF (via `react-pdf`)
+  - Markdown (via `markdown-it`)
+  - HTML (direct rendering)
+- **Modern UI**: Built with Next.js 15, Tailwind CSS, and Framer Motion.
+- **Vercel Ready**: Optimized for deployment on Vercel.
+
+## Getting Started
+
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+
+
+
+--- Analyzing omni-toolbox(1) ---
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/66c301ec-a23e-44ac-bc11-df5b0c399e0f
+
+## Run Locally
+
+**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+
+
+1. Open Android Studio
+2. Select **Open** and choose the directory containing this project
+3. Allow Android Studio to fix any incompatibilities as it imports the project.
+4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
+5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
+
+Java/Kotlin packages:
+/com/example/data
+/com/example/ui/screens
+/com/example/ui/theme
+
+
+--- Analyzing MaterialFiles-master ---
+# Nature Files
+
+## Preview
+
+<p><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="32%" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width="32%" /></p>
+
+## Features
+
+- Open source: Lightweight, clean and secure.
+- Material Design: Follows Material Design guidelines, with attention into details.
+- Breadcrumbs: Navigate in the filesystem with ease.
+- Root support: View and manage files with root access.
+- Archive support: View, extract and create common compressed files.
+- NAS support: View and manage files on FTP, SFTP, SMB and WebDAV servers.
+- Themes: Customizable UI colors, plus night mode with optional true black.
+- Linux-aware: Like [Nautilus](https://apps.gnome.org/Nautilus/), knows symbolic links, file permissions and SELinux context.
+- Robust: Uses Linux system calls under the hood, not yet another [`ls` parser](https://news.ycombinator.com/item?id=7994720).
+- Well-implemented: Built upon the right things, including [Java NIO2 File API](https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html) and [LiveData](https://developer.android.com/topic/libraries/architecture/livedata).
+
+
+Java/Kotlin packages:
+/com/hierynomus/smbj/share
+/com/nature/files/colorpicker
+/com/nature/files/filelist
+/com/nature/files/settings
+/com/nature/files/coil
+/com/nature/files/hiddenapi
+/com/nature/files/app
+/com/nature/files/navigation
+/com/nature/files/about
+/com/nature/files/ftpserver
+/com/nature/files/filejob
+/com/nature/files/viewer/image
+/com/nature/files/viewer/saveas
+/com/nature/files/viewer/text
+/com/nature/files/terminal
+/com/nature/files/file
+/com/nature/files/fileproperties/basic
+/com/nature/files/fileproperties/image
+/com/nature/files/fileproperties/video
+/com/nature/files/fileproperties/apk
+/com/nature/files/fileproperties/checksum
+/com/nature/files/fileproperties/permission
+/com/nature/files/fileproperties/audio
+/com/nature/files/compat
+/com/nature/files/util
+/com/nature/files/ui
+/com/nature/files/storage
+/com/nature/files/provider/webdav/client
+/com/nature/files/provider/remote
+/com/nature/files/provider/common
+/com/nature/files/provider/ftp/client
+/com/nature/files/provider/document/resolver
+/com/nature/files/provider/archive/archiver
+/com/nature/files/provider/smb/client
+/com/nature/files/provider/content/resolver
+/com/nature/files/provider/root
+/com/nature/files/provider/linux/syscall
+/com/nature/files/provider/linux/media
+/com/nature/files/provider/sftp/client
+/com/nature/files/theme/custom
+/com/nature/files/theme/night
+/com/nature/files/fileaction
+/com/google/android/material/appbar
+/com/google/android/material/shape
+/at/bitfire/dav4jvm
+/net/schmizz/sshj/sftp
+/androidx/swiperefreshlayout/widget
+/androidx/appcompat/app
+/androidx/appcompat/widget
+
+
+--- Analyzing notionmail-main ---
+# notionmail
+Java/Kotlin packages:
+/com/nmail/app
+
+
+--- Analyzing tools-main ---
+# Trail Sense
+
+> Use your Android phone's sensors to assist with wilderness treks or survival situations. Designed for entirely offline use.
+
+[![](https://github.com/kylecorry31/Trail-Sense/workflows/Android%20CI/badge.svg)](https://github.com/kylecorry31/Trail-Sense/actions/workflows/android.yml)
+[![](https://github.com/kylecorry31/Trail-Sense/workflows/Android%20Test/badge.svg)](https://github.com/kylecorry31/Trail-Sense/actions/workflows/android-test.yml)
+[![Nightly](https://github.com/kylecorry31/Trail-Sense/actions/workflows/nightly.yml/badge.svg)](https://github.com/kylecorry31/Trail-Sense/actions/workflows/nightly.yml)
+[![](https://hosted.weblate.org/widgets/trail-sense/-/trail-sense-android/svg-badge.svg)](https://hosted.weblate.org/projects/trail-sense/trail-sense-android)
+
+Trail Sense is a tool, and just like any other tool that you bring into the wilderness, it's essential to have backup equipment and skills.
+
+The "Trail Sense: Wilderness Survival Guide" book is available as a [paperback or free ebook](https://kylecorry.com/Trail-Sense/book.html).
+
+See the [Technical Blog / Research](https://kylecorry.com/research/categories/trail-sense/)
+
+<table>
+    <tr>
+        <th>F-Droid</th>
+        <th>Google Play</th>
+        <th>Obtainium</th>
+
+Java/Kotlin packages:
+/com/kylecorry/trail_sense/settings/infrastructure
+/com/kylecorry/trail_sense/settings/backup
+/com/kylecorry/trail_sense/settings/ui
+/com/kylecorry/trail_sense/settings/quickactions
+/com/kylecorry/trail_sense/settings/licenses
+/com/kylecorry/trail_sense/settings/migrations
+/com/kylecorry/trail_sense/main/automations
+/com/kylecorry/trail_sense/main/persistence
+/com/kylecorry/trail_sense/main/errors
+/com/kylecorry/trail_sense/plugins/plugins
+/com/kylecorry/trail_sense/shared/sharing
+/com/kylecorry/trail_sense/shared/commands/generic
+/com/kylecorry/trail_sense/shared/tiles
+/com/kylecorry/trail_sense/shared/map_layers/tiles/infrastructure/persistance
+/com/kylecorry/trail_sense/shared/map_layers/preferences/repo
+/com/kylecorry/trail_sense/shared/map_layers/preferences/ui/converters
+/com/kylecorry/trail_sense/shared/map_layers/ui/layers/tiles
+/com/kylecorry/trail_sense/shared/map_layers/ui/layers/geojson/features
+/com/kylecorry/trail_sense/shared/map_layers/ui/layers/geojson/sources
+/com/kylecorry/trail_sense/shared/map_layers/ui/layers/overlay
+/com/kylecorry/trail_sense/shared/alerts
+/com/kylecorry/trail_sense/shared/automations
+/com/kylecorry/trail_sense/shared/permissions
+/com/kylecorry/trail_sense/shared/io
+/com/kylecorry/trail_sense/shared/navigation
+/com/kylecorry/trail_sense/shared/scales
+/com/kylecorry/trail_sense/shared/hooks
+/com/kylecorry/trail_sense/shared/morse
+/com/kylecorry/trail_sense/shared/grouping/lists
+/com/kylecorry/trail_sense/shared/grouping/mapping
+/com/kylecorry/trail_sense/shared/grouping/persistence
+/com/kylecorry/trail_sense/shared/grouping/filter
+/com/kylecorry/trail_sense/shared/grouping/sort
+/com/kylecorry/trail_sense/shared/grouping/count
+/com/kylecorry/trail_sense/shared/grouping/picker
+/com/kylecorry/trail_sense/shared/declination
+/com/kylecorry/trail_sense/shared/dem/map_layers
+/com/kylecorry/trail_sense/shared/dem/colors
+/com/kylecorry/trail_sense/shared/extensions
+/com/kylecorry/trail_sense/shared/camera
+/com/kylecorry/trail_sense/shared/colors
+/com/kylecorry/trail_sense/shared/volume
+/com/kylecorry/trail_sense/shared/uri
+/com/kylecorry/trail_sense/shared/domain
+/com/kylecorry/trail_sense/shared/debugging
+/com/kylecorry/trail_sense/shared/preferences
+/com/kylecorry/trail_sense/shared/views/chart/label
+/com/kylecorry/trail_sense/shared/data
+/com/kylecorry/trail_sense/shared/canvas/tiles
+/com/kylecorry/trail_sense/shared/andromeda_temp
+/com/kylecorry/trail_sense/shared/specifications
+/com/kylecorry/trail_sense/shared/sensors/thermometer
+/com/kylecorry/trail_sense/shared/sensors/overrides
+/com/kylecorry/trail_sense/shared/sensors/altimeter
+/com/kylecorry/trail_sense/shared/sensors/barometer
+/com/kylecorry/trail_sense/shared/sensors/providers
+/com/kylecorry/trail_sense/shared/sensors/gps
+/com/kylecorry/trail_sense/shared/sensors/compass
+/com/kylecorry/trail_sense/shared/sensors/speedometer
+/com/kylecorry/trail_sense/shared/sensors/hygrometer
+/com/kylecorry/trail_sense/shared/device
+/com/kylecorry/trail_sense/shared/haptics
+/com/kylecorry/trail_sense/shared/quickactions
+/com/kylecorry/trail_sense/shared/text/search
+/com/kylecorry/trail_sense/shared/text/nlp/processors
+/com/kylecorry/trail_sense/shared/text/nlp/tokenizers
+/com/kylecorry/trail_sense/plugin/sample/domain
+/com/kylecorry/trail_sense/plugin/sample/service
+/com/kylecorry/trail_sense/receivers
+/com/kylecorry/trail_sense/tools/field_guide/infrastructure
+/com/kylecorry/trail_sense/tools/field_guide/map_layers
+/com/kylecorry/trail_sense/tools/field_guide/domain
+/com/kylecorry/trail_sense/tools/field_guide/ui
+/com/kylecorry/trail_sense/tools/signal_finder/infrastructure
+/com/kylecorry/trail_sense/tools/signal_finder/map_layers
+/com/kylecorry/trail_sense/tools/signal_finder/ui
+/com/kylecorry/trail_sense/tools/experimentation
+/com/kylecorry/trail_sense/tools/map/infrastructure
+/com/kylecorry/trail_sense/tools/map/map_layers
+/com/kylecorry/trail_sense/tools/map/widgets
+/com/kylecorry/trail_sense/tools/map/ui
+/com/kylecorry/trail_sense/tools/paths/infrastructure/commands
+/com/kylecorry/trail_sense/tools/paths/infrastructure/alerts
+/com/kylecorry/trail_sense/tools/paths/infrastructure/services
+/com/kylecorry/trail_sense/tools/paths/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/paths/infrastructure/receivers
+/com/kylecorry/trail_sense/tools/paths/tiles
+/com/kylecorry/trail_sense/tools/paths/map_layers
+/com/kylecorry/trail_sense/tools/paths/services
+/com/kylecorry/trail_sense/tools/paths/domain/hiking
+/com/kylecorry/trail_sense/tools/paths/domain/beacon
+/com/kylecorry/trail_sense/tools/paths/domain/pathsort/mappers
+/com/kylecorry/trail_sense/tools/paths/domain/waypointcolors
+/com/kylecorry/trail_sense/tools/paths/domain/point_finder
+/com/kylecorry/trail_sense/tools/paths/domain/factories
+/com/kylecorry/trail_sense/tools/paths/widgets
+/com/kylecorry/trail_sense/tools/paths/actions
+/com/kylecorry/trail_sense/tools/paths/ui/commands
+/com/kylecorry/trail_sense/tools/paths/ui/drawing
+/com/kylecorry/trail_sense/tools/paths/quickactions
+/com/kylecorry/trail_sense/tools/comms/talk/ui
+/com/kylecorry/trail_sense/tools/comms/messaging/ui
+/com/kylecorry/trail_sense/tools/photo_maps/infrastructure/commands
+/com/kylecorry/trail_sense/tools/photo_maps/infrastructure/tiles
+/com/kylecorry/trail_sense/tools/photo_maps/infrastructure/reduce
+/com/kylecorry/trail_sense/tools/photo_maps/infrastructure/create
+/com/kylecorry/trail_sense/tools/photo_maps/infrastructure/calibration
+/com/kylecorry/trail_sense/tools/photo_maps/map_layers
+/com/kylecorry/trail_sense/tools/photo_maps/domain/projections
+/com/kylecorry/trail_sense/tools/photo_maps/domain/sort/mappers
+/com/kylecorry/trail_sense/tools/photo_maps/domain/selection
+/com/kylecorry/trail_sense/tools/photo_maps/ui/commands
+/com/kylecorry/trail_sense/tools/photo_maps/ui/mappers
+/com/kylecorry/trail_sense/tools/photo_maps/quickactions
+/com/kylecorry/trail_sense/tools/permits/ui
+/com/kylecorry/trail_sense/tools/temperature_estimation/ui
+/com/kylecorry/trail_sense/tools/whitenoise/infrastructure/streams
+/com/kylecorry/trail_sense/tools/whitenoise/services
+/com/kylecorry/trail_sense/tools/whitenoise/ui
+/com/kylecorry/trail_sense/tools/whitenoise/quickactions
+/com/kylecorry/trail_sense/tools/survival_guide/infrastructure
+/com/kylecorry/trail_sense/tools/survival_guide/domain
+/com/kylecorry/trail_sense/tools/survival_guide/ui
+/com/kylecorry/trail_sense/tools/survival_guide/quickactions
+/com/kylecorry/trail_sense/tools/flashlight/infrastructure
+/com/kylecorry/trail_sense/tools/flashlight/services
+/com/kylecorry/trail_sense/tools/flashlight/domain
+/com/kylecorry/trail_sense/tools/flashlight/widgets
+/com/kylecorry/trail_sense/tools/flashlight/volumeactions
+/com/kylecorry/trail_sense/tools/flashlight/ui
+/com/kylecorry/trail_sense/tools/flashlight/quickactions
+/com/kylecorry/trail_sense/tools/navigation/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/navigation/infrastructure/share
+/com/kylecorry/trail_sense/tools/navigation/map_layers
+/com/kylecorry/trail_sense/tools/navigation/domain
+/com/kylecorry/trail_sense/tools/navigation/ui/markers
+/com/kylecorry/trail_sense/tools/navigation/ui/data
+/com/kylecorry/trail_sense/tools/navigation/ui/errors
+/com/kylecorry/trail_sense/tools/navigation/ui/layers/compass
+/com/kylecorry/trail_sense/tools/navigation/quickactions
+/com/kylecorry/trail_sense/tools/pedometer/infrastructure/stride_length
+/com/kylecorry/trail_sense/tools/pedometer/infrastructure/subsystem
+/com/kylecorry/trail_sense/tools/pedometer/tiles
+/com/kylecorry/trail_sense/tools/pedometer/services
+/com/kylecorry/trail_sense/tools/pedometer/domain
+/com/kylecorry/trail_sense/tools/pedometer/widgets
+/com/kylecorry/trail_sense/tools/pedometer/actions
+/com/kylecorry/trail_sense/tools/pedometer/ui
+/com/kylecorry/trail_sense/tools/pedometer/quickactions
+/com/kylecorry/trail_sense/tools/declination/ui
+/com/kylecorry/trail_sense/tools/solarpanel/domain
+/com/kylecorry/trail_sense/tools/solarpanel/ui
+/com/kylecorry/trail_sense/tools/clinometer/volumeactions
+/com/kylecorry/trail_sense/tools/clinometer/ui
+/com/kylecorry/trail_sense/tools/cliffheight/domain
+/com/kylecorry/trail_sense/tools/cliffheight/ui
+/com/kylecorry/trail_sense/tools/light/ui
+/com/kylecorry/trail_sense/tools/convert/infrastructure
+/com/kylecorry/trail_sense/tools/convert/ui
+/com/kylecorry/trail_sense/tools/convert/quickactions
+/com/kylecorry/trail_sense/tools/ruler/infrastructure
+/com/kylecorry/trail_sense/tools/ruler/ui
+/com/kylecorry/trail_sense/tools/ruler/quickactions
+/com/kylecorry/trail_sense/tools/qr/infrastructure
+/com/kylecorry/trail_sense/tools/qr/ui
+/com/kylecorry/trail_sense/tools/level/ui
+/com/kylecorry/trail_sense/tools/notes/infrastructure
+/com/kylecorry/trail_sense/tools/notes/domain
+/com/kylecorry/trail_sense/tools/notes/ui
+/com/kylecorry/trail_sense/tools/notes/quickactions
+/com/kylecorry/trail_sense/tools/waterpurification/infrastructure
+/com/kylecorry/trail_sense/tools/waterpurification/domain
+/com/kylecorry/trail_sense/tools/waterpurification/ui
+/com/kylecorry/trail_sense/tools/climate/infrastructure/dewpoint
+/com/kylecorry/trail_sense/tools/climate/infrastructure/precipitation
+/com/kylecorry/trail_sense/tools/climate/infrastructure/temperatures/calculators
+/com/kylecorry/trail_sense/tools/climate/domain
+/com/kylecorry/trail_sense/tools/climate/ui
+/com/kylecorry/trail_sense/tools/astronomy/infrastructure/commands
+/com/kylecorry/trail_sense/tools/astronomy/infrastructure/receivers
+/com/kylecorry/trail_sense/tools/astronomy/map_layers
+/com/kylecorry/trail_sense/tools/astronomy/services
+/com/kylecorry/trail_sense/tools/astronomy/domain
+/com/kylecorry/trail_sense/tools/astronomy/widgets
+/com/kylecorry/trail_sense/tools/astronomy/ui/commands
+/com/kylecorry/trail_sense/tools/astronomy/ui/items
+/com/kylecorry/trail_sense/tools/astronomy/ui/format
+/com/kylecorry/trail_sense/tools/astronomy/quickactions
+/com/kylecorry/trail_sense/tools/diagnostics/ui
+/com/kylecorry/trail_sense/tools/diagnostics/status
+/com/kylecorry/trail_sense/tools/battery/infrastructure/commands
+/com/kylecorry/trail_sense/tools/battery/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/battery/services
+/com/kylecorry/trail_sense/tools/battery/domain
+/com/kylecorry/trail_sense/tools/battery/ui
+/com/kylecorry/trail_sense/tools/battery/quickactions
+/com/kylecorry/trail_sense/tools/tides/infrastructure/io
+/com/kylecorry/trail_sense/tools/tides/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/tides/infrastructure/model
+/com/kylecorry/trail_sense/tools/tides/map_layers
+/com/kylecorry/trail_sense/tools/tides/subsystem
+/com/kylecorry/trail_sense/tools/tides/domain/commands
+/com/kylecorry/trail_sense/tools/tides/domain/loading
+/com/kylecorry/trail_sense/tools/tides/domain/waterlevel
+/com/kylecorry/trail_sense/tools/tides/domain/selection
+/com/kylecorry/trail_sense/tools/tides/domain/range
+/com/kylecorry/trail_sense/tools/tides/widgets
+/com/kylecorry/trail_sense/tools/tides/ui/mappers
+/com/kylecorry/trail_sense/tools/guide/infrastructure
+/com/kylecorry/trail_sense/tools/guide/domain
+/com/kylecorry/trail_sense/tools/guide/ui
+/com/kylecorry/trail_sense/tools/guide/quickactions
+/com/kylecorry/trail_sense/tools/weather/infrastructure/commands
+/com/kylecorry/trail_sense/tools/weather/infrastructure/alerts
+/com/kylecorry/trail_sense/tools/weather/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/weather/infrastructure/subsystem/temp
+/com/kylecorry/trail_sense/tools/weather/infrastructure/receivers
+/com/kylecorry/trail_sense/tools/weather/tiles
+/com/kylecorry/trail_sense/tools/weather/services
+/com/kylecorry/trail_sense/tools/weather/domain/forecasting/alerts
+/com/kylecorry/trail_sense/tools/weather/domain/forecasting/arrival
+/com/kylecorry/trail_sense/tools/weather/domain/forecasting/temperatures
+/com/kylecorry/trail_sense/tools/weather/domain/sealevel
+/com/kylecorry/trail_sense/tools/weather/widgets
+/com/kylecorry/trail_sense/tools/weather/actions
+/com/kylecorry/trail_sense/tools/weather/ui/charts
+/com/kylecorry/trail_sense/tools/weather/ui/dialogs
+/com/kylecorry/trail_sense/tools/weather/ui/fields
+/com/kylecorry/trail_sense/tools/weather/quickactions
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/commands/cell
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/export
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/loading
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/sort/mappers
+/com/kylecorry/trail_sense/tools/beacons/infrastructure/share
+/com/kylecorry/trail_sense/tools/beacons/map_layers
+/com/kylecorry/trail_sense/tools/beacons/subsystem
+/com/kylecorry/trail_sense/tools/beacons/domain
+/com/kylecorry/trail_sense/tools/beacons/widgets
+/com/kylecorry/trail_sense/tools/beacons/ui/list
+/com/kylecorry/trail_sense/tools/beacons/ui/form
+/com/kylecorry/trail_sense/tools/beacons/quickactions
+/com/kylecorry/trail_sense/tools/ballistics/infrastructure
+/com/kylecorry/trail_sense/tools/ballistics/domain
+/com/kylecorry/trail_sense/tools/ballistics/ui
+/com/kylecorry/trail_sense/tools/sensors/widgets
+/com/kylecorry/trail_sense/tools/sensors/ui
+/com/kylecorry/trail_sense/tools/sensors/quickactions
+/com/kylecorry/trail_sense/tools/clouds/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/clouds/domain/classification
+/com/kylecorry/trail_sense/tools/clouds/ui
+/com/kylecorry/trail_sense/tools/clouds/quickactions
+/com/kylecorry/trail_sense/tools/mirror/ui
+/com/kylecorry/trail_sense/tools/augmented_reality/domain/mapper
+/com/kylecorry/trail_sense/tools/augmented_reality/domain/calibration
+/com/kylecorry/trail_sense/tools/augmented_reality/domain/position
+/com/kylecorry/trail_sense/tools/augmented_reality/ui/guidance
+/com/kylecorry/trail_sense/tools/augmented_reality/ui/layers
+/com/kylecorry/trail_sense/tools/triangulate/ui
+/com/kylecorry/trail_sense/tools/clock/infrastructure
+/com/kylecorry/trail_sense/tools/clock/ui
+/com/kylecorry/trail_sense/tools/tools/infrastructure/diagnostics
+/com/kylecorry/trail_sense/tools/tools/services
+/com/kylecorry/trail_sense/tools/tools/widgets
+/com/kylecorry/trail_sense/tools/tools/ui/items/render
+/com/kylecorry/trail_sense/tools/tools/ui/widgets
+/com/kylecorry/trail_sense/tools/tools/ui/sort
+/com/kylecorry/trail_sense/tools/tools/quickactions
+/com/kylecorry/trail_sense/tools/magnifier/ui
+/com/kylecorry/trail_sense/tools/lightning/infrastructure/persistence
+/com/kylecorry/trail_sense/tools/lightning/domain
+/com/kylecorry/trail_sense/tools/lightning/ui
+/com/kylecorry/trail_sense/tools/metaldetector/ui
+/com/kylecorry/trail_sense/tools/turn_back/infrastructure/receivers
+/com/kylecorry/trail_sense/tools/turn_back/services
+/com/kylecorry/trail_sense/tools/turn_back/ui
+/com/kylecorry/trail_sense/tools/whistle/infrastructure
+/com/kylecorry/trail_sense/tools/whistle/ui
+/com/kylecorry/trail_sense/tools/whistle/quickactions
+/com/kylecorry/trail_sense/tools/packs/infrastructure
+/com/kylecorry/trail_sense/tools/packs/domain/sort
+/com/kylecorry/trail_sense/tools/packs/ui/commands
+/com/kylecorry/trail_sense/tools/packs/ui/mappers
+/com/kylecorry/trail_sense/onboarding
+
+
+--- Analyzing omni-toolbox (1) ---
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/66c301ec-a23e-44ac-bc11-df5b0c399e0f
+
+## Run Locally
+
+**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+
+
+1. Open Android Studio
+2. Select **Open** and choose the directory containing this project
+3. Allow Android Studio to fix any incompatibilities as it imports the project.
+4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
+5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
+
+Java/Kotlin packages:
+/com/example/data
+/com/example/ui/screens
+/com/example/ui/theme
+
+
+--- Analyzing mix-main ---
+# mix
+Java/Kotlin packages:
+/com/nature/files/utils
+/com/nature/files/security
+/com/nature/files/network
+/com/nature/files/workers
+/com/nature/files/domain/usecase
+/com/nature/files/data/db
+/com/nature/files/analyzer
+/com/nature/files/ui/components
+/com/nature/files/ui/preview
+/com/nature/files/ui/theme
+
+
+--- Analyzing to-notion-main ---
+# Notion Content Ingestion Engine
+
+Bridging data from the open web and localized files into structured Notion workspaces.
+
+## Features
+
+- **Multi-Source Scraping**: Direct integration with forum structures (Xossipy, Desifakes).
+- **Recursive Folder Scanning**: Ingest entire local directory structures while maintaining hierarchy in Notion.
+- **Advanced File Support**: PDF, DOCX, HTML, MHTML, Markdown, and TXT.
+- **Smart Chunking**: Automatically splits long documents (PDF/DOCX) into nested Notion subpages every 10 pages for better readability and API compliance.
+- **Database Integration**: Option to map files directly into a Notion Database with metadata properties (Path, Extension).
+- **Dynamic Translation**: Automatic translation of content to English via Google API.
+
+## Project Structure
+
+```text
+forum-notion-archiver/
+├── app.py                   # Flask server coordinating tasks
+├── core/
+│   ├── scraper.py           # Forum crawler logic
+
+
+
+--- Analyzing toolhub-main ---
+No README.md found
+
+
+--- Analyzing projects-main ---
+No README.md found
+
+
+--- Analyzing ImageTools-master ---
+<div align="center">
+</br>
+<img src="./fastlane/metadata/android/en-US/images/logo/logo.png" width="200" />
+
+</div>
+
+<div align="center">
+
+# Image Toolbox
+
+</div>
+
+</br>
+
+<p align="center">
+  <img alt="API" src="https://img.shields.io/badge/Api%2023+-50f270?logo=android&logoColor=black&style=for-the-badge"/></a>
+  <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-a503fc?logo=kotlin&logoColor=white&style=for-the-badge"/></a>
+  <img alt="Jetpack Compose" src="https://img.shields.io/static/v1?style=for-the-badge&message=Jetpack+Compose&color=4285F4&logo=Jetpack+Compose&logoColor=FFFFFF&label="/></a>
+    <img alt="material" src="https://custom-icon-badges.demolab.com/badge/material%20you-lightblue?style=for-the-badge&logoColor=333&logo=material-you"/></a>
+  </br>
+
+Java/Kotlin packages:
+/com/t8rin/imagetoolbox/app/presentation/components/utils
+/com/t8rin/imagetoolbox/app/presentation/components/functions
+
+
+--- Analyzing social-main ---
+# social
+Java/Kotlin packages:
+/com/nsocial/app
+
+
+--- Analyzing remix_-omni-toolbox ---
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/e2a76a8c-1214-4e7f-9ef4-4a51875f3b8a
+
+## Run Locally
+
+**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+
+
+1. Open Android Studio
+2. Select **Open** and choose the directory containing this project
+3. Allow Android Studio to fix any incompatibilities as it imports the project.
+4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
+5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
+
+Java/Kotlin packages:
+/com/example/data
+/com/example/ui/screens
+/com/example/ui/theme
+
+
+--- Analyzing omni-toolbox ---
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/66c301ec-a23e-44ac-bc11-df5b0c399e0f
+
+## Run Locally
+
+**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+
+
+1. Open Android Studio
+2. Select **Open** and choose the directory containing this project
+3. Allow Android Studio to fix any incompatibilities as it imports the project.
+4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
+5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
+
+Java/Kotlin packages:
+/com/example/data
+/com/example/ui/screens
+/com/example/ui/theme
+
+
+--- Analyzing nature-dailer-main ---
+# Fossify Phone
+<img alt="Logo" src="graphics/icon.webp" width="120" />
+
+<a href='https://play.google.com/store/apps/details?id=org.fossify.phone'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height=80/></a> <a href="https://f-droid.org/packages/org.fossify.phone/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" height=80/></a> <a href="https://apt.izzysoft.de/fdroid/index/apk/org.fossify.phone"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height=80/></a>
+
+Empower your calls, and safeguard your data. Fossify Phone redefines the mobile app experience with unmatched privacy and efficiency. Free from ads and intrusive permissions, it's designed for seamless and secure everyday communication.
+
+📱 **YOUR PRIVACY, OUR PRIORITY:**
+Welcome to the Fossify Phone App, where your digital privacy is paramount. Switch to a mobile experience that respects your data, ensuring your personal information remains secure and private.
+
+🚀 **SEAMLESS PERFORMANCE:**
+The Fossify Phone App offers a fluid and responsive mobile interface, enhancing your phone's performance while safeguarding your privacy. Experience a lag-free, smooth user experience, optimized for efficiency and speed.
+
+🌐 **OPEN-SOURCE ASSURANCE:**
+With the Fossify Phone App, transparency is at your fingertips. Built on an open-source foundation, our app allows you to review our code on GitHub, fostering trust and a community committed to privacy.
+
+🖼️ **TAILOR-MADE CUSTOMIZATION:**
+Customize your mobile experience with the Fossify Phone App. Adjust your app settings for a personalized interface, from thematic designs to functional preferences. Enjoy a user interface that's intuitive and uniquely yours.
+
+🔋 **EFFICIENT RESOURCE MANAGEMENT:**
+
+Java/Kotlin packages:
+/com/example/naturedialer/ui/screens
+/com/example/naturedialer/ui/viewmodel
+/com/example/naturedialer/ui/theme
+
+
+--- Analyzing nature-toolbox-main ---
+# 🌿 Nature Toolbox (Ultimate Edition)
+
+**The most comprehensive, organic-inspired tool suite for modern digital explorers.**
+
+Nature Toolbox is a beautifully crafted application that blends high-performance utility with a lush, nature-inspired aesthetic. From AI-powered species identification to scientific monitoring and daily productivity, every tool is designed to feel like a natural extension of your workflow.
+
+---
+
+## ✨ Features
+
+### 🍃 Lush Nature UI (Elegant Dark)
+A premium "Elegant Dark" design theme featuring high-contrast charcoal backgrounds, vibrant moss-green accents, and sharp typography.
+
+### 🧪 Advanced Science Tools
+- **Nature Dex (AI)**: Identify any plant, insect, or animal instantly using the integrated **Gemini AI API**.
+- **Sound Meter**: Real-time decibel monitoring with live telemetry charts.
+- **Compass & Level**: Technical-grade orientation tools for the modern explorer.
+- **Periodic Table**: A minimalist reference for fundamental chemical elements.
+
+### 🛠️ Core Utilities
+
+
+
+--- Analyzing astron_yt-main ---
+### ASTRON
+
+YouTube videos without ads, downloads 4K quality videos, and supports background playback.
+
+◈ Key Features ◈
+
+• **Ad-free Experience**: Watch videos immediately without any advertising.
+
+• **High-Quality Downloads**: Download videos in up to 4K quality and MP3 formats for offline viewing.
+
+• **Background Playback**: Keep the video playing while using other apps or with the screen turned off.
+
+• **Notification Section**: Stay updated with a dedicated notification section, just like the official Android YouTube app.
+
+• **Playlist Management**: Easily add any video to your playlists with options available for every video.
+
+• **Proper Subtitles**: Enhanced support for subtitles to ensure a better viewing experience.
+
+• **Bypass Quality Restrictions**: Access the highest available quality for all videos without restrictions.
+
+
+Java/Kotlin packages:
+/cc/astron/db
+/cc/astron/utils
+/cc/astron/model
+/cc/astron/ui/player
+/cc/astron/ui/notifications
+
+
+--- Analyzing YT-main ---
+
+<p align="center">
+<img src='https://raw.githubusercontent.com/prateek-chaubey/YTPro/main/.github/img/ytpro.gif' height=150  >
+</p>
+<h1 align=center>YT PRO </h1>
+
+<div align="center">
+
+
+[![Gradle](https://github.com/prateek-chaubey/YTPro/actions/workflows/gradle.yml/badge.svg)](https://github.com/prateek-chaubey/YTPro/actions/workflows/gradle.yml)
+<a href="https://www.jsdelivr.com/package/npm/ytpro?tab=stats" ><img alt="jsDelivr monthly hits badge" src="https://data.jsdelivr.com/v1/package/npm/ytpro/badge"></a>
+<img src=https://img.shields.io/github/downloads/prateek-chaubey/YTPro/total >
+
+</div>
+
+## Download YT PRO
+
+[![Download zip](https://custom-icon-badges.herokuapp.com/badge/-Download-ff0000?style=for-the-badge&logo=download&logoColor=white "Download Apk")](https://nightly.link/prateek-chaubey/YTPro/workflows/gradle/main/YTPRO.zip)
+
+#### Screenshots
+
+Java/Kotlin packages:
+/com/google/android/youtube/pro/utils
+/com/google/android/youtube/pro/webview
+/com/google/android/youtube/pro/receivers
+
+
+--- Analyzing nature-toolbox ---
+# 🌿 Nature Toolbox (Ultimate Edition)
+
+**The most comprehensive, organic-inspired tool suite for modern digital explorers.**
+
+Nature Toolbox is a beautifully crafted application that blends high-performance utility with a lush, nature-inspired aesthetic. From AI-powered species identification to scientific monitoring and daily productivity, every tool is designed to feel like a natural extension of your workflow.
+
+---
+
+## ✨ Features
+
+### 🍃 Lush Nature UI (Elegant Dark)
+A premium "Elegant Dark" design theme featuring high-contrast charcoal backgrounds, vibrant moss-green accents, and sharp typography.
+
+### 🧪 Advanced Science Tools
+- **Nature Dex (AI)**: Identify any plant, insect, or animal instantly using the integrated **Gemini AI API**.
+- **Sound Meter**: Real-time decibel monitoring with live telemetry charts.
+- **Compass & Level**: Technical-grade orientation tools for the modern explorer.
+- **Periodic Table**: A minimalist reference for fundamental chemical elements.
+
+### 🛠️ Core Utilities
+
+
+
+--- Analyzing nature-messages-main ---
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/e432da12-7f1a-4bf4-8c59-dcd27ef9a38c
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
+
+
+
+--- Analyzing Doctools-main ---
+
+
+# Nature Tools
+
+A privacy-first PDF utility for Android. Works 100% offline - no internet, no trackers.
+
+---
+
+## Features
+
+- Merge & Split PDFs
+- Password protect your PDFs
+- Convert Images to PDF
+- Export PDF pages as Images (ZIP)
+- Rotate and rearrange pages
+- And more!
+
+All processing happens on your device. Your files never leave your phone.
+
+---
+
+Java/Kotlin packages:
+/com/nature/docs/domain
+/com/nature/docs/data/image
+/com/nature/docs/data/video
+/com/nature/docs/data/archive
+/com/nature/docs/data/security
+/com/nature/docs/data/pdf
+/com/nature/docs/data/ai
+/com/nature/docs/data/ml
+/com/nature/docs/data/audio
+/com/nature/docs/data/office
+/com/nature/docs/ui/components
+/com/nature/docs/ui/theme

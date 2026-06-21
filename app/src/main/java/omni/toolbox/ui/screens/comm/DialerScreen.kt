@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +25,31 @@ import omni.toolbox.ui.components.ToolScreen
 @Composable
 fun DialerScreen(navController: NavHostController) {
     var phoneNumber by remember { mutableStateOf("") }
+    // Ported T9 logic from nature-dailer-main
+    val contacts = remember { listOf("Alice Johnson", "Bob Builder", "Charlie Chaplin", "David Bowie", "Eve Online", "Frank Sinatra", "Grace Hopper") }
+    val filteredContacts = remember(phoneNumber) {
+        if (phoneNumber.isEmpty()) emptyList()
+        else {
+            val t9Map = mapOf(
+                '2' to "abc", '3' to "def", '4' to "ghi",
+                '5' to "jkl", '6' to "mno", '7' to "pqrs",
+                '8' to "tuv", '9' to "wxyz"
+            )
+            contacts.filter { contact ->
+                var digitIndex = 0
+                val contactLower = contact.lowercase()
+                for (char in contactLower) {
+                    if (digitIndex < phoneNumber.length) {
+                        val possibleChars = t9Map[phoneNumber[digitIndex]] ?: ""
+                        if (char in possibleChars) {
+                            digitIndex++
+                        }
+                    }
+                }
+                digitIndex == phoneNumber.length || contactLower.contains(phoneNumber)
+            }
+        }
+    }
     val keys = listOf(
         "1" to "", "2" to "ABC", "3" to "DEF",
         "4" to "GHI", "5" to "JKL", "6" to "MNO",
@@ -49,6 +75,20 @@ fun DialerScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                // T9 Search Results
+                if (filteredContacts.isNotEmpty()) {
+                    Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            filteredContacts.take(3).forEach { contact ->
+                                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)) {
+                                    Icon(Icons.Default.Person, null, modifier = Modifier.size(16.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(contact, style = MaterialTheme.typography.bodySmall)
+                                }
+                            }
+                        }
+                    }
+                }
                 Text(
                     text = phoneNumber,
                     fontSize = 48.sp,
