@@ -152,7 +152,7 @@ object ToolProvider {
         // TRAVEL
         Tool("Travel & Adventure", Icons.Default.Landscape, "outdoor_group", "Travel", Color(0xFF8BC34A),
             description = "Essential tools for explorers.",
-            subToolRoutes = listOf("altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "packing_list", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
+            subToolRoutes = listOf("survival_guide", "beacon_nav", "altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "packing_list", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
 
         // DEVELOPER
         Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
@@ -572,6 +572,8 @@ object ToolProvider {
         Tool("Weather Forecast", Icons.Default.WbCloudy, "weather_forecast", "Weather", isVisibleOnHome = false, isSubTool = true),
 
         // TRAVEL
+        Tool("Survival Guide", Icons.Default.AutoStories, "survival_guide", "Travel", isVisibleOnHome = false, isSubTool = true, description = "Comprehensive wilderness survival techniques."),
+        Tool("Beacon Navigation", Icons.Default.Explore, "beacon_nav", "Travel", isVisibleOnHome = false, isSubTool = true, description = "Radar-style beacon tracking and navigation."),
         Tool("Altitude Graph", Icons.AutoMirrored.Filled.ShowChart, "altitude_graph", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Area Calculator", Icons.Default.SquareFoot, "area_calc", "Travel", isVisibleOnHome = false, isSubTool = true),
         Tool("Campfire Guide", Icons.Default.LocalFireDepartment, "campfire_guide", "Travel", isVisibleOnHome = false, isSubTool = true),

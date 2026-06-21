@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +26,8 @@ fun FileToolScreen(navController: NavHostController, title: String) {
     var fileItems by remember { mutableStateOf(listOf<FileItem>()) }
     var showRenameDialog by remember { mutableStateOf<File?>(null) }
     var newFileName by remember { mutableStateOf("") }
+    var storageMode by remember { mutableStateOf("Local") } // Local, Cloud, NAS, Root
+    var isRootEnabled by remember { mutableStateOf(false) }
 
     fun refreshFiles() {
         val files = currentDir.listFiles()?.toList() ?: emptyList()
@@ -43,7 +42,6 @@ fun FileToolScreen(navController: NavHostController, title: String) {
     }
 
     LaunchedEffect(currentDir) {
-        // Seed some initial files if empty for demonstration
         if (currentDir == rootDir && (rootDir.listFiles()?.isEmpty() == true)) {
             File(rootDir, "Welcome_Note.txt").writeText("Welcome to Omni Toolbox File Manager!")
             File(rootDir, "System_Logs").mkdir()
@@ -55,59 +53,91 @@ fun FileToolScreen(navController: NavHostController, title: String) {
     ToolScreen(
         title = title,
         onBack = {
-            if (currentDir != rootDir) {
+            if (currentDir != rootDir && storageMode == "Local") {
                 currentDir = currentDir.parentFile ?: rootDir
             } else {
                 navController.popBackStack()
             }
+        },
+        actions = {
+            IconButton(onClick = { /* Search */ }) { Icon(Icons.Default.Search, null) }
+            IconButton(onClick = { /* Filter */ }) { Icon(Icons.Default.FilterList, null) }
         }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            ScrollableTabRow(
+                selectedTabIndex = when(storageMode) {
+                    "Local" -> 0
+                    "Cloud" -> 1
+                    "NAS" -> 2
+                    "Root" -> 3
+                    else -> 0
+                },
+                containerColor = MaterialTheme.colorScheme.surface,
+                edgePadding = 16.dp
+            ) {
+                Tab(selected = storageMode == "Local", onClick = { storageMode = "Local" }) {
+                    Text("Local", Modifier.padding(12.dp))
+                }
+                Tab(selected = storageMode == "Cloud", onClick = { storageMode = "Cloud" }) {
+                    Text("Cloud", Modifier.padding(12.dp))
+                }
+                Tab(selected = storageMode == "NAS", onClick = { storageMode = "NAS" }) {
+                    Text("NAS", Modifier.padding(12.dp))
+                }
+                Tab(selected = storageMode == "Root", onClick = { storageMode = "Root" }) {
+                    Text("Root", Modifier.padding(12.dp))
+                }
+            }
+
             if (title == "Storage Cleaner") {
                 StorageCleanerHeader()
             }
 
             Text(
-                text = "Path: ${currentDir.absolutePath.replace(context.applicationInfo.dataDir, "")}",
+                text = if (storageMode == "Local") "Path: ${currentDir.absolutePath.replace(context.applicationInfo.dataDir, "")}" else "$storageMode Storage",
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.primary
             )
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(fileItems) { item ->
-                    ListItem(
-                        headlineContent = { Text(item.name) },
-                        supportingContent = { if (!item.isDirectory) Text(item.size) },
-                        leadingContent = {
-                            Icon(
-                                if (item.isDirectory) Icons.Default.Folder else Icons.Default.Description,
-                                contentDescription = null,
-                                tint = if (item.isDirectory) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
-                            )
-                        },
-                        trailingContent = {
-                            Row {
-                                IconButton(onClick = {
+            Box(modifier = Modifier.weight(1f)) {
+                when (storageMode) {
+                    "Cloud" -> CloudStorageView()
+                    "NAS" -> NASStorageView()
+                    "Root" -> {
+                        if (!isRootEnabled) {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Icon(Icons.Default.Security, null, Modifier.size(64.dp), tint = MaterialTheme.colorScheme.error)
+                                    Spacer(Modifier.height(16.dp))
+                                    Text("Root Access Required", style = MaterialTheme.typography.titleMedium)
+                                    Button(onClick = { isRootEnabled = true }, Modifier.padding(16.dp)) {
+                                        Text("Grant Permission")
+                                    }
+                                }
+                            }
+                        } else {
+                            Text("Root filesystem mounted.", modifier = Modifier.padding(16.dp))
+                        }
+                    }
+                    else -> {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            items(fileItems) { item ->
+                                FileItemRow(item, onRename = {
                                     showRenameDialog = item.file
                                     newFileName = item.name
-                                }) {
-                                    Icon(Icons.Default.Edit, contentDescription = "Rename", modifier = Modifier.size(20.dp))
-                                }
-                                IconButton(onClick = {
+                                }, onDelete = {
                                     item.file?.delete()
                                     refreshFiles()
-                                }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Delete", modifier = Modifier.size(20.dp))
-                                }
-                            }
-                        },
-                        modifier = Modifier.clickable {
-                            if (item.isDirectory && item.file != null) {
-                                currentDir = item.file
+                                }, onClick = {
+                                    if (item.isDirectory && item.file != null) {
+                                        currentDir = item.file
+                                    }
+                                })
                             }
                         }
-                    )
+                    }
                 }
             }
         }
@@ -141,6 +171,85 @@ fun FileToolScreen(navController: NavHostController, title: String) {
                     }
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun FileItemRow(item: FileItem, onRename: () -> Unit, onDelete: () -> Unit, onClick: () -> Unit) {
+    ListItem(
+        headlineContent = { Text(item.name) },
+        supportingContent = { if (!item.isDirectory) Text(item.size) },
+        leadingContent = {
+            Icon(
+                if (item.isDirectory) Icons.Default.Folder else Icons.Default.Description,
+                contentDescription = null,
+                tint = if (item.isDirectory) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+            )
+        },
+        trailingContent = {
+            Row {
+                IconButton(onClick = onRename) {
+                    Icon(Icons.Default.Edit, contentDescription = "Rename", modifier = Modifier.size(20.dp))
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete", modifier = Modifier.size(20.dp))
+                }
+            }
+        },
+        modifier = Modifier.clickable { onClick() }
+    )
+}
+
+@Composable
+fun CloudStorageView() {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Connected Accounts", style = MaterialTheme.typography.titleSmall)
+        Spacer(Modifier.height(8.dp))
+        CloudAccountItem("Google Drive", "active", Icons.Default.CloudQueue)
+        CloudAccountItem("OneDrive", "not connected", Icons.Default.CloudOff)
+        CloudAccountItem("Mega.nz", "not connected", Icons.Default.Lock)
+
+        Spacer(Modifier.height(24.dp))
+        Button(onClick = {}, Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.Add, null)
+            Spacer(Modifier.width(8.dp))
+            Text("Add Cloud Provider")
+        }
+    }
+}
+
+@Composable
+fun CloudAccountItem(name: String, status: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+    Card(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+        ListItem(
+            headlineContent = { Text(name) },
+            supportingContent = { Text(status) },
+            leadingContent = { Icon(icon, null) },
+            trailingContent = { Icon(Icons.Default.ChevronRight, null) }
+        )
+    }
+}
+
+@Composable
+fun NASStorageView() {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Network Shares", style = MaterialTheme.typography.titleSmall)
+        Spacer(Modifier.height(16.dp))
+        OutlinedCard(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp)) {
+                Text("Scan for devices on local network", style = MaterialTheme.typography.bodyMedium)
+                Button(onClick = {}, Modifier.padding(top = 8.dp)) {
+                    Text("Scan Network")
+                }
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        Text("Manual Connection", style = MaterialTheme.typography.titleSmall)
+        Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = {}, Modifier.weight(1f)) { Text("FTP") }
+            Button(onClick = {}, Modifier.weight(1f)) { Text("SMB") }
+            Button(onClick = {}, Modifier.weight(1f)) { Text("SFTP") }
         }
     }
 }

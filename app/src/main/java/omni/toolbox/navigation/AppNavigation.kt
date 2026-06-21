@@ -316,6 +316,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "world_map" -> WorldMapScreen(navController)
         route == "world_clock" -> WorldClockScreen(navController)
         route == "signal_mirror" -> SignalMirrorScreen(navController)
+        route == "survival_guide" -> SurvivalGuideScreen(navController)
+        route == "beacon_nav" -> BeaconNavigationScreen(navController)
         route == "packing_list" -> PackingListScreen(navController)
 
         route == "url_encoder" -> UrlEncoderScreen(navController)

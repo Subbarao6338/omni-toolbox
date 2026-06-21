@@ -24,7 +24,12 @@ import omni.toolbox.ui.components.ToolScreen
 @Composable
 fun DialerScreen(navController: NavHostController) {
     var phoneNumber by remember { mutableStateOf("") }
-    val keys = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#")
+    val keys = listOf(
+        "1" to "", "2" to "ABC", "3" to "DEF",
+        "4" to "GHI", "5" to "JKL", "6" to "MNO",
+        "7" to "PQRS", "8" to "TUV", "9" to "WXYZ",
+        "*" to "", "0" to "+", "#" to ""
+    )
 
     ToolScreen(title = "Dialer", onBack = { navController.popBackStack() }) { padding ->
         Column(
@@ -66,10 +71,11 @@ fun DialerScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(keys) { key ->
+                items(keys) { (digit, letters) ->
                     DialerButton(
-                        text = key,
-                        onClick = { phoneNumber += key }
+                        text = digit,
+                        subText = letters,
+                        onClick = { phoneNumber += digit }
                     )
                 }
             }
@@ -94,6 +100,7 @@ fun DialerScreen(navController: NavHostController) {
 @Composable
 fun DialerButton(
     text: String,
+    subText: String,
     onClick: () -> Unit
 ) {
     Surface(
@@ -104,13 +111,24 @@ fun DialerButton(
         color = MaterialTheme.colorScheme.surfaceVariant,
         shape = CircleShape
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
                 text = text,
                 fontSize = 28.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Medium
             )
+            if (subText.isNotEmpty()) {
+                Text(
+                    text = subText,
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
