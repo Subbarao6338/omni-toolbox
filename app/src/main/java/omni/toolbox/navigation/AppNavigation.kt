@@ -220,6 +220,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "media_grabber" -> MediaGrabberScreen(navController, null)
         route == "file_conv" -> FileConverterScreen(navController)
         route == "profile_photo_maker" -> ProfilePhotoMakerScreen(navController)
+        route == "batch_img_pro_v2" -> BatchImageProScreen(navController)
         route == "gradient_gen" -> GradientGeneratorScreen(navController)
 
         route == "periodic_table" -> PeriodicTableScreen(navController)
@@ -317,9 +318,11 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "world_clock" -> WorldClockScreen(navController)
         route == "signal_mirror" -> SignalMirrorScreen(navController)
         route == "weather_forecast" -> WeatherForecastScreen(navController)
+        route == "weather_prediction" -> WeatherPredictionScreen(navController)
         route == "tides" -> TidesScreen(navController)
         route == "survival_guide" -> SurvivalGuideScreen(navController)
         route == "beacon_nav" -> BeaconNavigationScreen(navController)
+        route == "path_tracking" -> PathTrackingScreen(navController)
         route == "packing_list" -> PackingListScreen(navController)
 
         route == "url_encoder" -> UrlEncoderScreen(navController)

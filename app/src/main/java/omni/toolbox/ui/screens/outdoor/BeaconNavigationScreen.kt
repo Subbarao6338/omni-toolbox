@@ -1,13 +1,13 @@
 package omni.toolbox.ui.screens.outdoor
 
+import android.content.Context
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -15,32 +15,43 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import omni.toolbox.data.local.AppDatabase
+import omni.toolbox.data.local.entity.BeaconEntity
 import omni.toolbox.ui.components.ToolScreen
+import omni.toolbox.utils.navigation.GeoUtils
+import kotlinx.coroutines.launch
 import kotlin.math.*
-
-data class Beacon(val name: String, val latitude: Double, val longitude: Double)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeaconNavigationScreen(navController: NavHostController) {
-    var beacons by remember { mutableStateOf(listOf(Beacon("Base Camp", 37.7749, -122.4194))) }
-    var userLocation by remember { mutableStateOf<Location?>(Location("simulated").apply { latitude = 37.7740; longitude = -122.4190 }) }
+    val context = LocalContext.current
+    val db = remember { AppDatabase.getDatabase(context) }
+    val beacons by db.navigationDao().getAllBeacons().collectAsState(initial = emptyList())
+    var userLocation by remember { mutableStateOf<Location?>(null) }
     var showAddBeacon by remember { mutableStateOf(false) }
     var newBeaconName by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
-        while(true) {
-            kotlinx.coroutines.delay(2000)
-            userLocation = Location("simulated").apply {
-                latitude = (userLocation?.latitude ?: 37.7740) + (kotlin.random.Random.nextDouble() - 0.5) * 0.0001
-                longitude = (userLocation?.longitude ?: -122.4190) + (kotlin.random.Random.nextDouble() - 0.5) * 0.0001
+    val scope = rememberCoroutineScope()
+
+    DisposableEffect(context) {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                userLocation = location
             }
+        }
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 1f, listener)
+        } catch (e: SecurityException) {}
+
+        onDispose {
+            locationManager.removeUpdates(listener)
         }
     }
 
@@ -70,8 +81,8 @@ fun BeaconNavigationScreen(navController: NavHostController) {
 
             LazyColumn(modifier = Modifier.weight(1f)) {
                 items(beacons) { beacon ->
-                    val distance = userLocation?.let { calculateDistance(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
-                    val bearing = userLocation?.let { calculateBearing(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
+                    val distance = userLocation?.let { GeoUtils.calculateDistance(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
+                    val bearing = userLocation?.let { GeoUtils.calculateBearing(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
 
                     Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                         ListItem(
@@ -81,7 +92,9 @@ fun BeaconNavigationScreen(navController: NavHostController) {
                             },
                             leadingContent = { Icon(Icons.Default.Place, null, tint = MaterialTheme.colorScheme.primary) },
                             trailingContent = {
-                                IconButton(onClick = { beacons = beacons.filter { it != beacon } }) {
+                                IconButton(onClick = {
+                                    scope.launch { db.navigationDao().deleteBeacon(beacon) }
+                                }) {
                                     Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.error)
                                 }
                             }
@@ -103,7 +116,13 @@ fun BeaconNavigationScreen(navController: NavHostController) {
                 },
                 confirmButton = {
                     Button(onClick = {
-                        beacons = beacons + Beacon(newBeaconName, userLocation?.latitude ?: 0.0, userLocation?.longitude ?: 0.0)
+                        scope.launch {
+                            db.navigationDao().insertBeacon(BeaconEntity(
+                                name = newBeaconName,
+                                latitude = userLocation?.latitude ?: 0.0,
+                                longitude = userLocation?.longitude ?: 0.0
+                            ))
+                        }
                         newBeaconName = ""
                         showAddBeacon = false
                     }) { Text("Save") }
@@ -114,7 +133,7 @@ fun BeaconNavigationScreen(navController: NavHostController) {
 }
 
 @Composable
-fun NavigationRadar(beacons: List<Beacon>, userLocation: Location?) {
+fun NavigationRadar(beacons: List<BeaconEntity>, userLocation: Location?) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val secondaryColor = MaterialTheme.colorScheme.secondary
 
@@ -133,8 +152,8 @@ fun NavigationRadar(beacons: List<Beacon>, userLocation: Location?) {
 
         // Draw beacons
         beacons.forEach { beacon ->
-            val bearing = userLocation?.let { calculateBearing(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
-            val distance = userLocation?.let { calculateDistance(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
+            val bearing = userLocation?.let { GeoUtils.calculateBearing(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
+            val distance = userLocation?.let { GeoUtils.calculateDistance(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
 
             val normDistance = (distance / 1000f).coerceIn(0.1f, 1.0f) * radius
             val angleRad = Math.toRadians((bearing - 90).toDouble())
@@ -150,16 +169,4 @@ fun NavigationRadar(beacons: List<Beacon>, userLocation: Location?) {
         // Draw user
         drawCircle(color = primaryColor, radius = 6f, center = center)
     }
-}
-
-fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
-    val results = FloatArray(1)
-    Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-    return results[0]
-}
-
-fun calculateBearing(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
-    val startLocation = Location("").apply { latitude = lat1; longitude = lon1 }
-    val endLocation = Location("").apply { latitude = lat2; longitude = lon2 }
-    return startLocation.bearingTo(endLocation)
 }

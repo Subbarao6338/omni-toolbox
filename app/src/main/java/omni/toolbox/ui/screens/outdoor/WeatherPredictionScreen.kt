@@ -1,0 +1,100 @@
+package omni.toolbox.ui.screens.outdoor
+
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import omni.toolbox.ui.components.ToolScreen
+import kotlin.math.*
+
+@Composable
+fun WeatherPredictionScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+    val pressureSensor = remember { sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) }
+
+    var currentPressure by remember { mutableFloatStateOf(1013.25f) }
+    var pressureHistory by remember { mutableStateOf(mutableListOf<Float>()) }
+
+    DisposableEffect(context) {
+        val listener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent?) {
+                if (event?.sensor?.type == Sensor.TYPE_PRESSURE) {
+                    currentPressure = event.values[0]
+                    if (pressureHistory.isEmpty() || abs(currentPressure - pressureHistory.last()) > 0.1f) {
+                        pressureHistory.add(currentPressure)
+                        if (pressureHistory.size > 50) pressureHistory.removeAt(0)
+                    }
+                }
+            }
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+        }
+        sensorManager.registerListener(listener, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        onDispose {
+            sensorManager.unregisterListener(listener)
+        }
+    }
+
+    val pressureChange = if (pressureHistory.size > 1) currentPressure - pressureHistory.first() else 0f
+
+    val prediction = when {
+        pressureChange < -2.0 -> "Storm Warning"
+        pressureChange < -0.5 -> "Deteriorating"
+        pressureChange > 2.0 -> "Fair Weather"
+        pressureChange > 0.5 -> "Improving"
+        else -> "Steady"
+    }
+
+    ToolScreen(
+        title = "Weather Prediction",
+        onBack = { navController.popBackStack() }
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+            if (pressureSensor == null) {
+                Text("Barometer sensor not detected on this device.", color = MaterialTheme.colorScheme.error)
+            }
+
+            Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Current Pressure", style = MaterialTheme.typography.labelLarge)
+                    Text("${String.format("%.2f", currentPressure)} hPa", style = MaterialTheme.typography.headlineMedium)
+                }
+            }
+
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Forecast", style = MaterialTheme.typography.labelLarge)
+                    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = when(prediction) {
+                                "Storm Warning" -> Icons.Default.Warning
+                                "Fair Weather" -> Icons.Default.WbSunny
+                                else -> Icons.Default.Cloud
+                            },
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(prediction, style = MaterialTheme.typography.headlineSmall)
+                    }
+                    Text(
+                        "Based on ${String.format("%.2f", pressureChange)} hPa change since start.",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+        }
+    }
+}

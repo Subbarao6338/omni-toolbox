@@ -1,151 +1,59 @@
-# Gap Analysis Summary
+# Gap Analysis & Integration Plan
 
-## youtube-main
-Package: .com.ntube
-Features identified:
+## 1. Trail Sense (tools-main)
+**Target:** Outdoor/Navigation/Environment Category
+- [Missing] Beacon Navigation (Radar-style UI, proximity alerts). *Main app has a screen but needs the full logic.*
+- [Missing] Path Tracking (Breadcrumbs, backtracking, retrace steps).
+- [Missing] Weather Prediction (Barometric trend analysis, storm alerts).
+- [Missing] Sighting Compass & Clinometer (AR/Camera integration).
+- [Existing] Flashlight, SOS, QR Scanner.
 
+## 2. Image Toolbox (ImageTools-master)
+**Target:** Media/Image Category
+- [Missing] Batch Processing (Filters, scaling, cropping, rotation in one workflow).
+- [Missing] Advanced Filters (Saturation, Contrast, Brightness, Exposure, RGB, Hue, White Balance, etc. - ~20 filters).
+- [Missing] Format Conversion (JPEG, PNG, WEBP, AVIF, JXL).
+- [Missing] EXIF Editing (Batch edit/remove metadata).
+- [Missing] Palette Extraction (Extract colors from images).
 
-## nature-docs-main
-Package: Unknown
-Features identified:
-- [Missing] Multi-source support
-- [Missing] Multi-account support
-- [Missing] Integrated Viewers
-- [Missing] PDF (via `react-pdf`)
-- [Missing] Markdown (via `markdown-it`)
-- [Missing] HTML (direct rendering)
-- [Missing] Modern UI
-- [Missing] Vercel Ready
+## 3. Material Files (MaterialFiles-master)
+**Target:** Documents Category (File Explorer)
+- [Missing] NAS Support (SMB, SFTP, WebDAV, FTP).
+- [Missing] Archive Management (Extract/Create 7z, Tar, Gzip, Bzip2).
+- [Missing] Root File Access support.
+- [Missing] Linux-aware features (Symlinks, permissions).
 
+## 4. YT Pro (YT-main)
+**Target:** Media/Web Category
+- [Missing] Integrated Downloader (Support for multiple formats/resolutions).
+- [Missing] Gemini Video Summarization (Extract captions and summarize).
+- [Missing] Muxing (In-built video/audio muxing for high-res downloads).
+- [Missing] PiP & Gesture Controls for playback.
 
-## omni-toolbox(1)
-Package: .com.example
-Features identified:
+## 5. DocTools (Doctools-main)
+**Target:** Documents Category (PDF Toolkit)
+- [Missing] PDF Protection (Password encrypt/decrypt).
+- [Missing] Rearrange/Rotate/Remove Pages.
+- [Missing] PDF to Images (Export pages as high-res images).
+- [Missing] Repair corrupted PDFs.
 
+## 6. Notion Ingestion Engine (to-notion-main)
+**Target:** Documents/Web Category (Docs Crawler)
+- [Missing] Recursive Folder Scanning (Upload whole directory trees).
+- [Missing] Smart Chunking (10-page subpage splitting for Notion).
+- [Missing] Database Property Mapping (Path, Extension).
 
-## MaterialFiles-master
-Package: .com.hierynomus.smbj.share
-Features identified:
-- [Missing] Open source: Lightweight, clean and secure.
-- [Missing] Material Design: Follows Material Design guidelines, with attention into details.
-- [Missing] Breadcrumbs: Navigate in the filesystem with ease.
-- [Missing] Root support: View and manage files with root access.
-- [Missing] Archive support: View, extract and create common compressed files.
-- [Missing] NAS support: View and manage files on FTP, SFTP, SMB and WebDAV servers.
-- [Missing] Themes: Customizable UI colors, plus night mode with optional true black.
-- [Missing] Linux-aware: Like [Nautilus](https://apps.gnome.org/Nautilus/), knows symbolic links, file permissions and SELinux context.
-- [Missing] Robust: Uses Linux system calls under the hood, not yet another [`ls` parser](https://news.ycombinator.com/item?id=7994720).
-- [Missing] Well-implemented: Built upon the right things, including [Java NIO2 File API](https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html) and [LiveData](https://developer.android.com/topic/libraries/architecture/livedata).
+## Required Dependencies to Add:
+- `com.hierynomus:smbj:0.11.5` (SMB)
+- `com.github.mwiede:jsch:0.2.11` (SFTP)
+- `com.tom_roush:pdfbox-android:2.0.27.0` (Already present, but need full usage)
+- `org.apache.commons:commons-compress:1.21` (Archives)
+- `com.github.t8rin:ImageToolbox` (If using as library) or porting the `GPUImage` filters.
+- `com.google.ai.client.generativeai` (Already present)
 
-
-## notionmail-main
-Package: .com.nmail.app
-Features identified:
-
-
-## tools-main
-Package: .com.kylecorry.trail_sense.settings
-Features identified:
-- [Existing] Designed for hiking, backpacking, camping, and geocaching
-- [Missing] Place beacons and navigate to them
-- [Missing] Follow paths
-- [Missing] Retrace your steps with backtrack
-- [Missing] Use a photo as a map
-- [Missing] Plan what to pack
-- [Missing] Be alerted before the sun sets
-- [Missing] Predict the weather
-- [Existing] Use your phone as a flashlight
-- [Missing] [And much more!](https://github.com/kylecorry31/Trail-Sense/wiki/Use-Cases)
-- [Existing] this is used to determine weather forecasts. The last known location is also stored in app preferences to allow faster load times and support app functionality when the GPS can not be reached. The beacons and paths store their location information in a local SQLite database. All of this information is cleared when you clear the app storage or delete it.
-
-
-## omni-toolbox (1)
-Package: .com.example
-Features identified:
-
-
-## mix-main
-Package: .com.nature.files
-Features identified:
-
-
-## to-notion-main
-Package: Unknown
-Features identified:
-- [Existing] Multi-Source Scraping
-- [Missing] Recursive Folder Scanning
-- [Missing] Advanced File Support
-- [Missing] Smart Chunking
-- [Missing] Database Integration
-- [Missing] Dynamic Translation
-
-
-## toolhub-main
-Package: Unknown
-Features identified:
-
-
-## projects-main
-Package: Unknown
-Features identified:
-
-
-## ImageTools-master
-Package: .com.t8rin.imagetoolbox.app.presentation
-Features identified:
-
-
-## social-main
-Package: .com.nsocial.app
-Features identified:
-
-
-## remix_-omni-toolbox
-Package: .com.example
-Features identified:
-
-
-## omni-toolbox
-Package: .com.example
-Features identified:
-
-
-## nature-dailer-main
-Package: .com.example.naturedialer
-Features identified:
-
-
-## nature-toolbox-main
-Package: Unknown
-Features identified:
-
-
-## astron_yt-main
-Package: .cc.astron.db
-Features identified:
-
-
-## YT-main
-Package: .com.google.android.youtube.pro
-Features identified:
-
-
-## nature-toolbox
-Package: Unknown
-Features identified:
-
-
-## nature-messages-main
-Package: Unknown
-Features identified:
-
-
-## Doctools-main
-Package: .com.nature.docs
-Features identified:
-- [Existing] Merge & Split PDFs
-- [Missing] Password protect your PDFs
-- [Existing] Convert Images to PDF
-- [Missing] Export PDF pages as Images (ZIP)
-- [Missing] Rotate and rearrange pages
-- [Missing] And more!
+## Required Permissions:
+- `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `ACCESS_BACKGROUND_LOCATION` (Trail Sense)
+- `ACTIVITY_RECOGNITION` (Pedometer)
+- `CAMERA` (QR, Sighting Compass)
+- `POST_NOTIFICATIONS` (Alerts)
+- `INTERNET` (NAS, Gemini, Downloader)

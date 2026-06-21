@@ -34,7 +34,7 @@ object ToolProvider {
             subToolRoutes = listOf("frame_grabber", "m_video_to_audio", "mix_video_audio", "vid_annotator", "vid_edit_pro", "vid_thumb", "video_compress", "video_delete", "video_flip", "video_loop", "video_reverse", "video_sfx", "video_silence", "video_speed_changer", "video_splitter", "video_stabilizer", "video_to_gif", "video_trim", "video_volume_booster", "digital_magnifier", "mirror_tool", "video_merger")),
         Tool("Image Tools", Icons.Default.PhotoLibrary, "image_tools_group", "Media", Color(0xFF2196F3),
             description = "Image editing and optimization tools.",
-            subToolRoutes = listOf("batch_img_pro", "exif_viewer", "image_ai_tools", "image_base64", "image_bg_remover", "image_collage", "image_color_picker", "image_compare", "image_crop", "image_cutting", "image_delete_exif", "image_draw", "image_draw_bg", "image_edit_exif", "image_filter", "image_format_conv", "image_layers_bg", "image_layers_img", "image_mask_filter", "image_noise_gen", "image_ocr", "image_open_project", "image_palette", "image_preview", "image_resize_conv", "image_resize_limits", "image_resize_weight", "image_single_edit", "image_stacking", "image_stitching", "image_to_svg", "image_to_webp", "image_wallpapers", "image_watermark", "image_web_load", "multi_crop", "multi_image_resize", "pixel_art", "profile_photo_maker", "webp_to_images", "file_conv")),
+            subToolRoutes = listOf("batch_img_pro_v2", "exif_viewer", "image_ai_tools", "image_base64", "image_bg_remover", "image_collage", "image_color_picker", "image_compare", "image_crop", "image_cutting", "image_delete_exif", "image_draw", "image_draw_bg", "image_edit_exif", "image_filter", "image_format_conv", "image_layers_bg", "image_layers_img", "image_mask_filter", "image_noise_gen", "image_ocr", "image_open_project", "image_palette", "image_preview", "image_resize_conv", "image_resize_limits", "image_resize_weight", "image_single_edit", "image_stacking", "image_stitching", "image_to_svg", "image_to_webp", "image_wallpapers", "image_watermark", "image_web_load", "multi_crop", "multi_image_resize", "pixel_art", "profile_photo_maker", "webp_to_images", "file_conv")),
         Tool("GIF & Animation", Icons.Default.Animation, "gif_tools_group", "Media", Color(0xFF9C27B0),
             description = "Tools for GIF, APNG and JXL animations.",
             subToolRoutes = listOf("apng_to_images", "apng_to_jxl", "gif_to_images", "gif_to_jxl", "gif_to_webp", "image_to_apng", "images_to_apng", "images_to_gif", "images_to_jxl", "jpeg_to_jxl", "jxl_to_images", "jxl_to_jpeg")),
@@ -147,12 +147,12 @@ object ToolProvider {
         // WEATHER
         Tool("Weather Center", Icons.Default.Cloud, "weather_group", "Weather", Color(0xFF03A9F4),
             description = "Forecasts and environment data.",
-            subToolRoutes = listOf("air_quality", "light_pollution", "moon_phase", "rain_radar", "uv_index", "weather_forecast")),
+            subToolRoutes = listOf("air_quality", "light_pollution", "moon_phase", "rain_radar", "uv_index", "weather_forecast", "weather_prediction")),
 
         // TRAVEL
         Tool("Travel & Adventure", Icons.Default.Landscape, "outdoor_group", "Travel", Color(0xFF8BC34A),
             description = "Essential tools for explorers.",
-            subToolRoutes = listOf("survival_guide", "beacon_nav", "altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "packing_list", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
+            subToolRoutes = listOf("survival_guide", "beacon_nav", "path_tracking", "altitude_graph", "area_calc", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "packing_list", "route_planner", "signal_mirror", "sos", "travel_budget", "world_clock", "world_map")),
 
         // DEVELOPER
         Tool("Dev Expert", Icons.Default.Code, "dev_group", "Developer", Color(0xFF3F51B5),
@@ -634,6 +634,10 @@ object ToolProvider {
         Tool("Bio Linker", Icons.Default.Link, "bio_linker", "Social", isVisibleOnHome = false, isSubTool = true),
         Tool("Profile Photo Maker", Icons.Default.AccountCircle, "profile_photo_maker", "Social", isVisibleOnHome = false, isSubTool = true),
         Tool("Social Preview", Icons.Default.Share, "social_preview", "Social", isVisibleOnHome = false, isSubTool = true),
+
+        Tool("Path Tracking", Icons.Default.Route, "path_tracking", "Travel", isVisibleOnHome = false, isSubTool = true),
+        Tool("Weather Prediction", Icons.Default.Cloud, "weather_prediction", "Weather", isVisibleOnHome = false, isSubTool = true),
+        Tool("Batch Image Pro", Icons.Default.Collections, "batch_img_pro_v2", "Media", isVisibleOnHome = false, isSubTool = true),
 
         Tool("PDF to MDX", Icons.Default.Description, "pdf_to_mdx", "Documents", isVisibleOnHome = false, isSubTool = true),
         Tool("PDF to MHTML", Icons.Default.Html, "pdf_to_mhtml", "Documents", isVisibleOnHome = false, isSubTool = true),
