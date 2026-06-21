@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
+import kotlinx.coroutines.launch
 import java.io.File
 
 data class FileItem(val name: String, val isDirectory: Boolean, val size: String = "", val file: File? = null)
@@ -26,8 +27,10 @@ fun FileToolScreen(navController: NavHostController, title: String) {
     var fileItems by remember { mutableStateOf(listOf<FileItem>()) }
     var showRenameDialog by remember { mutableStateOf<File?>(null) }
     var newFileName by remember { mutableStateOf("") }
-    var storageMode by remember { mutableStateOf("Local") } // Local, Cloud, NAS, Root
+    var storageMode by remember { mutableStateOf("Local") }
     var isRootEnabled by remember { mutableStateOf(false) }
+
+    val scope = rememberCoroutineScope()
 
     fun refreshFiles() {
         val files = currentDir.listFiles()?.toList() ?: emptyList()
@@ -104,7 +107,17 @@ fun FileToolScreen(navController: NavHostController, title: String) {
             Box(modifier = Modifier.weight(1f)) {
                 when (storageMode) {
                     "Cloud" -> CloudStorageView()
-                    "NAS" -> NASStorageView()
+                    "NAS" -> NASStorageView { server, share, user, pass, path ->
+                        scope.launch {
+                            val dest = File(context.cacheDir, "smb_download_${System.currentTimeMillis()}.tmp")
+                            val success = NASManager.connectSMB(context, server, share, user, pass, path, dest)
+                            if (success) {
+                                android.widget.Toast.makeText(context, "Downloaded to ${dest.name}", android.widget.Toast.LENGTH_LONG).show()
+                            } else {
+                                android.widget.Toast.makeText(context, "SMB Connection Failed", android.widget.Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                     "Root" -> {
                         if (!isRootEnabled) {
                             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -232,24 +245,27 @@ fun CloudAccountItem(name: String, status: String, icon: androidx.compose.ui.gra
 }
 
 @Composable
-fun NASStorageView() {
+fun NASStorageView(onConnect: (String, String, String, String, String) -> Unit) {
+    var server by remember { mutableStateOf("192.168.1.100") }
+    var share by remember { mutableStateOf("Public") }
+    var user by remember { mutableStateOf("guest") }
+    var pass by remember { mutableStateOf("") }
+    var path by remember { mutableStateOf("test.txt") }
+
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Network Shares", style = MaterialTheme.typography.titleSmall)
+        Text("Manual SMB Connection", style = MaterialTheme.typography.titleSmall)
         Spacer(Modifier.height(16.dp))
-        OutlinedCard(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp)) {
-                Text("Scan for devices on local network", style = MaterialTheme.typography.bodyMedium)
-                Button(onClick = {}, Modifier.padding(top = 8.dp)) {
-                    Text("Scan Network")
-                }
-            }
-        }
-        Spacer(Modifier.height(16.dp))
-        Text("Manual Connection", style = MaterialTheme.typography.titleSmall)
-        Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = {}, Modifier.weight(1f)) { Text("FTP") }
-            Button(onClick = {}, Modifier.weight(1f)) { Text("SMB") }
-            Button(onClick = {}, Modifier.weight(1f)) { Text("SFTP") }
+        OutlinedTextField(value = server, onValueChange = { server = it }, label = { Text("Server IP") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = share, onValueChange = { share = it }, label = { Text("Share Name") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = user, onValueChange = { user = it }, label = { Text("Username") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = pass, onValueChange = { pass = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth(), visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation())
+        OutlinedTextField(value = path, onValueChange = { path = it }, label = { Text("Remote Path") }, modifier = Modifier.fillMaxWidth())
+
+        Button(
+            onClick = { onConnect(server, share, user, pass, path) },
+            modifier = Modifier.padding(top = 16.dp).fillMaxWidth()
+        ) {
+            Text("Connect & Download")
         }
     }
 }

@@ -118,6 +118,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 
+    // Additional dependencies for ported features
+    implementation("com.hierynomus:smbj:0.11.5")
+    implementation("com.github.mwiede:jsch:0.2.11")
+    implementation("org.apache.commons:commons-compress:1.21")
+    implementation("androidx.media3:media3-exoplayer:1.2.1")
+    implementation("androidx.media3:media3-ui:1.2.1")
+    implementation("androidx.media3:media3-session:1.2.1")
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
     val cameraxVersion = "1.3.1"
     implementation("androidx.camera:camera-core:$cameraxVersion")
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
