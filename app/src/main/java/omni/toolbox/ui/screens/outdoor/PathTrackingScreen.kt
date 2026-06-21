@@ -68,7 +68,7 @@ fun PathTrackingScreen(navController: NavHostController) {
                         val intent = Intent(context, PathTrackingService::class.java).apply {
                             putExtra("pathId", id)
                         }
-                        context.startForegroundService(intent)
+                        ContextCompat.startForegroundService(context, intent)
                         isTracking = true
                     } else {
                         context.stopService(Intent(context, PathTrackingService::class.java))
