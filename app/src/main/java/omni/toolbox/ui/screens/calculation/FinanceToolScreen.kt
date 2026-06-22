@@ -40,8 +40,12 @@ fun FinanceToolScreen(navController: NavHostController, title: String) {
                 "Salary Calc" -> SalaryCalculator()
                 "Stock Profit" -> StockProfitCalculator()
                 "Expense Tracker" -> ExpenseTracker()
-                "CAGR Calculator" -> CagrCalculator()
-                "DCF Calculator" -> DcfCalculator()
+                "CAGR Calculator", "CAGR Calc" -> CagrCalculator()
+                "DCF Calculator", "DCF Calc" -> DcfCalculator()
+                "Coin Tracker" -> CoinTracker()
+                "NFT Viewer" -> NftViewer()
+                "Currency Trends" -> CurrencyTrends()
+                "Wallet Explorer" -> WalletExplorer()
                 else -> Text("Finance Utility for $title")
             }
         }
@@ -423,6 +427,58 @@ fun UnitPriceCalculator() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CoinTracker() {
+    val coins = remember { listOf("Bitcoin" to 65432.10, "Ethereum" to 3456.78, "Solana" to 145.67, "Cardano" to 0.45) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Market Prices (Live-sim)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        coins.forEach { (name, price) ->
+            ListItem(
+                headlineContent = { Text(name) },
+                trailingContent = { Text("$${"%,.2f".format(price)}") },
+                leadingContent = { Icon(androidx.compose.material.icons.Icons.Default.MonetizationOn, null) }
+            )
+        }
+    }
+}
+
+@Composable
+fun NftViewer() {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("NFT Portfolio", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(32.dp))
+        Icon(androidx.compose.material.icons.Icons.Default.Token, null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.secondary)
+        Text("Connect wallet to view your digital collectibles.")
+        Button(onClick = {}, Modifier.padding(16.dp)) { Text("Connect Wallet") }
+    }
+}
+
+@Composable
+fun CurrencyTrends() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Currency Trends (24h)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        listOf("USD/EUR" to "+0.25%", "GBP/USD" to "-0.12%", "USD/JPY" to "+0.45%").forEach { (pair, trend) ->
+            ListItem(
+                headlineContent = { Text(pair) },
+                trailingContent = { Text(trend, color = if (trend.startsWith("+")) Color.Green else Color.Red) }
+            )
+        }
+    }
+}
+
+@Composable
+fun WalletExplorer() {
+    var address by remember { mutableStateOf("") }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Blockchain Explorer", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Wallet Address") }, modifier = Modifier.fillMaxWidth())
+        Button(onClick = {}, Modifier.fillMaxWidth().padding(top = 8.dp)) { Text("Explore Transactions") }
     }
 }
 

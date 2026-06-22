@@ -45,16 +45,54 @@ fun EnvironmentToolScreen(navController: NavHostController, title: String) {
             when (title) {
                 "Air Quality" -> {
                     Text("Current Air Quality Index (AQI)", style = MaterialTheme.typography.titleMedium)
-                    Text("42", style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.primary)
+                    Text("${(20..150).random()}", style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.primary)
                     Text("Status: Good", style = MaterialTheme.typography.bodyLarge)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(16.dp)) {
+                            Text("PM2.5: 12.4 µg/m³")
+                            Text("PM10: 21.0 µg/m³")
+                            Text("NO2: 8.5 ppb")
+                        }
+                    }
                     Spacer(modifier = Modifier.height(24.dp))
                     AdjustmentSlider("Sensor Sensitivity", initialValue = 0.8f)
                 }
                 "UV Index" -> {
+                    val uv = (0..11).random()
                     Text("Current UV Radiation Level", style = MaterialTheme.typography.titleMedium)
-                    Text("Low (2)", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
+                    Text(if (uv < 3) "Low ($uv)" else if (uv < 6) "Moderate ($uv)" else "High ($uv)", style = MaterialTheme.typography.displaySmall, color = if (uv > 5) Color.Red else MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(24.dp))
-                    Text("Sun protection is generally not needed.", style = MaterialTheme.typography.bodyMedium)
+                    Text(if (uv < 3) "Sun protection is generally not needed." else "Wear sunscreen and seek shade.", style = MaterialTheme.typography.bodyMedium)
+                }
+                "Rain Radar" -> {
+                    Text("Local Precipitation Map", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Box(modifier = Modifier.fillMaxWidth().height(200.dp).background(Color.DarkGray, RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) {
+                        Text("📡 Radar Stream Active", color = Color.Green)
+                    }
+                    Text("No significant rain detected in your 50km radius.", modifier = Modifier.padding(16.dp))
+                }
+                "Moon Phase" -> {
+                    Text("Lunar Cycle", style = MaterialTheme.typography.titleMedium)
+                    Text("Waxing Gibbous", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.secondary)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Icon(androidx.compose.material.icons.Icons.Default.Brightness3, null, modifier = Modifier.size(80.dp))
+                    Text("Illumination: 78%", modifier = Modifier.padding(top = 16.dp))
+                    Text("Next Full Moon: 4 days")
+                }
+                "Tides" -> {
+                    Text("Tidal Information", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    listOf("High Tide" to "04:12 AM (1.8m)", "Low Tide" to "10:45 AM (0.2m)", "High Tide " to "04:56 PM (1.6m)").forEach { (t, time) ->
+                         ListItem(headlineContent = { Text(t) }, trailingContent = { Text(time) })
+                    }
+                }
+                "Light Pollution" -> {
+                    Text("Bortle Scale Class", style = MaterialTheme.typography.titleMedium)
+                    Text("Class 4", style = MaterialTheme.typography.displaySmall, color = Color.Yellow)
+                    Text("Rural/Suburban Transition Sky", style = MaterialTheme.typography.bodyLarge)
+                    Text("SQM: 20.45 mag/arcsec²", modifier = Modifier.padding(top = 8.dp))
                 }
                 "Weather Forecast", "weather_forecast" -> {
                     Text("Barometric Pressure Trend", style = MaterialTheme.typography.titleMedium)

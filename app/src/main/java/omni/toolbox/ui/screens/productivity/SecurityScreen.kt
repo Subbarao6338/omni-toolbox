@@ -30,12 +30,12 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 
 @Composable
-fun SecurityScreen(navController: NavHostController) {
+fun SecurityScreen(navController: NavHostController, title: String = "Security Vault") {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Encryption", "Password Gen", "QR Studio")
 
     ToolScreen(
-        title = "Cryptographic Security Suite",
+        title = title,
         onBack = { navController.popBackStack() }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
