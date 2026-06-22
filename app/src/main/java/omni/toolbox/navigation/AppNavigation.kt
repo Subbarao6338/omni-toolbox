@@ -252,7 +252,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "mortgage_calc" -> MortgageCalculatorScreen(navController)
         route == "sci_calc" -> ScientificCalculatorScreen(navController)
         route == "tiles_widgets" -> TilesAndWidgetsScreen(navController)
-        route == "panchangam" -> PanchangamScreen(navController)
+        route == "panchangam" -> TeluguPanchangamScreen(navController, omniViewModel)
         route == "ruler" -> RulerScreen(navController)
         route == "protractor" -> ProtractorScreen(navController)
         route == "zodiac" -> ZodiacFinderScreen(navController)

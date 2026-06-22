@@ -40,6 +40,7 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
     var useExternalDownloader by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
 
     LaunchedEffect(urlToLoad, webView) {
         if (urlToLoad.isNotEmpty() && webView != null) {
@@ -122,23 +123,23 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                 }
             }
 
-                if (url.contains("youtube.com") || url.contains("youtu.be")) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            val intent = Intent(context, omni.toolbox.service.YoutubeForegroundService::class.java).apply {
-                                putExtra("videoUrl", url)
-                            }
-                            context.startService(intent)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                    ) {
-                        Icon(Icons.Default.PlayArrow, null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Play in Background")
-                    }
+            if (urlToLoad.contains("youtube.com") || urlToLoad.contains("youtu.be")) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {
+                        val intent = Intent(context, omni.toolbox.service.YoutubeForegroundService::class.java).apply {
+                            putExtra("videoUrl", urlToLoad)
+                        }
+                        context.startService(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Icon(Icons.Default.PlayArrow, null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Play in Background")
                 }
+            }
 
             if (isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())

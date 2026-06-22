@@ -14,10 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
+import omni.toolbox.data.remote.NASManager
+import omni.toolbox.model.common.FileItem
 import kotlinx.coroutines.launch
 import java.io.File
-
-data class FileItem(val name: String, val isDirectory: Boolean, val size: String = "", val file: File? = null)
 
 @Composable
 fun FileToolScreen(navController: NavHostController, title: String) {
