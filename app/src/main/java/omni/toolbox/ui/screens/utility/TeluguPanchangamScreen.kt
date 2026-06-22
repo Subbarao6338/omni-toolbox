@@ -1,6 +1,7 @@
 package omni.toolbox.ui.screens.utility
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,16 +39,17 @@ fun TeluguPanchangamScreen(
 ) {
     val context = LocalContext.current
 
-    var selectedDate by remember { mutableStateOf(Date()) }
+    var selectedDate by remember { mutableStateOf(Calendar.getInstance().time) }
     var showExplanationDialog by remember { mutableStateOf(false) }
 
     val formattedGregorianDate = remember(selectedDate) {
-        val df = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+        val df = SimpleDateFormat("EEEE, d MMMM yyyy, hh:mm a", Locale.getDefault())
         df.format(selectedDate)
     }
 
     val panchangResult = remember(selectedDate) {
-        calculatePanchangam(selectedDate)
+        val localDateTime = java.time.LocalDateTime.ofInstant(selectedDate.toInstant(), java.time.ZoneId.systemDefault())
+        omni.toolbox.utils.PanchangamLogic.getPanchangam(localDateTime)
     }
 
     val goldHeaderGrad = Brush.horizontalGradient(
@@ -113,29 +115,61 @@ fun TeluguPanchangamScreen(
                                     textAlign = TextAlign.Center
                                 )
                                 Spacer(modifier = Modifier.height(14.dp))
-                                Button(
-                                    onClick = {
-                                        val c = Calendar.getInstance().apply { time = selectedDate }
-                                        DatePickerDialog(
-                                            context,
-                                            { _, y, m, d ->
-                                                c.set(y, m, d)
-                                                selectedDate = c.time
-                                            },
-                                            c.get(Calendar.YEAR),
-                                            c.get(Calendar.MONTH),
-                                            c.get(Calendar.DAY_OF_MONTH)
-                                        ).show()
-                                    },
-                                    shape = RoundedCornerShape(12.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color.White,
-                                        contentColor = Color(0xFFE65100)
-                                    )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = null, modifier = Modifier.size(16.dp))
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text("SELECT DATE", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                    Button(
+                                        onClick = {
+                                            val c = Calendar.getInstance().apply { time = selectedDate }
+                                            DatePickerDialog(
+                                                context,
+                                                { _, y, m, d ->
+                                                    c.set(Calendar.YEAR, y)
+                                                    c.set(Calendar.MONTH, m)
+                                                    c.set(Calendar.DAY_OF_MONTH, d)
+                                                    selectedDate = c.time
+                                                },
+                                                c.get(Calendar.YEAR),
+                                                c.get(Calendar.MONTH),
+                                                c.get(Calendar.DAY_OF_MONTH)
+                                            ).show()
+                                        },
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color.White,
+                                            contentColor = Color(0xFFE65100)
+                                        )
+                                    ) {
+                                        Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text("DATE", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                    }
+
+                                    Button(
+                                        onClick = {
+                                            val c = Calendar.getInstance().apply { time = selectedDate }
+                                            TimePickerDialog(
+                                                context,
+                                                { _, h, m ->
+                                                    c.set(Calendar.HOUR_OF_DAY, h)
+                                                    c.set(Calendar.MINUTE, m)
+                                                    selectedDate = c.time
+                                                },
+                                                c.get(Calendar.HOUR_OF_DAY),
+                                                c.get(Calendar.MINUTE),
+                                                false
+                                            ).show()
+                                        },
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color.White,
+                                            contentColor = Color(0xFFE65100)
+                                        )
+                                    ) {
+                                        Icon(imageVector = Icons.Default.AccessTime, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text("TIME", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                    }
                                 }
                             }
                         }
@@ -216,7 +250,7 @@ fun TeluguPanchangamScreen(
 }
 
 @Composable
-fun TeluguYearBanner(panchang: PanchangData) {
+fun TeluguYearBanner(panchang: omni.toolbox.utils.PanchangamDetails) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
@@ -249,14 +283,14 @@ fun TeluguYearBanner(panchang: PanchangData) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "${panchang.teluguYearName} నామ సంవత్సరం",
+                    text = panchang.samvatsaram,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color(0xFF4E342E)
                 )
             }
             Text(
-                text = "Dakshinayana \u2022 Rutuvu: Greeshma \u2022 Masamu: Jyeshta",
+                text = "${panchang.ayana} \u2022 Rutuvu: ${panchang.rutu} \u2022 ${panchang.maasam}",
                 fontSize = 11.sp,
                 color = Color(0xFF5D4037)
             )
@@ -265,7 +299,7 @@ fun TeluguYearBanner(panchang: PanchangData) {
 }
 
 @Composable
-fun PanchangGrid(panchang: PanchangData) {
+fun PanchangGrid(panchang: omni.toolbox.utils.PanchangamDetails) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             PanchElementCard(
@@ -277,29 +311,47 @@ fun PanchangGrid(panchang: PanchangData) {
                 modifier = Modifier.weight(1f)
             )
             PanchElementCard(
-                title = "వారం (VARAMU)",
-                value = panchang.varam,
-                desc = "Lord: " + panchang.varamLord,
-                icon = Icons.Default.Brightness5,
+                title = "నక్షత్రం (NAKSHATRA)",
+                value = panchang.nakshatram,
+                desc = "Constellation orbit",
+                icon = Icons.Default.Star,
+                tint = Color(0xFF26A69A),
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            PanchElementCard(
+                title = "యోగం (YOGA)",
+                value = panchang.yoga,
+                desc = "Auspicious index",
+                icon = Icons.Default.TrackChanges,
+                tint = Color(0xFF42A5F5),
+                modifier = Modifier.weight(1f)
+            )
+            PanchElementCard(
+                title = "కరణం (KARANA)",
+                value = panchang.karana,
+                desc = "Lunar half-day",
+                icon = Icons.Default.Grain,
                 tint = Color(0xFFFF7043),
                 modifier = Modifier.weight(1f)
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             PanchElementCard(
-                title = "నక్షత్రం (NAKSHATRA)",
-                value = panchang.nakshatra,
-                desc = "Constellation orbit",
-                icon = Icons.Default.Star,
-                tint = Color(0xFF26A69A),
+                title = "రాశి (RASHI)",
+                value = panchang.raashi,
+                desc = "Moon Sign",
+                icon = Icons.Default.Public,
+                tint = Color(0xFFE65100),
                 modifier = Modifier.weight(1f)
             )
             PanchElementCard(
-                title = "యోగం & కరణం",
-                value = panchang.yoga,
-                desc = "Karana: " + panchang.karana,
-                icon = Icons.Default.TrackChanges,
-                tint = Color(0xFF42A5F5),
+                title = "అదృష్ట (LUCKY)",
+                value = "No: ${panchang.luckyNumber}",
+                desc = "Color: ${panchang.luckyColor}",
+                icon = Icons.Default.AutoAwesome,
+                tint = Color(0xFFFFD600),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -367,7 +419,7 @@ fun PanchElementCard(
 }
 
 @Composable
-fun DurationsPanel(panchang: PanchangData) {
+fun DurationsPanel(panchang: omni.toolbox.utils.PanchangamDetails) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
@@ -383,7 +435,6 @@ fun DurationsPanel(panchang: PanchangData) {
         ) {
             SolarTimeItem(title = "Sunrise", value = panchang.sunrise, icon = Icons.Default.WbSunny, modifier = Modifier.weight(1f))
             SolarTimeItem(title = "Sunset", value = panchang.sunset, icon = Icons.Default.WbTwilight, modifier = Modifier.weight(1f))
-            SolarTimeItem(title = "Abhijith", value = panchang.abhijitLagna, icon = Icons.Default.Timeline, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -407,7 +458,7 @@ fun SolarTimeItem(
 }
 
 @Composable
-fun AlertTimesGrid(panchang: PanchangData) {
+fun AlertTimesGrid(panchang: omni.toolbox.utils.PanchangamDetails) {
     Card(
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
@@ -420,7 +471,11 @@ fun AlertTimesGrid(panchang: PanchangData) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), modifier = Modifier.padding(vertical = 10.dp))
             AlertTimingRow(name = "యమగండం (Yamagandam)", time = panchang.yamagandam, color = Color(0xFFF57C00))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), modifier = Modifier.padding(vertical = 10.dp))
+            AlertTimingRow(name = "గుళికా కాలం (Gulika Kalam)", time = panchang.gulikaKalam, color = Color(0xFF2E7D32))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), modifier = Modifier.padding(vertical = 10.dp))
             AlertTimingRow(name = "దుర్ముహూర్తం (Durmuhurtham)", time = panchang.durmuhurtham, color = Color(0xFF7B1FA2))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f), modifier = Modifier.padding(vertical = 10.dp))
+            AlertTimingRow(name = "బ్రహ్మ ముహూర్తం (Brahma Muhurtham)", time = panchang.brahmaMuhurtham, color = Color(0xFFE65100))
         }
     }
 }
@@ -463,89 +518,3 @@ fun AlertTimingRow(
     }
 }
 
-data class PanchangData(
-    val selectedDate: Date,
-    val teluguYearName: String,
-    val tithi: String,
-    val paksha: String,
-    val varam: String,
-    val varamLord: String,
-    val nakshatra: String,
-    val yoga: String,
-    val karana: String,
-    val sunrise: String,
-    val sunset: String,
-    val abhijitLagna: String,
-    val rahuKalam: String,
-    val yamagandam: String,
-    val durmuhurtham: String
-)
-
-fun calculatePanchangam(date: Date): PanchangData {
-    val cal = Calendar.getInstance().apply { time = date }
-    val year = cal.get(Calendar.YEAR)
-    val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
-
-    val teluguYears = listOf(
-        "Prabhava", "Vibhava", "Shukla", "Pramodoota", "Prajotpatti", "Angirasa", "Shrimukha", "Bhava",
-        "Yuva", "Dhatri", "Eashwara", "Bahudhanya", "Pramadi", "Vikrama", "Vrisha", "Chitrabhanu",
-        "Swabhannu", "Tharana", "Parthiva", "Vyaya", "Sarvajeethu", "Sarvadhari", "Virodhi", "Vikruthi",
-        "Khara", "Nandana", "Vijaya", "Jaya", "Manmadha", "Durmukhi", "Hevilambi", "Vilambi", "Vikari",
-        "Sarvari", "Plava", "Shubhakruthi", "Sobhakruthi", "Krodhi", "Vishvavasu", "Parabhava", "Plavanga",
-        "Keelaka", "Saumya", "Sadharana", "Virodhikruthi", "Paridhavi", "Pramadicha", "Ananda", "Rakshasa",
-        "Nala", "Pingala", "Kalayukthi", "Siddharthi", "Raudra", "Durmathi", "Dundubhi", "Rudhirodgari",
-        "Raktakshi", "Krodhana", "Akshaya"
-    )
-    val baseYear = 2024
-    val baseIndex = 37
-    val yearOffset = year - baseYear
-    val calculatedYearIndex = (baseIndex + yearOffset) % 60
-    val yearName = teluguYears[if (calculatedYearIndex < 0) calculatedYearIndex + 60 else calculatedYearIndex]
-
-    val refCal = Calendar.getInstance().apply { set(2024, Calendar.JANUARY, 11, 12, 0, 0) }
-    val diffMs = date.time - refCal.timeInMillis
-    val actualDays = diffMs.toDouble() / 86400000.0
-    val phaseAge = (actualDays % 29.5305888).let { if (it < 0) it + 29.5305888 else it }
-    val isShukla = phaseAge < 14.765
-    val tithiPercent = if (isShukla) phaseAge / 14.765 else (phaseAge - 14.765) / 14.765
-    val tithiValue = (tithiPercent * 15).toInt().coerceIn(1, 15)
-
-    val pakshaLabel = if (isShukla) "శుక్ల పక్షం" else "కృష్ణ పక్షం"
-    val tithiNames = listOf(
-        "పాడ్యమి", "విదియ", "తదియ", "చవితి", "పంచమి", "షష్టి", "సప్తమి", "అష్టమి",
-        "నవమి", "దశమి", "ఏకాదశి", "ద్వాదశి", "త్రయోదశి", "చతుర్దశి", if (isShukla) "పూర్ణిమ" else "అమావాస్య"
-    )
-    val selectedTithi = tithiNames[tithiValue - 1]
-
-    val varamNames = listOf("", "ఆదివారము", "సోమవారము", "మంగళవారము", "బుధవారము", "గురువారము", "శుక్రవారము", "శనివారము")
-    val varamLords = listOf("", "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
-    val selectedVaram = varamNames[dayOfWeek]
-    val selectedLord = varamLords[dayOfWeek]
-
-    val moonSiderealAge = (actualDays % 27.32166).let { if (it < 0) it + 27.32166 else it }
-    val nakshatramIndex = ((moonSiderealAge / 27.32166) * 27).toInt().coerceIn(0, 26)
-    val nakshatrasList = listOf(
-        "అశ్విని", "భరణి", "కృత్తిక", "రోహిణి", "మృగశిర", "ఆర్ద్ర", "పునర్వసు", "పుష్యమి",
-        "ఆశ్లేష", "మఖ", "పుబ్బ", "ఉత్తర", "హస్త", "చిత్ర", "స్వాతి", "విశాఖ", "అనురాధ",
-        "జ్యేష్ట", "మూల", "పూర్వాషాఢ", "ఉత్తరాషాఢ", "శ్రావణం", "ధనిష్ట", "శతభిషం",
-        "పూర్వాభాద్ర", "ఉత్తరాభాద్ర", "రేవతి"
-    )
-    val selectedNakshatra = nakshatrasList[nakshatramIndex]
-
-    val yogaIndex = ((actualDays * 1.015) % 27).toInt().let { if (it < 0) it + 27 else it }
-    val yogasList = listOf("విష్కంబ", "ప్రీతి", "ఆయుష్మాన్", "సౌభాగ్య", "శోభన", "అతిగండ", "సుకర్మ", "ధృతి", "శూల", "గండ", "వృద్ధి", "ధ్రువ", "వ్యాఘాత", "హర్షణ", "వజ్ర", "సిద్ధి", "వ్యతీపాత", "వరియాన్", "పరిఖ", "శివ", "సిద్ధ", "సాధ్య", "శుభ", "శుక్ల", "బ్రహ్మ", "ఐంద్ర", "వైధృతి")
-    val selectedYoga = yogasList[yogaIndex % yogasList.size]
-
-    val karanaNames = listOf("బవ", "బాలవ", "కౌలవ", "తైతుల", "గరజ", "వణిజ", "భద్ర", "శకుని")
-    val selectedKarana = karanaNames[(phaseAge.toInt() * 2) % karanaNames.size]
-
-    val rahuMap = mapOf(1 to "04:30 PM - 06:00 PM", 2 to "07:30 AM - 09:00 AM", 3 to "03:00 PM - 04:30 PM", 4 to "12:00 PM - 01:30 PM", 5 to "01:30 PM - 03:00 PM", 6 to "10:30 AM - 12:00 PM", 7 to "09:00 AM - 10:30 AM")
-    val yamaMap = mapOf(1 to "12:00 PM - 01:30 PM", 2 to "10:30 AM - 12:00 PM", 3 to "09:00 AM - 10:30 AM", 4 to "07:30 AM - 09:00 AM", 5 to "06:00 AM - 07:30 AM", 6 to "03:00 PM - 04:30 PM", 7 to "01:30 PM - 03:00 PM")
-    val durmuMap = mapOf(1 to "04:54 PM - 05:46 PM", 2 to "12:44 PM - 01:36 PM", 3 to "08:21 AM - 09:13 AM", 4 to "11:51 AM - 12:43 PM", 5 to "11:02 AM - 11:54 AM", 6 to "08:42 AM - 09:34 AM", 7 to "07:30 AM - 08:22 AM")
-
-    return PanchangData(
-        selectedDate = date, teluguYearName = yearName, tithi = selectedTithi, paksha = pakshaLabel, varam = selectedVaram, varamLord = selectedLord, nakshatra = selectedNakshatra, yoga = selectedYoga, karana = selectedKarana,
-        sunrise = "05:46 AM", sunset = "06:38 PM", abhijitLagna = "11:50 AM - 12:40 PM",
-        rahuKalam = rahuMap[dayOfWeek] ?: "", yamagandam = yamaMap[dayOfWeek] ?: "", durmuhurtham = durmuMap[dayOfWeek] ?: ""
-    )
-}
