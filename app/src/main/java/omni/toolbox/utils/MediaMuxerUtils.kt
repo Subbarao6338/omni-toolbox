@@ -4,9 +4,11 @@ import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMuxer
+import android.annotation.SuppressLint
 import java.nio.ByteBuffer
 
 object MediaMuxerUtils {
+    @SuppressLint("WrongConstant")
     fun mux(videoPath: String, audioPath: String, outputPath: String) {
         val videoExtractor = MediaExtractor()
         videoExtractor.setDataSource(videoPath)
