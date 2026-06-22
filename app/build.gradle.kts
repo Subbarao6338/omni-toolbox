@@ -90,6 +90,15 @@ android {
             excludes += "**/tools1/**"
         }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force("org.bouncycastle:bcprov-jdk18on:1.77")
+            dependencySubstitution {
+                substitute(module("org.bouncycastle:bcprov-jdk15to18")).using(module("org.bouncycastle:bcprov-jdk18on:1.77"))
+            }
+        }
+    }
 }
 
 dependencies {
@@ -120,8 +129,12 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     // Additional dependencies for ported features
-    implementation("com.hierynomus:smbj:0.11.5")
-    implementation("com.hierynomus:sshj:0.40.0")
+    implementation("com.hierynomus:smbj:0.11.5") {
+        exclude(group = "org.bouncycastle")
+    }
+    implementation("com.hierynomus:sshj:0.40.0") {
+        exclude(group = "org.bouncycastle")
+    }
     implementation("commons-net:commons-net:3.10.0")
     implementation("org.bouncycastle:bcprov-jdk18on:1.77")
     implementation("org.apache.commons:commons-compress:1.26.1")

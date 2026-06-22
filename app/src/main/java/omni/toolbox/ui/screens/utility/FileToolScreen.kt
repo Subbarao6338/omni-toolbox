@@ -38,7 +38,7 @@ fun FileToolScreen(navController: NavHostController, title: String) {
             FileItem(
                 name = file.name,
                 isDirectory = file.isDirectory,
-                size = if (file.isDirectory) "" else "${file.length() / 1024} KB",
+                sizeLabel = if (file.isDirectory) "" else "${file.length() / 1024} KB",
                 file = file
             )
         }.sortedWith(compareBy({ !it.isDirectory }, { it.name }))
@@ -192,7 +192,7 @@ fun FileToolScreen(navController: NavHostController, title: String) {
 fun FileItemRow(item: FileItem, onRename: () -> Unit, onDelete: () -> Unit, onClick: () -> Unit) {
     ListItem(
         headlineContent = { Text(item.name) },
-        supportingContent = { if (!item.isDirectory) Text(item.size) },
+        supportingContent = { if (!item.isDirectory) Text(item.sizeLabel) },
         leadingContent = {
             Icon(
                 if (item.isDirectory) Icons.Default.Folder else Icons.Default.Description,

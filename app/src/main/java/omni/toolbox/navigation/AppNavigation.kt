@@ -34,7 +34,7 @@ import omni.toolbox.ui.screens.calculation.*
 import omni.toolbox.ui.screens.conversion.*
 import omni.toolbox.ui.screens.developer.*
 import omni.toolbox.ui.screens.health.*
-import omni.toolbox.ui.screens.utility.PanchangamScreen
+import omni.toolbox.ui.screens.utility.TeluguPanchangamScreen
 import omni.toolbox.ui.screens.image.*
 import omni.toolbox.ui.screens.lifestyle.*
 import omni.toolbox.ui.screens.media.*
@@ -159,7 +159,7 @@ fun OmniToolboxApp(
             ToolProvider.tools.filter { it.subToolRoutes == null }.forEach { tool ->
                 if (isSpecialRoute(tool.route)) return@forEach
                 composable(tool.route) {
-                    ToolScreenDispatcher(navController, tool, aiApiKey)
+                    ToolScreenDispatcher(navController, tool, aiApiKey, omniViewModel)
                 }
             }
         }
@@ -200,7 +200,7 @@ fun isSpecialRoute(route: String): Boolean {
 }
 
 @Composable
-fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String) {
+fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String, omniViewModel: OmniViewModel) {
     val route = tool.route
 
     when {
