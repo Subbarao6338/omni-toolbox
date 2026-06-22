@@ -1,14 +1,18 @@
 package omni.toolbox.ui.screens.environment
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Brightness3
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -77,7 +81,7 @@ fun EnvironmentToolScreen(navController: NavHostController, title: String) {
                     Text("Lunar Cycle", style = MaterialTheme.typography.titleMedium)
                     Text("Waxing Gibbous", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.secondary)
                     Spacer(modifier = Modifier.height(16.dp))
-                    Icon(androidx.compose.material.icons.Icons.Default.Brightness3, null, modifier = Modifier.size(80.dp))
+                    Icon(Icons.Default.Brightness3, null, modifier = Modifier.size(80.dp))
                     Text("Illumination: 78%", modifier = Modifier.padding(top = 16.dp))
                     Text("Next Full Moon: 4 days")
                 }
