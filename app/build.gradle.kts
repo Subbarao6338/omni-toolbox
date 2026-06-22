@@ -4,7 +4,7 @@ import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
+    id("com.google.devtools.ksp") version "1.9.23-1.0.19"
 }
 
 val versionPropsFile = rootProject.file("version.properties")

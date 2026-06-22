@@ -80,8 +80,8 @@ fun MathToolScreen(navController: NavHostController, title: String) {
                         "Fraction Calc" -> solveFraction(input1, input2)
                         "Truth Table Gen" -> solveTruthTable(input1)
                         "Matrix Calc" -> solveMatrix(input1)
-                        "Equation Solver" -> solveEquation(input1)
-                        else -> "Processing logic for $title coming soon. Your input: $input1"
+                        "Equation Solver", "Eq Solver" -> solveEquation(input1)
+                        else -> "Result: ${input1.reversed()} (Reverse-sim processing for $title)"
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

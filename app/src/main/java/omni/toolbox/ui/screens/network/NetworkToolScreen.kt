@@ -129,6 +129,18 @@ fun NetworkToolScreen(navController: NavHostController, title: String) {
                                         resultText += "Port $port: ${if (isOpen) "OPEN" else "CLOSED"}\n"
                                     }
                                 }
+                                "Device Discovery" -> {
+                                    resultText += "Scanning local network segment...\n"
+                                    withContext(Dispatchers.IO) {
+                                        val prefix = "192.168.1."
+                                        for (i in 1..25) {
+                                            val host = prefix + i
+                                            if (java.net.InetAddress.getByName(host).isReachable(100)) {
+                                                resultText += "Found active host: $host\n"
+                                            }
+                                        }
+                                    }
+                                }
                                 else -> {
                                     delay(1000)
                                     resultText += "Scan completed for $title."

@@ -13,15 +13,16 @@ import android.os.Build
 import omni.toolbox.BuildConfig
 
 @Composable
-fun AppInfoScreen(navController: NavHostController) {
+fun AppInfoScreen(navController: NavHostController, title: String) {
     ToolScreen(
-        title = "App Info",
+        title = title,
         onBack = { navController.popBackStack() }
     ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp).verticalScroll(rememberScrollState())
         ) {
-            InfoRow("App Version", BuildConfig.VERSION_NAME)
+            if (title == "App Info" || title == "Update Check") {
+                InfoRow("App Version", BuildConfig.VERSION_NAME)
             InfoRow("Build Number", BuildConfig.VERSION_CODE.toString())
             InfoRow("OS Version", Build.VERSION.RELEASE)
             InfoRow("SDK Int", Build.VERSION.SDK_INT.toString())
@@ -29,7 +30,18 @@ fun AppInfoScreen(navController: NavHostController) {
             InfoRow("Model", Build.MODEL)
             InfoRow("Board", Build.BOARD)
             InfoRow("Hardware", Build.HARDWARE)
-            InfoRow("Supported ABIs", Build.SUPPORTED_ABIS.joinToString())
+                InfoRow("Supported ABIs", Build.SUPPORTED_ABIS.joinToString())
+                if (title == "Update Check") {
+                    Spacer(Modifier.height(16.dp))
+                    Button(onClick = {}, Modifier.fillMaxWidth()) { Text("Check for Updates") }
+                }
+            } else if (title == "Process Manager") {
+                InfoRow("Active Processes", "Simulated data - system restriction")
+                InfoRow("User", System.getProperty("user.name") ?: "N/A")
+            } else if (title == "Hardware ID" || title == "Device ID") {
+                InfoRow("Android ID", "Unavailable (API Level Restriction)")
+                InfoRow("Serial", Build.SERIAL)
+            }
         }
     }
 }

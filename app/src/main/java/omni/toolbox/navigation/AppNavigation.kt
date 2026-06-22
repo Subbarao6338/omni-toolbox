@@ -138,7 +138,7 @@ fun OmniToolboxApp(
         composable("cloud_sync") { SyncScreen(navController, omniViewModel) }
         composable("web_scraper") { DocsCrawlerScreen(navController) }
         composable("ai_companion") { AICompanionScreen(navController, aiApiKey) }
-        composable("security_vault") { SecurityScreen(navController) }
+        composable("security_vault") { SecurityScreen(navController, "Security Vault") }
         composable("power_bench") { PowerBenchScreen(navController) }
         composable("quick_tiles") { QuickTilesCreatorScreen(navController) }
 
@@ -208,8 +208,6 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey)
         route == "ai_doc_translator" -> DocumentTranslatorScreen(navController, tool.name)
         route == "binaural" -> BinauralBeatsScreen(navController)
-        route == "ping" -> PingScreen(navController)
-        route == "port_scanner" -> PortScannerScreen(navController)
         route == "cipher_tools" -> HashGeneratorScreen(navController)
         route == "bpm" -> BpmCounterScreen(navController)
         route == "random" -> RandomGeneratorScreen(navController)
@@ -267,8 +265,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "ram_info" -> RamInfoScreen(navController)
         route == "cpu_info" -> CpuInfoScreen(navController)
         route == "device" -> DeviceScreen(navController)
+        listOf("app_info", "update_check", "process_manager", "device_id").contains(route) -> AppInfoScreen(navController, tool.name)
         route == "storage" -> StorageScreen(navController)
-        route == "app_info" -> AppInfoScreen(navController)
         route == "app_inspector" -> AppDecompilerScreen(navController)
         listOf("drawing_board", "signature_maker").contains(route) -> DrawingBoardScreen(navController, tool.name)
         route == "terminal" -> TerminalScreen(navController)
@@ -292,6 +290,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "docs_online" -> OnlineDocsScreen(navController)
         route == "password_gen" -> PasswordGenScreen(navController)
         route == "password_manager" -> PasswordManagerScreen(navController)
+        listOf("app_locker", "app_permissions", "perm_manager", "privacy_check").contains(route) -> SecurityScreen(navController, tool.name)
 
         route == "meta_anal" -> MetaTagScreen(navController)
         route == "markitdown" -> MarkItDownScreen(navController)
@@ -300,6 +299,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "my_ip" -> MyIPScreen(navController)
 
         route == "compound_interest" -> CompoundInterestScreen(navController)
+        listOf("cagr_calc", "dcf_calc", "sip_calc", "gst_calc", "dividend_calc", "inflation_calc", "roi_calc", "salary_calc", "stock_profit", "retirement_planner", "expense_tracker").contains(route) -> FinanceToolScreen(navController, tool.name)
         route == "tax_calc" -> TaxCalculatorScreen(navController)
         route == "loan_calc" -> LoanCalculatorScreen(navController)
         listOf("crypto_conv", "currency").contains(route) -> CurrencyConverterScreen(navController)
@@ -311,19 +311,20 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "calorie_calc" -> CalorieCalculatorScreen(navController)
         route == "habit_tracker" -> HabitTrackerScreen(navController)
         route == "meditation" -> MeditationTimerScreen(navController)
-        listOf("heart_rate", "blood_pressure", "blood_sugar").contains(route) -> MedicalToolsScreen(navController, tool.name)
+        listOf("heart_rate", "blood_pressure", "blood_sugar", "eye_exercise", "medication_tracker", "period_tracker", "posture_check", "sleep_tracker", "stretch_guide", "water_reminder", "yoga_guide").contains(route) -> MedicalToolsScreen(navController, tool.name)
 
         route == "travel_budget" -> TravelBudgetScreen(navController)
         route == "world_map" -> WorldMapScreen(navController)
         route == "world_clock" -> WorldClockScreen(navController)
         route == "signal_mirror" -> SignalMirrorScreen(navController)
-        route == "weather_forecast" -> WeatherForecastScreen(navController)
+        listOf("weather_forecast", "air_quality", "uv_index", "rain_radar", "moon_phase", "light_pollution").contains(route) -> WeatherForecastScreen(navController)
         route == "weather_prediction" -> WeatherPredictionScreen(navController)
         route == "tides" -> TidesScreen(navController)
         route == "survival_guide" -> SurvivalGuideScreen(navController)
         route == "beacon_nav" -> BeaconNavigationScreen(navController)
         route == "path_tracking" -> PathTrackingScreen(navController)
         route == "packing_list" -> PackingListScreen(navController)
+        listOf("altitude_graph", "campfire_guide", "gps_status", "hiking_trails", "knots_guide", "route_planner").contains(route) -> OutdoorToolScreen(navController, tool.name)
 
         route == "url_encoder" -> UrlEncoderScreen(navController)
         route == "base64" -> Base64Screen(navController)
@@ -331,32 +332,33 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "regex_tester" -> RegexTesterScreen(navController)
         route == "markdown_preview" -> MarkdownPreviewScreen(navController)
         route == "word_counter" -> WordCounterScreen(navController)
-        route == "morse" -> MorseCodeScreen(navController)
-        route == "morse_decoder" -> MorseDecoderScreen(navController)
         route == "text_diff" -> TextDiffScreen(navController)
-        listOf("case_converter", "lorem", "anagram").contains(route) -> TextToolScreen(navController, tool.name)
+        listOf("case_converter", "lorem", "anagram", "ascii_table", "crontab_gen", "hex_viewer", "morse", "morse_decoder").contains(route) -> TextToolScreen(navController, tool.name)
         route == "word_rank_calc" -> WordRankScreen(navController)
 
         route == "dialer" -> DialerScreen(navController)
         route == "call_history" -> HistoryScreen(navController)
         route == "contacts" -> ContactsScreen(navController)
         route == "messages" -> MessagesScreen(navController)
+        listOf("doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "zip_unzip", "storage_cleaner").contains(route) -> FileToolScreen(navController, tool.name)
         route == "vocal_remover" || route == "ai_stems_splitter" -> VocalRemoverScreen(navController, tool.name)
+        route == "m_8d_audio" -> AudioToolScreen(navController, tool.name)
+        route == "ping" -> PingScreen(navController)
+        listOf("dns_lookup", "whois", "speed_test", "wake_on_lan", "http_request", "ssh_client", "port_checker", "port_scanner").contains(route) -> NetworkToolScreen(navController, tool.name)
 
         route == "plant_care" -> PlantCareScreen(navController)
         route == "fuel" -> FuelCostCalculatorScreen(navController)
         listOf("speedometer", "fuel_consumption", "car_maintenance").contains(route) -> AutomotiveToolScreen(navController, tool.name)
-
-        listOf("image_color_picker", "image_palette", "color_palette_group").contains(route) -> ColorToolsScreen(navController)
+        listOf("image_color_picker", "image_palette", "color_palette_group", "color_conv_pro", "color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "material_you_palette", "image_histogram").contains(route) -> ColorToolsScreen(navController)
         route == "image_bg_remover" || route == "image_ai_tools" -> ImageAIScreen(navController, tool.name)
 
         // --- 2. Shared Multi-Category Screens ---
         listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "binary_calc", "stats").contains(route) -> MathToolScreen(navController, tool.name)
         listOf("antenna_calc", "filter_design", "logic_gates", "pcb_trace", "resistor_code", "signal_gen_pro", "force_calc").contains(route) -> EngineeringToolScreen(navController, tool.name)
-        listOf("ohms_law", "circuit_calc").contains(route) -> ElectronicsToolScreen(navController, tool.name)
+        listOf("ohms_law", "circuit_calc", "electronics_tools", "smart_hub").contains(route) -> ElectronicsToolScreen(navController, tool.name)
 
         // --- 3. Web Tools (Dynamic URL mapping) ---
-        route.startsWith("per_") || listOf("sec_adguard", "sec_nextdns", "sec_bitwarden", "sec_ente", "hub", "web").contains(route) -> {
+        route.startsWith("per_") || listOf("sec_adguard", "sec_nextdns", "sec_bitwarden", "sec_ente", "hub", "web", "mqtt_tester", "coin_tracker", "nft_viewer", "wallet_explorer", "currency_trends", "rain_radar").contains(route) -> {
              WebDispatcher(navController, tool)
         }
 
@@ -377,6 +379,12 @@ fun WebDispatcher(navController: NavHostController, tool: Tool) {
         "per_text_gen" -> "https://perchance.org/ai-text-generator"
         "per_text_rewrite" -> "https://perchance.org/ai-text-rewriter"
         "per_necs_story" -> "https://perchance.org/necs-story"
+        "mqtt_tester" -> "https://www.hivemq.com/mqtt-websocket-client/"
+        "coin_tracker" -> "https://coinmarketcap.com/"
+        "nft_viewer" -> "https://opensea.io/"
+        "wallet_explorer" -> "https://etherscan.io/"
+        "currency_trends" -> "https://www.tradingview.com/markets/currencies/rates-all/"
+        "rain_radar" -> "https://www.accuweather.com/en/us/national/weather-radar"
         "sec_adguard" -> "https://adguard-dns.io/en/welcome.html"
         "sec_nextdns" -> "https://my.nextdns.io"
         "sec_bitwarden" -> "https://vault.bitwarden.com/"
@@ -395,12 +403,12 @@ fun CategoryFallbackDispatcher(navController: NavHostController, tool: Tool, aiA
 
     when (category) {
         "Games" -> GameToolScreen(navController, tool.name)
-        "Network" -> NetworkToolScreen(navController, tool.name)
+        "Network" -> if (route == "device_discovery" || route == "wifi_anal" || route == "subnet_calc") NetworkInfoScreen(navController) else NetworkToolScreen(navController, tool.name)
         "Finance" -> FinanceToolScreen(navController, tool.name)
-        "Social" -> SocialToolScreen(navController, tool.name)
+        "Social" -> if (route == "profile_photo_maker") ProfilePhotoMakerScreen(navController) else SocialToolScreen(navController, tool.name)
         "Media" -> MediaDispatcher(navController, tool)
         "Health" -> HealthScreen(navController, tool.name)
-        "Device", "Security", "Utilities" -> SystemLabScreen(navController, tool.name)
+        "Device", "Security", "Utilities" -> if (route == "thermal_info") SensorDataScreen(navController) else SystemLabScreen(navController, tool.name)
         "Weather" -> EnvironmentToolScreen(navController, tool.name)
         "Travel" -> OutdoorToolScreen(navController, tool.name)
         "Documents" -> FileToolScreen(navController, tool.name)

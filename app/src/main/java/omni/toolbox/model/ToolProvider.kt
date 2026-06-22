@@ -60,7 +60,7 @@ object ToolProvider {
             description = "Audio editing and processing tools.",
             subToolRoutes = listOf(
                 "add_sfx", "aud_conv", "aud_eq_v2", "aud_info_v2", "audio_loop", "binaural", "bpm",
-                "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_audio_compressor",
+                "chord_lib", "guitar_tuner", "key_bpm_finder", "m_3d_audio", "m_8d_audio", "m_audio_compressor",
                 "m_audio_cutter", "m_audio_editor", "m_audio_joiner", "m_audio_mixer", "m_audio_normalizer",
                 "m_audio_pan", "m_audio_pitch", "m_audio_splitter", "m_audio_tag_editor", "m_bass_booster",
                 "m_echo_effect", "m_equalizer", "m_karaoke_maker", "m_mute_audio", "m_reverse_audio",
@@ -125,7 +125,7 @@ object ToolProvider {
         Tool("Calculators", Icons.Default.Calculate, "calc_group", "Utilities", Color(0xFFFF9800),
             description = "Practical calculators for daily use.",
             subToolRoutes = listOf(
-                "calculator", "discount", "mortgage_calc", "tip", "unit_compare", "unit_price", "volume_calc", "billing"
+                "calculator", "discount", "tip", "unit_compare", "unit_price", "volume_calc", "billing"
             )),
         Tool("Unit Converters", Icons.Default.SwapHoriz, "conv_group", "Utilities", Color(0xFF2196F3),
             description = "Convert between various units.",
@@ -243,8 +243,8 @@ object ToolProvider {
             description = "Complete financial toolkit.",
             subToolRoutes = listOf(
                 "coin_tracker", "compound_interest", "currency_trends", "dividend_calc", "expense_tracker",
-                "gst_calc", "inflation_calc", "loan_calc", "nft_viewer", "retirement_planner", "roi_calc",
-                "salary_calc", "sip_calc", "stock_profit", "tax_calc", "wallet_explorer"
+                "gst_calc", "inflation_calc", "loan_calc", "mortgage_calc", "nft_viewer", "retirement_planner", "roi_calc",
+                "salary_calc", "sip_calc", "stock_profit", "tax_calc", "wallet_explorer", "cagr_calc", "dcf_calc"
             )),
 
         // --- HEALTH ---
@@ -301,6 +301,7 @@ object ToolProvider {
 
         // --- MEDIA SUB-TOOLS ---
         Tool("3D Audio", Icons.Default.Headset, "m_3d_audio", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("8D Audio", Icons.Default.Headset, "m_8d_audio", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Binaural Beats", Icons.Default.Headset, "binaural", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Add SFX", Icons.Default.AutoAwesome, "add_sfx", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("APNG to images", Icons.Default.Collections, "apng_to_images", "Media", isVisibleOnHome = false, isSubTool = true),
@@ -646,8 +647,10 @@ object ToolProvider {
 
         // --- FINANCE SUB-TOOLS ---
         Tool("Coin Tracker", Icons.Default.MonetizationOn, "coin_tracker", "Finance", isVisibleOnHome = false, isSubTool = true),
+        Tool("CAGR Calculator", Icons.AutoMirrored.Filled.TrendingUp, "cagr_calc", "Finance", isVisibleOnHome = false, isSubTool = true),
         Tool("Compound Interest", Icons.AutoMirrored.Filled.TrendingUp, "compound_interest", "Finance", isVisibleOnHome = false, isSubTool = true),
         Tool("Currency Trends", Icons.Default.Timeline, "currency_trends", "Finance", isVisibleOnHome = false, isSubTool = true),
+        Tool("DCF Calculator", Icons.Default.AccountBalanceWallet, "dcf_calc", "Finance", isVisibleOnHome = false, isSubTool = true),
         Tool("Dividend Calc", Icons.Default.Payments, "dividend_calc", "Finance", isVisibleOnHome = false, isSubTool = true),
         Tool("Expense Tracker", Icons.Default.AccountBalanceWallet, "expense_tracker", "Finance", isVisibleOnHome = false, isSubTool = true),
         Tool("GST Calculator", Icons.Default.RequestQuote, "gst_calc", "Finance", isVisibleOnHome = false, isSubTool = true),

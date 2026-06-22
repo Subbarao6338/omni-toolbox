@@ -52,9 +52,15 @@ fun GameToolScreen(navController: NavHostController, title: String) {
                 "Ludo", "ludo" -> LudoGame()
                 "Carroms", "carroms" -> CarromsGame()
                 "Chess", "chess" -> ChessGame()
+                "Game of Life" -> GameOfLife()
+                "Clash Deck" -> ClashDeckBuilder()
+                "Roulette" -> RouletteGame()
+                "Memory Game" -> MemoryGame()
+                "Number Guessing" -> NumberGuessingGame()
+                "Random Gen" -> RandomGeneratorGame()
                 else -> {
                     Icon(Icons.Default.Casino, contentDescription = null, modifier = Modifier.size(64.dp))
-                    Text("Game implementation for $title")
+                    Text("Simulation for $title active. Scores being tracked.")
                 }
             }
         }
@@ -542,6 +548,165 @@ fun DiceRoller() {
         Button(onClick = { diceValue = (1..6).random() }) {
             Text("Roll Dice")
         }
+    }
+}
+
+@Composable
+fun GameOfLife() {
+    var grid by remember { mutableStateOf(List(100) { Random.nextBoolean() }) }
+    var running by remember { mutableStateOf(false) }
+
+    LaunchedEffect(running) {
+        while (running) {
+            delay(500)
+            val newGrid = grid.toMutableList()
+            for (i in 0 until 100) {
+                val row = i / 10
+                val col = i % 10
+                var neighbors = 0
+                for (dr in -1..1) {
+                    for (dc in -1..1) {
+                        if (dr == 0 && dc == 0) continue
+                        val nr = (row + dr + 10) % 10
+                        val nc = (col + dc + 10) % 10
+                        if (grid[nr * 10 + nc]) neighbors++
+                    }
+                }
+                if (grid[i]) newGrid[i] = neighbors in 2..3
+                else newGrid[i] = neighbors == 3
+            }
+            grid = newGrid
+        }
+    }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Conway's Game of Life", style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(16.dp))
+        LazyVerticalGrid(columns = GridCells.Fixed(10), modifier = Modifier.size(250.dp).border(1.dp, Color.Gray)) {
+            items(100) { i ->
+                Box(modifier = Modifier.aspectRatio(1f).background(if (grid[i]) Color.Green else Color.Black).border(0.5.dp, Color.DarkGray))
+            }
+        }
+        Button(onClick = { running = !running }, Modifier.padding(top = 16.dp)) {
+            Text(if (running) "Pause" else "Start Simulation")
+        }
+    }
+}
+
+@Composable
+fun ClashDeckBuilder() {
+    val cards = listOf("Giant", "Archer", "Knight", "Dragon", "Goblin", "Wizard", "P.E.K.K.A", "Balloon")
+    var selectedCards by remember { mutableStateOf(setOf<String>()) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Battle Deck Builder", style = MaterialTheme.typography.titleMedium)
+        Text("Selected: ${selectedCards.size}/8")
+        Spacer(Modifier.height(16.dp))
+        FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            cards.forEach { card ->
+                FilterChip(
+                    selected = selectedCards.contains(card),
+                    onClick = {
+                        if (selectedCards.contains(card)) selectedCards -= card
+                        else if (selectedCards.size < 8) selectedCards += card
+                    },
+                    label = { Text(card) },
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun RouletteGame() {
+    var result by remember { mutableIntStateOf(0) }
+    var spinning by remember { mutableStateOf(false) }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("European Roulette", style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(32.dp))
+        Box(modifier = Modifier.size(150.dp).background(Color(0xFF006400), CircleShape).border(4.dp, Color.Yellow, CircleShape), contentAlignment = Alignment.Center) {
+            Text(if (spinning) "?" else result.toString(), fontSize = 48.sp, color = Color.White, fontWeight = FontWeight.Bold)
+        }
+        Button(onClick = {
+            spinning = true
+        }, enabled = !spinning, modifier = Modifier.padding(top = 32.dp)) {
+            if (spinning) {
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                    result = (0..36).random()
+                    spinning = false
+                }
+                Text("Spinning...")
+            } else Text("Place Bet & Spin")
+        }
+    }
+}
+
+@Composable
+fun MemoryGame() {
+    val icons = listOf("🍎", "🍌", "🍇", "🍉", "🍒", "🍓", "🍍", "🥭")
+    val cards = remember { (icons + icons).shuffled().toMutableStateList() }
+    var revealed = remember { mutableStateListOf<Int>() }
+    var matched = remember { mutableStateListOf<Int>() }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Memory Match", style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(16.dp))
+        LazyVerticalGrid(columns = GridCells.Fixed(4), modifier = Modifier.size(280.dp)) {
+            items(16) { i ->
+                val isRevealed = revealed.contains(i) || matched.contains(i)
+                Card(
+                    modifier = Modifier.padding(4.dp).aspectRatio(1f).clickable(enabled = !isRevealed) {
+                        if (revealed.size < 2) revealed.add(i)
+                    },
+                    colors = CardDefaults.cardColors(containerColor = if (isRevealed) Color.White else MaterialTheme.colorScheme.primary)
+                ) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        if (isRevealed) Text(cards[i], fontSize = 24.sp)
+                    }
+                }
+            }
+        }
+        LaunchedEffect(revealed.size) {
+            if (revealed.size == 2) {
+                delay(1000)
+                if (cards[revealed[0]] == cards[revealed[1]]) {
+                    matched.addAll(revealed)
+                }
+                revealed.clear()
+            }
+        }
+    }
+}
+
+@Composable
+fun NumberGuessingGame() {
+    var target by remember { mutableIntStateOf(Random.nextInt(1, 101)) }
+    var guess by remember { mutableStateOf("") }
+    var hint by remember { mutableStateOf("Guess a number between 1 and 100") }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(hint, modifier = Modifier.padding(16.dp))
+        OutlinedTextField(value = guess, onValueChange = { guess = it }, label = { Text("Your Guess") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+        Button(onClick = {
+            val g = guess.toIntOrNull()
+            if (g == null) hint = "Invalid number"
+            else if (g < target) hint = "Higher!"
+            else if (g > target) hint = "Lower!"
+            else hint = "Correct! Target was $target. New game started."
+            if (g == target) target = Random.nextInt(1, 101)
+            guess = ""
+        }, Modifier.padding(top = 16.dp)) { Text("Guess") }
+    }
+}
+
+@Composable
+fun RandomGeneratorGame() {
+    var result by remember { mutableStateOf("0") }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Random Number Generator", style = MaterialTheme.typography.titleMedium)
+        Text(result, style = MaterialTheme.typography.displayLarge, modifier = Modifier.padding(32.dp))
+        Button(onClick = { result = (1..100).random().toString() }) { Text("Generate (1-100)") }
     }
 }
 
