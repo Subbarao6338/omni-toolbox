@@ -10,6 +10,18 @@ interface ImageTransformation {
     fun transform(input: Bitmap): Bitmap
 }
 
+class ColorMatrixTransformation(private val matrix: ColorMatrix) : ImageTransformation {
+    override fun transform(bitmap: Bitmap): Bitmap {
+        val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config ?: Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        val paint = Paint().apply {
+            colorFilter = ColorMatrixColorFilter(matrix)
+        }
+        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+        return result
+    }
+}
+
 class BrightnessTransformation(val amount: Float) : ImageTransformation {
     override fun transform(input: Bitmap): Bitmap {
         val output = Bitmap.createBitmap(input.width, input.height, input.config ?: Bitmap.Config.ARGB_8888)
@@ -89,6 +101,36 @@ class ContrastTransformation(val amount: Float) : ImageTransformation {
         canvas.drawBitmap(input, 0f, 0f, paint)
         return output
     }
+}
+
+object ImageFilters {
+    val Sepia = floatArrayOf(
+        0.393f, 0.769f, 0.189f, 0f, 0f,
+        0.349f, 0.686f, 0.168f, 0f, 0f,
+        0.272f, 0.534f, 0.131f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f
+    )
+
+    val GrayScale = floatArrayOf(
+        0.2126f, 0.7152f, 0.0722f, 0f, 0f,
+        0.2126f, 0.7152f, 0.0722f, 0f, 0f,
+        0.2126f, 0.7152f, 0.0722f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f
+    )
+
+    val Invert = floatArrayOf(
+        -1f,  0f,  0f, 0f, 255f,
+         0f, -1f,  0f, 0f, 255f,
+         0f,  0f, -1f, 0f, 255f,
+         0f,  0f,  0f, 1f, 0f
+    )
+
+    val Vintage = floatArrayOf(
+        0.9f, 0f, 0f, 0f, 0f,
+        0f, 0.7f, 0f, 0f, 0f,
+        0f, 0f, 0.5f, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f
+    )
 }
 
 object FilterEngine {

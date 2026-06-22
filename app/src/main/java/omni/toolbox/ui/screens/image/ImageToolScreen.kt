@@ -57,10 +57,22 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
         ColorMatrix().apply {
             reset()
             when(currentFilter) {
-                "Sepia" -> set(omni.toolbox.data.image.ImageFilters.Sepia)
-                "Mono" -> set(omni.toolbox.data.image.ImageFilters.GrayScale)
-                "Invert" -> set(omni.toolbox.data.image.ImageFilters.Invert)
-                "Vintage" -> set(omni.toolbox.data.image.ImageFilters.Vintage)
+                "Sepia" -> {
+                    val values = omni.toolbox.data.image.ImageFilters.Sepia
+                    for (i in values.indices) this[i / 5, i % 5] = values[i]
+                }
+                "Mono" -> {
+                    val values = omni.toolbox.data.image.ImageFilters.GrayScale
+                    for (i in values.indices) this[i / 5, i % 5] = values[i]
+                }
+                "Invert" -> {
+                    val values = omni.toolbox.data.image.ImageFilters.Invert
+                    for (i in values.indices) this[i / 5, i % 5] = values[i]
+                }
+                "Vintage" -> {
+                    val values = omni.toolbox.data.image.ImageFilters.Vintage
+                    for (i in values.indices) this[i / 5, i % 5] = values[i]
+                }
             }
             // Contrast & Brightness
             val t = (1.0f - contrast) / 2.0f * 255.0f
