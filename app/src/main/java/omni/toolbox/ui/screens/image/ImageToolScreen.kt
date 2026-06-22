@@ -45,6 +45,7 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
     var contrast by remember { mutableFloatStateOf(1f) }
     var saturation by remember { mutableFloatStateOf(1f) }
     var rotation by remember { mutableFloatStateOf(0f) }
+    var currentFilter by remember { mutableStateOf("None") }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -52,9 +53,15 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
         selectedImageUri = uri
     }
 
-    val colorMatrix = remember(brightness, contrast, saturation) {
+    val colorMatrix = remember(brightness, contrast, saturation, currentFilter) {
         ColorMatrix().apply {
             reset()
+            when(currentFilter) {
+                "Sepia" -> set(omni.toolbox.data.image.ImageFilters.Sepia)
+                "Mono" -> set(omni.toolbox.data.image.ImageFilters.GrayScale)
+                "Invert" -> set(omni.toolbox.data.image.ImageFilters.Invert)
+                "Vintage" -> set(omni.toolbox.data.image.ImageFilters.Vintage)
+            }
             // Contrast & Brightness
             val t = (1.0f - contrast) / 2.0f * 255.0f
             val contrastMatrix = ColorMatrix(floatArrayOf(
@@ -124,6 +131,18 @@ fun ImageToolScreen(navController: NavHostController, title: String) {
                         AdjustmentSlider("Contrast", valueRange = 0f..2f, initialValue = contrast, onValueChange = { contrast = it })
                         AdjustmentSlider("Saturation", valueRange = 0f..2f, initialValue = saturation, onValueChange = { saturation = it })
                         AdjustmentSlider("Rotation", valueRange = 0f..360f, initialValue = rotation, onValueChange = { rotation = it })
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text("Filters", style = MaterialTheme.typography.labelLarge)
+                        Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf("None", "Sepia", "Mono", "Invert", "Vintage").forEach { filter ->
+                                FilterChip(
+                                    selected = currentFilter == filter,
+                                    onClick = { currentFilter = filter },
+                                    label = { Text(filter) }
+                                )
+                            }
+                        }
                     }
                 }
 

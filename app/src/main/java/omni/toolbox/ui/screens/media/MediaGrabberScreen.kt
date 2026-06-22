@@ -14,6 +14,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -120,6 +121,24 @@ fun MediaGrabberScreen(navController: NavHostController, initialUrl: String? = n
                     Text("Grab")
                 }
             }
+
+                if (url.contains("youtube.com") || url.contains("youtu.be")) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            val intent = Intent(context, omni.toolbox.service.YoutubeForegroundService::class.java).apply {
+                                putExtra("videoUrl", url)
+                            }
+                            context.startService(intent)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Icon(Icons.Default.PlayArrow, null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Play in Background")
+                    }
+                }
 
             if (isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())

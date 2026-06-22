@@ -155,7 +155,8 @@ fun NavigationRadar(beacons: List<BeaconEntity>, userLocation: Location?) {
             val bearing = userLocation?.let { GeoUtils.calculateBearing(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
             val distance = userLocation?.let { GeoUtils.calculateDistance(it.latitude, it.longitude, beacon.latitude, beacon.longitude) } ?: 0f
 
-            val normDistance = (distance / 1000f).coerceIn(0.1f, 1.0f) * radius
+            val maxRadarDistance = 1000f // 1km
+            val normDistance = (distance / maxRadarDistance).coerceIn(0.1f, 1.0f) * radius
             val angleRad = Math.toRadians((bearing - 90).toDouble())
 
             val beaconPos = Offset(

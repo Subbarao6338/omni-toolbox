@@ -48,11 +48,21 @@ fun WeatherPredictionScreen(navController: NavHostController) {
     val pressureChange = if (pressureHistory.size > 1) currentPressure - pressureHistory.first() else 0f
 
     val prediction = when {
-        pressureChange < -2.0 -> "Storm Warning"
-        pressureChange < -0.5 -> "Deteriorating"
-        pressureChange > 2.0 -> "Fair Weather"
-        pressureChange > 0.5 -> "Improving"
+        pressureChange < -3.0 -> "Rapidly Falling (Storm)"
+        pressureChange < -1.5 -> "Falling (Deteriorating)"
+        pressureChange < -0.5 -> "Slowly Falling"
+        pressureChange > 3.0 -> "Rapidly Rising (Fair)"
+        pressureChange > 1.5 -> "Rising (Improving)"
+        pressureChange > 0.5 -> "Slowly Rising"
         else -> "Steady"
+    }
+
+    val forecastIcon = when {
+        pressureChange < -1.5 -> Icons.Default.Warning
+        pressureChange < -0.5 -> Icons.Default.Cloud
+        pressureChange > 1.5 -> Icons.Default.WbSunny
+        pressureChange > 0.5 -> Icons.Default.WbCloudy
+        else -> Icons.Default.CloudQueue
     }
 
     ToolScreen(
@@ -76,14 +86,10 @@ fun WeatherPredictionScreen(navController: NavHostController) {
                     Text("Forecast", style = MaterialTheme.typography.labelLarge)
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Icon(
-                            imageVector = when(prediction) {
-                                "Storm Warning" -> Icons.Default.Warning
-                                "Fair Weather" -> Icons.Default.WbSunny
-                                else -> Icons.Default.Cloud
-                            },
+                            imageVector = forecastIcon,
                             contentDescription = null,
                             modifier = Modifier.size(48.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = if (pressureChange < -1.5) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(prediction, style = MaterialTheme.typography.headlineSmall)

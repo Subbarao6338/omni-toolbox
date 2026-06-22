@@ -121,8 +121,10 @@ dependencies {
 
     // Additional dependencies for ported features
     implementation("com.hierynomus:smbj:0.11.5")
-    implementation("com.github.mwiede:jsch:0.2.11")
-    implementation("org.apache.commons:commons-compress:1.21")
+    implementation("com.hierynomus:sshj:0.40.0")
+    implementation("commons-net:commons-net:3.10.0")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.77")
+    implementation("org.apache.commons:commons-compress:1.26.1")
     implementation("androidx.media3:media3-exoplayer:1.2.1")
     implementation("androidx.media3:media3-ui:1.2.1")
     implementation("androidx.media3:media3-session:1.2.1")
