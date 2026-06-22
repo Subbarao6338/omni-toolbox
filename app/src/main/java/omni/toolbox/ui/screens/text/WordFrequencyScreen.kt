@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 
 @Composable
-fun WordRankScreen(navController: NavHostController) {
+fun WordFrequencyScreen(navController: NavHostController) {
     var textInput by remember { mutableStateOf("The quick brown fox jumps over the lazy dog. The fox is quick.") }
     var ignoreCommonWords by remember { mutableStateOf(true) }
 
