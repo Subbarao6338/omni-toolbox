@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MonetizationOn
+import androidx.compose.material.icons.filled.Token
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -440,7 +443,7 @@ fun CoinTracker() {
             ListItem(
                 headlineContent = { Text(name) },
                 trailingContent = { Text("$${"%,.2f".format(price)}") },
-                leadingContent = { Icon(androidx.compose.material.icons.Icons.Default.MonetizationOn, null) }
+                leadingContent = { Icon(Icons.Default.MonetizationOn, null) }
             )
         }
     }
@@ -451,7 +454,7 @@ fun NftViewer() {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text("NFT Portfolio", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(32.dp))
-        Icon(androidx.compose.material.icons.Icons.Default.Token, null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.secondary)
+        Icon(Icons.Default.Token, null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.secondary)
         Text("Connect wallet to view your digital collectibles.")
         Button(onClick = {}, Modifier.padding(16.dp)) { Text("Connect Wallet") }
     }
