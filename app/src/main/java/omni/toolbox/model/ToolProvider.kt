@@ -170,7 +170,7 @@ object ToolProvider {
             description = "Powerful text processing tools.",
             subToolRoutes = listOf(
                 "anagram", "case_converter", "lorem", "morse", "morse_decoder", "text_diff",
-                "word_counter", "word_rank_calc"
+                "word_counter", "word_frequency", "word_rank_calc"
             )),
 
         // --- DATA ---
@@ -731,7 +731,8 @@ object ToolProvider {
         Tool("URL Encoder", Icons.Default.Link, "url_encoder", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("App Inspector", Icons.Default.Android, "app_inspector", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Word Counter", Icons.Default.Abc, "word_counter", "Developer", isVisibleOnHome = false, isSubTool = true),
-        Tool("Word Rank", Icons.Default.Calculate, "word_rank_calc", "Developer", isVisibleOnHome = false, isSubTool = true),
+        Tool("Word Frequency", Icons.AutoMirrored.Filled.ShowChart, "word_frequency", "Developer", isVisibleOnHome = false, isSubTool = true),
+        Tool("Word Rank Calculator", Icons.Default.Calculate, "word_rank_calc", "Developer", isVisibleOnHome = false, isSubTool = true),
         Tool("Base Converter", Icons.Default.Numbers, "base_conv", "Developer", isVisibleOnHome = false, isSubTool = true),
 
         // --- DESIGN SUB-TOOLS ---

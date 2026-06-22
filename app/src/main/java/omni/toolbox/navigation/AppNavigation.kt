@@ -334,7 +334,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "word_counter" -> WordCounterScreen(navController)
         route == "text_diff" -> TextDiffScreen(navController)
         listOf("case_converter", "lorem", "anagram", "ascii_table", "crontab_gen", "hex_viewer", "morse", "morse_decoder").contains(route) -> TextToolScreen(navController, tool.name)
-        route == "word_rank_calc" -> WordRankScreen(navController)
+        route == "word_frequency" -> WordFrequencyScreen(navController)
+        route == "word_rank_calc" -> WordRankCalculatorScreen(navController)
 
         route == "dialer" -> DialerScreen(navController)
         route == "call_history" -> HistoryScreen(navController)
