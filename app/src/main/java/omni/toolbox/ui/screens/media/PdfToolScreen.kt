@@ -132,6 +132,58 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
                                             }
                                         }
                                     }
+                                    "Rotate PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_rotate.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "rotated_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.rotatePages(tempFile, rotationAngle, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Rotated PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Protect PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_protect.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "protected_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.protect(tempFile, password, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Protected PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Unlock PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_unlock.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "unlocked_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.unlock(tempFile, password, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Unlocked PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Repair PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_repair.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "repaired_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.repair(tempFile, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Repaired PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
                                     "Split PDF" -> {
                                         if (selectedFiles.isNotEmpty()) {
                                             context.contentResolver.openInputStream(selectedFiles[0])?.use { inputStream ->

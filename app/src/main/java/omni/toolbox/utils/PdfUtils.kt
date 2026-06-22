@@ -34,4 +34,27 @@ object PdfUtils {
         document.save(outFile)
         document.close()
     }
+
+    fun rotatePages(pdfFile: File, angle: Int, outFile: File) {
+        val document = PDDocument.load(pdfFile)
+        for (page in document.pages) {
+            page.rotation = (page.rotation + angle) % 360
+        }
+        document.save(outFile)
+        document.close()
+    }
+
+    fun unlock(pdfFile: File, password: String, outFile: File) {
+        val document = PDDocument.load(pdfFile, password)
+        document.isAllSecurityToBeRemoved = true
+        document.save(outFile)
+        document.close()
+    }
+
+    fun repair(pdfFile: File, outFile: File) {
+        // Simple repair by reloading and resaving using PDFBox
+        val document = PDDocument.load(pdfFile)
+        document.save(outFile)
+        document.close()
+    }
 }
