@@ -4,7 +4,9 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -31,8 +33,12 @@ class PathTrackingService : Service(), LocationListener {
     private fun startForegroundService() {
         val channelId = "path_tracking_channel"
         val channelName = "Path Tracking"
-        val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW))
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW)
+            )
+        }
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Tracking Path")
