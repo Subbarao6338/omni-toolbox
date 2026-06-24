@@ -45,7 +45,13 @@ fun AutomationScreen(navController: NavHostController, viewModel: OmniViewModel)
                     Text("Macros", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
                 }
                 Tab(selected = activeTab == 1, onClick = { activeTab = 1 }) {
-                    Text("Automation Logs", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
+                    Text("Calculators", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
+                }
+                Tab(selected = activeTab == 2, onClick = { activeTab = 2 }) {
+                    Text("Converter", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
+                }
+                Tab(selected = activeTab == 3, onClick = { activeTab = 3 }) {
+                    Text("Logs", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
                 }
             }
 
@@ -53,7 +59,9 @@ fun AutomationScreen(navController: NavHostController, viewModel: OmniViewModel)
 
             when (activeTab) {
                 0 -> MacrosTab(viewModel)
-                1 -> AutomationLogsTab(viewModel)
+                1 -> AutomationCalculatorsTab()
+                2 -> AutomationConverterTab()
+                3 -> AutomationLogsTab(viewModel)
             }
         }
     }
@@ -209,6 +217,33 @@ fun MacrosTab(viewModel: OmniViewModel) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun AutomationCalculatorsTab() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("Automation Utility Calculators", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Standard Calculator", fontWeight = FontWeight.Bold)
+                Text("Radix & Bitwise Tool", fontWeight = FontWeight.Bold)
+                Text("Scientific Math Engine", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+fun AutomationConverterTab() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("Automation Unit Converters", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Length & Temperature", fontWeight = FontWeight.Bold)
+                Text("Cyber Storage & Weight", fontWeight = FontWeight.Bold)
             }
         }
     }

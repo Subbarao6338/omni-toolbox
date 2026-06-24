@@ -58,7 +58,7 @@ fun GameToolScreen(navController: NavHostController, title: String) {
                 "Game of Life" -> GameOfLife()
                 "Clash Deck" -> ClashDeckBuilder()
                 "Roulette" -> RouletteGame()
-                "Memory Game" -> MemoryGame()
+                "Memory Game" -> MemoryGameV2()
                 "Number Guessing" -> NumberGuessingGame()
                 "Random Gen" -> RandomGeneratorGame()
                 else -> {
@@ -648,37 +648,61 @@ fun RouletteGame() {
 }
 
 @Composable
-fun MemoryGame() {
-    val icons = listOf("🍎", "🍌", "🍇", "🍉", "🍒", "🍓", "🍍", "🥭")
-    val cards = remember { (icons + icons).shuffled().toMutableStateList() }
-    var revealed = remember { mutableStateListOf<Int>() }
-    var matched = remember { mutableStateListOf<Int>() }
+fun MemoryGameV2() {
+    val baseEmojis = listOf("🎮", "🪐", "🚀", "🤖", "🔑", "💻", "🍎", "🍌")
+    val itemsDeck = remember { (baseEmojis + baseEmojis).shuffled() }
+    var cardStates by remember { mutableStateOf(List(16) { false }) }
+    var matchedCards by remember { mutableStateOf(setOf<Int>()) }
+    var selectedIndices by remember { mutableStateOf(listOf<Int>()) }
+    var movesCount by remember { mutableIntStateOf(0) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Memory Match", style = MaterialTheme.typography.titleMedium)
+        Text("Memory Match Pro", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("Moves: $movesCount", fontSize = 14.sp)
         Spacer(Modifier.height(16.dp))
-        LazyVerticalGrid(columns = GridCells.Fixed(4), modifier = Modifier.size(280.dp)) {
-            items(16) { i ->
-                val isRevealed = revealed.contains(i) || matched.contains(i)
+
+        LazyVerticalGrid(columns = GridCells.Fixed(4), modifier = Modifier.size(300.dp)) {
+            items(16) { idx ->
+                val isFlipped = cardStates[idx] || matchedCards.contains(idx)
+                val isMatched = matchedCards.contains(idx)
+
                 Card(
-                    modifier = Modifier.padding(4.dp).aspectRatio(1f).clickable(enabled = !isRevealed) {
-                        if (revealed.size < 2) revealed.add(i)
-                    },
-                    colors = CardDefaults.cardColors(containerColor = if (isRevealed) Color.White else MaterialTheme.colorScheme.primary)
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .aspectRatio(1f)
+                        .clickable(enabled = !isFlipped && selectedIndices.size < 2) {
+                            val currentStates = cardStates.toMutableList()
+                            currentStates[idx] = true
+                            cardStates = currentStates
+                            selectedIndices = selectedIndices + idx
+                        },
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isMatched) Color(0xFF4CAF50).copy(alpha = 0.3f)
+                        else if (isFlipped) MaterialTheme.colorScheme.secondaryContainer
+                        else MaterialTheme.colorScheme.primaryContainer
+                    )
                 ) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        if (isRevealed) Text(cards[i], fontSize = 24.sp)
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        if (isFlipped) Text(itemsDeck[idx], fontSize = 24.sp)
+                        else Icon(Icons.Default.SportsEsports, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.5f))
                     }
                 }
             }
         }
-        LaunchedEffect(revealed.size) {
-            if (revealed.size == 2) {
+
+        LaunchedEffect(selectedIndices) {
+            if (selectedIndices.size == 2) {
+                movesCount++
                 delay(1000)
-                if (cards[revealed[0]] == cards[revealed[1]]) {
-                    matched.addAll(revealed)
+                if (itemsDeck[selectedIndices[0]] == itemsDeck[selectedIndices[1]]) {
+                    matchedCards = matchedCards + selectedIndices[0] + selectedIndices[1]
+                } else {
+                    val currentStates = cardStates.toMutableList()
+                    currentStates[selectedIndices[0]] = false
+                    currentStates[selectedIndices[1]] = false
+                    cardStates = currentStates
                 }
-                revealed.clear()
+                selectedIndices = emptyList()
             }
         }
     }

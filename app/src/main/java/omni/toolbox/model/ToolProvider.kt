@@ -40,6 +40,10 @@ object ToolProvider {
             description = "Cryptographic tools and secure data locker."),
         Tool("Quick Tiles", Icons.Default.Widgets, "quick_tiles", "Utilities", Color(0xFF4CAF50),
             description = "Create custom settings shade tiles."),
+        Tool("Automation", Icons.Default.SettingsInputComponent, "automation", "Utilities", Color(0xFF673AB7),
+            description = "Root-free system automation and macros."),
+        Tool("Telemetry & Stats", Icons.Default.Analytics, "telemetry_stats", "Device", Color(0xFF00E676),
+            description = "System telemetry and backup recovery hub."),
 
         // --- AI & DATA ---
         Tool("Gemini AI Hub", Icons.Default.AutoAwesome, "ai_companion", "AI Tools", Color(0xFF673AB7),
@@ -414,6 +418,7 @@ object ToolProvider {
         Tool("Wallpapers Export", Icons.Default.Wallpaper, "image_wallpapers", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Watermarking", Icons.AutoMirrored.Filled.BrandingWatermark, "image_watermark", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Wave Generator", Icons.Default.Waves, "wave_generator", "Media", isVisibleOnHome = false, isSubTool = true),
+        Tool("Noise Generator", Icons.Default.GraphicEq, "noise_generator", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("Web Image Loading", Icons.Default.CloudDownload, "image_web_load", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("WEBP to images", Icons.Default.Collections, "webp_to_images", "Media", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Noise Remover", Icons.Default.BlurOff, "ai_noise_remover", "Media", isVisibleOnHome = false, isSubTool = true),
