@@ -51,7 +51,7 @@ fun AICompanionScreen(navController: NavHostController, aiApiKey: String) {
                 when (selectedTab) {
                     0 -> ChatAndCodeTab(aiApiKey)
                     1 -> SummarizerTab(aiApiKey)
-                    2 -> MediaGenTab()
+                    2 -> MediaGenTab(aiApiKey)
                 }
             }
         }
