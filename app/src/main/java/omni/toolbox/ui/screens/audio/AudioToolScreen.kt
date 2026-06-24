@@ -288,18 +288,36 @@ fun AudioToolScreenSingle(navController: NavHostController, title: String, mimeT
                             if (selectedFileUri != null) {
                                 val outputDir = File(context.cacheDir, "audio_output")
                                 if (!outputDir.exists()) outputDir.mkdirs()
-                                val outPath = File(outputDir, "processed_${System.currentTimeMillis()}.mp3")
+                                val extension = if (mimeType.startsWith("video")) "mp4" else "mp3"
+                                val outPath = File(outputDir, "processed_${System.currentTimeMillis()}.$extension")
 
                                 context.contentResolver.openInputStream(selectedFileUri)?.use { input ->
-                                    // For Roadmap completion, we implement functional simulation
-                                    // with correct file handling. Full PCM/MP3 parsing is out of scope
-                                    // for a single screen implementation without specialized libraries.
-                                    FileOutputStream(outPath).use { output ->
-                                        input.copyTo(output)
+                                    if (title == "Audio Cutter" || title == "m_audio_cutter" || title == "Video Trim" || title == "video_trim") {
+                                        // Simulate trimming by skipping a portion of the stream
+                                        // A real implementation would need to parse the container format
+                                        val totalAvailable = input.available()
+                                        if (totalAvailable > 0) {
+                                            val skipBytes = ((startTime / 300f) * totalAvailable).toLong()
+                                            val takeBytes = (((endTime - startTime) / 300f) * totalAvailable).toLong()
+                                            input.skip(skipBytes)
+                                            FileOutputStream(outPath).use { output ->
+                                                val buffer = ByteArray(8192)
+                                                var bytesRead: Int
+                                                var totalRead = 0L
+                                                while (input.read(buffer).also { bytesRead = it } != -1 && totalRead < takeBytes) {
+                                                    output.write(buffer, 0, bytesRead)
+                                                    totalRead += bytesRead
+                                                }
+                                            }
+                                        } else {
+                                            FileOutputStream(outPath).use { output -> input.copyTo(output) }
+                                        }
+                                    } else {
+                                        FileOutputStream(outPath).use { output -> input.copyTo(output) }
                                     }
                                 }
                                 withContext(Dispatchers.Main) {
-                                    Toast.makeText(context, "Audio trimmed and saved: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, "Processed file saved: ${outPath.name}", Toast.LENGTH_LONG).show()
                                 }
                             }
                         } catch (e: Exception) {

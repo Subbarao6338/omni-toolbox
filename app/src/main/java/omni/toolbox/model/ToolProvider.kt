@@ -199,7 +199,7 @@ object ToolProvider {
             subToolRoutes = listOf(
                 "ai_chat", "ai_code", "ai_doc_translator", "ai_grammar", "ai_image",
                 "ai_obj_detect", "ai_sentiment", "ai_summarizer", "ai_text_ext", "ai_translate",
-                "face_swap", "video_noise_remover"
+                "face_swap", "video_noise_remover", "ai_tryon"
             )),
 
         // --- SECURITY ---
@@ -550,7 +550,7 @@ object ToolProvider {
         Tool("Media Grabber", Icons.Default.Download, "media_grabber", "Web", isVisibleOnHome = false, isSubTool = true),
         Tool("Metatag Analyzer", Icons.Default.Search, "meta_anal", "Web", isVisibleOnHome = false, isSubTool = true),
         Tool("NECS Story", Icons.Default.AutoAwesome, "per_necs_story", "Web", isVisibleOnHome = false, isSubTool = true),
-        Tool("nHub", Icons.Default.Hub, "hub", "Web", isVisibleOnHome = false, isSubTool = true),
+        Tool("Epic Bookmarx", Icons.Default.Hub, "hub", "Web", isVisibleOnHome = false, isSubTool = true),
         Tool("Perchance Character Maker", Icons.Default.Person, "per_character", "Web", isVisibleOnHome = false, isSubTool = true),
         Tool("Perchance General Hub", Icons.Default.Hub, "per_hub", "Web", isVisibleOnHome = false, isSubTool = true),
         Tool("Perchance Image Generator", Icons.Default.Image, "per_image", "Web", isVisibleOnHome = false, isSubTool = true),
@@ -569,6 +569,7 @@ object ToolProvider {
         Tool("AI Text Extractor", Icons.Default.TextFields, "ai_text_ext", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("AI Translator", Icons.Default.Translate, "ai_translate", "AI Tools", isVisibleOnHome = false, isSubTool = true),
         Tool("Video Noise Remover", Icons.Default.VideoSettings, "video_noise_remover", "AI Tools", isVisibleOnHome = false, isSubTool = true),
+        Tool("Virtual Try-On", Icons.Default.Face, "ai_tryon", "AI Tools", isVisibleOnHome = false, isSubTool = true),
 
         // --- SECURITY SUB-TOOLS ---
         Tool("App Locker", Icons.Default.Lock, "app_locker", "Security", isVisibleOnHome = false, isSubTool = true),

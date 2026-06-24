@@ -113,31 +113,32 @@ fun encodeHtmlEntities(input: String): String {
 }
 
 fun calculateWordRank(input: String): String {
-    val word = input.uppercase().filter { it.isLetter() }
+    val word = input.trim().uppercase().filter { it.isLetter() }
     if (word.isEmpty()) return "Enter a valid word."
 
-    var rank = BigInteger.ONE
     val n = word.length
-    val freqMap = word.groupingBy { it }.eachCount().toMutableMap()
+    if (n > 25) return "Word too long for rank calculation."
 
-    fun factorial(num: Int): BigInteger {
-        var res = BigInteger.ONE
-        for (i in 2..num) res = res.multiply(BigInteger.valueOf(i.toLong()))
-        return res
-    }
+    val fact = Array(n + 1) { BigInteger.ONE }
+    for (i in 2..n) fact[i] = fact[i - 1].multiply(BigInteger.valueOf(i.toLong()))
 
-    fun getPermutations(totalLen: Int, counts: Map<Char, Int>): BigInteger {
-        var den = BigInteger.ONE
-        for (count in counts.values) den = den.multiply(factorial(count))
-        return factorial(totalLen).divide(den)
-    }
+    var rank = BigInteger.ONE
+    val freqMap = mutableMapOf<Char, Int>()
+    for (c in word) freqMap[c] = freqMap.getOrDefault(c, 0) + 1
 
-    for (i in word.indices) {
-        val smallerChars = freqMap.keys.filter { it < word[i] && freqMap[it]!! > 0 }
-        for (char in smallerChars) {
-            val tempMap = freqMap.toMutableMap()
-            tempMap[char] = tempMap[char]!! - 1
-            rank = rank.add(getPermutations(n - 1 - i, tempMap))
+    for (i in 0 until n) {
+        val sortedKeys = freqMap.keys.filter { it < word[i] && freqMap[it]!! > 0 }.sorted()
+        for (char in sortedKeys) {
+            freqMap[char] = freqMap[char]!! - 1
+
+            var den = BigInteger.ONE
+            for (count in freqMap.values) {
+                if (count > 1) den = den.multiply(fact[count])
+            }
+            val permutations = fact[n - 1 - i].divide(den)
+            rank = rank.add(permutations)
+
+            freqMap[char] = freqMap[char]!! + 1
         }
         freqMap[word[i]] = freqMap[word[i]]!! - 1
     }
@@ -146,15 +147,33 @@ fun calculateWordRank(input: String): String {
 }
 
 fun findAnagrams(input: String): String {
-    val text = input.lowercase().filter { it.isLetter() }
-    if (text.isEmpty()) return "Enter some text to analyze."
+    val cleaned = input.trim().lowercase()
+    val lettersOnly = cleaned.filter { it.isLetter() }
+    if (lettersOnly.isEmpty()) return "Enter some text to analyze."
 
-    val charCount = text.groupingBy { it }.eachCount().toSortedMap()
-    val sortedText = text.toCharArray().sortedArray().joinToString("")
+    val charCount = lettersOnly.groupingBy { it }.eachCount().toSortedMap()
+    val sortedLetters = lettersOnly.toCharArray().sortedArray().joinToString("")
 
-    return "Sorted Letters: $sortedText\n\nCharacter Breakdown:\n" +
-           charCount.map { "${it.key}: ${it.value}" }.joinToString("\n") +
-           "\n\nAnagrams search: Try 'listen' (silent), 'debit card' (bad credit), 'dormitory' (dirty room)."
+    // Simple built-in dictionary for demo purposes
+    val demoDict = listOf("listen", "silent", "enlist", "tinsel", "inlets", "rail safety", "fairy tales", "dormitory", "dirty room", "astronomer", "moon starer", "the eyes", "they see", "school master", "the classroom")
+
+    val matches = demoDict.filter { dictWord ->
+        val dictLetters = dictWord.lowercase().filter { it.isLetter() }
+        dictLetters.length == lettersOnly.length &&
+        dictLetters.toCharArray().sortedArray().joinToString("") == sortedLetters &&
+        dictWord.lowercase() != cleaned
+    }
+
+    return buildString {
+        append("Sorted Letters: $sortedLetters\n")
+        append("Character Breakdown: ${charCount}\n\n")
+        if (matches.isNotEmpty()) {
+            append("Known Anagrams:\n")
+            matches.forEach { append("- $it\n") }
+        } else {
+            append("No anagrams found in local demo dictionary.")
+        }
+    }
 }
 
 fun generateLorem(input: String): String {

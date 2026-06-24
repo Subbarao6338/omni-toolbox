@@ -215,11 +215,17 @@ fun SummarizerTab(apiKey: String) {
 }
 
 @Composable
-fun MediaGenTab() {
+fun MediaGenTab(apiKey: String) {
     var prompt by remember { mutableStateOf("") }
+    var response by remember { mutableStateOf("") }
     var isGenerating by remember { mutableStateOf(false) }
-    var progress by remember { mutableFloatStateOf(0f) }
     val scope = rememberCoroutineScope()
+
+    val generativeModel = remember(apiKey) {
+        if (apiKey.isNotEmpty()) {
+            GenerativeModel(modelName = "gemini-1.5-pro", apiKey = apiKey)
+        } else null
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Multimodal Generative Lab", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -236,47 +242,62 @@ fun MediaGenTab() {
                 onClick = {
                     scope.launch {
                         isGenerating = true
-                        progress = 0f
-                        repeat(10) {
-                            delay(500)
-                            progress += 0.1f
+                        try {
+                            val fullPrompt = "Explain how you would generate a video for this prompt using Veo-3.1 and provide a detailed cinematic description: $prompt"
+                            val result = generativeModel?.generateContent(fullPrompt)
+                            response = result?.text ?: "No generation plan available."
+                        } catch (e: Exception) {
+                            response = "Error: ${e.localizedMessage}"
+                        } finally {
+                            isGenerating = false
                         }
-                        isGenerating = false
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = apiKey.isNotEmpty() && !isGenerating
             ) {
-                Icon(Icons.Default.Movie, contentDescription = null)
+                if (isGenerating) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                else Icon(Icons.Default.Movie, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Text-to-Video")
+                Text("Veo Video Plan")
             }
 
             Button(
-                onClick = { /* Music Gen */ },
+                onClick = {
+                    scope.launch {
+                        isGenerating = true
+                        try {
+                            val fullPrompt = "Describe a musical composition for this prompt in terms of key, tempo, instruments, and mood: $prompt"
+                            val result = generativeModel?.generateContent(fullPrompt)
+                            response = result?.text ?: "No musical description available."
+                        } catch (e: Exception) {
+                            response = "Error: ${e.localizedMessage}"
+                        } finally {
+                            isGenerating = false
+                        }
+                    }
+                },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                enabled = apiKey.isNotEmpty() && !isGenerating
             ) {
-                Icon(Icons.Default.MusicNote, contentDescription = null)
+                if (isGenerating) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                else Icon(Icons.Default.MusicNote, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Text-to-Music")
+                Text("Music Gen Plan")
             }
         }
 
-        if (isGenerating) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                Text("Synthesizing cinematic frames (veo-3.1)...", style = MaterialTheme.typography.bodySmall)
-                Spacer(modifier = Modifier.height(8.dp))
-                LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
-                Text("${(progress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall)
-            }
-        }
-
-        Card(
-            modifier = Modifier.fillMaxWidth().height(180.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text("Media Preview Area", color = MaterialTheme.colorScheme.outline)
+        if (response.isNotEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("AI Generative Design:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(response, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }
