@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
             var dynamicColor by rememberSaveable { mutableStateOf(prefs.getBoolean("dynamic_color", true)) }
             var showCategoryCounts by rememberSaveable { mutableStateOf(prefs.getBoolean("show_category_counts", true)) }
             var aiApiKey by rememberSaveable { mutableStateOf(prefs.getString("ai_api_key", "") ?: "") }
+            var stableDiffusionUrl by rememberSaveable { mutableStateOf(prefs.getString("stable_diffusion_url", "") ?: "") }
             var accentColorHex by rememberSaveable { mutableStateOf(prefs.getString("accent_color", "") ?: "") }
 
             val accentColor = remember(accentColorHex) {
@@ -68,6 +69,11 @@ class MainActivity : ComponentActivity() {
                         onAiApiKeyChange = {
                             aiApiKey = it
                             prefs.edit().putString("ai_api_key", it).apply()
+                        },
+                        stableDiffusionUrl = stableDiffusionUrl,
+                        onStableDiffusionUrlChange = {
+                            stableDiffusionUrl = it
+                            prefs.edit().putString("stable_diffusion_url", it).apply()
                         },
                         accentColor = accentColor,
                         onAccentColorChange = { color ->

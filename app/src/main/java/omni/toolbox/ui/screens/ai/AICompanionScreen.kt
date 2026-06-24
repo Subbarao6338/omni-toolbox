@@ -1,9 +1,7 @@
 package omni.toolbox.ui.screens.ai
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
@@ -51,7 +49,7 @@ fun AICompanionScreen(navController: NavHostController, aiApiKey: String) {
                 when (selectedTab) {
                     0 -> ChatAndCodeTab(aiApiKey)
                     1 -> SummarizerTab(aiApiKey)
-                    2 -> MediaGenTab()
+                    2 -> MediaGenTab(aiApiKey)
                 }
             }
         }
@@ -215,11 +213,19 @@ fun SummarizerTab(apiKey: String) {
 }
 
 @Composable
-fun MediaGenTab() {
+fun MediaGenTab(apiKey: String) {
     var prompt by remember { mutableStateOf("") }
     var isGenerating by remember { mutableStateOf(false) }
+    var statusText by remember { mutableStateOf("") }
     var progress by remember { mutableFloatStateOf(0f) }
+    var responseText by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+
+    val generativeModel = remember(apiKey) {
+        if (apiKey.isNotEmpty()) {
+            GenerativeModel(modelName = "gemini-1.5-flash", apiKey = apiKey)
+        } else null
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Multimodal Generative Lab", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -236,15 +242,22 @@ fun MediaGenTab() {
                 onClick = {
                     scope.launch {
                         isGenerating = true
-                        progress = 0f
-                        repeat(10) {
-                            delay(500)
-                            progress += 0.1f
+                        progress = 0.1f
+                        statusText = "Consulting Gemini for cinematic synthesis..."
+                        try {
+                            val result = generativeModel?.generateContent("Describe a cinematic video storyboard for: $prompt")
+                            responseText = result?.text ?: "No storyboard generated."
+                            progress = 1.0f
+                            statusText = "Analysis complete."
+                        } catch (e: Exception) {
+                            statusText = "Error: ${e.localizedMessage}"
+                        } finally {
+                            isGenerating = false
                         }
-                        isGenerating = false
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = apiKey.isNotEmpty() && !isGenerating && prompt.isNotBlank()
             ) {
                 Icon(Icons.Default.Movie, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -264,7 +277,7 @@ fun MediaGenTab() {
 
         if (isGenerating) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                Text("Synthesizing cinematic frames (veo-3.1)...", style = MaterialTheme.typography.bodySmall)
+                Text(statusText, style = MaterialTheme.typography.bodySmall)
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
                 Text("${(progress * 100).toInt()}%", style = MaterialTheme.typography.labelSmall)
@@ -272,11 +285,15 @@ fun MediaGenTab() {
         }
 
         Card(
-            modifier = Modifier.fillMaxWidth().height(180.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 180.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text("Media Preview Area", color = MaterialTheme.colorScheme.outline)
+            Box(contentAlignment = if (responseText.isEmpty()) Alignment.Center else Alignment.TopStart, modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                if (responseText.isEmpty()) {
+                    Text("Media Preview Area", color = MaterialTheme.colorScheme.outline)
+                } else {
+                    Text(responseText, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }

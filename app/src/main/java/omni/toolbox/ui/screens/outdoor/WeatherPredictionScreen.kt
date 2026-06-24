@@ -24,16 +24,19 @@ fun WeatherPredictionScreen(navController: NavHostController) {
     val pressureSensor = remember { sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) }
 
     var currentPressure by remember { mutableFloatStateOf(1013.25f) }
-    var pressureHistory by remember { mutableStateOf(mutableListOf<Float>()) }
+    var pressureHistory by remember { mutableStateOf(mutableListOf<Pair<Long, Float>>()) }
 
     DisposableEffect(context) {
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
                 if (event?.sensor?.type == Sensor.TYPE_PRESSURE) {
                     currentPressure = event.values[0]
-                    if (pressureHistory.isEmpty() || abs(currentPressure - pressureHistory.last()) > 0.1f) {
-                        pressureHistory.add(currentPressure)
-                        if (pressureHistory.size > 50) pressureHistory.removeAt(0)
+                    val currentTime = System.currentTimeMillis()
+                    if (pressureHistory.isEmpty() || abs(currentPressure - pressureHistory.last().second) > 0.05f) {
+                        pressureHistory.add(currentTime to currentPressure)
+                        // Keep 3 hours of history (3 * 60 * 60 * 1000 ms)
+                        val threeHoursAgo = currentTime - (3 * 60 * 60 * 1000)
+                        pressureHistory.removeAll { it.first < threeHoursAgo }
                     }
                 }
             }
@@ -45,7 +48,9 @@ fun WeatherPredictionScreen(navController: NavHostController) {
         }
     }
 
-    val pressureChange = if (pressureHistory.size > 1) currentPressure - pressureHistory.first() else 0f
+    val pressureChange = if (pressureHistory.size > 1) {
+        currentPressure - pressureHistory.first().second
+    } else 0f
 
     val prediction = when {
         pressureChange < -3.0 -> "Rapidly Falling (Storm)"

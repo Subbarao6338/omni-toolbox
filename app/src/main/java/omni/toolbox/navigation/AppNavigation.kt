@@ -70,6 +70,8 @@ fun OmniToolboxApp(
     onShowCategoryCountsChange: (Boolean) -> Unit,
     aiApiKey: String,
     onAiApiKeyChange: (String) -> Unit,
+    stableDiffusionUrl: String,
+    onStableDiffusionUrlChange: (String) -> Unit,
     accentColor: Color?,
     onAccentColorChange: (Color?) -> Unit,
     intent: Intent? = null
@@ -129,6 +131,7 @@ fun OmniToolboxApp(
                 dynamicColor, onDynamicColorChange,
                 showCategoryCounts, onShowCategoryCountsChange,
                 aiApiKey, onAiApiKeyChange,
+                stableDiffusionUrl, onStableDiffusionUrlChange,
                 accentColor, onAccentColorChange
             )
         }
@@ -159,7 +162,7 @@ fun OmniToolboxApp(
             ToolProvider.tools.filter { it.subToolRoutes == null }.forEach { tool ->
                 if (isSpecialRoute(tool.route)) return@forEach
                 composable(tool.route) {
-                    ToolScreenDispatcher(navController, tool, aiApiKey, omniViewModel)
+                    ToolScreenDispatcher(navController, tool, aiApiKey, stableDiffusionUrl, omniViewModel)
                 }
             }
         }
@@ -169,7 +172,7 @@ fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
     composable(route = "calculator", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://calculator" })) { CalculatorScreen(navController) }
     composable(route = "compass", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://compass" })) { CompassScreen(navController) }
     composable(route = "note", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://note" })) { NotePadScreen(navController) }
-    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://hub" })) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "nHub") }
+    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://hub" })) { WebToolScreen(navController, initialUrl = "https://epic-bookmarx.vercel.app/", showUrlBar = false, title = "Epic Bookmarx") }
     composable(route = "qr_scanner", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://qr_scanner" })) { QrScannerScreen(navController) }
     composable(route = "sos", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://sos" })) { EmergencySOSScreen(navController) }
     composable(route = "metronome", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://metronome" })) { MetronomeScreen(navController) }
@@ -200,12 +203,12 @@ fun isSpecialRoute(route: String): Boolean {
 }
 
 @Composable
-fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String, omniViewModel: OmniViewModel) {
+fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String, stableDiffusionUrl: String, omniViewModel: OmniViewModel) {
     val route = tool.route
 
     when {
         // --- 1. Specialized Screens by Route (Direct Mapping) ---
-        route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey)
+        route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey, stableDiffusionUrl)
         route == "ai_doc_translator" -> DocumentTranslatorScreen(navController, tool.name)
         route == "binaural" -> BinauralBeatsScreen(navController)
         route == "cipher_tools" -> HashGeneratorScreen(navController)
@@ -352,6 +355,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         listOf("speedometer", "fuel_consumption", "car_maintenance").contains(route) -> AutomotiveToolScreen(navController, tool.name)
         listOf("image_color_picker", "image_palette", "color_palette_group", "color_conv_pro", "color_harmonies", "color_info", "color_mixing", "color_shading", "edit_palette", "generate_palette", "material_you_palette", "image_histogram").contains(route) -> ColorToolsScreen(navController)
         route == "image_bg_remover" || route == "image_ai_tools" -> ImageAIScreen(navController, tool.name)
+        route == "virtual_try_on" -> VirtualTryOnScreen(navController, stableDiffusionUrl)
 
         // --- 2. Shared Multi-Category Screens ---
         listOf("matrix_calc", "eq_solver", "fraction_calc", "truth_table", "binary_calc", "stats").contains(route) -> MathToolScreen(navController, tool.name)
@@ -390,7 +394,7 @@ fun WebDispatcher(navController: NavHostController, tool: Tool) {
         "sec_nextdns" -> "https://my.nextdns.io"
         "sec_bitwarden" -> "https://vault.bitwarden.com/"
         "sec_ente" -> "https://auth.ente.com/"
-        "hub" -> "https://nhub-pi.vercel.app"
+        "hub" -> "https://epic-bookmarx.vercel.app/"
         "web" -> "https://www.google.com"
         else -> "https://perchance.org"
     }

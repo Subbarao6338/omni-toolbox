@@ -146,15 +146,34 @@ fun calculateWordRank(input: String): String {
 }
 
 fun findAnagrams(input: String): String {
-    val text = input.lowercase().filter { it.isLetter() }
+    val text = input.lowercase().trim()
     if (text.isEmpty()) return "Enter some text to analyze."
 
-    val charCount = text.groupingBy { it }.eachCount().toSortedMap()
-    val sortedText = text.toCharArray().sortedArray().joinToString("")
+    val words = text.split(Regex("\\s+")).filter { it.length > 1 }
+    val anagramGroups = mutableMapOf<String, MutableList<String>>()
 
-    return "Sorted Letters: $sortedText\n\nCharacter Breakdown:\n" +
-           charCount.map { "${it.key}: ${it.value}" }.joinToString("\n") +
-           "\n\nAnagrams search: Try 'listen' (silent), 'debit card' (bad credit), 'dormitory' (dirty room)."
+    words.forEach { word ->
+        val sorted = word.toCharArray().sortedArray().joinToString("")
+        anagramGroups.getOrPut(sorted) { mutableListOf() }.add(word)
+    }
+
+    val results = anagramGroups.filter { it.value.distinct().size > 1 }
+
+    val charCount = text.filter { it.isLetter() }.groupingBy { it }.eachCount().toSortedMap()
+
+    return buildString {
+        append("Character Breakdown:\n")
+        append(charCount.map { "${it.key}: ${it.value}" }.joinToString(", "))
+        append("\n\n")
+        if (results.isEmpty()) {
+            append("No anagrams found in the input text.")
+        } else {
+            append("Anagrams Found:\n")
+            results.values.forEach { group ->
+                append("• ${group.distinct().joinToString(", ")}\n")
+            }
+        }
+    }
 }
 
 fun generateLorem(input: String): String {

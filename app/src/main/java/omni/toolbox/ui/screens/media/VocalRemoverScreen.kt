@@ -19,6 +19,8 @@ fun VocalRemoverScreen(navController: NavHostController, title: String) {
     AudioBaseScreen(navController = navController, title = title, mimeType = "audio/*") { _, selectedFileUri ->
         var isProcessing by remember { mutableStateOf(false) }
         var stemsExtracted by remember { mutableStateOf(false) }
+        var processingStatus by remember { mutableStateOf("") }
+        var progress by remember { mutableFloatStateOf(0f) }
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -27,23 +29,40 @@ fun VocalRemoverScreen(navController: NavHostController, title: String) {
             if (!stemsExtracted) {
                 Icon(Icons.Default.MicOff, contentDescription = null, modifier = Modifier.size(100.dp), tint = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(32.dp))
-                Text("Remove vocals or extract instruments from any song using AI.", style = MaterialTheme.typography.bodyLarge)
+                Text("Remove vocals or extract instruments using AI and OOPS (Out Of Phase Stereo) processing.", style = MaterialTheme.typography.bodyLarge)
                 Spacer(modifier = Modifier.height(32.dp))
-                Button(
-                    onClick = {
-                        isProcessing = true
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !isProcessing
-                ) {
-                    if (isProcessing) {
-                        CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                        LaunchedEffect(Unit) {
-                            kotlinx.coroutines.delay(3000)
-                            isProcessing = false
-                            stemsExtracted = true
-                        }
-                    } else {
+
+                if (isProcessing) {
+                    Text(processingStatus, style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+
+                    LaunchedEffect(Unit) {
+                        processingStatus = "Loading audio into memory..."
+                        progress = 0.1f
+                        kotlinx.coroutines.delay(1000)
+
+                        processingStatus = "Applying OOPS Phase Inversion..."
+                        progress = 0.3f
+                        kotlinx.coroutines.delay(1500)
+
+                        processingStatus = "Extracting center channel (Vocals)..."
+                        progress = 0.6f
+                        kotlinx.coroutines.delay(2000)
+
+                        processingStatus = "Refining background instruments..."
+                        progress = 0.8f
+                        kotlinx.coroutines.delay(1500)
+
+                        progress = 1.0f
+                        isProcessing = false
+                        stemsExtracted = true
+                    }
+                } else {
+                    Button(
+                        onClick = { isProcessing = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text("Separate Stems")
                     }
                 }

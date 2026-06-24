@@ -1,6 +1,11 @@
 package omni.toolbox.viewmodel
 
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.compose.runtime.*
@@ -53,6 +58,12 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     private val _isSyncing = mutableStateOf(false)
     val isSyncing: State<Boolean> = _isSyncing
 
+    // --- System Info State ---
+    var currentRamUsage = mutableFloatStateOf(0f)
+    var currentRamText = mutableStateOf("0 GB / 0 GB")
+    var currentBatteryLevel = mutableFloatStateOf(0f)
+    var currentBatteryStatus = mutableStateOf("Unknown")
+
     // --- Benchmarking State ---
     val isBenchmarking = mutableStateOf(false)
     val benchmarkProgress = mutableFloatStateOf(0f)
@@ -83,6 +94,7 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     ))
 
     init {
+        startSystemMonitoring()
         // Seed demo accounts
         _accounts.addAll(listOf(
             CloudAccount("1", "GDrive", "subbu.edu.68@gmail.com", "12.4 GB", "15.0 GB"),
@@ -234,5 +246,39 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteRule(id: Int) {
         automationRules.value = automationRules.value.filter { it.id != id }
         addLog("Automation: Deleted rule ID $id")
+    }
+
+    private fun startSystemMonitoring() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val activityManager = getApplication<Application>().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val memoryInfo = ActivityManager.MemoryInfo()
+
+            while (true) {
+                // RAM
+                activityManager.getMemoryInfo(memoryInfo)
+                val totalMem = memoryInfo.totalMem.toDouble()
+                val availMem = memoryInfo.availMem.toDouble()
+                val usedMem = totalMem - availMem
+                currentRamUsage.floatValue = (usedMem / totalMem).toFloat()
+                currentRamText.value = "${(usedMem / (1024 * 1024 * 1024)).toInt()} GB / ${(totalMem / (1024 * 1024 * 1024)).toInt()} GB"
+
+                // Battery
+                val batteryStatus: Intent? = getApplication<Application>().registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                val level: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+                val scale: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+                currentBatteryLevel.floatValue = if (level != -1 && scale != -1) level / scale.toFloat() else 0f
+
+                val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+                currentBatteryStatus.value = when (status) {
+                    BatteryManager.BATTERY_STATUS_CHARGING -> "Charging"
+                    BatteryManager.BATTERY_STATUS_DISCHARGING -> "Discharging"
+                    BatteryManager.BATTERY_STATUS_FULL -> "Full"
+                    BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "Not Charging"
+                    else -> "Unknown"
+                }
+
+                delay(5000)
+            }
+        }
     }
 }

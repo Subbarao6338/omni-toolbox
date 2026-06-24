@@ -170,7 +170,9 @@ fun solveFraction(f1: String, f2: String): String {
         }
 
         val (n1, d1) = parse(f1)
+        if (d1 == 0L) return "Error: Division by zero in first fraction."
         val (n2, d2) = if (f2.isEmpty()) 0L to 1L else parse(f2)
+        if (d2 == 0L) return "Error: Division by zero in second fraction."
 
         fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)
         fun simplify(n: Long, d: Long): String {
@@ -189,8 +191,9 @@ fun solveFraction(f1: String, f2: String): String {
         val prodD = d1 * d2
         val divN = n1 * d2
         val divD = d1 * n2
+        val quotient = if (divD == 0L) "Infinity" else simplify(divN, divD)
 
-        "Sum: ${simplify(sumN, sumD)}\nDifference: ${simplify(diffN, sumD)}\nProduct: ${simplify(prodN, prodD)}\nQuotient: ${simplify(divN, divD)}"
+        "Sum: ${simplify(sumN, sumD)}\nDifference: ${simplify(diffN, sumD)}\nProduct: ${simplify(prodN, prodD)}\nQuotient: $quotient"
     } catch (e: Exception) {
         "Invalid input. Format: 1/2 or 1 1/2"
     }
@@ -261,14 +264,21 @@ fun solveMatrix(input: String): String {
 
 fun solveEquation(input: String): String {
     return try {
-        val nums = input.split(",").map { it.trim().toDouble() }
+        val nums = input.split(",").filter { it.isNotBlank() }.map { it.trim().toDouble() }
         if (nums.size != 3) return "Enter 3 numbers (a,b,c) for ax² + bx + c = 0"
         val a = nums[0]; val b = nums[1]; val c = nums[2]
+        if (a == 0.0) {
+            return if (b == 0.0) {
+                if (c == 0.0) "Infinite solutions (0=0)" else "No solution ($c=0)"
+            } else {
+                "Linear equation: x=${-c/b}"
+            }
+        }
         val d = b * b - 4 * a * c
         when {
             d > 0 -> "Two real roots: x1=${(-b+sqrt(d))/(2*a)}, x2=${(-b-sqrt(d))/(2*a)}"
             d == 0.0 -> "One real root: x=${-b/(2*a)}"
-            else -> "No real roots (Discriminant: $d)"
+            else -> "Complex roots: x=${-b/(2*a)} ± ${sqrt(-d)/(2*a)}i"
         }
     } catch (e: Exception) {
         "Invalid Input. Format: 1, -3, 2 (for x²-3x+2=0)"
