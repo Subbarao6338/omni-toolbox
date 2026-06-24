@@ -138,7 +138,8 @@ fun OmniToolboxApp(
         composable("dashboard") { DashboardScreen(navController) }
         composable("developer_console") { DeveloperScreen(navController) }
         composable("cloud_sync") { SyncScreen(navController, omniViewModel) }
-        composable("web_scraper") { DocsCrawlerScreen(navController) }
+        composable("web_scraper") { DocsCrawlerScreen(navController, omniViewModel) }
+        composable("telemetry_stats") { StatsBackupScreen(navController, omniViewModel) }
         composable("ai_companion") { AICompanionScreen(navController, aiApiKey) }
         composable("security_vault") { SecurityScreen(navController, "Security Vault") }
         composable("power_bench") { PowerBenchScreen(navController) }
@@ -207,6 +208,8 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
 
     when {
         // --- 1. Specialized Screens by Route (Direct Mapping) ---
+        route == "telemetry_stats" -> StatsBackupScreen(navController, omniViewModel)
+        route == "web_scraper" -> DocsCrawlerScreen(navController, omniViewModel)
         route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey, stableDiffusionUrl)
         route == "ai_tryon" -> VirtualTryOnScreen(navController, stableDiffusionUrl)
         route == "ai_doc_translator" -> DocumentTranslatorScreen(navController, tool.name)
@@ -293,6 +296,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "docs_online" -> OnlineDocsScreen(navController)
         route == "password_gen" -> PasswordGenScreen(navController)
         route == "password_manager" -> PasswordManagerScreen(navController)
+        route == "automation" -> AutomationScreen(navController, omniViewModel)
         listOf("app_locker", "app_permissions", "perm_manager", "privacy_check").contains(route) -> SecurityScreen(navController, tool.name)
 
         route == "meta_anal" -> MetaTagScreen(navController)
@@ -346,6 +350,7 @@ fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey:
         route == "messages" -> MessagesScreen(navController)
         listOf("doc_scanner", "duplicate_finder", "file_explorer", "file_shredder", "sql_format", "zip_unzip", "storage_cleaner").contains(route) -> FileToolScreen(navController, tool.name)
         route == "vocal_remover" || route == "ai_stems_splitter" -> VocalRemoverScreen(navController, tool.name)
+        route == "wave_generator" || route == "noise_generator" -> AudioGeneratorScreen(navController, tool.name)
         route == "m_8d_audio" -> AudioToolScreen(navController, tool.name)
         route == "ping" -> PingScreen(navController)
         listOf("dns_lookup", "whois", "speed_test", "wake_on_lan", "http_request", "ssh_client", "port_checker", "port_scanner").contains(route) -> NetworkToolScreen(navController, tool.name)
