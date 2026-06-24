@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import omni.toolbox.viewmodel.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun DocsCrawlerScreen(navController: NavHostController, viewModel: OmniViewModel) {
@@ -70,8 +71,43 @@ fun DocsCrawlerScreen(navController: NavHostController, viewModel: OmniViewModel
 fun DocViewerTab(viewModel: OmniViewModel) {
     val docs = viewModel.documents.value
     var searchQuery by remember { mutableStateOf("") }
+    var folderPath by remember { mutableStateOf("/sdcard/Documents") }
+    var isIngesting by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(
+                value = folderPath,
+                onValueChange = { folderPath = it },
+                label = { Text("Local Folder to Ingest") },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                onClick = {
+                    isIngesting = true
+                    scope.launch {
+                        val root = java.io.File(folderPath)
+                        if (root.exists() && root.isDirectory) {
+                            root.walkTopDown()
+                                .filter { it.isFile && it.extension?.lowercase() in listOf("pdf", "docx", "txt", "md") }
+                                .forEach { file ->
+                                    viewModel.addDocument(file.name, file.extension.uppercase(), "Ingested content from ${file.name}")
+                                }
+                        }
+                        isIngesting = false
+                    }
+                },
+                enabled = !isIngesting
+            ) {
+                if (isIngesting) CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                else Text("Ingest")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },

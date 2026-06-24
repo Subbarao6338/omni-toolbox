@@ -41,6 +41,7 @@ import omni.toolbox.ui.screens.network.*
 import omni.toolbox.ui.screens.physics.*
 import omni.toolbox.ui.screens.productivity.*
 import omni.toolbox.ui.screens.productivity.SecurityScreen
+import omni.toolbox.ui.screens.automation.*
 import omni.toolbox.ui.screens.science.*
 import omni.toolbox.ui.screens.sensor.*
 import omni.toolbox.ui.screens.survival.*

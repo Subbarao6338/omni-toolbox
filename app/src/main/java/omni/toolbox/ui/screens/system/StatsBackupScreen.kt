@@ -284,7 +284,7 @@ fun CallSmsBackupTab(viewModel: OmniViewModel) {
                             isBackingUp = false
                         }
                     }, enabled = !isBackingUp, modifier = Modifier.fillMaxWidth()) {
-                        if (isBackingUp) CircularProgressIndicator(size = 20.dp)
+                        if (isBackingUp) CircularProgressIndicator(modifier = Modifier.size(20.dp))
                         else Text("Backup to Google Drive")
                     }
                 }

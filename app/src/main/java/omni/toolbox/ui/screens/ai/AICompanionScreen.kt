@@ -88,7 +88,8 @@ fun ChatAndCodeTab(apiKey: String) {
                     scope.launch {
                         isAnalyzing = true
                         try {
-                            val result = generativeModel?.generateContent(input)
+                            val prompt = "Provide a detailed answer to the following query. If it's a coding question, provide optimized code examples and explain potential edge cases:\n\n$input"
+                            val result = generativeModel?.generateContent(prompt)
                             response = result?.text ?: "No response from AI."
                         } catch (e: Exception) {
                             response = "Error: ${e.localizedMessage}"

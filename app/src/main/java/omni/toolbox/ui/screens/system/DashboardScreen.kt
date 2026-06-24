@@ -133,7 +133,7 @@ fun DashboardScreen(navController: NavHostController) {
                         .padding(horizontal = 16.dp)
                         .height(180.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF121212))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Column(
                         modifier = Modifier
@@ -143,7 +143,7 @@ fun DashboardScreen(navController: NavHostController) {
                         logs.forEach { log ->
                             Text(
                                 text = log,
-                                color = Color(0xFF39FF14), // Neon Green
+                                color = MaterialTheme.colorScheme.primary,
                                 fontFamily = FontFamily.Monospace,
                                 fontSize = 11.sp,
                                 lineHeight = 16.sp
