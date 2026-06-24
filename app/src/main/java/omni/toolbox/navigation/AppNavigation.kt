@@ -2,7 +2,6 @@ package omni.toolbox.navigation
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -70,6 +69,8 @@ fun OmniToolboxApp(
     onShowCategoryCountsChange: (Boolean) -> Unit,
     aiApiKey: String,
     onAiApiKeyChange: (String) -> Unit,
+    stableDiffusionUrl: String,
+    onStableDiffusionUrlChange: (String) -> Unit,
     accentColor: Color?,
     onAccentColorChange: (Color?) -> Unit,
     intent: Intent? = null
@@ -129,6 +130,7 @@ fun OmniToolboxApp(
                 dynamicColor, onDynamicColorChange,
                 showCategoryCounts, onShowCategoryCountsChange,
                 aiApiKey, onAiApiKeyChange,
+                stableDiffusionUrl, onStableDiffusionUrlChange,
                 accentColor, onAccentColorChange
             )
         }
@@ -159,7 +161,7 @@ fun OmniToolboxApp(
             ToolProvider.tools.filter { it.subToolRoutes == null }.forEach { tool ->
                 if (isSpecialRoute(tool.route)) return@forEach
                 composable(tool.route) {
-                    ToolScreenDispatcher(navController, tool, aiApiKey, omniViewModel)
+                    ToolScreenDispatcher(navController, tool, aiApiKey, stableDiffusionUrl, omniViewModel)
                 }
             }
         }
@@ -169,7 +171,7 @@ fun NavGraphBuilder.addSpecialRoutes(navController: NavHostController) {
     composable(route = "calculator", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://calculator" })) { CalculatorScreen(navController) }
     composable(route = "compass", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://compass" })) { CompassScreen(navController) }
     composable(route = "note", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://note" })) { NotePadScreen(navController) }
-    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://hub" })) { WebToolScreen(navController, initialUrl = "https://nhub-pi.vercel.app", showUrlBar = false, title = "nHub") }
+    composable(route = "hub", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://hub" })) { WebToolScreen(navController, initialUrl = "https://epic-bookmarx.vercel.app/", showUrlBar = false, title = "Epic Bookmarx") }
     composable(route = "qr_scanner", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://qr_scanner" })) { QrScannerScreen(navController) }
     composable(route = "sos", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://sos" })) { EmergencySOSScreen(navController) }
     composable(route = "metronome", deepLinks = listOf(navDeepLink { uriPattern = "omnitoolbox://metronome" })) { MetronomeScreen(navController) }
@@ -200,12 +202,13 @@ fun isSpecialRoute(route: String): Boolean {
 }
 
 @Composable
-fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String, omniViewModel: OmniViewModel) {
+fun ToolScreenDispatcher(navController: NavHostController, tool: Tool, aiApiKey: String, stableDiffusionUrl: String, omniViewModel: OmniViewModel) {
     val route = tool.route
 
     when {
         // --- 1. Specialized Screens by Route (Direct Mapping) ---
-        route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey)
+        route == "ai_image" -> ImageGeneratorScreen(navController, aiApiKey, stableDiffusionUrl)
+        route == "ai_tryon" -> VirtualTryOnScreen(navController, stableDiffusionUrl)
         route == "ai_doc_translator" -> DocumentTranslatorScreen(navController, tool.name)
         route == "binaural" -> BinauralBeatsScreen(navController)
         route == "cipher_tools" -> HashGeneratorScreen(navController)
@@ -390,7 +393,7 @@ fun WebDispatcher(navController: NavHostController, tool: Tool) {
         "sec_nextdns" -> "https://my.nextdns.io"
         "sec_bitwarden" -> "https://vault.bitwarden.com/"
         "sec_ente" -> "https://auth.ente.com/"
-        "hub" -> "https://nhub-pi.vercel.app"
+        "hub" -> "https://epic-bookmarx.vercel.app/"
         "web" -> "https://www.google.com"
         else -> "https://perchance.org"
     }

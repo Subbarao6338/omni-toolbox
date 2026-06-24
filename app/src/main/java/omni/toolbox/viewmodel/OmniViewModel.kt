@@ -1,12 +1,20 @@
 package omni.toolbox.viewmodel
 
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
+import android.os.Build
+import android.os.Environment
+import android.os.StatFs
+import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.compose.runtime.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.UUID
 import kotlin.random.Random
 
@@ -44,6 +52,8 @@ data class AutomationRule(
 )
 
 class OmniViewModel(application: Application) : AndroidViewModel(application) {
+    private val context = application.applicationContext
+
     private val _accounts = mutableStateListOf<CloudAccount>()
     val accounts: List<CloudAccount> = _accounts
 
@@ -52,6 +62,13 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _isSyncing = mutableStateOf(false)
     val isSyncing: State<Boolean> = _isSyncing
+
+    // --- Real-time System State ---
+    var ramUsage by mutableStateOf("0 MB / 0 MB")
+    var batteryLevel by mutableIntStateOf(0)
+    var batteryStatus by mutableStateOf("Unknown")
+    var storageUsage by mutableStateOf("0 GB / 0 GB")
+    var cpuCores by mutableIntStateOf(Runtime.getRuntime().availableProcessors())
 
     // --- Benchmarking State ---
     val isBenchmarking = mutableStateOf(false)
@@ -85,11 +102,50 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     init {
         // Seed demo accounts
         _accounts.addAll(listOf(
-            CloudAccount("1", "GDrive", "subbu.edu.68@gmail.com", "12.4 GB", "15.0 GB"),
-            CloudAccount("2", "Mega", "subbu.mega@outlook.com", "2.1 GB", "20.0 GB"),
-            CloudAccount("3", "OneDrive", "subbu.work@microsoft.com", "45.0 GB", "1.0 TB"),
-            CloudAccount("4", "Nextcloud", "subbu@personal-cloud.com", "150 GB", "500 GB")
+            CloudAccount("1", "GDrive", "omni.user@gmail.com", "12.4 GB", "15.0 GB"),
+            CloudAccount("2", "Mega", "omni.user@outlook.com", "2.1 GB", "20.0 GB")
         ))
+
+        startSystemMonitoring()
+    }
+
+    private fun startSystemMonitoring() {
+        viewModelScope.launch {
+            while (true) {
+                updateSystemInfo()
+                delay(3000)
+            }
+        }
+    }
+
+    private fun updateSystemInfo() {
+        // RAM Info
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
+        val totalRam = memoryInfo.totalMem / (1024 * 1024)
+        val availableRam = memoryInfo.availMem / (1024 * 1024)
+        ramUsage = "${totalRam - availableRam} MB / $totalRam MB"
+
+        // Battery Info
+        val batteryStatusIntent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        batteryLevel = batteryStatusIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val status = batteryStatusIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        batteryStatus = when (status) {
+            BatteryManager.BATTERY_STATUS_CHARGING -> "Charging"
+            BatteryManager.BATTERY_STATUS_DISCHARGING -> "Discharging"
+            BatteryManager.BATTERY_STATUS_FULL -> "Full"
+            else -> "Unknown"
+        }
+
+        // Storage Info
+        val stat = StatFs(Environment.getDataDirectory().path)
+        val blockSize = stat.blockSizeLong
+        val totalBlocks = stat.blockCountLong
+        val availableBlocks = stat.availableBlocksLong
+        val totalStorage = (totalBlocks * blockSize) / (1024 * 1024 * 1024)
+        val availableStorage = (availableBlocks * blockSize) / (1024 * 1024 * 1024)
+        storageUsage = "${totalStorage - availableStorage} GB / $totalStorage GB"
     }
 
     fun addLog(message: String) {

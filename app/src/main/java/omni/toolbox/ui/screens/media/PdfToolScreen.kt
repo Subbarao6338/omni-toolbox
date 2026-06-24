@@ -132,6 +132,58 @@ fun PdfToolScreen(navController: NavHostController, title: String) {
                                             }
                                         }
                                     }
+                                    "Invert PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_invert.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "inverted_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.invert(tempFile, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Inverted PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Compress PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_compress.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "compressed_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.compress(tempFile, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Compressed PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Flatten PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_flatten.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "flattened_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.flatten(tempFile, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Flattened PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
+                                    "Grayscale PDF" -> {
+                                        if (selectedFiles.isNotEmpty()) {
+                                            val tempFile = File(context.cacheDir, "temp_grayscale.pdf")
+                                            context.contentResolver.openInputStream(selectedFiles[0])?.use { input ->
+                                                tempFile.outputStream().use { output -> input.copyTo(output) }
+                                            }
+                                            val outPath = File(outputDir, "grayscale_${System.currentTimeMillis()}.pdf")
+                                            omni.toolbox.utils.PdfUtils.grayscale(tempFile, outPath)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Grayscale PDF: ${outPath.name}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    }
                                     "Rotate PDF" -> {
                                         if (selectedFiles.isNotEmpty()) {
                                             val tempFile = File(context.cacheDir, "temp_rotate.pdf")

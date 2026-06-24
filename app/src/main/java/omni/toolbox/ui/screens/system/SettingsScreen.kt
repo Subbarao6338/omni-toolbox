@@ -41,6 +41,8 @@ fun SettingsScreen(
     onShowCategoryCountsChange: (Boolean) -> Unit,
     aiApiKey: String,
     onAiApiKeyChange: (String) -> Unit,
+    stableDiffusionUrl: String,
+    onStableDiffusionUrlChange: (String) -> Unit,
     accentColor: Color?,
     onAccentColorChange: (Color?) -> Unit
 ) {
@@ -205,6 +207,24 @@ fun SettingsScreen(
             )
             Text(
                 "Provide an API key to enable online AI features. If left empty, local implementation will be used.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = stableDiffusionUrl,
+                onValueChange = onStableDiffusionUrlChange,
+                label = { Text("Stable Diffusion API URL") },
+                placeholder = { Text("http://your-sd-url:7860") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                leadingIcon = { Icon(Icons.Default.Cloud, contentDescription = null) }
+            )
+            Text(
+                "API URL for Stable Diffusion (webui with --api or similar).",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.padding(top = 8.dp)
