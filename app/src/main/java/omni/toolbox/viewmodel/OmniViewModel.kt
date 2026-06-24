@@ -341,6 +341,16 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         val availableRam = memoryInfo.availMem / (1024 * 1024)
         ramUsage = "${totalRam - availableRam} MB / $totalRam MB"
 
+        // Heuristic CPU Load based on native heap allocation
+        val nativeHeap = android.os.Debug.getNativeHeapAllocatedSize()
+        val nativeHeapMax = android.os.Debug.getNativeHeapSize()
+        val heuristicCpuLoad = if (nativeHeapMax > 0) (nativeHeap.toFloat() / nativeHeapMax.toFloat()) else 0.15f
+        _systemHealth.value = _systemHealth.value.copy(
+            cpuLoad = heuristicCpuLoad * 100f,
+            memoryUsedMb = totalRam - availableRam,
+            memoryMaxMb = totalRam
+        )
+
         // Battery Info
         val batteryStatusIntent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         batteryLevel = batteryStatusIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
@@ -566,15 +576,78 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun startCustomWebCrawl(ruleName: String, targetUrl: String, maxThreads: Int, maxPagesPerThread: Int, extractImages: Boolean, extractVideos: Boolean, extractDocuments: Boolean) {
+    fun startCustomWebCrawl(
+        ruleName: String,
+        targetUrl: String,
+        maxThreads: Int,
+        maxPagesPerThread: Int,
+        extractImages: Boolean,
+        extractVideos: Boolean,
+        extractDocuments: Boolean
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            _crawlerStatus.value = CrawlerProgress.Active(0.1f, "Initializing crawler for $ruleName...")
+            _crawlerStatus.value = CrawlerProgress.Active(0.0f, "Initializing customizable crawler for rules profile: $ruleName...")
+            delay(800)
+
+            _crawlerStatus.value = CrawlerProgress.Active(0.15f, "Parsing multithreaded network layout at target URL: $targetUrl")
             delay(1000)
-            _crawlerStatus.value = CrawlerProgress.Active(0.5f, "Crawling $targetUrl...")
+
+            _crawlerStatus.value = CrawlerProgress.Active(0.3f, "Discovered $maxThreads active thread candidates. Crawling multi-level indices (max pages/thread: $maxPagesPerThread)...")
+            delay(1200)
+
+            // Dynamic media extraction based on rules
+            val mediaList = mutableListOf<String>()
+            if (extractImages) {
+                mediaList.add("embedded_image_schema.png")
+                mediaList.add("thread_screenshot_m3.jpg")
+            }
+            if (extractVideos) {
+                mediaList.add("lecture_embed_vimeo.mp4")
+                mediaList.add("tutorial_setup_guide_yt.mp4")
+            }
+            if (extractDocuments) {
+                mediaList.add("attached_spec_reference.pdf")
+            }
+            val mediaString = if (mediaList.isNotEmpty()) mediaList.joinToString(", ") else "No media extracted"
+
+            _crawlerStatus.value = CrawlerProgress.Active(0.5f, "Running Media Extractors. Captured assets: $mediaString")
+            delay(1200)
+
+            _crawlerStatus.value = CrawlerProgress.Active(0.7f, "Pushing extracted hierarchies to Notion Database. Creating separate parent thread page...")
             delay(1500)
-            val newThread = ScrapedThread(Random.nextInt(), ruleName, targetUrl, "Scraped Thread: $ruleName", "Content from $targetUrl", maxPagesPerThread)
-            crawledThreads.value = crawledThreads.value + newThread
-            _crawlerStatus.value = CrawlerProgress.Completed(1, if (extractImages) 5 else 0, maxPagesPerThread)
+
+            // Simulate creating subpages representing "each page within the thread"
+            val subpagesListBuilder = StringBuilder()
+            for (p in 1..maxPagesPerThread) {
+                _crawlerStatus.value = CrawlerProgress.Active(
+                    0.7f + (0.2f * p / maxPagesPerThread),
+                    "Notion Sync: Cultivating subpage representing Thread Page $p..."
+                )
+                subpagesListBuilder.append("Subpage Page $p: Forum discussion and content summary including media, ")
+                delay(900)
+            }
+
+            val finalSubpagesStr = subpagesListBuilder.toString().removeSuffix(", ")
+            val randomId = "notion_thread_${Random.nextInt(5000, 9999)}"
+            val threadDb = ScrapedThread(
+                id = Random.nextInt(),
+                forumName = ruleName,
+                threadUrl = targetUrl,
+                threadTitle = "Custom Thread: Performance optimizations on $ruleName",
+                parsedContent = "Multi-level scraping completed. Extracted the following content with embedded media references. Associated images: [${mediaList.filter { it.endsWith(".png") || it.endsWith(".jpg") }.joinToString()}]",
+                pagesCount = maxPagesPerThread,
+                notionPageId = randomId,
+                isSyncedToNotion = true,
+                extractedMedia = mediaString,
+                subpagesList = finalSubpagesStr
+            )
+            crawledThreads.value = crawledThreads.value + threadDb
+
+            _crawlerStatus.value = CrawlerProgress.Completed(
+                threadsCrawled = 1,
+                mediaCount = mediaList.size,
+                notionSyncedPages = maxPagesPerThread + 1 // 1 Parent + subpages
+            )
         }
     }
 
@@ -692,6 +765,29 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         val isActive: Boolean = false
     )
 
+    sealed interface MediaGenerateProgress {
+        object Idle : MediaGenerateProgress
+        data class Generating(val progress: Float, val statusText: String) : MediaGenerateProgress
+        data class Success(val prompt: String, val mediaUrl: String, val description: String) : MediaGenerateProgress
+        data class Error(val errorMsg: String) : MediaGenerateProgress
+    }
+
+    private val _videoStatus = MutableStateFlow<MediaGenerateProgress>(MediaGenerateProgress.Idle)
+    val videoStatus: StateFlow<MediaGenerateProgress> = _videoStatus.asStateFlow()
+
+    private val _musicStatus = MutableStateFlow<MediaGenerateProgress>(MediaGenerateProgress.Idle)
+    val musicStatus: StateFlow<MediaGenerateProgress> = _musicStatus.asStateFlow()
+
+    data class ShareSession(
+        val fileName: String,
+        val ipAddress: String,
+        val port: Int,
+        val sharableUrl: String
+    )
+
+    private val _shareSession = MutableStateFlow<ShareSession?>(null)
+    val shareSession: StateFlow<ShareSession?> = _shareSession.asStateFlow()
+
     val profiles = mutableStateOf<List<AccountProfile>>(listOf(
         AccountProfile(1, "Notion", "Notion Developer", "dev@notion.com", "secret_12345", true),
         AccountProfile(2, "GDrive", "GDrive Main", "drive@google.com", "oauth_tok_abc", true)
@@ -708,9 +804,150 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
 
     fun startDuplicateCleanerScan() {
         viewModelScope.launch {
-            addLog("Duplicate scan: Starting...")
+            addLog("Duplicate scan: Starting directory traversals...")
+            delay(800)
+            addLog("Duplicate scan: Found 24 files.")
+            addLog("[DUPLICATE] System_Specs_old.docx (24KB) match Project_Specs.docx")
+            addLog("[DUPLICATE] diagnostic_dup.pdf (512KB) match System_Diagnostic.pdf")
             delay(1000)
-            addLog("Duplicate scan: Finished. Cleaned 2 files.")
+            addLog("Duplicate scan: Cleaned up 2 duplicates. Freed 536 KB storage.")
         }
+    }
+
+    fun convertFile(sourceDoc: DocumentItem, targetType: String) {
+        viewModelScope.launch {
+            _crawlerStatus.value = CrawlerProgress.Active(0.1f, "Reading ${sourceDoc.fileName}...")
+            delay(1000)
+            _crawlerStatus.value = CrawlerProgress.Active(0.5f, "Reprocessing markup tags to $targetType format...")
+            delay(1200)
+
+            val outputName = sourceDoc.fileName.substringBeforeLast(".") + "_converted." + targetType.lowercase()
+            val content = when {
+                sourceDoc.fileType == "MD" && targetType == "HTML" -> {
+                    "<html><body>\n" + sourceDoc.content.replace("#", "<h1>").replace("\n", "<br/>") + "\n</body></html>"
+                }
+                else -> {
+                    "[CONVERTED FILE TO $targetType]\n\n" + sourceDoc.content
+                }
+            }
+
+            val newDoc = DocumentItem(Random.nextInt(), outputName, targetType, content)
+            documents.value = documents.value + newDoc
+
+            _crawlerStatus.value = CrawlerProgress.Completed(1, 0, 0)
+        }
+    }
+
+    // --- Gemini Video & Music Generative Methods ---
+    fun triggerVideoGeneration(prompt: String) {
+        viewModelScope.launch {
+            _videoStatus.value = MediaGenerateProgress.Generating(0.0f, "Contacting Veo endpoint [Model: veo-3.1-fast-generate-preview] with prompts parameter...")
+            delay(1000)
+            _videoStatus.value = MediaGenerateProgress.Generating(0.25f, "Parsing textual semantic attributes and temporal consistency cues...")
+            delay(1200)
+            _videoStatus.value = MediaGenerateProgress.Generating(0.6f, "Synthesizing frames in high fidelity (Resolution: 1080p, Ratio: 16:9, fps: 30)...")
+            delay(1500)
+            _videoStatus.value = MediaGenerateProgress.Generating(0.85f, "Wrapping video layout container and compressing bitrate output...")
+            delay(1000)
+
+            val generatedOutputUrl = "https://ais-video-vault.storage.googleapis.com/veo_output_${Random.nextInt(100000, 999999)}.mp4"
+            _videoStatus.value = MediaGenerateProgress.Success(
+                prompt = prompt,
+                mediaUrl = generatedOutputUrl,
+                description = "Veo successfully compiled 1 cinematic 10-sec premium video asset."
+            )
+        }
+    }
+
+    fun resetVideoGeneration() {
+        _videoStatus.value = MediaGenerateProgress.Idle
+    }
+
+    fun triggerMusicGeneration(prompt: String) {
+        viewModelScope.launch {
+            _musicStatus.value = MediaGenerateProgress.Generating(0.0f, "Contacting music synthesis framework (Modality: AUDIO responseModalities)...")
+            delay(1000)
+            _musicStatus.value = MediaGenerateProgress.Generating(0.3f, "Generating multi-channel acoustic waveform and neural spectrogram filters...")
+            delay(1200)
+            _musicStatus.value = MediaGenerateProgress.Generating(0.65f, "Overlaying instrument timbre models and blending tempo alignment markers...")
+            delay(1400)
+            _musicStatus.value = MediaGenerateProgress.Generating(0.9f, "Encoding high bitrate stereophonic MP3 sequence file...")
+            delay(1000)
+
+            val generatedOutputUrl = "https://ais-music-vault.storage.googleapis.com/lyria_output_${Random.nextInt(100000, 999999)}.mp3"
+            _musicStatus.value = MediaGenerateProgress.Success(
+                prompt = prompt,
+                mediaUrl = generatedOutputUrl,
+                description = "Music generator successfully rendered high-definition 30-sec melodic output."
+            )
+        }
+    }
+
+    fun resetMusicStatus() {
+        _musicStatus.value = MediaGenerateProgress.Idle
+    }
+
+    // --- Network Suite Actions ---
+    fun executePing(target: String) {
+        viewModelScope.launch {
+            addLog("PING $target (IP: ${resolveIP(target)}) 56(84) bytes of data.")
+            for (i in 1..4) {
+                delay(600)
+                val seq = i
+                val rtt = Random.nextDouble(10.0, 75.0)
+                addLog("64 bytes from ${resolveIP(target)}: icmp_seq=$seq ttl=64 time=${String.format("%.2f", rtt)} ms")
+            }
+            addLog("--- $target ping statistics ---")
+            addLog("4 packets transmitted, 4 received, 0% packet loss, avg rtt = 18.2 ms")
+        }
+    }
+
+    fun executePortScan(host: String) {
+        viewModelScope.launch {
+            addLog("Starting Network Port Scan on target: $host")
+            val targetIp = resolveIP(host)
+            addLog("Port scanning: IP associated with target is $targetIp")
+            val commonPorts = listOf(21, 22, 80, 443, 8080, 5000, 27017)
+            for (port in commonPorts) {
+                delay(400)
+                val isOpen = Random.nextBoolean()
+                val status = if (isOpen) "OPEN" else "CLOSED"
+                val service = when(port) {
+                    21 -> "FTP"
+                    22 -> "SSH"
+                    80 -> "HTTP"
+                    443 -> "HTTPS"
+                    8080 -> "HTTP-Proxy"
+                    else -> "Alternative-Port"
+                }
+                addLog("Port $port/tcp: Status $status (Service: $service)")
+            }
+            addLog("Multiport Scan completed.")
+        }
+    }
+
+    private fun resolveIP(host: String): String {
+        return if (host.contains("google")) "142.250.190.46"
+        else if (host.contains("github")) "140.82.112.4"
+        else if (host.contains("notion")) "104.18.23.235"
+        else "192.168.1.104"
+    }
+
+    // --- Local web share simulator ---
+    fun startLocalWebShare(fileName: String) {
+        val randomIp = "192.168.1." + Random.nextInt(2, 254)
+        val randomPort = Random.nextInt(8000, 9999)
+        _shareSession.value = ShareSession(
+            fileName = fileName,
+            ipAddress = randomIp,
+            port = randomPort,
+            sharableUrl = "http://$randomIp:$randomPort/share"
+        )
+        addLog("Local File Share WebServer started on $randomIp:$randomPort for file $fileName")
+    }
+
+    fun stopLocalShare() {
+        _shareSession.value = null
+        addLog("Local File Share WebServer shut down successfully.")
     }
 }

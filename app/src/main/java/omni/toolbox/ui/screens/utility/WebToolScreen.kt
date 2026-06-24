@@ -323,6 +323,17 @@ fun WebToolScreen(
                                         super.onPageStarted(view, url, favicon)
                                     }
 
+                                    override fun onLoadResource(view: WebView?, url: String?) {
+                                        super.onLoadResource(view, url)
+                                        if (url != null) {
+                                            val mediaExtensions = listOf(".mp4", ".mkv", ".mp3", ".jpg", ".jpeg", ".png", ".webp")
+                                            if (mediaExtensions.any { url.lowercase().contains(it) }) {
+                                                android.util.Log.d("WebToolMedia", "Detected potential media: $url")
+                                                // In a real app, we'd add this to a shared media list in the ViewModel
+                                            }
+                                        }
+                                    }
+
                                     override fun onPageFinished(view: WebView?, url: String?) {
                                         isLoading = false
                                         canGoBack = view?.canGoBack() ?: false

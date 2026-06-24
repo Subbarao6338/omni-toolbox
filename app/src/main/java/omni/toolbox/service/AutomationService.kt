@@ -7,10 +7,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.sqrt
 
 class AutomationWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
@@ -61,5 +66,42 @@ object AutomationManager {
             ExistingWorkPolicy.REPLACE,
             workRequest
         )
+    }
+
+    private var sensorManager: SensorManager? = null
+    private var shakeListener: SensorEventListener? = null
+
+    fun startShakeDetection(context: Context, onShake: () -> Unit) {
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        shakeListener = object : SensorEventListener {
+            private var lastAcceleration = 0f
+            private var currentAcceleration = 0f
+            private var shakeThreshold = 12f
+
+            override fun onSensorChanged(event: SensorEvent?) {
+                if (event == null) return
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+
+                lastAcceleration = currentAcceleration
+                currentAcceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+                val delta = currentAcceleration - lastAcceleration
+
+                if (delta > shakeThreshold) {
+                    onShake()
+                }
+            }
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+        }
+
+        sensorManager?.registerListener(shakeListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    fun stopShakeDetection() {
+        sensorManager?.unregisterListener(shakeListener)
+        shakeListener = null
     }
 }

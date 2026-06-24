@@ -51,6 +51,9 @@ fun AutomationScreen(navController: NavHostController, viewModel: OmniViewModel)
                     Text("Converter", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
                 }
                 Tab(selected = activeTab == 3, onClick = { activeTab = 3 }) {
+                    Text("Widgets", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
+                }
+                Tab(selected = activeTab == 4, onClick = { activeTab = 4 }) {
                     Text("Logs", modifier = Modifier.padding(10.dp), fontSize = 11.sp)
                 }
             }
@@ -61,7 +64,87 @@ fun AutomationScreen(navController: NavHostController, viewModel: OmniViewModel)
                 0 -> MacrosTab(viewModel)
                 1 -> AutomationCalculatorsTab()
                 2 -> AutomationConverterTab()
-                3 -> AutomationLogsTab(viewModel)
+                3 -> ProductivityWidgetsTab()
+                4 -> AutomationLogsTab(viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductivityWidgetsTab() {
+    var currentTime by remember { mutableStateOf("") }
+    var currentDate by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            val sFormat = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+            val dFormat = java.text.SimpleDateFormat("EEEE, d MMMM yyyy", java.util.Locale.getDefault())
+            val cal = java.util.Calendar.getInstance()
+            currentTime = sFormat.format(cal.time)
+            currentDate = dFormat.format(cal.time)
+            kotlinx.coroutines.delay(1000)
+        }
+    }
+
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item {
+            Text("DAILY PRODUCTIVITY & TIME WIDGETS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        }
+
+        item {
+            Card(
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("AGENT DYNAMIC CLOCK WIDGET", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, letterSpacing = 0.8.sp)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = currentTime,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Monospace,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = currentDate,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            }
+        }
+
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Text("STUDIO FOCUS STATS", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("ACTIVE FOCUS SPRINT", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Text("25 Minutes (Pomodoro)", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("COMPLETED CYCLES", fontSize = 10.sp, color = MaterialTheme.colorScheme.outline)
+                            Text("4 Sessions Today", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
             }
         }
     }
@@ -224,27 +307,241 @@ fun MacrosTab(viewModel: OmniViewModel) {
 
 @Composable
 fun AutomationCalculatorsTab() {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Automation Utility Calculators", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Standard Calculator", fontWeight = FontWeight.Bold)
-                Text("Radix & Bitwise Tool", fontWeight = FontWeight.Bold)
-                Text("Scientific Math Engine", fontWeight = FontWeight.Bold)
+    var isProgrammerMode by remember { mutableStateOf(false) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        TabRow(selectedTabIndex = if (isProgrammerMode) 1 else 0) {
+            Tab(selected = !isProgrammerMode, onClick = { isProgrammerMode = false }) {
+                Text("Standard Calc", modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+            }
+            Tab(selected = isProgrammerMode, onClick = { isProgrammerMode = true }) {
+                Text("Programmer Calc", modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+            }
+        }
+
+        if (!isProgrammerMode) {
+            StandardCalculatorView()
+        } else {
+            ProgrammerCalculatorView()
+        }
+    }
+}
+
+@Composable
+fun StandardCalculatorView() {
+    var display by remember { mutableStateOf("0") }
+    var operator by remember { mutableStateOf("") }
+    var operand1 by remember { mutableStateOf(0.0) }
+    var resetOnNext by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = display,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                    .padding(12.dp)
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            val keys = listOf(
+                listOf("7", "8", "9", "/"),
+                listOf("4", "5", "6", "*"),
+                listOf("1", "2", "3", "-"),
+                listOf("C", "0", "=", "+")
+            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (row in keys) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        for (key in row) {
+                            Button(
+                                onClick = {
+                                    when (key) {
+                                        "C" -> {
+                                            display = "0"
+                                            operator = ""
+                                            operand1 = 0.0
+                                        }
+                                        "+", "-", "*", "/" -> {
+                                            operand1 = display.toDoubleOrNull() ?: 0.0
+                                            operator = key
+                                            resetOnNext = true
+                                        }
+                                        "=" -> {
+                                            val operand2 = display.toDoubleOrNull() ?: 0.0
+                                            val result = when (operator) {
+                                                "+" -> operand1 + operand2
+                                                "-" -> operand1 - operand2
+                                                "*" -> operand1 * operand2
+                                                "/" -> if (operand2 != 0.0) operand1 / operand2 else 0.0
+                                                else -> operand2
+                                            }
+                                            display = if (result % 1 == 0.0) result.toInt().toString() else result.toString()
+                                            operator = ""
+                                        }
+                                        else -> {
+                                            if (display == "0" || resetOnNext) {
+                                                display = key
+                                                resetOnNext = false
+                                            } else {
+                                                display += key
+                                            }
+                                        }
+                                    }
+                                },
+                                shape = RoundedCornerShape(16.dp),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (key in listOf("+", "-", "*", "/", "=")) MaterialTheme.colorScheme.primary
+                                    else if (key == "C") MaterialTheme.colorScheme.error
+                                    else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
+                                )
+                            ) {
+                                Text(
+                                    text = key,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (key in listOf("+", "-", "*", "/", "=")) Color.White
+                                    else if (key == "C") Color.White
+                                    else MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
+fun ProgrammerCalculatorView() {
+    var decInput by remember { mutableStateOf("128") }
+    val decimalVal = decInput.toIntOrNull() ?: 0
+
+    val hexString = decimalVal.toString(16).uppercase()
+    val binString = decimalVal.toString(2)
+    val octString = decimalVal.toString(8)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("NUMERIC RADIX CONVERTER", fontWeight = FontWeight.Bold, fontSize = 11.sp, color = MaterialTheme.colorScheme.outline)
+
+            TextField(
+                value = decInput,
+                onValueChange = { decInput = it.filter { c -> c.isDigit() } },
+                label = { Text("Decimal Integer Value", fontSize = 12.sp) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent)
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RadixOutputRow(label = "HEXADECIMAL (HEX)", value = hexString)
+            RadixOutputRow(label = "DECIMAL (DEC)", value = decimalVal.toString())
+            RadixOutputRow(label = "OCTAL (OCT)", value = octString)
+            RadixOutputRow(label = "BINARY (BIN)", value = binString)
+        }
+    }
+}
+
+@Composable
+fun RadixOutputRow(label: String, value: String) {
+    Column {
+        Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        Text(
+            text = value,
+            fontSize = 14.sp,
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                .padding(8.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun AutomationConverterTab() {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Automation Unit Converters", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Length & Temperature", fontWeight = FontWeight.Bold)
-                Text("Cyber Storage & Weight", fontWeight = FontWeight.Bold)
+    var sourceVal by remember { mutableStateOf("10.0") }
+    var convertType by remember { mutableIntStateOf(0) } // 0: KM to Miles, 1: Celsius to F, 2: GB to MB
+
+    val number = sourceVal.toDoubleOrNull() ?: 0.0
+    val result = when (convertType) {
+        0 -> number * 0.621371 // km to miles
+        1 -> (number * 9 / 5) + 32 // c to f
+        else -> number * 1024 // gb to mb
+    }
+
+    val resultString = String.format("%.2f", result)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("ENGINEERING UNIT CONVERTER", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                val list = listOf("KM ➔ Miles", "°C ➔ °F", "GB ➔ MB")
+                list.forEachIndexed { index, item ->
+                    FilterChip(
+                        selected = convertType == index,
+                        onClick = { convertType = index },
+                        label = { Text(item, fontSize = 11.sp) }
+                    )
+                }
             }
+
+            TextField(
+                value = sourceVal,
+                onValueChange = { sourceVal = it },
+                label = { Text("Input Value to convert", fontSize = 12.sp) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent)
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text("CONVERSION OUTCOME", fontSize = 11.sp, color = MaterialTheme.colorScheme.outline, fontWeight = FontWeight.Bold)
+
+            Text(
+                text = "$sourceVal ${when(convertType){0->"KM";1->"°C";else->"GB"}} is equal to: $resultString ${when(convertType){0->"Miles";1->"°F";else->"MB"}}",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+                    .padding(14.dp)
+            )
         }
     }
 }
@@ -256,7 +553,7 @@ fun AutomationLogsTab(viewModel: OmniViewModel) {
 
         Card(
             modifier = Modifier.fillMaxWidth().height(400.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF121212))
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
         ) {
             Column(
                 modifier = Modifier.padding(12.dp)
@@ -264,7 +561,7 @@ fun AutomationLogsTab(viewModel: OmniViewModel) {
                 viewModel.syncLogs.forEach { log ->
                     Text(
                         text = log.message,
-                        color = Color(0xFF00FF88),
+                        color = MaterialTheme.colorScheme.primary,
                         fontFamily = FontFamily.Monospace,
                         fontSize = 11.sp,
                         lineHeight = 16.sp
