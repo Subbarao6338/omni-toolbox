@@ -10,10 +10,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
 import android.os.Build
+import android.app.ActivityManager
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import omni.toolbox.BuildConfig
 
 @Composable
 fun AppInfoScreen(navController: NavHostController, title: String) {
+    val context = LocalContext.current
     ToolScreen(
         title = title,
         onBack = { navController.popBackStack() }
@@ -36,7 +40,13 @@ fun AppInfoScreen(navController: NavHostController, title: String) {
                     Button(onClick = {}, Modifier.fillMaxWidth()) { Text("Check for Updates") }
                 }
             } else if (title == "Process Manager") {
-                InfoRow("Active Processes", "Simulated data - system restriction")
+                val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                val memoryInfo = ActivityManager.MemoryInfo()
+                activityManager.getMemoryInfo(memoryInfo)
+
+                InfoRow("Total RAM", "${memoryInfo.totalMem / 1024 / 1024} MB")
+                InfoRow("Available RAM", "${memoryInfo.availMem / 1024 / 1024} MB")
+                InfoRow("Low Memory State", memoryInfo.lowMemory.toString())
                 InfoRow("User", System.getProperty("user.name") ?: "N/A")
             } else if (title == "Hardware ID" || title == "Device ID") {
                 InfoRow("Android ID", "Unavailable (API Level Restriction)")

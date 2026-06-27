@@ -271,32 +271,169 @@ fun LudoBoard(isPvP: Boolean, onReset: () -> Unit) {
     }
 }
 
+data class CarromCoin(
+    var x: Float,
+    var y: Float,
+    var vx: Float = 0f,
+    var vy: Float = 0f,
+    val color: Color,
+    val isStriker: Boolean = false,
+    var inPocket: Boolean = false
+)
+
 @Composable
 fun CarromsGame() {
+    var coins by remember {
+        mutableStateOf(
+            mutableListOf<CarromCoin>().apply {
+                // Striker
+                add(CarromCoin(150f, 250f, color = Color.Yellow, isStriker = true))
+                // Queen
+                add(CarromCoin(150f, 150f, color = Color.Red))
+                // Black and White coins around center
+                repeat(6) { i ->
+                    val angle = (i * 60) * (Math.PI / 180)
+                    add(CarromCoin(150f + (30 * Math.cos(angle)).toFloat(), 150f + (30 * Math.sin(angle)).toFloat(), color = if (i % 2 == 0) Color.Black else Color.White))
+                }
+            }
+        )
+    }
+    var score by remember { mutableIntStateOf(0) }
+    var strikerX by remember { mutableFloatStateOf(150f) }
+    var isAiming by remember { mutableStateOf(true) }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Carroms", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Score: $score", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
+
         Box(
             modifier = Modifier
                 .size(300.dp)
                 .background(Color(0xFFDEB887))
-                .border(8.dp, Color(0xFF5D4037)),
-            contentAlignment = Alignment.Center
+                .border(8.dp, Color(0xFF5D4037))
         ) {
             // Pockets
-            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.TopStart).offset(x = (-5).dp, y = (-5).dp))
-            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.TopEnd).offset(x = (5).dp, y = (-5).dp))
-            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.BottomStart).offset(x = (-5).dp, y = (5).dp))
-            Box(modifier = Modifier.size(30.dp).background(Color.Black, CircleShape).align(Alignment.BottomEnd).offset(x = (5).dp, y = (5).dp))
+            repeat(4) { i ->
+                Box(modifier = Modifier.size(35.dp).background(Color.Black, CircleShape).align(when(i) {
+                    0 -> Alignment.TopStart
+                    1 -> Alignment.TopEnd
+                    2 -> Alignment.BottomStart
+                    else -> Alignment.BottomEnd
+                }).offset(
+                    x = if (i % 2 == 0) (-5).dp else 5.dp,
+                    y = if (i < 2) (-5).dp else 5.dp
+                ))
+            }
 
-            // Center
-            Box(modifier = Modifier.size(80.dp).border(1.dp, Color.Black, CircleShape))
-            repeat(9) { i ->
-                Box(modifier = Modifier.size(15.dp).background(if (i == 0) Color.Red else if (i % 2 == 0) Color.Black else Color.White, CircleShape).offset(x = (Math.cos(i * 0.7) * 20).dp, y = (Math.sin(i * 0.7) * 20).dp))
+            // Board Content
+            coins.filter { !it.inPocket }.forEach { coin ->
+                Box(
+                    modifier = Modifier
+                        .size(if (coin.isStriker) 24.dp else 18.dp)
+                        .offset(x = (coin.x - (if (coin.isStriker) 12 else 9)).dp, y = (coin.y - (if (coin.isStriker) 12 else 9)).dp)
+                        .background(coin.color, CircleShape)
+                        .border(1.dp, Color.DarkGray, CircleShape)
+                )
+            }
+
+            if (isAiming) {
+                // Striker position slider (visualized on board)
+                Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Black.copy(0.2f)).align(Alignment.TopCenter).offset(y = 250.dp))
             }
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        Text("Flick the striker to play")
+
+        LaunchedEffect(isAiming) {
+            if (!isAiming) {
+                while (coins.any { it.vx != 0f || it.vy != 0f }) {
+                    delay(20)
+                    val nextCoins = coins.map { it.copy() }
+                    for (i in nextCoins.indices) {
+                        val c = nextCoins[i]
+                        if (c.inPocket) continue
+
+                        c.x += c.vx
+                        c.y += c.vy
+                        c.vx *= 0.98f
+                        c.vy *= 0.98f
+                        if (Math.abs(c.vx) < 0.1f) c.vx = 0f
+                        if (Math.abs(c.vy) < 0.1f) c.vy = 0f
+
+                        // Wall collisions
+                        if (c.x < 10 || c.x > 290) { c.vx *= -1; c.x = c.x.coerceIn(10f, 290f) }
+                        if (c.y < 10 || c.y > 290) { c.vy *= -1; c.y = c.y.coerceIn(10f, 290f) }
+
+                        // Pocketing
+                        if ((c.x < 25 || c.x > 275) && (c.y < 25 || c.y > 275)) {
+                            c.inPocket = true
+                            c.vx = 0f; c.vy = 0f
+                            if (!c.isStriker) {
+                                score += if (c.color == Color.Red) 50 else 10
+                            } else {
+                                score -= 10
+                            }
+                        }
+                    }
+
+                    // Coin-to-coin collisions (Simplified)
+                    for (i in nextCoins.indices) {
+                        for (j in i + 1 until nextCoins.indices.last + 1) {
+                            val c1 = nextCoins[i]
+                            val c2 = nextCoins[j]
+                            if (c1.inPocket || c2.inPocket) continue
+                            val dx = c2.x - c1.x
+                            val dy = c2.y - c1.y
+                            val dist = Math.sqrt((dx * dx + dy * dy).toDouble()).toFloat()
+                            val minDist = if (c1.isStriker || c2.isStriker) 21f else 18f
+                            if (dist < minDist) {
+                                // Swap velocities as a simple elastic collision
+                                val tvx = c1.vx; c1.vx = c2.vx; c2.vx = tvx
+                                val tvy = c1.vy; c1.vy = c2.vy; c2.vy = tvy
+                                // Move apart to avoid sticking
+                                val overlap = minDist - dist
+                                c1.x -= overlap * (dx / dist) / 2
+                                c1.y -= overlap * (dy / dist) / 2
+                                c2.x += overlap * (dx / dist) / 2
+                                c2.y += overlap * (dy / dist) / 2
+                            }
+                        }
+                    }
+                    coins = nextCoins.toMutableList()
+                }
+                isAiming = true
+                // Reset striker
+                val resetCoins = coins.toMutableList()
+                val sIdx = resetCoins.indexOfFirst { it.isStriker }
+                resetCoins[sIdx] = CarromCoin(strikerX, 250f, color = Color.Yellow, isStriker = true)
+                coins = resetCoins
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        if (isAiming) {
+            Slider(value = strikerX, onValueChange = { strikerX = it; val nc = coins.toMutableList(); nc[0] = nc[0].copy(x = it); coins = nc }, valueRange = 50f..250f)
+            Button(onClick = {
+                val nc = coins.toMutableList()
+                nc[0] = nc[0].copy(vy = -15f, vx = (Random.nextFloat() - 0.5f) * 5f)
+                coins = nc
+                isAiming = false
+            }) { Text("Strike!") }
+        } else {
+            Text("Moving...")
+        }
+
+        Button(onClick = {
+            score = 0
+            coins = mutableListOf<CarromCoin>().apply {
+                add(CarromCoin(150f, 250f, color = Color.Yellow, isStriker = true))
+                add(CarromCoin(150f, 150f, color = Color.Red))
+                repeat(6) { i ->
+                    val angle = (i * 60) * (Math.PI / 180)
+                    add(CarromCoin(150f + (30 * Math.cos(angle)).toFloat(), 150f + (30 * Math.sin(angle)).toFloat(), color = if (i % 2 == 0) Color.Black else Color.White))
+                }
+            }
+            isAiming = true
+        }, modifier = Modifier.padding(top = 8.dp)) { Text("Reset Board") }
     }
 }
 
@@ -421,115 +558,447 @@ fun checkWinner(board: List<String>): String? {
 fun SnakeGame() {
     var score by remember { mutableIntStateOf(0) }
     var gameStarted by remember { mutableStateOf(false) }
+    var gameOver by remember { mutableStateOf(false) }
     var direction by remember { mutableStateOf("RIGHT") }
-    var headPos by remember { mutableStateOf(0 to 0) }
+    var snakeBody by remember { mutableStateOf(listOf(5 to 5, 4 to 5, 3 to 5)) }
+    var foodPos by remember { mutableStateOf(Random.nextInt(10) to Random.nextInt(10)) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Snake", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.size(200.dp).background(Color.Black)) {
-            if (!gameStarted) {
-                Button(onClick = { gameStarted = true; score = 0; headPos = 5 to 5 }, modifier = Modifier.align(Alignment.Center)) { Text("Start") }
-            } else {
-                Text("Score: $score", color = Color.White, modifier = Modifier.align(Alignment.TopStart).padding(4.dp))
-                LaunchedEffect(gameStarted) {
-                    while(gameStarted) {
-                        delay(300)
-                        headPos = when(direction) {
-                            "UP" -> headPos.first to (headPos.second - 1 + 10) % 10
-                            "DOWN" -> headPos.first to (headPos.second + 1) % 10
-                            "LEFT" -> (headPos.first - 1 + 10) % 10 to headPos.second
-                            else -> (headPos.first + 1) % 10 to headPos.second
-                        }
-                        score++
+        Box(modifier = Modifier.size(200.dp).background(Color.Black).border(2.dp, Color.DarkGray)) {
+            if (!gameStarted || gameOver) {
+                Column(modifier = Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (gameOver) {
+                        Text("GAME OVER", color = Color.Red, fontWeight = FontWeight.Bold)
+                        Text("Score: $score", color = Color.White)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    Button(onClick = {
+                        snakeBody = listOf(5 to 5, 4 to 5, 3 to 5)
+                        direction = "RIGHT"
+                        score = 0
+                        gameOver = false
+                        gameStarted = true
+                        foodPos = generateFood(snakeBody)
+                    }) {
+                        Text(if (gameOver) "Restart" else "Start Game")
                     }
                 }
-                Text("🐍", fontSize = 20.sp, modifier = Modifier.offset(x = (headPos.first * 20).dp, y = (headPos.second * 20).dp))
+            } else {
+                LaunchedEffect(Unit) {
+                    while (!gameOver) {
+                        delay(250)
+                        val head = snakeBody.first()
+                        val nextHead = when (direction) {
+                            "UP" -> head.first to head.second - 1
+                            "DOWN" -> head.first to head.second + 1
+                            "LEFT" -> head.first - 1 to head.second
+                            "RIGHT" -> head.first + 1 to head.second
+                            else -> head
+                        }
+
+                        if (nextHead.first !in 0..9 || nextHead.second !in 0..9 || snakeBody.contains(nextHead)) {
+                            gameOver = true
+                        } else {
+                            val newBody = (mutableListOf(nextHead) + snakeBody).toMutableList()
+                            if (nextHead == foodPos) {
+                                score += 10
+                                foodPos = generateFood(newBody)
+                            } else {
+                                newBody.removeAt(newBody.size - 1)
+                            }
+                            snakeBody = newBody.toList()
+                        }
+                    }
+                }
+
+                // Food
+                Text("🍎", fontSize = 18.sp, modifier = Modifier.offset(x = (foodPos.first * 20).dp, y = (foodPos.second * 20).dp))
+
+                // Snake
+                snakeBody.forEachIndexed { index, pos ->
+                    Box(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .offset(x = (pos.first * 20).dp, y = (pos.second * 20).dp)
+                            .background(if (index == 0) Color.Green else Color(0xFF4CAF50), RoundedCornerShape(4.dp))
+                            .border(1.dp, Color.Black)
+                    )
+                }
             }
         }
 
+        Spacer(modifier = Modifier.height(24.dp))
+        Text("Score: $score", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        Row {
-            Column {
-                Spacer(modifier = Modifier.width(40.dp))
-                Button(onClick = { direction = "UP" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("↑") }
+
+        // Controls
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Button(onClick = { if (direction != "DOWN") direction = "UP" }, modifier = Modifier.size(50.dp)) { Text("↑") }
+            Row {
+                Button(onClick = { if (direction != "RIGHT") direction = "LEFT" }, modifier = Modifier.size(50.dp)) { Text("←") }
+                Spacer(modifier = Modifier.width(50.dp))
+                Button(onClick = { if (direction != "LEFT") direction = "RIGHT" }, modifier = Modifier.size(50.dp)) { Text("→") }
             }
-        }
-        Row {
-            Button(onClick = { direction = "LEFT" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("←") }
-            Button(onClick = { direction = "DOWN" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("↓") }
-            Button(onClick = { direction = "RIGHT" }, modifier = Modifier.size(40.dp), contentPadding = PaddingValues(0.dp)) { Text("→") }
+            Button(onClick = { if (direction != "UP") direction = "DOWN" }, modifier = Modifier.size(50.dp)) { Text("↓") }
         }
     }
 }
 
+fun generateFood(snake: List<Pair<Int, Int>>): Pair<Int, Int> {
+    var pos = Random.nextInt(10) to Random.nextInt(10)
+    while (snake.contains(pos)) {
+        pos = Random.nextInt(10) to Random.nextInt(10)
+    }
+    return pos
+}
+
 @Composable
 fun DinoJumpGame() {
+    var dinoY by remember { mutableFloatStateOf(0f) }
+    var dinoVelocity by remember { mutableFloatStateOf(0f) }
+    var cactusX by remember { mutableFloatStateOf(300f) }
+    var score by remember { mutableIntStateOf(0) }
+    var gameOver by remember { mutableStateOf(false) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    val gravity = 0.8f
+    val jumpStrength = -12f
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Dino Jump", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Score: $score", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxWidth().height(150.dp).background(Color.LightGray)) {
-            Text("🌵", modifier = Modifier.align(Alignment.BottomEnd).padding(end = 50.dp))
-            Text("🦖", modifier = Modifier.align(Alignment.BottomStart).padding(start = 50.dp, bottom = 40.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(Color(0xFFF7F7F7))
+                .border(1.dp, Color.LightGray)
+                .clickable {
+                    if (!gameStarted) {
+                        gameStarted = true
+                        gameOver = false
+                        score = 0
+                        cactusX = 400f
+                        dinoY = 0f
+                    } else if (dinoY == 0f && !gameOver) {
+                        dinoVelocity = jumpStrength
+                    }
+                }
+        ) {
+            if (!gameStarted || gameOver) {
+                Column(modifier = Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (gameOver) Text("GAME OVER", color = Color.Red, fontWeight = FontWeight.Bold)
+                    Text(if (gameOver) "Tap to Restart" else "Tap to Start", color = Color.Gray)
+                }
+            }
+
+            // Ground
+            Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Gray).align(Alignment.BottomCenter).offset(y = (-40).dp))
+
+            // Dino
+            Text(
+                text = "🦖",
+                fontSize = 40.sp,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .offset(x = 50.dp, y = (-40).dp + dinoY.dp)
+            )
+
+            // Cactus
+            Text(
+                text = "🌵",
+                fontSize = 30.sp,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .offset(x = cactusX.dp, y = (-40).dp)
+            )
+
+            LaunchedEffect(gameStarted, gameOver) {
+                if (gameStarted && !gameOver) {
+                    while (!gameOver) {
+                        delay(20)
+                        // Physics
+                        dinoVelocity += gravity
+                        dinoY += dinoVelocity
+                        if (dinoY > 0f) {
+                            dinoY = 0f
+                            dinoVelocity = 0f
+                        }
+
+                        cactusX -= 8f + (score / 100f) // Speed up over time
+                        if (cactusX < -50f) {
+                            cactusX = 400f
+                            score += 10
+                        }
+
+                        // Collision (rough)
+                        if (cactusX > 40f && cactusX < 80f && dinoY > -30f) {
+                            gameOver = true
+                        }
+                    }
+                }
+            }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {}) { Text("Jump") }
+        Button(onClick = { if (dinoY == 0f && !gameOver) dinoVelocity = jumpStrength }) {
+            Text("Jump")
+        }
+        Text("Tip: Tap the game area to jump", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
 @Composable
 fun Game2048() {
+    var board by remember { mutableStateOf(List(16) { 0 }) }
+    var score by remember { mutableIntStateOf(0) }
+    var gameOver by remember { mutableStateOf(false) }
+
+    if (board.all { it == 0 }) {
+        val newBoard = board.toMutableList()
+        repeat(2) {
+            val empty = newBoard.indices.filter { newBoard[it] == 0 }
+            if (empty.isNotEmpty()) newBoard[empty.random()] = if (Random.nextFloat() > 0.9f) 4 else 2
+        }
+        board = newBoard
+    }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("2048", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Score: $score", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
-        val grid = listOf(2, 4, 0, 0, 0, 2, 0, 0, 0, 0, 8, 0, 16, 0, 0, 0)
-        LazyVerticalGrid(columns = GridCells.Fixed(4), modifier = Modifier.size(240.dp)) {
-            items(grid) { value ->
-                Card(modifier = Modifier.padding(4.dp).aspectRatio(1f), colors = CardDefaults.cardColors(containerColor = if (value == 0) Color.Gray else Color.Yellow)) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        if (value != 0) Text(value.toString(), fontWeight = FontWeight.Bold)
+
+        Box(modifier = Modifier.size(280.dp).background(Color(0xFFBBADA0), RoundedCornerShape(8.dp)).padding(8.dp)) {
+            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+                items(board) { value ->
+                    Card(
+                        modifier = Modifier.padding(4.dp).aspectRatio(1f),
+                        colors = CardDefaults.cardColors(
+                            containerColor = when(value) {
+                                0 -> Color(0xFFCDC1B4)
+                                2 -> Color(0xFFEEE4DA)
+                                4 -> Color(0xFFEDE0C8)
+                                8 -> Color(0xFFF2B179)
+                                16 -> Color(0xFFF59563)
+                                32 -> Color(0xFFF67C5F)
+                                64 -> Color(0xFFF65E3B)
+                                128 -> Color(0xFFEDCF72)
+                                256 -> Color(0xFFEDCC61)
+                                512 -> Color(0xFFEDC850)
+                                1024 -> Color(0xFFEDC53F)
+                                2048 -> Color(0xFFEDC22E)
+                                else -> Color(0xFF3C3A32)
+                            }
+                        )
+                    ) {
+                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            if (value != 0) Text(
+                                text = value.toString(),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = if (value < 100) 24.sp else if (value < 1000) 20.sp else 16.sp,
+                                color = if (value <= 4) Color(0xFF776E65) else Color.White
+                            )
+                        }
+                    }
+                }
+            }
+            if (gameOver) {
+                Box(modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.7f)), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Game Over!", style = MaterialTheme.typography.headlineMedium, color = Color.Black)
+                        Button(onClick = {
+                            val newBoard = List(16) { 0 }.toMutableList()
+                            repeat(2) {
+                                val empty = newBoard.indices.filter { newBoard[it] == 0 }
+                                if (empty.isNotEmpty()) newBoard[empty.random()] = 2
+                            }
+                            board = newBoard
+                            score = 0
+                            gameOver = false
+                        }) { Text("Try Again") }
                     }
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
-        Text("Swipe to move tiles")
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { val (nb, s) = move2048(board, "LEFT"); if(nb != board) { board = addRandom(nb); score += s }; if(is2048GameOver(board)) gameOver = true }) { Text("←") }
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = { val (nb, s) = move2048(board, "UP"); if(nb != board) { board = addRandom(nb); score += s }; if(is2048GameOver(board)) gameOver = true }) { Text("↑") }
+                Button(onClick = { val (nb, s) = move2048(board, "DOWN"); if(nb != board) { board = addRandom(nb); score += s }; if(is2048GameOver(board)) gameOver = true }) { Text("↓") }
+            }
+            Button(onClick = { val (nb, s) = move2048(board, "RIGHT"); if(nb != board) { board = addRandom(nb); score += s }; if(is2048GameOver(board)) gameOver = true }) { Text("→") }
+        }
     }
+}
+
+fun move2048(board: List<Int>, direction: String): Pair<List<Int>, Int> {
+    val newBoard = board.toIntArray()
+    var addedScore = 0
+    val rows = when(direction) {
+        "LEFT" -> listOf(0..3, 4..7, 8..11, 12..15)
+        "RIGHT" -> listOf(3 downTo 0, 7 downTo 4, 11 downTo 8, 15 downTo 12)
+        "UP" -> listOf(listOf(0,4,8,12), listOf(1,5,9,13), listOf(2,6,10,14), listOf(3,7,11,15))
+        "DOWN" -> listOf(listOf(12,8,4,0), listOf(13,9,5,1), listOf(14,10,6,2), listOf(15,11,7,3))
+        else -> emptyList()
+    }
+
+    for (indices in rows) {
+        val original = indices.map { board[it] }.filter { it != 0 }
+        val merged = mutableListOf<Int>()
+        var skip = false
+        for (i in original.indices) {
+            if (skip) { skip = false; continue }
+            if (i + 1 < original.size && original[i] == original[i+1]) {
+                merged.add(original[i] * 2)
+                addedScore += original[i] * 2
+                skip = true
+            } else {
+                merged.add(original[i])
+            }
+        }
+        val resultRow = merged + List(4 - merged.size) { 0 }
+        indices.forEachIndexed { index, boardIdx ->
+            newBoard[boardIdx] = resultRow[index]
+        }
+    }
+    return newBoard.toList() to addedScore
+}
+
+fun addRandom(board: List<Int>): List<Int> {
+    val empty = board.indices.filter { board[it] == 0 }
+    if (empty.isEmpty()) return board
+    val newBoard = board.toMutableList()
+    newBoard[empty.random()] = if (Random.nextFloat() > 0.9f) 4 else 2
+    return newBoard
+}
+
+fun is2048GameOver(board: List<Int>): Boolean {
+    if (board.any { it == 0 }) return false
+    for (i in 0..3) {
+        for (j in 0..2) {
+            if (board[i * 4 + j] == board[i * 4 + j + 1]) return false
+            if (board[j * 4 + i] == board[(j + 1) * 4 + i]) return false
+        }
+    }
+    return true
 }
 
 @Composable
 fun SudokuGame() {
-    val puzzle = remember {
-        mutableStateListOf<String>().apply {
-            addAll(List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" })
-        }
-    }
+    var puzzle by remember { mutableStateOf(generateSudoku()) }
+    var userGrid by remember { mutableStateOf(puzzle.map { if (it == 0) "" else it.toString() }) }
+    var initialGrid by remember { mutableStateOf(puzzle.map { it != 0 }) }
+    var statusMessage by remember { mutableStateOf("Fill the grid") }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Sudoku", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(statusMessage, style = MaterialTheme.typography.bodyMedium, color = if (statusMessage.contains("Correct")) Color(0xFF4CAF50) else MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(16.dp))
-        LazyVerticalGrid(columns = GridCells.Fixed(9), modifier = Modifier.size(300.dp).border(1.dp, Color.Black)) {
-            items(81) { i ->
-                Box(
-                    modifier = Modifier
-                        .border(0.5.dp, Color.LightGray)
-                        .aspectRatio(1f)
-                        .clickable {
-                            val current = puzzle[i].toIntOrNull() ?: 0
-                            puzzle[i] = if (current == 9) "" else (current + 1).toString()
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(puzzle[i], fontWeight = FontWeight.Bold)
+
+        Box(modifier = Modifier.size(320.dp).border(2.dp, Color.Black)) {
+            LazyVerticalGrid(columns = GridCells.Fixed(9)) {
+                items(81) { i ->
+                    val row = i / 9
+                    val col = i % 9
+                    val isInitial = initialGrid[i]
+
+                    Box(
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .background(if (isInitial) Color(0xFFF0F0F0) else Color.White)
+                            .border(0.5.dp, Color.LightGray)
+                            .clickable(enabled = !isInitial) {
+                                val current = userGrid[i].toIntOrNull() ?: 0
+                                val next = if (current == 9) "" else (current + 1).toString()
+                                val newList = userGrid.toMutableList()
+                                newList[i] = next
+                                userGrid = newList
+                                statusMessage = "Playing..."
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // Thicker borders for 3x3 blocks
+                        if (col % 3 == 0 && col > 0) Box(modifier = Modifier.fillMaxHeight().width(2.dp).background(Color.Black).align(Alignment.CenterStart))
+                        if (row % 3 == 0 && row > 0) Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color.Black).align(Alignment.TopCenter))
+
+                        Text(
+                            text = userGrid[i],
+                            fontWeight = if (isInitial) FontWeight.Bold else FontWeight.Normal,
+                            color = if (isInitial) Color.Black else Color.Blue
+                        )
+                    }
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {
-            puzzle.clear()
-            puzzle.addAll(List(81) { if (Random.nextInt(10) > 7) (1..9).random().toString() else "" })
-        }) { Text("New Puzzle") }
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Button(onClick = {
+                if (validateSudoku(userGrid)) {
+                    statusMessage = "Correct! Well done!"
+                } else {
+                    statusMessage = "Not quite right yet. Keep trying!"
+                }
+            }) { Text("Check") }
+
+            Button(onClick = {
+                puzzle = generateSudoku()
+                userGrid = puzzle.map { if (it == 0) "" else it.toString() }
+                initialGrid = puzzle.map { it != 0 }
+                statusMessage = "New game started"
+            }) { Text("New Game") }
+        }
     }
+}
+
+fun generateSudoku(): List<Int> {
+    // Very simple generator: take a solved grid and remove some numbers
+    val base = listOf(
+        5, 3, 4, 6, 7, 8, 9, 1, 2,
+        6, 7, 2, 1, 9, 5, 3, 4, 8,
+        1, 9, 8, 3, 4, 2, 5, 6, 7,
+        8, 5, 9, 7, 6, 1, 4, 2, 3,
+        4, 2, 6, 8, 5, 3, 7, 9, 1,
+        7, 1, 3, 9, 2, 4, 8, 5, 6,
+        9, 6, 1, 5, 3, 7, 2, 8, 4,
+        2, 8, 7, 4, 1, 9, 6, 3, 5,
+        3, 4, 5, 2, 8, 6, 1, 7, 9
+    )
+    // Randomly shuffle rows/cols within blocks and blocks themselves to make it "new"
+    // For simplicity here, just hide random cells
+    return base.map { if (Random.nextFloat() > 0.4f) it else 0 }
+}
+
+fun validateSudoku(grid: List<String>): Boolean {
+    if (grid.any { it.isEmpty() }) return false
+    val nums = grid.map { it.toInt() }
+
+    // Check rows, cols, blocks
+    for (i in 0 until 9) {
+        val row = nums.subList(i * 9, (i + 1) * 9)
+        if (row.toSet().size != 9) return false
+
+        val col = (0 until 9).map { nums[it * 9 + i] }
+        if (col.toSet().size != 9) return false
+    }
+
+    for (blockRow in 0 until 3) {
+        for (blockCol in 0 until 3) {
+            val block = mutableListOf<Int>()
+            for (r in 0 until 3) {
+                for (c in 0 until 3) {
+                    block.add(nums[(blockRow * 3 + r) * 9 + (blockCol * 3 + c)])
+                }
+            }
+            if (block.toSet().size != 9) return false
+        }
+    }
+    return true
 }
 
 @Composable
