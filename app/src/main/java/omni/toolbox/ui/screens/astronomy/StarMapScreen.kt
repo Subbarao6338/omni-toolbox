@@ -2,6 +2,7 @@ package omni.toolbox.ui.screens.astronomy
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -22,8 +23,14 @@ fun StarMapScreen(navController: NavHostController) {
     var offset by remember { mutableStateOf(Offset.Zero) }
 
     val stars = remember {
-        List(200) {
-            Offset(Random.nextFloat(), Random.nextFloat()) to Random.nextFloat() * 2f + 1f
+        List(300) {
+            val color = when(Random.nextInt(4)) {
+                0 -> Color(0xFFADCFFF) // Blue-ish
+                1 -> Color(0xFFFFF4EA) // White-ish
+                2 -> Color(0xFFFFD2A1) // Yellow-ish
+                else -> Color(0xFFFFCC6F) // Orange-ish
+            }
+            Triple(Offset(Random.nextFloat(), Random.nextFloat()), Random.nextFloat() * 2.5f + 0.5f, color)
         }
     }
 
@@ -53,9 +60,9 @@ fun StarMapScreen(navController: NavHostController) {
                         translationY = offset.y
                     )
             ) {
-                stars.forEach { (pos, size) ->
+                stars.forEach { (pos, size, color) ->
                     drawCircle(
-                        color = Color.White.copy(alpha = Random.nextFloat() * 0.5f + 0.5f),
+                        color = color.copy(alpha = Random.nextFloat() * 0.4f + 0.6f),
                         radius = size,
                         center = Offset(pos.x * this.size.width, pos.y * this.size.height)
                     )
@@ -65,11 +72,10 @@ fun StarMapScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
-                    .background(Color.Black.copy(alpha = 0.5f))
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                     .padding(8.dp)
             ) {
                 Text("Pinch to zoom, drag to pan", color = Color.White, style = MaterialTheme.typography.bodySmall)
-                Text("Interactive Star Chart (Placeholder)", color = Color.White, style = MaterialTheme.typography.labelSmall)
             }
         }
     }
