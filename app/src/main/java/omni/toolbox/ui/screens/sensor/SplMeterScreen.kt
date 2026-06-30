@@ -6,24 +6,57 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import android.annotation.SuppressLint
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import omni.toolbox.ui.components.ToolScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.log10
 import kotlin.random.Random
 
+@SuppressLint("MissingPermission")
 @Composable
 fun SplMeterScreen(navController: NavHostController) {
-    var dbLevel by remember { mutableFloatStateOf(30f) }
+    var dbLevel by remember { mutableFloatStateOf(0f) }
     var isRunning by remember { mutableStateOf(false) }
 
     LaunchedEffect(isRunning) {
         if (isRunning) {
-            while (isRunning) {
-                // Mocking microphone input
-                dbLevel = 30f + Random.nextFloat() * 60f
-                kotlinx.coroutines.delay(200)
+            withContext(Dispatchers.IO) {
+                val bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+                val audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize)
+
+                val buffer = ShortArray(bufferSize)
+                audioRecord.startRecording()
+
+                try {
+                    while (isRunning) {
+                        val read = audioRecord.read(buffer, 0, buffer.size)
+                        if (read > 0) {
+                            var sum = 0.0
+                            for (i in 0 until read) {
+                                sum += buffer[i] * buffer[i]
+                            }
+                            val amplitude = Math.sqrt(sum / read)
+                            // Convert amplitude to dB (approximate)
+                            // reference value for 0dB can vary, 1.0 is a common placeholder for digital full scale
+                            // but here we use a common heuristic for Android mics
+                            val db = if (amplitude > 0) 20 * log10(amplitude / 32767.0) + 90 else 0.0
+                            withContext(Dispatchers.Main) {
+                                dbLevel = db.toFloat().coerceIn(0f, 120f)
+                            }
+                        }
+                        kotlinx.coroutines.delay(100)
+                    }
+                } finally {
+                    audioRecord.stop()
+                    audioRecord.release()
+                }
             }
         }
     }
@@ -70,7 +103,7 @@ fun SplMeterScreen(navController: NavHostController) {
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Mock data shown. Real-time mic access required for actual measurements.", style = MaterialTheme.typography.bodySmall)
+            Text("Real-time audio levels measured via microphone.", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

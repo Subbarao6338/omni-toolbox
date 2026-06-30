@@ -146,14 +146,6 @@ fun SystemDataTab(viewModel: OmniViewModel) {
             }
         }
 
-        item {
-            Button(onClick = {
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                viewModel.simulatedDataConsumption(15f, 120f)
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text("Simulate Data Usage")
-            }
-        }
 
         items(topAppsData) { app ->
             ListItem(
@@ -197,12 +189,6 @@ fun ScreenUnlocksTab(viewModel: OmniViewModel) {
             }
         }
 
-        item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { viewModel.incrementScreenTime(15) }, modifier = Modifier.weight(1f)) { Text("+15m Screen") }
-                Button(onClick = { viewModel.simulateScreenUnlock() }, modifier = Modifier.weight(1f)) { Text("Simulate Unlock") }
-            }
-        }
 
         items(topAppsScreen) { app ->
             ListItem(
@@ -234,13 +220,6 @@ fun NotificationLogTab(viewModel: OmniViewModel) {
             }
         }
 
-        item {
-            Button(onClick = {
-                viewModel.simulateNotificationReceived("WhatsApp", "Subbu", "New sync rules ready.", "Communication")
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text("Simulate Notification")
-            }
-        }
 
         items(notificationLogs) { log ->
             Card(modifier = Modifier.fillMaxWidth()) {

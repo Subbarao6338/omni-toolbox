@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -160,7 +161,23 @@ fun AppManagerTab() {
 @Composable
 fun IntegrityTab() {
     var diagnosticDensity by remember { mutableFloatStateOf(0.5f) }
-    var fakeRootEnabled by remember { mutableStateOf(false) }
+    val isRooted = remember {
+        val paths = arrayOf(
+            "/system/app/Superuser.apk",
+            "/sbin/su",
+            "/system/bin/su",
+            "/system/xbin/su",
+            "/data/local/xbin/su",
+            "/data/local/bin/su",
+            "/system/sd/xbin/su",
+            "/system/bin/failsafe/su",
+            "/data/local/su",
+            "/su/bin/su"
+        )
+        val hasSuBinary = paths.any { File(it).exists() }
+        val hasTestKeys = Build.TAGS?.contains("test-keys") ?: false
+        hasSuBinary || hasTestKeys
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text("Sandbox Integrity Controllers", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -176,22 +193,34 @@ fun IntegrityTab() {
         }
 
         ListItem(
-            headlineContent = { Text("Simulated Root Access") },
-            supportingContent = { Text("Toggles a fake root-interceptor state for compiler trials.") },
+            headlineContent = { Text("Device Root Status") },
+            supportingContent = { Text(if (isRooted) "Root access detected on this device." else "No root access detected.") },
             trailingContent = {
-                Switch(checked = fakeRootEnabled, onCheckedChange = { fakeRootEnabled = it })
+                Icon(
+                    imageVector = if (isRooted) Icons.Default.Warning else Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = if (isRooted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
             }
         )
 
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            colors = CardDefaults.cardColors(
+                containerColor = if (isRooted) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            )
         ) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    imageVector = if (isRooted) Icons.Default.ReportProblem else Icons.Default.Info,
+                    contentDescription = null,
+                    tint = if (isRooted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    "Integrity check passed. Rootless user-space environment confirmed.",
-                    style = MaterialTheme.typography.bodyMedium
+                    if (isRooted) "Security Warning: Rooted environment detected. Sandbox integrity may be compromised."
+                    else "Integrity check passed. Rootless user-space environment confirmed.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (isRooted) MaterialTheme.colorScheme.onErrorContainer else Color.Unspecified
                 )
             }
         }
