@@ -188,8 +188,7 @@ fun DataToolScreen(navController: NavHostController, route: String, toolName: St
                                 }
                             }
                             if (dataState.isEmpty()) {
-                                dataState.clear()
-                                dataState.addAll(mockData)
+                                snackbarHostState.showSnackbar("No data could be extracted from the file.")
                             }
                             processing = false
                             resultGenerated = true

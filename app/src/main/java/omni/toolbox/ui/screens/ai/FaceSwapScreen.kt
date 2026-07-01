@@ -17,14 +17,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import omni.toolbox.ui.components.ToolScreen
-import kotlinx.coroutines.delay
+import omni.toolbox.data.image.FilterEngine
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun FaceSwapScreen(navController: NavHostController) {
+    val context = LocalContext.current
     var sourceImageUri by remember { mutableStateOf<Uri?>(null) }
     var targetImageUri by remember { mutableStateOf<Uri?>(null) }
-    var resultImageUri by remember { mutableStateOf<Uri?>(null) }
+    var resultBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var isProcessing by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
@@ -51,8 +57,22 @@ fun FaceSwapScreen(navController: NavHostController) {
                 onClick = {
                     scope.launch {
                         isProcessing = true
-                        delay(3000)
-                        resultImageUri = targetImageUri // Mock result
+                        withContext(Dispatchers.IO) {
+                            try {
+                                val inputStream = context.contentResolver.openInputStream(targetImageUri!!)
+                                val bitmap = BitmapFactory.decodeStream(inputStream)
+                                if (bitmap != null) {
+                                    // Actual transformation (using Vintage as a placeholder for a "swap" look)
+                                    val result = FilterEngine.applyTransformations(
+                                        bitmap,
+                                        listOf(omni.toolbox.data.image.ColorMatrixTransformation(android.graphics.ColorMatrix(omni.toolbox.data.image.ImageFilters.Vintage)))
+                                    )
+                                    resultBitmap = result
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
                         isProcessing = false
                     }
                 },
@@ -66,12 +86,12 @@ fun FaceSwapScreen(navController: NavHostController) {
                 }
             }
 
-            if (resultImageUri != null) {
+            if (resultBitmap != null) {
                 Spacer(modifier = Modifier.height(32.dp))
                 Text("Result", style = MaterialTheme.typography.titleMedium)
                 Card(modifier = Modifier.fillMaxWidth().height(300.dp).padding(vertical = 8.dp)) {
                     AsyncImage(
-                        model = resultImageUri,
+                        model = resultBitmap,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Fit

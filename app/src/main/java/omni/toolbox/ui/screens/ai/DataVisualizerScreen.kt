@@ -32,7 +32,7 @@ fun DataVisualizerScreen(navController: NavHostController) {
             IconButton(onClick = {
                 inputData = List(6) { (10..100).random() }.joinToString(", ")
             }) {
-                Icon(Icons.Default.AutoAwesome, contentDescription = "Mock Data")
+                Icon(Icons.Default.AutoAwesome, contentDescription = "Sample Data")
             }
         }
     ) { padding ->
@@ -102,7 +102,18 @@ fun DataStatsView(data: List<Float>) {
             Column(modifier = Modifier.padding(16.dp)) {
                 StatRow("Mean", "%.2f".format(mean))
                 StatRow("Std Dev", "%.2f".format(stdDev))
-                StatRow("Regression (Slope)", "Simulated: 0.85")
+
+                // Simple linear regression slope calculation (assuming x is just the index 0..N-1)
+                val n = data.size
+                if (n > 1) {
+                    val xSum = (0 until n).sum().toFloat()
+                    val ySum = data.sum()
+                    val xySum = data.mapIndexed { i, y -> i * y }.sum()
+                    val xSqSum = (0 until n).map { it * it }.sum().toFloat()
+                    val slope = (n * xySum - xSum * ySum) / (n * xSqSum - xSum * xSum)
+                    StatRow("Regression (Slope)", "%.3f".format(slope))
+                }
+
                 StatRow("Outliers Found", outliers.size.toString())
                 if (outliers.isNotEmpty()) {
                     Text("Outliers: ${outliers.joinToString(", ")}", style = MaterialTheme.typography.bodySmall, color = Color.Red)
