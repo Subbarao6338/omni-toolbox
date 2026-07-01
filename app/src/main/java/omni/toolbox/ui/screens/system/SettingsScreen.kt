@@ -2,6 +2,8 @@ package omni.toolbox.ui.screens.system
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,6 +50,56 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    var exportContent by remember { mutableStateOf("") }
+
+    val fileSaverLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+        onResult = { uri ->
+            uri?.let {
+                scope.launch {
+                    try {
+                        context.contentResolver.openOutputStream(it)?.use { outputStream ->
+                            outputStream.write(exportContent.toByteArray())
+                        }
+                        Toast.makeText(context, "Settings exported successfully", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Failed to export settings", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    )
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            uri?.let {
+                scope.launch {
+                    try {
+                        val content = context.contentResolver.openInputStream(it)?.bufferedReader()?.readText() ?: ""
+                        val data = JSONObject(content)
+                        // This is a simplified import. In a real app, we'd update all prefs.
+                        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+                        val edit = prefs.edit()
+                        data.keys().forEach { key ->
+                            val value = data.get(key)
+                            when (value) {
+                                is Boolean -> edit.putBoolean(key, value)
+                                is Int -> edit.putInt(key, value)
+                                is Long -> edit.putLong(key, value)
+                                is Float -> edit.putFloat(key, value)
+                                is String -> edit.putString(key, value)
+                            }
+                        }
+                        edit.apply()
+                        Toast.makeText(context, "Settings imported. Please restart app.", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Failed to import settings", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    )
 
     ToolScreen(title = "Settings", onBack = { navController.popBackStack() }) { padding ->
         Column(modifier = Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(16.dp)) {
@@ -166,9 +218,8 @@ fun SettingsScreen(
                             data.put("recent_tools", recentPrefs.getString("routes", ""))
 
                             val jsonString = data.toString(2)
-                            // In a real app, we would use a file picker. For this simulation, we'll toast.
-                            android.util.Log.d("SettingsScreen", "Exported Data: $jsonString")
-                            Toast.makeText(context, "Settings exported to Logcat", Toast.LENGTH_SHORT).show()
+                            exportContent = jsonString
+                            fileSaverLauncher.launch("omni_settings.json")
                         }
                     },
                     modifier = Modifier.weight(1f)
@@ -180,7 +231,7 @@ fun SettingsScreen(
 
                 OutlinedButton(
                     onClick = {
-                        Toast.makeText(context, "Import functionality ready", Toast.LENGTH_SHORT).show()
+                        filePickerLauncher.launch(arrayOf("application/json"))
                     },
                     modifier = Modifier.weight(1f)
                 ) {
