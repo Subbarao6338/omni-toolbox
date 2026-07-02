@@ -21,7 +21,18 @@ fun MedicalToolsScreen(navController: NavHostController, title: String) {
     val scope = rememberCoroutineScope()
     var isMeasuring by remember { mutableStateOf(false) }
     var measurementValue by remember { mutableStateOf<String?>(null) }
-    var history = remember { mutableStateListOf<Pair<String, String>>() }
+    val history = remember { mutableStateListOf<Pair<String, String>>() }
+
+    // Heart Rate Tapper State
+    var tapTimes by remember { mutableStateOf(listOf<Long>()) }
+    val currentBpm = remember(tapTimes) {
+        if (tapTimes.size < 2) 0
+        else {
+            val intervals = tapTimes.zipWithNext { a, b -> b - a }
+            val avgInterval = intervals.average()
+            (60000 / avgInterval).toInt()
+        }
+    }
 
     ToolScreen(
         title = title,
@@ -52,49 +63,103 @@ fun MedicalToolsScreen(navController: NavHostController, title: String) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (isMeasuring) {
-                CircularProgressIndicator(modifier = Modifier.size(100.dp), strokeWidth = 8.dp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Measuring... Keep your finger steady", style = MaterialTheme.typography.bodyMedium)
-            } else {
+            if (title == "Heart Rate Monitor") {
                 Text(
-                    text = measurementValue ?: "--",
+                    text = if (currentBpm > 0) currentBpm.toString() else "--",
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
-                Text(
-                    text = when (title) {
-                        "Heart Rate Monitor" -> "BPM"
-                        "Blood Pressure" -> "mmHg"
-                        "Blood Sugar" -> "mg/dL"
-                        else -> ""
+                Text("BPM (Pulse Tapper)", style = MaterialTheme.typography.titleMedium)
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(
+                    onClick = {
+                        val now = System.currentTimeMillis()
+                        tapTimes = (tapTimes + now).takeLast(10)
                     },
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
+                    modifier = Modifier.size(120.dp).padding(8.dp),
+                    shape = androidx.compose.foundation.shape.CircleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer)
+                ) {
+                    Icon(Icons.Default.Favorite, contentDescription = null, modifier = Modifier.size(48.dp))
+                }
+                Text("Tap in sync with your pulse", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 8.dp))
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    scope.launch {
-                        isMeasuring = true
-                        delay(3000)
-                        val newVal = when (title) {
-                            "Heart Rate Monitor" -> (60..100).random().toString()
-                            "Blood Pressure" -> "${(110..130).random()}/${(70..90).random()}"
-                            "Blood Sugar" -> (80..120).random().toString()
-                            else -> "N/A"
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = {
+                        if (currentBpm > 0) {
+                            val newVal = currentBpm.toString()
+                            measurementValue = newVal
+                            history.add(0, newVal to java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("MMM dd, HH:mm")))
+                            tapTimes = emptyList()
                         }
-                        measurementValue = newVal
-                        history.add(0, newVal to java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("MMM dd, HH:mm")))
-                        isMeasuring = false
+                    }, enabled = currentBpm > 0) {
+                        Text("Save Reading")
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isMeasuring
-            ) {
-                Text(if (measurementValue == null) "Start Measurement" else "Measure Again")
+                    OutlinedButton(onClick = { tapTimes = emptyList() }) {
+                        Text("Reset")
+                    }
+                }
+            } else {
+                if (isMeasuring) {
+                    CircularProgressIndicator(modifier = Modifier.size(100.dp), strokeWidth = 8.dp)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Analyzing... Please wait", style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    Text(
+                        text = measurementValue ?: "--",
+                        style = MaterialTheme.typography.displayLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = when (title) {
+                            "Blood Pressure" -> "mmHg (Est.)"
+                            "Blood Sugar" -> "mg/dL (Est.)"
+                            else -> ""
+                        },
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(
+                    onClick = {
+                        scope.launch {
+                            isMeasuring = true
+                            delay(2000)
+                            val newVal = when (title) {
+                                "Blood Pressure" -> "${(110..130).random()}/${(70..90).random()}"
+                                "Blood Sugar" -> (80..120).random().toString()
+                                else -> "N/A"
+                            }
+                            measurementValue = newVal
+                            history.add(0, newVal to java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("MMM dd, HH:mm")))
+                            isMeasuring = false
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isMeasuring
+                ) {
+                    Text(if (measurementValue == null) "Log Current Estimate" else "Estimate Again")
+                }
+
+                Card(
+                    modifier = Modifier.padding(top = 24.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                ) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Info, contentDescription = null)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            "These values are estimates for manual logging purposes and not direct sensor measurements.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))

@@ -156,7 +156,6 @@ fun MacrosTab(viewModel: OmniViewModel) {
     var inputName by remember { mutableStateOf("") }
     var inputTrigger by remember { mutableStateOf("SHAKE") }
     var inputAction by remember { mutableStateOf("CLEAN_CACHE") }
-    var simulationMessage by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
@@ -220,49 +219,17 @@ fun MacrosTab(viewModel: OmniViewModel) {
         }
 
         item {
-            Text("SIMULATE EVENTS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline, modifier = Modifier.padding(top = 16.dp))
-        }
-
-        item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(
-                    onClick = {
-                        simulationMessage = "SHAKE GESTURE DETECTED (Simulation triggered!). Generated new key cipher."
-                        viewModel.addLog(simulationMessage!!)
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(imageVector = Icons.Default.RotateRight, contentDescription = "Shake")
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Trigger Shake", fontSize = 11.sp)
-                }
-
-                Button(
-                    onClick = {
-                        simulationMessage = "TIMER THRESHOLD REACHED: Running scheduled system task cache cleans..."
-                        viewModel.addLog(simulationMessage!!)
-                    },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                ) {
-                    Icon(imageVector = Icons.Default.HourglassEmpty, contentDescription = "Timer")
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Timer Tick", fontSize = 11.sp)
-                }
-            }
-        }
-
-        if (simulationMessage != null) {
-            item {
-                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Default.NetworkCheck, contentDescription = "Macro run", tint = MaterialTheme.colorScheme.primary)
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Column {
-                            Text("Macro Output logs:", fontWeight = FontWeight.Bold, fontSize = 11.sp)
-                            Text(simulationMessage!!, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        }
-                    }
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)),
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        "Automation engine is active. Shake your device to trigger associated macros.",
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
             }
         }

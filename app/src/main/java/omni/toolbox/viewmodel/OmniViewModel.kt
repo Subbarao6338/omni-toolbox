@@ -5,6 +5,10 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.net.TrafficStats
 import android.os.BatteryManager
 import android.os.Build
@@ -170,6 +174,61 @@ data class ScrapingRule(
 
 class OmniViewModel(application: Application) : AndroidViewModel(application) {
     private val context = application.applicationContext
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var lastShakeTime: Long = 0
+
+    private val sensorListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent?) {
+            if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                val acceleration = Math.sqrt((x * x + y * y + z * z).toDouble()) - SensorManager.GRAVITY_EARTH
+                if (acceleration > 12) {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastShakeTime > 2000) {
+                        lastShakeTime = currentTime
+                        onShakeDetected()
+                    }
+                }
+            }
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    }
+
+    private fun onShakeDetected() {
+        addLog("Shake gesture detected!")
+        automationRules.value.forEach { rule ->
+            if (rule.isActive && rule.triggerType == "SHAKE") {
+                executeAutomationAction(rule.actionType)
+            }
+        }
+    }
+
+    private fun executeAutomationAction(actionType: String) {
+        when (actionType) {
+            "PASSWORD_GEN" -> {
+                val password = (1..12).map { (('a'..'z') + ('A'..'Z') + ('0'..'9')).random() }.joinToString("")
+                addLog("Automation: Generated secure key: $password")
+                // Copy to clipboard
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Generated Password", password)
+                clipboard.setPrimaryClip(clip)
+                addLog("Automation: Password copied to clipboard.")
+            }
+            "CLEAN_CACHE" -> {
+                startDuplicateCleanerScan()
+            }
+            "LOG_STATS" -> {
+                addLog("Automation: System Stats Logged - RAM: $ramUsage, Battery: $batteryLevel%")
+            }
+            "SYNC_TASKS" -> {
+                startSyncAll()
+            }
+        }
+    }
 
     private val _accounts = mutableStateListOf<CloudAccount>()
     val accounts: List<CloudAccount> = _accounts
@@ -310,6 +369,18 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
 
         startSystemMonitoring()
         launchSystemStatsBackground()
+        initShakeDetector()
+    }
+
+    private fun initShakeDetector() {
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorManager?.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sensorManager?.unregisterListener(sensorListener)
     }
 
     private fun startSystemMonitoring() {
@@ -837,14 +908,25 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun startDuplicateCleanerScan() {
-        viewModelScope.launch {
-            addLog("Duplicate scan: Starting directory traversals...")
-            delay(800)
-            addLog("Duplicate scan: Found 24 files.")
-            addLog("[DUPLICATE] System_Specs_old.docx (24KB) match Project_Specs.docx")
-            addLog("[DUPLICATE] diagnostic_dup.pdf (512KB) match System_Diagnostic.pdf")
-            delay(1000)
-            addLog("Duplicate scan: Cleaned up 2 duplicates. Freed 536 KB storage.")
+        viewModelScope.launch(Dispatchers.IO) {
+            addLog("Duplicate scan: Starting cache directory traversal...")
+            val cacheDir = context.cacheDir
+            val files = cacheDir.listFiles()
+            if (files == null || files.isEmpty()) {
+                addLog("Duplicate scan: No temporary files found in cache.")
+            } else {
+                var count = 0
+                var size = 0L
+                files.forEach { file ->
+                    if (file.isFile) {
+                        size += file.length()
+                        if (file.delete()) {
+                            count++
+                        }
+                    }
+                }
+                addLog("Duplicate scan: Cleaned up $count files. Freed ${size / 1024} KB storage.")
+            }
         }
     }
 

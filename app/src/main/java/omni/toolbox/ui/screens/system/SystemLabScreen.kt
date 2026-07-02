@@ -23,11 +23,15 @@ import omni.toolbox.ui.components.ToolScreen
 import kotlinx.coroutines.delay
 import android.app.ActivityManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Environment
 import android.os.StatFs
 import androidx.compose.ui.platform.LocalContext
 import java.io.File
+import java.net.Inet4Address
+import java.net.NetworkInterface
 
 data class PermissionInfo(val name: String, val status: String, val count: Int)
 
@@ -46,6 +50,8 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
     var ramUsageText by remember { mutableStateOf("0/0 GB") }
     var storageProgress by remember { mutableFloatStateOf(0.0f) }
     var storageText by remember { mutableStateOf("0%") }
+    var ipAddress by remember { mutableStateOf("Unknown") }
+    var networkType by remember { mutableStateOf("Unknown") }
 
     val logs = remember { mutableStateListOf<String>() }
 
@@ -66,6 +72,34 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
             val usedRam = totalRam - availRam
             ramUsageProgress = usedRam / totalRam
             ramUsageText = "%.1f / %.1f GB".format(usedRam, totalRam)
+
+            // Network Info
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork = cm.activeNetwork
+            val caps = cm.getNetworkCapabilities(activeNetwork)
+            networkType = when {
+                caps == null -> "None"
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "WiFi"
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "Cellular"
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "Ethernet"
+                else -> "Other"
+            }
+
+            try {
+                val interfaces = NetworkInterface.getNetworkInterfaces()
+                var foundIp = "Unknown"
+                while (interfaces.hasMoreElements()) {
+                    val intf = interfaces.nextElement()
+                    val addrs = intf.inetAddresses
+                    while (addrs.hasMoreElements()) {
+                        val addr = addrs.nextElement()
+                        if (!addr.isLoopbackAddress && addr is Inet4Address) {
+                            foundIp = addr.hostAddress ?: "Unknown"
+                        }
+                    }
+                }
+                ipAddress = foundIp
+            } catch (ex: Exception) {}
 
             // Storage Usage
             val stat = StatFs(Environment.getDataDirectory().path)
@@ -121,6 +155,15 @@ fun SystemLabScreen(navController: NavHostController, title: String) {
                 Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     StatusCard("Storage", storageText, Modifier.weight(1f), MaterialTheme.colorScheme.tertiary)
                     StatusCard("Kernel", System.getProperty("os.version") ?: "N/A", Modifier.weight(1f), MaterialTheme.colorScheme.error)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Network Diagnostics", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(horizontal = 16.dp))
+                Card(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        DetailRow("IP Address", ipAddress)
+                        DetailRow("Connection", networkType)
+                    }
                 }
             } else {
                 Card(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
